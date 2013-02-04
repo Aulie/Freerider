@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    android:title="Settings">	
+    <PreferenceCategory
+        android:key="polling_category"
+        android:title="Polling" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="perform_polling"
+            android:summary="Should the application fetch data automatically?"
+            android:title="Enable polling" />
+
+        <ListPreference
+            android:defaultValue="600"
+            android:entries="@array/polling_intervals"
+            android:key="updates_interval"
+            android:dependency="perform_polling"
+            android:summary="Define how often updates will be performed"
+            android:title="Updates interval" android:entryValues="@array/updateIntervalValues"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="privacy_category"
+        android:title="Privacy" >
+    <ListPreference
+        android:defaultValue="public"
+        android:entries="@array/privacy_setting"
+        android:key="privacy"
+        android:summary="Set the default privacy setting for the journeys you create"
+        android:title="Set Facebook privacy" android:entryValues="@array/privacy_values" android:positiveButtonText="OK"/>
+	</PreferenceCategory>
+	
+    <PreferenceCategory
+        android:key="toast_category"
+        android:title="Start notifications" >
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="connection"
+        android:summary="Should the application show info about connection settings?" android:entryValues="@array/privacy_values" android:positiveButtonText="OK"
+        android:title="Enable start notifiations"/>
+	</PreferenceCategory>
+
+</PreferenceScreen>

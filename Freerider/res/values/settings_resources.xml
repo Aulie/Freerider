@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="polling_intervals">
+        <item name="60">Every minute</item>
+        <item name="300">Every 5 minutes</item>
+        <item name="600">Every 10 minutes</item>
+    </string-array>
+    <string-array name="privacy_setting">
+        <item name="friends">Friends only</item>
+        <item name="friends_of_friends">Friends of friends</item> 
+        <item name="public">Public</item>
+    </string-array>
+    
+    <string-array name="privacy_values">
+        <item name="friends">friends</item>
+        <item name="friends_of_friends">friends_of_friends</item>
+        <item name="public">public</item>
+    </string-array>
+    <string-array name="updateIntervalValues">
+        <item name="60">60</item>
+        <item name="300">300</item>
+        <item name="600">600</item>
+    </string-array>
+
+</resources>

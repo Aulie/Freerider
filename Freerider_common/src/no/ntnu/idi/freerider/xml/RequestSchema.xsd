@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+	targetNamespace="http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/Request"
+	elementFormDefault="unqualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/Request"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/Request http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/source/browse/Social_hitchhiking_common/src/no/ntnu/idi/freerider/xml/RequestSchema.xsd ">
+	<element name="Request" type="tns:Request"></element>
+
+	<complexType name="Request">
+		<sequence>
+			<element name="RequestHeader" type="tns:RequestHeader"
+				maxOccurs="1" minOccurs="1"></element>
+			<element name="Data" type="tns:Data" maxOccurs="1" minOccurs="1"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="RequestHeader">
+		<attribute name="protocol" type="string"></attribute>
+		<attribute name="protocol_version" type="string"></attribute>
+		<attribute name="type" type="tns:RequestType"></attribute>
+		<attribute name="user" type="tns:userID" use="required"></attribute>
+	</complexType>
+
+	<simpleType name="RequestType">
+		<restriction base="string">
+			<enumeration value="POST"></enumeration>
+			<enumeration value="LIST"></enumeration>
+			<enumeration value="DELETE"></enumeration>
+			<enumeration value="CREATE_ROUTE"></enumeration>
+			<enumeration value="CREATE_AD_HOC_ROUTE"></enumeration>
+			<enumeration value="UPDATE_ROUTE"></enumeration>
+			<enumeration value="DELETE_ROUTE"></enumeration>
+			<enumeration value="CREATE_JOURNEY"></enumeration>
+			<enumeration value="UPDATE_JOURNEY"></enumeration>
+			<enumeration value="DELETE_JOURNEY"></enumeration>
+			<enumeration value="SEARCH"></enumeration>
+			<enumeration value="CREATE_USER"></enumeration>
+			<enumeration value="UPDATE_USER"></enumeration>
+			<enumeration value="LOGIN"></enumeration>
+			<enumeration value="START_JOURNEY"></enumeration>
+			<enumeration value="RATE_JOURNEY"></enumeration>
+			<enumeration value="GET_ROUTES"></enumeration>
+		</restriction>
+	</simpleType>
+
+	<complexType name="Data">
+		<sequence>
+			<element name="Route" type="tns:Route" minOccurs="0"></element>
+			<element name="Journey" type="tns:Journey"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="Search" type="tns:Search" maxOccurs="1"
+				minOccurs="0">
+			</element>
+			<element name="User" type="tns:User" maxOccurs="1"
+				minOccurs="0">
+			</element>
+			<element name="Notification" type="tns:Notification"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="AccessToken" type="string" minOccurs="0" maxOccurs="1"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Location">
+		<attribute name="LAT" use="required">
+			<simpleType>
+				<restriction base="double">
+					<minInclusive value="-90"></minInclusive>
+					<maxExclusive value="90"></maxExclusive>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="LONG" use="required">
+			<simpleType>
+				<restriction base="double">
+					<minExclusive value="-180"></minExclusive>
+					<maxExclusive value="180"></maxExclusive>
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+
+	<simpleType name="userID">
+		<restriction base="string">
+			<maxLength value="15"></maxLength>
+			<minLength value="1"></minLength>
+		</restriction>
+	</simpleType>
+
+	<complexType name="Route">
+		<sequence>
+			<element name="User" type="tns:User" maxOccurs="1"
+				minOccurs="1">
+			</element>
+			<element name="Location" type="tns:Location"
+				maxOccurs="unbounded" minOccurs="2">
+			</element>
+			<element name="MapLocation" type="tns:MapLocation" maxOccurs="unbounded" minOccurs="2"></element>
+		</sequence>
+		<attribute name="name" type="string" use="optional"></attribute>
+		<attribute name="serial" type="int"></attribute>
+	</complexType>
+
+	<complexType name="Journey">
+		<sequence>
+			<element name="User" type="tns:User" maxOccurs="1" minOccurs="0">
+			</element>
+			<element name="route" type="tns:Route"></element>
+		</sequence>
+		<attribute name="serial" type="int"></attribute>
+		<attribute name="starttime" type="dateTime"></attribute>
+		<attribute name="visibility" type="tns:visibilityType"></attribute>
+	</complexType>
+
+
+	<complexType name="Search">
+		<sequence>
+			<element name="Startlocation" type="tns:Location"></element>
+			<element name="Endlocation" type="tns:Location"></element>
+		</sequence>
+		<attribute name="Starttime" type="dateTime"></attribute>
+	</complexType>
+
+	<complexType name="User">
+		<attribute name="id" type="tns:userID" use="required"></attribute>
+		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="surname" type="string" use="required"></attribute>
+		<attribute name="rating" type="double" use="required"></attribute>
+	</complexType>
+
+	<simpleType name="visibilityType">
+		<restriction base="string">
+			<enumeration value="PUBLIC"></enumeration>
+			<enumeration value="FRIENDS_OF_FRIENDS"></enumeration>
+			<enumeration value="FRIENDS"></enumeration>
+		</restriction>
+	</simpleType>
+
+	<complexType name="Notification">
+		<sequence maxOccurs="1" minOccurs="0">
+			<element name="StartLocation" type="tns:Location"></element>
+			<element name="StopLocation" type="tns:Location"></element>
+		</sequence>
+		<attribute name="senderID" type="tns:userID" use="required"></attribute>
+		<attribute name="recipientID" type="tns:userID"
+			use="required">
+		</attribute>
+		<attribute name="sender_name" type="string"></attribute>
+		<attribute name="type" use="required">
+			<simpleType>
+				<restriction base="tns:NotificationType">
+					<enumeration value="HITCHHIKER_REQUEST"></enumeration>
+					<enumeration value="REQUEST_ACCEPT"></enumeration>
+					<enumeration value="REQUEST_REJECT"></enumeration>
+					<enumeration value="HITCHHIKER_CANCEL"></enumeration>
+					<enumeration value="DRIVER_CANCEL"></enumeration>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="time_sent" type="dateTime"></attribute>
+		<attribute name="journey_serial" type="int" use="required"></attribute>
+		<attribute name="comment" type="string"></attribute>
+		<attribute name="is_read" type="boolean"></attribute>
+	</complexType>
+
+	<simpleType name="NotificationType">
+		<restriction base="string"></restriction>
+	</simpleType>
+
+	<complexType name="MapLocation">
+		<complexContent>
+			<extension base="tns:Location">
+				<attribute name="address" type="string"></attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+</schema>

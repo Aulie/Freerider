@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:id="@+id/mapLayoutTop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="100" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:orientation="vertical" >
+
+            <AutoCompleteTextView
+                android:id="@+id/etGoingFrom"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/mapViewBtnFrom" 
+                android:textSize="15sp">
+
+                <requestFocus />
+            </AutoCompleteTextView>
+
+            <AutoCompleteTextView
+                android:id="@+id/etGoingTo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/mapViewBtnTo" 
+                android:textSize="15sp">
+            </AutoCompleteTextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="75"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btnGoingTo"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:onClick="findAndDrawPath"
+                android:text="@string/mapViewBtnDrawRoute" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mapLayoutMap"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/mapLayoutTop"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:weightSum="100" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="80" >
+
+            <com.google.android.maps.MapView
+                android:id="@+id/map_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:apiKey="@string/maps_api_key"
+                android:clickable="true"
+                android:enabled="true" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true" 
+                android:visibility="gone"/> 
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnChooseRoute"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:text="@string/mapViewBtnChooseRoute" />
+
+            <CheckBox
+                android:id="@+id/checkBoxSave"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/mapViewCheckBoxSave" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

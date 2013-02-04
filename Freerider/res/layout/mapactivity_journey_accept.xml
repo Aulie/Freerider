@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:id="@+id/mapViewJourneyAcceptLayoutMap"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:baselineAligned="false"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="20" >
+
+            <com.google.android.maps.MapView
+                android:id="@+id/mapViewJourneyAcceptMapView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:apiKey="@string/maps_api_key"
+                android:clickable="true"
+                android:enabled="true" />
+
+            <ProgressBar
+                android:id="@+id/mapViewJourneyAcceptProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true" 
+                android:visibility="gone"/> 
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" 
+            android:layout_weight="80">
+
+            <EditText 
+                android:id="@+id/mapViewJourneyAcceptEtComment"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:hint="@string/mapViewPickupEtComment" 
+                android:textSize="15sp"
+                android:layout_weight="1.0"
+                />
+            
+	        <LinearLayout
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:orientation="horizontal" 
+	            android:layout_weight="1.0"
+	            >
+	            
+	            <Button
+	                android:id="@+id/mapViewJourneyAcceptBtnSendAccept"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                android:layout_weight="1.0"
+	                android:text="@string/mapViewJourneyAccept" />
+	            
+	            <Button 
+	                android:id="@+id/mapViewJourneyAcceptBtnSendReject"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                android:layout_weight="1.0"
+	                android:text="@string/mapViewJourneyReject" />
+	
+	        </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,138 @@
+<class-diagram version="1.0.7" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="no.ntnu.idi.freerider.backend.Servlet" 
+    project="Freerider_backend" file="/Freerider_backend/src/no/ntnu/idi/freerider/backend/Servlet.java" binary="false">    
+    <position height="179" width="285" x="33" y="7"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="no.ntnu.idi.freerider.backend.RequestProcessor" 
+    project="Freerider_backend" file="/Freerider_backend/src/no/ntnu/idi/freerider/backend/RequestProcessor.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="479" y="105"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="no.ntnu.idi.freerider.backend.DBConnector" 
+    project="Freerider_backend" file="/Freerider_backend/src/no/ntnu/idi/freerider/backend/DBConnector.java" 
+    binary="false">    
+    <position height="787" width="328" x="624" y="-266"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="no.ntnu.idi.freerider.backend.facebook.FacebookFilter" 
+    project="Freerider_backend" file="/Freerider_backend/src/no/ntnu/idi/freerider/backend/facebook/FacebookFilter.java" 
+    binary="false">    
+    <position height="179" width="240" x="41" y="212"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="5" corner="BOTTOM_RIGHT" language="java" name="no.ntnu.idi.freerider.backend.SocialNetwork" 
+    project="Freerider_backend" file="/Freerider_backend/src/no/ntnu/idi/freerider/backend/SocialNetwork.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="471" y="299"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="no.ntnu.idi.freerider.protocol.Request" 
+    project="Freerider_common" file="/Freerider_common/src/no/ntnu/idi/freerider/protocol/Request.java" binary="false">    
+    <position height="163" width="160" x="669" y="208"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="no.ntnu.idi.freerider.protocol.Response" 
+    project="Freerider_common" file="/Freerider_common/src/no/ntnu/idi/freerider/protocol/Response.java" binary="false">    
+    <position height="-1" width="-1" x="466" y="464"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="8" corner="BOTTOM_RIGHT" language="java" name="no.ntnu.idi.freerider.protocol.RequestType" 
+    project="Freerider_common" file="/Freerider_common/src/no/ntnu/idi/freerider/protocol/RequestType.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="751" y="612"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </enumeration>  
+  <enumeration id="9" corner="BOTTOM_RIGHT" language="java" name="no.ntnu.idi.freerider.protocol.ResponseStatus" 
+    project="Freerider_common" file="/Freerider_common/src/no/ntnu/idi/freerider/protocol/ResponseStatus.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="188" y="507"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </enumeration>  
+  <association id="10">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="11" name="status"/>      
+      <multiplicity id="12" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="13">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <association id="14">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="15" name="db"/>      
+      <multiplicity id="16" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="17">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="18" name="processor"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="20">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="21" name="type"/>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="23">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="24" name="type"/>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="26">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="27" name="filterService"/>      
+      <multiplicity id="28" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

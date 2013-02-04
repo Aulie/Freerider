@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib/dom4j-1.6.1.jar" sourcepath="lib/dom4j-1.6.1.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Social_hitchhiking_common/lib/dom4j-1.6.1.zip!/dom4j-1.6.1/docs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/postgis.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.6.4.jar" sourcepath="/Freerider_backend/lib/slf4j-1.6.4.zip"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

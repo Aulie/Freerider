@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/mapmenu_clear"
+          android:icon="@android:drawable/ic_menu_close_clear_cancel"
+          android:title="Clear" />
+    <item android:id="@+id/mapmenu_add"
+          android:icon="@android:drawable/ic_menu_add"
+          android:title="Add point" />
+    <item android:id="@+id/mapmenu_order" 
+          android:icon="@drawable/icmpmove"
+          android:title="Change order" />
+</menu>

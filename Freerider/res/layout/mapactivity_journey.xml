@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/mapViewJourneyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+        />
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+
+        <com.google.android.maps.MapView
+            android:id="@+id/mapViewJourneyMapView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:apiKey="@string/maps_api_key"
+            android:clickable="true"
+            android:enabled="true" />
+
+        <ProgressBar
+            android:id="@+id/mapViewJourneyProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</LinearLayout>

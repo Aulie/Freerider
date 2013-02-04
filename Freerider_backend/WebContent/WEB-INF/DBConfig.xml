@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIGURATION>
+	<DATABASE_URL>jdbc:postgresql_postGIS://localhost:5432/social_hitchhiking</DATABASE_URL>
+	<DATABASE_USERNAME>social_hitchhiking</DATABASE_USERNAME>
+	<DATABASE_PASSWORD>rrJo6yDPiag9hDikMsUI</DATABASE_PASSWORD>
+</CONFIGURATION>

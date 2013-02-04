@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mapViewBtnFrom">Driving from</string>
+    <string name="mapViewBtnTo">Driving to</string>
+    <string name="mapViewBtnDrawRoute">Draw route on map</string>
+    <string name="mapViewBtnChooseRoute">Choose this route</string>
+    <string name="mapViewCheckBoxSave">Save?</string>
+    
+    <string name="mapViewPickupEtComment">Comment to driver</string>
+    <string name="mapViewPickupBtnSendRequest">Send request</string>
+    <string name="mapViewPickupBtnPickup">Pickup</string>
+    <string name="mapViewPickupBtnDropoff">Dropoff</string>
+    
+    <string name="mapViewJourneyAccept">Accept</string>
+    <string name="mapViewJourneyReject">Reject</string>
+    
+    <string name="maps_api_key">0cbT-LIE-Z8-19w6TtX99UIGsIhvNADnW9qLL0w</string>
+    <string name="google_places_autocomplete_api_key">AIzaSyBtXv55mVZuE3BLP3SRiiL1PJWUXReEnj0</string>
+    
+    <color name="dragAndDropItemFocused">#FFFFFF</color>
+    <color name="dragAndDropItemPressed">#CCFF33</color>
+    <color name="dragAndDropItemEnabled">#33FFCC</color>
+    <color name="dragAndDropItemActive">#3366FF</color>
+    <color name="dragAndDropItemColor">#FF33CC</color>
+    
+    <string name="dragAndDropHeader">Drag to choose order</string>
+    <string name="dragAndDropOK">OK</string>
+    
+</resources>
+

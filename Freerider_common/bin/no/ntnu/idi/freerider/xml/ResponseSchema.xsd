@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsi:schema
+	targetNamespace="http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/Response"
+	elementFormDefault="qualified" xmlns:xsi="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/Response"
+	xmlns:Q1="http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/Request">
+
+	<xsi:import
+		schemaLocation="http://svn.codespot.com/a/eclipselabs.org/sintef-social-hitchhiking/Social_hitchhiking_common/src/no/ntnu/idi/freerider/xml/RequestSchema.xsd"
+		namespace="http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/Request" />
+	<xsi:element name="Response" type="tns:Response"></xsi:element>
+
+	<xsi:complexType name="Response">
+		<xsi:sequence>
+			<xsi:element name="ResponseHeader" type="tns:ResponseHeader">
+			</xsi:element>
+			<xsi:element name="Data" type="Q1:Data"></xsi:element>
+		</xsi:sequence>
+	</xsi:complexType>
+
+	<xsi:complexType name="ResponseHeader">
+		<xsi:sequence></xsi:sequence>
+		<xsi:attribute name="protocol" type="xsi:string"></xsi:attribute>
+		<xsi:attribute name="status" type="tns:status" use="required"></xsi:attribute>
+		<xsi:attribute name="protocol_version" type="xsi:string"></xsi:attribute>
+		<xsi:attribute name="type" type="Q1:RequestType" use="required"></xsi:attribute>
+		<xsi:attribute name="error_message" type="xsi:string"></xsi:attribute>
+	</xsi:complexType>
+
+	<xsi:simpleType name="status">
+		<xsi:restriction base="xsi:string">
+			<xsi:enumeration value="FAILED"></xsi:enumeration>
+			<xsi:enumeration value="OK"></xsi:enumeration>
+			<xsi:enumeration value="CLIENT_ERROR"></xsi:enumeration>
+			<xsi:enumeration value="UNKNOWN"></xsi:enumeration>
+		</xsi:restriction>
+	</xsi:simpleType>
+</xsi:schema>

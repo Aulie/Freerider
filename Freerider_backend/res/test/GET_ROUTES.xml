@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Request
+	xmlns:tns="http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/Request"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/Request http://svn.codespot.com/a/eclipselabs.org/sintef-social-hitchhiking/Social_hitchhiking_common/src/no/ntnu/idi/freerider/xml/RequestSchema.xsd ">
+	<RequestHeader protocol="Social_hitchhiking"
+		protocol_version="1.0.0" type="GET_ROUTES" user="bobbytables" />
+	<Data>
+		<User name="Robert'; DROP TABLE Students;" surname="Tables" rating="4" id="testuser"/>
+	</Data>
+</tns:Request>

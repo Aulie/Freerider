@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Welcome, FreeRider!</string>
+    <string name="app_name">FreeRider</string>
+    <string name="welcome">Facebook</string>
+    <string name="enter">Log in</string>
+    <string name="journey_main_title">Journeys</string>
+    <string name="server_url">vm-6116.idi.ntnu.no</string>
+    <string name="server_port">8080</string>
+    
+    
+
+</resources>

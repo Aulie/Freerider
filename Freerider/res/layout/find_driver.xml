@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            
+                <AutoCompleteTextView
+                        android:id="@+id/searchText"   
+                        android:hint="Start"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dip"
+                        android:layout_weight="1"/>
+         
+        </LinearLayout>     
+         
+        <LinearLayout 
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/search2" 
+                    android:hint="Destination"   
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dip"
+                    android:layout_weight="1" />
+
+                   
+               
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/finddriver_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_height="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="0.40"
+                android:onClick="search"
+                android:text="Search" />
+
+            <ImageButton
+                android:id="@+id/finddriver_mapmode"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:src="@android:drawable/ic_menu_mapmode" />
+
+        </LinearLayout>
+        
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+</LinearLayout>

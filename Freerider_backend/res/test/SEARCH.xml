@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:Request
+	xmlns:tns="http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/Request"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://code.google.com/a/eclipselabs.org/p/sintef-social-hitchhiking/Request ../../../Freerider_common/src/no/ntnu/idi/freerider/xml/RequestSchema.xsd ">
+	<RequestHeader user="bobbytables" type="SEARCH" />
+	<Data>
+		<Search Starttime="2012-03-22T10:30:00">
+			<Startlocation LONG="63.41009" LAT="10.47365" />
+			<Endlocation LONG="63.42738" LAT="10.42303" />
+		</Search>
+	</Data>
+</tns:Request>

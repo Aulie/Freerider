@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:id="@+id/mapViewPickupLayoutTop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="100" >
+
+        <ImageView 
+            android:id="@+id/mapViewPickupImage"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="40"
+            android:src="@drawable/facebook_logo"
+            android:scaleType="centerCrop"
+            />
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="25"
+            android:orientation="vertical" 
+        	android:gravity="fill_vertical">
+			
+			<TextView 
+			    android:id="@+id/mapViewPickupTextViewName"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1.0"
+			    android:text="[NAME]"
+			    android:layout_gravity="top|center"
+			    />
+			<TextView 
+			    android:id="@+id/mapViewPickupTextViewDate"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1.0"
+			    android:text="[DATE]"
+			    android:layout_gravity="bottom|center"
+			    />
+           
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:layout_weight="35"
+            android:orientation="vertical"
+            >
+
+            <Button
+                android:id="@+id/mapViewPickupBtnPickup"
+                android:layout_width="fill_parent"
+                android:layout_height="38dp"
+                android:layout_weight="1.0"
+                android:text="@string/mapViewPickupBtnPickup" 
+                android:layout_gravity="top|center"
+                android:layout_marginBottom="2dp"
+                />
+            <Button
+                android:id="@+id/mapViewPickupBtnDropoff"
+                android:layout_width="fill_parent"
+                android:layout_height="38dp"
+                android:layout_weight="1.0"
+                android:text="@string/mapViewPickupBtnDropoff" 
+                android:layout_gravity="bottom|center"
+                android:layout_marginTop="2dp"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mapViewPickupLayoutMap"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/mapViewPickupLayoutTop"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:weightSum="100" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="25" >
+
+            <com.google.android.maps.MapView
+                android:id="@+id/mapViewPickupAndDropoffMapView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:apiKey="@string/maps_api_key"
+                android:clickable="true"
+                android:enabled="true" />
+
+            <ProgressBar
+                android:id="@+id/mapViewPickupProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true" 
+                android:visibility="gone"/> 
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" 
+            android:layout_weight="75">
+
+            <EditText 
+                android:id="@+id/mapViewPickupEtComment"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:hint="@string/mapViewPickupEtComment" 
+                android:textSize="15sp"
+                android:layout_weight="1.0"
+                />
+            <Button
+                android:id="@+id/mapViewPickupBtnSendRequest"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/mapViewPickupBtnSendRequest" 
+                android:layout_weight="1.0"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
