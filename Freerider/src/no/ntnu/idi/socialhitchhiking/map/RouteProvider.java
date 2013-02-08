@@ -270,7 +270,7 @@ class KMLHandler extends DefaultHandler {
 			iIndexOfInnerString = iIndexOfDelimiter + strDelimiter.length();
 			iCounter += 1;
 		}
-
+ 
 		return strArray;
 	}
 }
