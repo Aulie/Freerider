@@ -35,8 +35,12 @@ import javax.xml.parsers.SAXParserFactory;
 import no.ntnu.idi.freerider.model.MapLocation;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import org.xmlpull.v1.XmlPullParserException;
+
+import android.util.Log;
 
 /**
  * This class retrieves a {@link MapRoute} using the Google Maps API.
@@ -53,22 +57,40 @@ public class RouteProvider {
 	 * @param toLat The latitude where the route ends.
 	 * @param toLon The latitude where the route ends.
 	 * @return Returns a {@link MapRoute} containing all the map data needed for showing a route in a map view.
+	 * @throws MalformedURLException 
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public static MapRoute getRoute(double fromLat, double fromLon, double toLat, double toLon) throws ParserConfigurationException, SAXException, IOException{
+	public static MapRoute getRoute(double fromLat, double fromLon, double toLat, double toLon) throws MalformedURLException, IOException
+	{
 		String url = RouteProvider.getUrl(fromLat, fromLon, toLat, toLon);
+		Log.e("TestLL","FL " + fromLat + " FL " + fromLon + " TL " + toLat + " TL " + toLon);
+		Log.e("URL",url);
 		InputStream is = RouteProvider.getConnectionInputStream(url);
-		return RouteProvider.getRoute(is);
+		
+		MapRoute temp = new MapRoute();
+
+			try {
+				temp = RouteProvider.getRoute(is);
+			} catch (XmlPullParserException e) {
+				// TODO Auto-generated catch block
+				Log.e("XMLError", e.getMessage());
+				Log.e("XMLCause",e.getCause().toString());
+			} catch (IOException e)
+			{
+				Log.e("IOError", e.getMessage());
+				Log.e("IOCause",e.getCause().toString());
+			}
+
+		Log.e("Reached","A MapRoute");
+		return temp;
 	}
 
 	
-	private static MapRoute getRoute(InputStream is) throws ParserConfigurationException, SAXException, IOException {
-		KMLHandler handler = new KMLHandler();
-		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
-		parser.parse(is, handler);
-		return handler.route;
+	private static MapRoute getRoute(InputStream is) throws IOException, XmlPullParserException {
+		XMLParser parser = new XMLParser();
+		return parser.parse(is);
 	}
 
 	/**
@@ -82,16 +104,16 @@ public class RouteProvider {
 	 */
 	private static String getUrl(double fromLat, double fromLon, double toLat, double toLon) {// connect to map web service
 		StringBuffer urlString = new StringBuffer();
-			urlString.append("http://maps.google.com/maps?f=d&hl=en");
-			urlString.append("&saddr=");// from
+			urlString.append("http://maps.googleapis.com/maps/api/directions/xml?");
+			urlString.append("origin=");// from
 			urlString.append(Double.toString(fromLat));
 			urlString.append(",");
 			urlString.append(Double.toString(fromLon));
-			urlString.append("&daddr=");// to
+			urlString.append("&destination=");// to
 			urlString.append(Double.toString(toLat));
 			urlString.append(",");
 			urlString.append(Double.toString(toLon));
-			urlString.append("&ie=UTF8&0&om=0&output=kml");
+			urlString.append("&sensor=false");
 			return urlString.toString();
 	}
 	/**

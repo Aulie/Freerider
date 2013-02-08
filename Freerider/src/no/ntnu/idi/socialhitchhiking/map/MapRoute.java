@@ -31,6 +31,7 @@ import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.User;
 import android.content.Context;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 
@@ -76,8 +77,19 @@ public class MapRoute extends Route implements Serializable{
 		this.name = oldRoute.getName();
 		this.owner = oldRoute.getOwner();
 		this.serial = oldRoute.getSerial();
+		/*
+		List<Location> tempList = new ArrayList<Location>();
+		for(int i = 0; i < newDrivingThroughList.size(); i++)
+		{
+			//GeoPoint from = GeoHelper.getGeoPoint(newDrivingThroughList.get(i));
+			//GeoPoint to = GeoHelper.getGeoPoint(newDrivingThroughList.get(i+1));
+			tempList.add(new Location(newDrivingThroughList.get(i).latitude, newDrivingThroughList.get(i).longitude));
+		}
+		*/
+		//this.mapPoints = newDrivingThroughList;
 		
 		loadRoutePath(newDrivingThroughList);
+		//this.routeData = tempList;
 	}
 	
 	private void loadRoutePath(List<MapLocation> drivingThrough) {
@@ -111,6 +123,7 @@ public class MapRoute extends Route implements Serializable{
 				route = RouteProvider.getRoute(fromLat, fromLon, toLat, toLon);
 			}catch (Exception e) {
 				//ERROR
+				//Log.e("Error",e.getCause().toString());
 				return null; 
 			}
 			
