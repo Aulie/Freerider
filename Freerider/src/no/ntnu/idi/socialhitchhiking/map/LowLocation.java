@@ -1,7 +1,6 @@
 package no.ntnu.idi.socialhitchhiking.map;
 
-public class LowLocation 
-{
+public class LowLocation {
 	String latitude;
 	String longitude;
 	public String getLatitude() {
@@ -16,8 +15,7 @@ public class LowLocation
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
-	public LowLocation()
-	{
+	public LowLocation(){
 		
 	}
 }

@@ -58,8 +58,7 @@ public class Step
 	public void setKmDistance(String kmDistance) {
 		KmDistance = kmDistance;
 	}
-	public Step()
-	{
+	public Step() {
 		
 	}
 }
