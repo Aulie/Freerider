@@ -58,27 +58,16 @@ public class RouteProvider {
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
+	 * @throws XmlPullParserException 
 	 */
-	public static MapRoute getRoute(double fromLat, double fromLon, double toLat, double toLon) throws MalformedURLException, IOException
-	{
+	public static MapRoute getRoute(double fromLat, double fromLon, double toLat, double toLon) throws MalformedURLException, IOException, XmlPullParserException {
 		String url = RouteProvider.getUrl(fromLat, fromLon, toLat, toLon);
 		Log.e("TestLL","FL " + fromLat + " FL " + fromLon + " TL " + toLat + " TL " + toLon);
 		Log.e("URL",url);
 		InputStream is = RouteProvider.getConnectionInputStream(url);
 		
 		MapRoute temp = new MapRoute();
-
-			try {
-				temp = RouteProvider.getRoute(is);
-			} catch (XmlPullParserException e) {
-				// TODO Auto-generated catch block
-				Log.e("XMLError", e.getMessage());
-				Log.e("XMLCause",e.getCause().toString());
-			} catch (IOException e)
-			{
-				Log.e("IOError", e.getMessage());
-				Log.e("IOCause",e.getCause().toString());
-			}
+		temp = RouteProvider.getRoute(is);
 
 		Log.e("Reached","A MapRoute");
 		return temp;
