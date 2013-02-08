@@ -31,7 +31,6 @@ import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.User;
 import android.content.Context;
-import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 

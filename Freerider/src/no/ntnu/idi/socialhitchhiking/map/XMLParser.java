@@ -2,7 +2,6 @@ package no.ntnu.idi.socialhitchhiking.map;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -90,7 +89,7 @@ public class XMLParser
 		MapRoute route = new MapRoute();
 		//ArrayList<MapLocation> mapPoints = new ArrayList<MapLocation>();
 		parser.require(XmlPullParser.START_TAG, ns, "leg");
-		int i = 0;
+		//int i = 0;
 		while(parser.next() != XmlPullParser.END_TAG)
 		{
 			if(parser.getEventType() != XmlPullParser.START_TAG)
@@ -113,7 +112,7 @@ public class XMLParser
 				//route.addRouteAsPartOfThis(tempRoute, (i==0));
 				
 				
-				i++;
+				//i++;
 			}
 			else
 			{
