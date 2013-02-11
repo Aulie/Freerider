@@ -91,7 +91,7 @@ public class XMLParser
 				{
 					duration = duration + Double.parseDouble(step.minutesDuration.replace(" mins", "").replace(" min", ""));
 					Log.e("Duration", Double.toString(Double.parseDouble(step.minutesDuration.replace(" mins", "").replace(" min", ""))));
-					//Log.e("Total duration",)
+					//Log.e("Total duration",n
 				}
 				catch(Exception e)
 				{
