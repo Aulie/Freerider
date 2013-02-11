@@ -76,6 +76,7 @@ public class XMLParser
 		Log.e("Reached","Leg");
 		MapRoute route = new MapRoute();
 		//ArrayList<MapLocation> mapPoints = new ArrayList<MapLocation>();
+		double duration = 0;
 		parser.require(XmlPullParser.START_TAG, ns, "leg");
 		//int i = 0;
 		while(parser.next() != XmlPullParser.END_TAG) {
@@ -86,13 +87,23 @@ public class XMLParser
 			if(name.equals("step")) {
 				Log.e("Reached","Step0");
 				Step step = readStep(parser);
+				try
+				{
+					duration = duration + Double.parseDouble(step.minutesDuration.replace(" mins", "").replace(" min", ""));
+					Log.e("Duration", Double.toString(Double.parseDouble(step.minutesDuration.replace(" mins", "").replace(" min", ""))));
+					//Log.e("Total duration",)
+				}
+				catch(Exception e)
+				{
+					Log.e("DurationException", e.getMessage());
+				}
 				//MapRoute tempRoute = new MapRoute();
 				route.addCoordinate(new MapLocation(Double.parseDouble(step.getStartLatitude()), Double.parseDouble(step.getStartLongitude())));
 				route.addCoordinate(new MapLocation(Double.parseDouble(step.getEndLatitude()), Double.parseDouble(step.getEndLongitude())));
 				route.addToDrivingThroughList(new MapLocation(Double.parseDouble(step.getEndLatitude()), Double.parseDouble(step.getEndLongitude())));
 				//route.setDistanceDescription(step.getDescription());
 				//route.setDistanceInKilometers(Double.parseDouble(step.getKmDistance()));
-				//route.setDistanceInMinutes(Double.parseDouble(step.getMinutesDuration()));
+				route.setDistanceInMinutes(duration);
 				//route.setName("Test"); //Use <summary>?
 				//route.addRouteAsPartOfThis(tempRoute, (i==0));
 				
