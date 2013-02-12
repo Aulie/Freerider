@@ -91,8 +91,8 @@ public class XMLParser
 				Step step = readStep(parser);
 				try
 				{
-					duration = duration + Double.parseDouble(step.minutesDuration.replace(" mins", "").replace(" min", ""));
-					Log.e("Duration", Double.toString(Double.parseDouble(step.minutesDuration.replace(" mins", "").replace(" min", ""))));
+					duration = duration + (Double.parseDouble(step.minutesDuration)/60);
+					//Log.e("Duration", Double.toString(Double.parseDouble(step.minutesDuration.replace(" mins", "").replace(" min", ""))));
 					//Log.e("Total duration",n
 				}
 				catch(Exception e)
@@ -237,8 +237,8 @@ public class XMLParser
 				continue;
 			}
 			String name = parser.getName();
-			if(name.equals("text")) {
-				ret = readString(parser,"text");
+			if(name.equals("value")) {
+				ret = readString(parser,"value");
 			
 			} else {
 				skip(parser);
@@ -295,12 +295,15 @@ public class XMLParser
     	}
     }
 	public static ArrayList<Location> decodePoly(String encoded) {
-		  ArrayList<Location> poly = new ArrayList<Location>();
-		  int index = 0, len = encoded.length();
-		  int lat = 0, lng = 0;
-		  while (index < len) {
-		   int b, shift = 0, result = 0;
-		   do {
+		ArrayList<Location> poly = new ArrayList<Location>();
+		int index = 0, len = encoded.length();
+		int lat = 0; 
+		int lng = 0;
+		while (index < len) {
+			int b;
+			int shift = 0;
+			int result = 0;
+			do {
 		    b = encoded.charAt(index++) - 63;
 		    result |= (b & 0x1f) << shift;
 		    shift += 5;
