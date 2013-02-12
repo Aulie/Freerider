@@ -1,12 +1,16 @@
 package no.ntnu.idi.socialhitchhiking.map;
 
+import java.util.ArrayList;
+
+import no.ntnu.idi.freerider.model.Location;
+
 public class Step 
 {
 	String startLatitude;
 	String startLongitude;
 	String endLatitude;
 	String endLongitude;
-	String mapPoints;
+	ArrayList<Location> mapPoints;
 	String minutesDuration;
 	String description;
 	String KmDistance;
@@ -34,10 +38,10 @@ public class Step
 	public void setEndLongitude(String endLongitude) {
 		this.endLongitude = endLongitude;
 	}
-	public String getMapPoints() {
+	public ArrayList<Location> getMapPoints() {
 		return mapPoints;
 	}
-	public void setMapPoints(String mapPoints) {
+	public void setMapPoints(ArrayList<Location> mapPoints) {
 		this.mapPoints = mapPoints;
 	}
 	public String getMinutesDuration() {
@@ -59,6 +63,6 @@ public class Step
 		KmDistance = kmDistance;
 	}
 	public Step() {
-		
+		mapPoints = new ArrayList<Location>();
 	}
 }

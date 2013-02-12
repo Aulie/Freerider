@@ -26,10 +26,12 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Stack;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
 
 import org.xml.sax.Attributes;
@@ -262,4 +264,5 @@ class KMLHandler extends DefaultHandler {
  
 		return strArray;
 	}
+	
 }

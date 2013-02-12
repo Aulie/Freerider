@@ -2,6 +2,7 @@ package no.ntnu.idi.socialhitchhiking.map;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -9,6 +10,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Log;
 import android.util.Xml;
 
+import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 
@@ -99,8 +101,15 @@ public class XMLParser
 				}
 				//MapRoute tempRoute = new MapRoute();
 				route.addCoordinate(new MapLocation(Double.parseDouble(step.getStartLatitude()), Double.parseDouble(step.getStartLongitude())));
+				//Polyline
+				for(int i = 0; i < step.mapPoints.size(); i++) {
+					route.addCoordinate(new MapLocation(step.mapPoints.get(i).latitude, step.mapPoints.get(i).longitude));
+					route.addToDrivingThroughList(new MapLocation(step.mapPoints.get(i).latitude, step.mapPoints.get(i).longitude));
+				}
+				//End polyline
 				route.addCoordinate(new MapLocation(Double.parseDouble(step.getEndLatitude()), Double.parseDouble(step.getEndLongitude())));
 				route.addToDrivingThroughList(new MapLocation(Double.parseDouble(step.getEndLatitude()), Double.parseDouble(step.getEndLongitude())));
+				
 				//route.setDistanceDescription(step.getDescription());
 				//route.setDistanceInKilometers(Double.parseDouble(step.getKmDistance()));
 				route.setDistanceInMinutes(duration);
@@ -139,7 +148,7 @@ public class XMLParser
 				step.setEndLongitude(ll.getLongitude());
 				
 			} else if(name.equals("polyline")) {
-				step.setMapPoints(readPolyline(parser));
+				step.setMapPoints(decodePoly(readPolyline(parser)));
 				
 			} else if(name.equals("duration")) {
 				step.setMinutesDuration(readDuration(parser));
@@ -254,6 +263,7 @@ public class XMLParser
 			
 			}
 		}
+		
 		return ret;
 	}
 	private String readString(XmlPullParser parser, String name) throws XmlPullParserException, IOException {
@@ -284,5 +294,33 @@ public class XMLParser
     		}
     	}
     }
+	public static ArrayList<Location> decodePoly(String encoded) {
+		  ArrayList<Location> poly = new ArrayList<Location>();
+		  int index = 0, len = encoded.length();
+		  int lat = 0, lng = 0;
+		  while (index < len) {
+		   int b, shift = 0, result = 0;
+		   do {
+		    b = encoded.charAt(index++) - 63;
+		    result |= (b & 0x1f) << shift;
+		    shift += 5;
+		   } while (b >= 0x20);
+		   int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+		   lat += dlat;
+		   shift = 0;
+		   result = 0;
+		   do {
+		    b = encoded.charAt(index++) - 63;
+		    result |= (b & 0x1f) << shift;
+		    shift += 5;
+		   } while (b >= 0x20);
+		   int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+		   lng += dlng;
+		   Location p = new Location((((double) lat / 1E5)),
+		     (((double) lng / 1E5)));
+		   poly.add(p);
+		  }
+		  return poly;
+		 }
 
 }
