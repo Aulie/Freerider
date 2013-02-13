@@ -57,7 +57,7 @@ import android.widget.Toast;
  */
 public class Main extends FBConnectionActivity{ 
 	private User user;
-	private Button drive,hitchhike,inbox;
+	private Button sceduleDrive,hitchhike,notifications,myTrips,myAccount;
 	private TextView name;
 	private ImageView picture;
 
@@ -92,9 +92,11 @@ public class Main extends FBConnectionActivity{
 		setContentView(R.layout.main_layout);
 		if(!getApp().isKey("main"))sendLoginRequest();
 
-		drive = (Button) findViewById(R.id.startScreenDrive);
-		inbox = (Button) findViewById(R.id.startScreenInbox);
+		sceduleDrive = (Button) findViewById(R.id.startScreenDrive);
+		notifications = (Button) findViewById(R.id.startScreenInbox);
 		hitchhike = (Button) findViewById(R.id.startScreenHitchhike);
+		myAccount = (Button) findViewById(R.id.startScreenMyAccount);
+		myTrips = (Button) findViewById(R.id.startScreenMyTrips);
 		name = (TextView) findViewById(R.id.startScreenProfileName);
 		picture = (ImageView) findViewById(R.id.startScreenProfilePicture);
 		name.setText(user.getFullName());
@@ -106,7 +108,7 @@ public class Main extends FBConnectionActivity{
 				loginAsNewClicked(true);
 			}
 		}); 
-		drive.setOnClickListener(new OnClickListener() {
+		sceduleDrive.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				startCreateJourney();
@@ -119,7 +121,7 @@ public class Main extends FBConnectionActivity{
 				startFindDriver();
 			}
 		});
-		inbox.setOnClickListener(new OnClickListener() {
+		notifications.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
