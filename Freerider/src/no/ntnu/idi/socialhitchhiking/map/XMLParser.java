@@ -14,12 +14,27 @@ import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 
+/**
+ * Class for parsing the XML-files from google maps
+ * 
+ * @author Thomas, Jon-Robert
+ *
+ */
 public class XMLParser 
 {
 	private static final String ns = null;
-	public XMLParser(){
+	public XMLParser()
+	{
 		
 	}
+	
+	/**
+	 * The parser
+	 * @param InputStream is
+	 * @return MapRoute required from readFeed(parser, "DirectionsResponse")
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	public MapRoute parse(InputStream is) throws XmlPullParserException, IOException{
 		try
 		{
@@ -28,78 +43,72 @@ public class XMLParser
 			parser.setInput(is,null);
 			parser.nextTag();
 			Log.e("Reached","Parse");
-			return readFeed(parser);
+			return readFeed(parser, "DirectionsResponse");
 		}
 		finally
 		{
 			is.close();
 		}
 	}
-	private MapRoute readFeed(XmlPullParser parser) throws XmlPullParserException, IOException
-	{
-		Log.e("Reached","Feed");
+	
+	/**
+	 * Method for extracting rout and legs from the feed
+	 * @param parser
+	 * @param String type that specifies the action that should be performed
+	 * @return MapRoute
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
+	private MapRoute readFeed(XmlPullParser parser, String type) throws XmlPullParserException, IOException{
+		
 		MapRoute route = new MapRoute();
-		parser.require(XmlPullParser.START_TAG, ns, "DirectionsResponse");
+		parser.require(XmlPullParser.START_TAG, ns, type);
 		while(parser.next() != XmlPullParser.END_TAG) {
 			if(parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
 			}
 			String name = parser.getName();
 			if(name.equals("route")) {
-				route = readRoute(parser);
+				route = readFeed(parser, "route");
+			}
+			else if(name.equals("leg")) {
+				route = readLeg(parser);
 			}
 			else {
 				skip(parser);
 			}
 		}
-		Log.e("Reached","End Feed");
 		return route;
-	}
-	private MapRoute readRoute(XmlPullParser parser) throws XmlPullParserException, IOException {
-		MapRoute route = new MapRoute();
-		Log.e("Reached","Route");
-		parser.require(XmlPullParser.START_TAG, ns, "route");
-		while(parser.next() != XmlPullParser.END_TAG) {
-			if(parser.getEventType() != XmlPullParser.START_TAG) {
-				continue;
-			}
-			String name = parser.getName();
-			if(name.equals("leg")) {
-				route = readLeg(parser);
-			} else {
-				skip(parser);
-			}
-		}
-		Log.e("Reached","End Route");
-		return route;
-	}
+	}	
+	
+	/**
+	 * Method for reading leg
+	 * @param parser
+	 * @return the MapRoute for the leg
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private MapRoute readLeg(XmlPullParser parser) throws XmlPullParserException, IOException
 	{
 		Log.e("Reached","Leg");
 		MapRoute route = new MapRoute();
-		//ArrayList<MapLocation> mapPoints = new ArrayList<MapLocation>();
 		double duration = 0;
 		parser.require(XmlPullParser.START_TAG, ns, "leg");
-		//int i = 0;
 		while(parser.next() != XmlPullParser.END_TAG) {
 			if(parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
 			}
 			String name = parser.getName();
 			if(name.equals("step")) {
-				Log.e("Reached","Step0");
 				Step step = readStep(parser);
 				try
 				{
 					duration = duration + (Double.parseDouble(step.minutesDuration)/60);
-					//Log.e("Duration", Double.toString(Double.parseDouble(step.minutesDuration.replace(" mins", "").replace(" min", ""))));
-					//Log.e("Total duration",n
 				}
 				catch(Exception e)
 				{
-					Log.e("DurationException", e.getMessage());
+					
 				}
-				//MapRoute tempRoute = new MapRoute();
 				route.addCoordinate(new MapLocation(Double.parseDouble(step.getStartLatitude()), Double.parseDouble(step.getStartLongitude())));
 				//Polyline
 				for(int i = 0; i < step.mapPoints.size(); i++) {
@@ -109,41 +118,37 @@ public class XMLParser
 				//End polyline
 				route.addCoordinate(new MapLocation(Double.parseDouble(step.getEndLatitude()), Double.parseDouble(step.getEndLongitude())));
 				route.addToDrivingThroughList(new MapLocation(Double.parseDouble(step.getEndLatitude()), Double.parseDouble(step.getEndLongitude())));
-				
-				//route.setDistanceDescription(step.getDescription());
-				//route.setDistanceInKilometers(Double.parseDouble(step.getKmDistance()));
 				route.setDistanceInMinutes(duration);
-				//route.setName("Test"); //Use <summary>?
-				//route.addRouteAsPartOfThis(tempRoute, (i==0));
-				
-				
-				//i++;
 			} else {
 				skip(parser);
 			}
 		}
-		Log.e("Reached","End Leg");
 		return route;
 	}
+	
+	/**
+	 * Method for reading a step
+	 * @param parser
+	 * @return the Step step
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private Step readStep(XmlPullParser parser) throws XmlPullParserException, IOException {
-		//Log.e("Reached","Step1");
 		Step step = new Step();
 		parser.require(XmlPullParser.START_TAG, ns, "step");
 		
 		while(parser.next() != XmlPullParser.END_TAG) {
-			//Log.e("Reached",parser.getName());
 			if(parser.getEventType() != XmlPullParser.START_TAG){
 				continue;
 			}
 			String name = parser.getName();
-			//Log.e("Type", name);
 			if(name.equals("start_location")) {
-				LowLocation ll = readStartLocation(parser);
+				LowLocation ll = readLocation(parser, name);
 				step.setStartLatitude(ll.getLatitude());
 				step.setStartLongitude(ll.getLongitude());
 				
 			} else if(name.equals("end_location")) {
-				LowLocation ll = readEndLocation(parser);
+				LowLocation ll = readLocation(parser, name);
 				step.setEndLatitude(ll.getLatitude());
 				step.setEndLongitude(ll.getLongitude());
 				
@@ -151,75 +156,76 @@ public class XMLParser
 				step.setMapPoints(decodePoly(readPolyline(parser)));
 				
 			} else if(name.equals("duration")) {
-				step.setMinutesDuration(readDuration(parser));
+				step.setMinutesDuration(readData(parser, name, "value"));
 				
 			} else if(name.equals("html_instructions")) {
 				step.setDescription(readString(parser,"html_instructions"));
 			
 			} else if(name.equals("distance")) {
-				step.setKmDistance(readDistance(parser));
+				step.setKmDistance(readData(parser, name, "text"));
 			
 			} else {
 				skip(parser);
-			
 			}
 				
 		}
-		//Log.e("Step",step.getDescription());
-		Log.e("Reached","Step");
 		return step;
 	}
-	private LowLocation readEndLocation(XmlPullParser parser) throws XmlPullParserException, IOException {
-		LowLocation ll = new LowLocation();
-		parser.require(XmlPullParser.START_TAG, ns, "end_location");
+	
+	/**
+	 * Method for creating a LowLocation
+	 * @param parser
+	 * @param type
+	 * @return LowLocation lowLoc
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
+	private LowLocation readLocation(XmlPullParser parser, String type) throws XmlPullParserException, IOException{
+		
+		LowLocation lowLoc = new LowLocation();
+		
+		parser.require(XmlPullParser.START_TAG, ns, type);
+		
 		while(parser.next() != XmlPullParser.END_TAG) {
 			if(parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
 			}
 			String name = parser.getName();
 			if(name.equals("lat")) {
-				ll.setLatitude(readString(parser,"lat"));
+				lowLoc.setLatitude(readString(parser,"lat"));
 			
 			} else if(name.equals("lng")) {
-				ll.setLongitude(readString(parser,"lng"));
-			
-			} else {
-				skip(parser);
-			}
-		}
-		return ll;
-	}
-	private LowLocation readStartLocation(XmlPullParser parser) throws XmlPullParserException, IOException {
-		LowLocation ll = new LowLocation();
-		parser.require(XmlPullParser.START_TAG, ns, "start_location");
-		while(parser.next() != XmlPullParser.END_TAG) {
-			if(parser.getEventType() != XmlPullParser.START_TAG) {
-				continue;
-			}
-			String name = parser.getName();
-			if(name.equals("lat")) {
-				ll.setLatitude(readString(parser,"lat"));
-			
-			} else if(name.equals("lng")) {
-				ll.setLongitude(readString(parser,"lng"));
+				lowLoc.setLongitude(readString(parser,"lng"));
 			
 			} else {
 				skip(parser);
 			
 			}
 		}
-		return ll;
+		
+		return lowLoc;
+		
 	}
-	private String readDistance(XmlPullParser parser) throws XmlPullParserException, IOException {
+	
+	/**
+	 * Method for reading data relevant for the journey
+	 * @param parser
+	 * @param typeName
+	 * @param type
+	 * @return a String containing the data fetched
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
+	private String readData(XmlPullParser parser, String typeName, String type) throws XmlPullParserException, IOException{
 		String ret = "";
-		parser.require(XmlPullParser.START_TAG, ns, "distance");
+		parser.require(XmlPullParser.START_TAG, ns, typeName);
 		while(parser.next() != XmlPullParser.END_TAG) {
 			if(parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
 			}
 			String name = parser.getName();
-			if(name.equals("text")) {
-				ret = readString(parser,"text");
+			if(name.equals(type)) {
+				ret = readString(parser,type);
 			
 			} else {
 				skip(parser);
@@ -229,24 +235,13 @@ public class XMLParser
 		return ret;
 	}
 	
-	private String readDuration(XmlPullParser parser) throws XmlPullParserException, IOException {
-		String ret = "";
-		parser.require(XmlPullParser.START_TAG, ns, "duration");
-		while(parser.next() != XmlPullParser.END_TAG) {
-			if(parser.getEventType() != XmlPullParser.START_TAG) {
-				continue;
-			}
-			String name = parser.getName();
-			if(name.equals("value")) {
-				ret = readString(parser,"value");
-			
-			} else {
-				skip(parser);
-			
-			}
-		}
-		return ret;
-	}
+	/**
+	 * Method for reading a PolyLine
+	 * @param parser
+	 * @return a String containing a PolyLine
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private String readPolyline(XmlPullParser parser) throws XmlPullParserException, IOException {
 		String ret = "";
 		parser.require(XmlPullParser.START_TAG, ns, "polyline");
@@ -266,6 +261,15 @@ public class XMLParser
 		
 		return ret;
 	}
+	
+	/**
+	 * Method for reading a String
+	 * @param parser
+	 * @param name
+	 * @return the processed String
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private String readString(XmlPullParser parser, String name) throws XmlPullParserException, IOException {
 		
 		parser.require(XmlPullParser.START_TAG, ns, name);
@@ -275,9 +279,15 @@ public class XMLParser
 			parser.nextTag();
 		}
 		parser.require(XmlPullParser.END_TAG, ns, name);
-		//Log.e("Result",result);
 		return result;
 	}
+	
+	/**
+	 * Skip-method
+	 * @param parser
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
     	if(parser.getEventType() != XmlPullParser.START_TAG) {
     		throw new IllegalStateException();
@@ -294,6 +304,12 @@ public class XMLParser
     		}
     	}
     }
+	
+	/**
+	 * 
+	 * @param encoded
+	 * @return
+	 */
 	public static ArrayList<Location> decodePoly(String encoded) {
 		ArrayList<Location> poly = new ArrayList<Location>();
 		int index = 0, len = encoded.length();
@@ -325,5 +341,5 @@ public class XMLParser
 		  }
 		  return poly;
 		 }
-
+	
 }
