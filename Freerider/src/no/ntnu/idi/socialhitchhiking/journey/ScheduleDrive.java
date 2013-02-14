@@ -270,12 +270,13 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		if(routeAdap != null)routeAdap.notifyDataSetChanged();
+		//Why on earth is this code here?
+		//if(routeAdap != null)routeAdap.notifyDataSetChanged();
 	}
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if(routeAdap != null)routeAdap.notifyDataSetChanged();
+		//if(routeAdap != null)routeAdap.notifyDataSetChanged();
 	}
 	private class RouteAdapter extends ArrayAdapter<Route>{
 		public RouteAdapter(Context context, int textViewResourceId,
