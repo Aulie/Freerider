@@ -9,6 +9,11 @@
     <string name="server_url">vm-6116.idi.ntnu.no</string>
     <string name="server_port">8080</string>
     
+    <string name="date_prompt">[Choose an option]</string>
+    <string-array name="date_array">
+        <item>Upcoming</item>
+        <item>Specific date</item>
+    </string-array>
     
 
 </resources>

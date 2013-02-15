@@ -106,8 +106,8 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		searchTo = (AutoCompleteTextView) findViewById (R.id.search2);
 		searchFrom = (AutoCompleteTextView) findViewById (R.id.searchText);
 
-		clear = (ImageButton)findViewById(R.id.finddriver_clear);
-		mapmode = (ImageButton)findViewById(R.id.finddriver_mapmode);
+		//clear = (ImageButton)findViewById(R.id.finddriver_clear);
+		//mapmode = (ImageButton)findViewById(R.id.finddriver_mapmode);
 		search = (Button) findViewById(R.id.searchButton);
 		driverList = (ListView) findViewById (R.id.list);
 		dc = new DateChooser(this, this);
@@ -140,6 +140,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 				imm.hideSoftInputFromWindow(searchTo.getWindowToken(), 0);
 			}
 		});
+		/*
 		clear.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -152,6 +153,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 				mapMode();
 			}
 		});
+		*/
 
 	}
 	
@@ -178,7 +180,9 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			search.performClick();
 		}
 	}
-	
+	public void onDateClicked(View v){
+		
+	}
 	/**
 	 * Method called by the PropertyChangeListener when the application gets a
 	 * new access token from facebook.
