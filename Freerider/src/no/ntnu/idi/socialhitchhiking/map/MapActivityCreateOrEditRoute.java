@@ -194,32 +194,23 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		acFrom.setAdapter(adapter);
 		acFrom.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acFrom));
-		acFrom.setThreshold(1);
-		
-		
-			
+		acFrom.setThreshold(1);	
 		acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
 		acTo.setAdapter(adapter);
 		acTo.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acTo));
 		
 		acTo.setOnEditorActionListener(new EditText.OnEditorActionListener(){
-
 			@Override
 			public boolean onEditorAction(TextView v, int actionId,
 					KeyEvent event) {
-				
-				Log.e("Ime_action_done", EditorInfo.IME_ACTION_DONE + "");
 				if(actionId == EditorInfo.IME_ACTION_DONE){
 					findAndDrawPath(v);
 					return true;
 				}
 				else{
-					Log.e("actionID", actionId + "");
 					return false;
 				}
-				
 			}
-			
 		});
 
 	}
