@@ -142,8 +142,8 @@ public abstract class SocialHitchhikingActivity extends Activity{
 		}
 		return false;
 	}
-	@Override
-	public void onBackPressed() {
+	
+/*	public void onBackPressed() {
 		if(this.getClass() != Main.class){
 			Intent main = new Intent(this, no.ntnu.idi.socialhitchhiking.Main.class);
 			main.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -153,7 +153,7 @@ public abstract class SocialHitchhikingActivity extends Activity{
 		
 		super.onBackPressed();
 	}
-	
+	*/
 	protected void createAlertDialog(SocialHitchhikingActivity activity,boolean flag,final String type,String action,String msg){
 		if(flag){
 			new AlertDialog.Builder(this)

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/createOrLoadRideScreenReuse"
+        android:layout_width="250dp"
+        android:layout_below="@+id/createOrLoadRideScreenNew"
+        android:layout_centerHorizontal="true"
+        android:onClick="onReuseRideClick"
+        android:layout_height="55dp"
+        android:layout_marginTop="30dp"
+
+        android:text="Reuse previous ride" />
+
+    <Button
+        android:id="@+id/createOrLoadRideScreenNew"
+        android:layout_width="250dp"
+        android:layout_height="55dp"
+        android:layout_alignLeft="@+id/createOrLoadRideScreenReuse"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="169dp"
+        android:onClick="onScheduleNewRideClick"
+        android:text="Create New Ride" />
+
+</RelativeLayout>
