@@ -82,7 +82,6 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 	}
 	private Calendar dateAndTime;
 	private DateChooser dc;
-	private Button defineBtn;
 	private ListView listRoute;
 	private Route selectedRoute;
 	private RouteAdapter routeAdap;
@@ -106,16 +105,6 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		setContentView(R.layout.schedule_drive);
 		listRoute = (ListView) findViewById(R.id.routeList);
 		initRoutes();
-
-		defineBtn = (Button) findViewById(R.id.defineRoute);
-		defineBtn.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(ScheduleDrive.this, MapActivityCreateOrEditRoute.class);
-				startActivity(intent);
-			} 
-		});
 
 		listRoute.setChoiceMode(ListView.CHOICE_MODE_SINGLE);  
 		listRoute.setOnItemLongClickListener(new OnItemLongClickListener() {

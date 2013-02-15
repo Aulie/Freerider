@@ -264,12 +264,12 @@ public class Main extends FBConnectionActivity{
 	 * Starts the Intent MapViewActivity
 	 */
 	private void startCreateJourney(){
-		//initActivity(no.ntnu.idi.socialhitchhiking.journey.ScheduleDrive.class);
-		Intent intent = new Intent(this,no.ntnu.idi.socialhitchhiking.journey.ScheduleDrive.class);
+		initActivity(no.ntnu.idi.socialhitchhiking.journey.CreateOrLoadRide.class);
+		//Intent intent = new Intent(this,no.ntnu.idi.socialhitchhiking.journey.CreateOrLoadRide.class);
 		//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		//intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 		//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
+		//startActivity(intent);
 	}
 
 	/**

@@ -31,7 +31,16 @@
 
         <receiver android:name="no.ntnu.idi.socialhitchhiking.service.AlarmService" ></receiver>
         <receiver android:name="no.ntnu.idi.socialhitchhiking.service.JourneyReminder" ></receiver>
-
+		
+        
+        <activity
+            android:name=".journey.CreateOrLoadRide"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="no.ntnu.idi.socialhitchhiking.journey.SCHEDULEDRIVE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".journey.ScheduleDrive"
             android:label="@string/app_name"

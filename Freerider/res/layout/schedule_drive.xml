@@ -2,16 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
+    android:orientation="vertical"
     >
-
-    <Button
-        android:id="@+id/defineRoute"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Define new Route" 
-        android:drawableRight="@android:drawable/ic_menu_add"/>
-    <ListView
+    <ListView
         android:id="@+id/routeList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
