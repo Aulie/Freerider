@@ -49,8 +49,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -58,6 +61,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -66,6 +70,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -140,6 +146,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	@Override
 	protected void initContentView() {
 		setContentView(R.layout.mapactivity_create_route);
+		
+		//Setter drawable mbl
+		//Drawable myDrawable = getResources().getDrawable(R.drawable.google_marker_thumb_mini_start);
+		
 	}
 
 	@Override
@@ -180,16 +190,37 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	 */
 	private void initAutocomplete() {
 		adapter = new ArrayAdapter<String>(this,R.layout.item_list);
-		
 		adapter.setNotifyOnChange(true); 
-
 		acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		acFrom.setAdapter(adapter);
 		acFrom.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acFrom));
 		acFrom.setThreshold(1);
+		
+		
+			
 		acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
 		acTo.setAdapter(adapter);
 		acTo.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acTo));
+		
+		acTo.setOnEditorActionListener(new EditText.OnEditorActionListener(){
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				
+				Log.e("Ime_action_done", EditorInfo.IME_ACTION_DONE + "");
+				if(actionId == EditorInfo.IME_ACTION_DONE){
+					findAndDrawPath(v);
+					return true;
+				}
+				else{
+					Log.e("actionID", actionId + "");
+					return false;
+				}
+				
+			}
+			
+		});
 
 	}
 	

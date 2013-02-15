@@ -15,39 +15,66 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="25"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+             >
+            
 
-            <AutoCompleteTextView
-                android:id="@+id/etGoingFrom"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/mapViewBtnFrom" 
-                android:textSize="15sp">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-                <requestFocus />
-            </AutoCompleteTextView>
+                <AutoCompleteTextView
+                    android:id="@+id/etGoingFrom"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="40dip"
+                    android:ems="10"
+                    android:hint="@string/mapViewBtnFrom"
+                    android:textSize="15sp"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"
+                    />
 
-            <AutoCompleteTextView
-                android:id="@+id/etGoingTo"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/mapViewBtnTo" 
-                android:textSize="15sp">
-            </AutoCompleteTextView>
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/etGoingFromIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:src="@drawable/google_marker_thumb_mini_start"
+                    android:layout_marginBottom="2dip"
+                    android:layout_marginLeft="10dip" />
+                    
+            </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="75"
-            android:orientation="vertical" >
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-            <Button
-                android:id="@+id/btnGoingTo"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:onClick="findAndDrawPath"
-                android:text="@string/mapViewBtnDrawRoute" />
+                <AutoCompleteTextView
+                    android:id="@+id/etGoingTo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="40dip"
+                    android:ems="10"
+                    android:hint="@string/mapViewBtnTo"
+                    android:textSize="15sp"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" >
+
+                    <requestFocus />
+                </AutoCompleteTextView>
+
+                <ImageView
+                    android:id="@+id/etGoingToIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:src="@drawable/google_marker_thumb_mini_stop"
+                    android:layout_marginBottom="2dip"
+                    android:layout_marginLeft="10dip" />
+
+            </FrameLayout>
+
         </LinearLayout>
     </LinearLayout>
 
