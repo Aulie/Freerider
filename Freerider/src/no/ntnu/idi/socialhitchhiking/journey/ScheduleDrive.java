@@ -52,6 +52,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,13 @@ import android.widget.TextView;
  *
  */
 public class ScheduleDrive extends SocialHitchhikingActivity {
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		//super.onBackPressed();
+		Log.e("Back","ScheduleDrive");
+		finish();
+	}
 	private Calendar dateAndTime;
 	private DateChooser dc;
 	private Button defineBtn;
@@ -286,17 +294,25 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		}
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Route current = this.getItem(position);
-			LayoutInflater inflater = getLayoutInflater();
-			View row = inflater.inflate(R.layout.route_list_item, parent, false);
+			View row;
+			try
+			{
+				Route current = this.getItem(position);
+				LayoutInflater inflater = getLayoutInflater();
+				row = inflater.inflate(R.layout.route_list_item, parent, false);
 
-			TextView start = (TextView)row.findViewById(R.id.route_item_startpoint);
-			CheckedTextView name = (CheckedTextView)row.findViewById(R.id.route_item_name);
-			TextView stop = (TextView)row.findViewById(R.id.route_item_stoppoint);
-			start.setText("From: "+current.getStartAddress());
-			stop.setText("To: "+current.getEndAddress());
-			name.setText(current.getName());
-			
+				TextView start = (TextView)row.findViewById(R.id.route_item_startpoint);
+				CheckedTextView name = (CheckedTextView)row.findViewById(R.id.route_item_name);
+				TextView stop = (TextView)row.findViewById(R.id.route_item_stoppoint);
+				start.setText("From: "+current.getStartAddress());
+				stop.setText("To: "+current.getEndAddress());
+				name.setText(current.getName());
+				
+			}
+			catch(NullPointerException e)
+			{
+			 row = convertView;
+			}
 			return row;
 		}
 	}

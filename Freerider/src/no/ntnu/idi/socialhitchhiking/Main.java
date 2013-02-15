@@ -36,6 +36,7 @@ import org.apache.http.client.ClientProtocolException;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -263,7 +264,12 @@ public class Main extends FBConnectionActivity{
 	 * Starts the Intent MapViewActivity
 	 */
 	private void startCreateJourney(){
-		initActivity(no.ntnu.idi.socialhitchhiking.journey.ScheduleDrive.class);
+		//initActivity(no.ntnu.idi.socialhitchhiking.journey.ScheduleDrive.class);
+		Intent intent = new Intent(this,no.ntnu.idi.socialhitchhiking.journey.ScheduleDrive.class);
+		//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		//intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
 	}
 
 	/**

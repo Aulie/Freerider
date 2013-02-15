@@ -153,7 +153,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	}
 	@Override
 	public void onBackPressed() {
-		getApp().getRoutes().set(positionOfRoute, getApp().getOldEditRoute());
+		//getApp().getRoutes().set(positionOfRoute, getApp().getOldEditRoute());
 		super.onBackPressed();
 	}
 	private void createOneTimeJourney(){
