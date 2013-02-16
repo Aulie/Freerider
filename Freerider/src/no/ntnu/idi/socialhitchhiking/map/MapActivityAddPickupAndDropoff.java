@@ -54,6 +54,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
@@ -125,11 +126,25 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 */
 	private Overlay overlayDropoffCross = null;
 	
+	
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
 		Journey journey = getApp().getSelectedJourney();
+		// Setting up tabs
+		TabHost tabs = (TabHost)findViewById(R.id.tabhost);
+		tabs.setup();
+		
+		TabHost.TabSpec spec = tabs.newTabSpec("tag1");
+		spec.setContent(R.id.ride_tab);
+		spec.setIndicator("Ride");
+		tabs.addTab(spec);
+		
+		spec = tabs.newTabSpec("tag2");
+		spec.setContent(R.id.driver_tab);
+		spec.setIndicator("Driver");
+		tabs.addTab(spec);
 		
 		try{
 			((ImageView)findViewById(R.id.mapViewPickupImage)).setImageBitmap(getPicture(journey.getRoute().getOwner()));
