@@ -14,7 +14,9 @@ import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
  */
 public class CreateOrLoadRide extends SocialHitchhikingActivity {
 
-	
+	public void onBackPressed() {
+		finish();
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
