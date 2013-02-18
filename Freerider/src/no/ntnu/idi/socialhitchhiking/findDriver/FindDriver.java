@@ -30,6 +30,9 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+
+import com.google.android.maps.GeoPoint;
 
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
@@ -46,13 +49,17 @@ import no.ntnu.idi.socialhitchhiking.map.GeoHelper;
 import no.ntnu.idi.socialhitchhiking.map.MapActivitySearch;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
+import no.ntnu.idi.socialhitchhiking.utility.GpsHandler;
 import no.ntnu.idi.socialhitchhiking.utility.JourneyAdapter;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -105,6 +112,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	private OnDateSetListener odsl;
 	private ArrayList<SpinnerEntry> spinnerList;
 	private ArrayAdapter<SpinnerEntry> spinnerAdapter;
+	private ProgressDialog loadingDialog;
 
 
 	/** Called when the activity is first created. */
@@ -386,6 +394,37 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		searchTo = (AutoCompleteTextView) findViewById(R.id.search2);  
 		searchTo.setAdapter(adapter2);
 		searchTo.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter2, searchTo));
+
+	}
+	public void gotLocation(android.location.Location location) {
+		Log.e("Reached","gotLocation");
+		//searchFrom.setText(GeoHelper.getAddressAtPointString(new GeoPoint((int)(location.getLatitude()* 1E6), (int)(location.getLongitude()* 1E6))));
+		//Log.e("Test",GeoHelper.getAddressAtPointString(new GeoPoint((int)(location.getLatitude()* 1E6), (int)(location.getLongitude()* 1E6))));
+		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+		try {
+			List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+			searchFrom.setText(addresses.get(0).getAddressLine(0));
+		} catch (IOException e) {
+			Log.e("IOError",e.getMessage());
+		}
+		loadingDialog.dismiss();
+	}
+	public void onGpsClicked(View view) {
+		final GpsHandler gps = new GpsHandler(this);
+		gps.findLocation();
+		loadingDialog = ProgressDialog.show(this, "Locating", "Finding your location");
+		new Thread() {
+			public void run() {
+				try {
+					sleep(20000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				loadingDialog.dismiss();
+				gps.abortGPS();
+			}
+		}.start();
 
 	}
 

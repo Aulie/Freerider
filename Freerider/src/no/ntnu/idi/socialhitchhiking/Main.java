@@ -163,7 +163,7 @@ public class Main extends FBConnectionActivity{
 
 			if(s.isCheckSettings() && !getApp().isKey("main")){
 				if(s.isWifi() && s.isOnline()){
-					Toast msg = Toast.makeText(getApp(), "You're connected to the internet:)", 1);
+					Toast msg = Toast.makeText(getApp(), "Connected", 1);
 					msg.show();
 				}
 				if(s.isWifi() && !s.isOnline()){
@@ -258,7 +258,9 @@ public class Main extends FBConnectionActivity{
 	 * Starts the Intent FindDriver
 	 */
 	private void startFindDriver(){
-		initActivity(no.ntnu.idi.socialhitchhiking.findDriver.FindDriver.class);
+		//initActivity(no.ntnu.idi.socialhitchhiking.findDriver.FindDriver.class);
+		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.findDriver.FindDriver.class);
+		startActivity(intent);
 	}
 	/**
 	 * Starts the Intent MapViewActivity
