@@ -81,14 +81,15 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 /**
- * This is the activity where the hitchhiker search for available drivers. The hitchhiker enters where he or she
- * is going from and where he or she is going to. By pressing the search button a search is started and
+ * This is the activity where the hitchhiker search for available drivers. The hitchhiker enters where he/she
+ * is going from, where he/she is going to and what date he/she wants to depart. By pressing the search button a search is started and
  * the result is shown in a list. By clicking on a driver in the list the hitchhiker will get extra information
  * about the driver and the drivers journey. The hitchhiker can then define pickup and dropoff points, and send a request 
  * to join. If desirable a comment can also be sent with the request.
  * 
  * @author Pål
  * @author Christian Thurmann-Nielsen
+ * @author Thomas Gjerde
  *
  */
 public class FindDriver extends SocialHitchhikingActivity implements PropertyChangeListener{
@@ -134,8 +135,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		spinnerAdapter = new ArrayAdapter<FindDriver.SpinnerEntry>(this, android.R.layout.simple_spinner_dropdown_item,spinnerList);
 		pickDate.setAdapter(spinnerAdapter);
 		spinnerAdapter.notifyDataSetChanged();
-		//clear = (ImageButton)findViewById(R.id.finddriver_clear);
-		//mapmode = (ImageButton)findViewById(R.id.finddriver_mapmode);
 		search = (Button) findViewById(R.id.searchButton);
 		driverList = (ListView) findViewById (R.id.list);
 		dc = new DateChooser(this, this);
@@ -182,7 +181,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 				    //Check if set
 				}
 				else if(position == 0) {
-					//searchDate.set(2000, 1, 1);
 				    if(spinnerList.size() == 3) {
 				    	spinnerList.remove(2);
 				    	spinnerAdapter.notifyDataSetChanged();
@@ -204,7 +202,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			@Override
 			public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
 				searchDate.set(arg0.getYear(), arg0.getMonth(), arg0.getDayOfMonth());
-				//Spinner spinner = (Spinner) findViewById(R.id.pickDate);
 
 			    if(spinnerList.size() == 3) {
 				    SpinnerEntry se = spinnerList.get(2);
@@ -217,29 +214,12 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			    	Spinner spinner = (Spinner) findViewById(R.id.pickDate);
 			    	spinner.setSelection(2);
 			    }
-			    //spinnerList.add(new SpinnerEntry("Date",searchDate));
 			    spinnerAdapter.notifyDataSetChanged();
-			    Log.e("ODSL", "Run");
-				
 			}
 			
 		};
-		/*
-		clear.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				clear();
-			}
-		});
-		mapmode.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				mapMode();
-			}
-		});
-		*/
-
 	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -266,45 +246,37 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	/**
 	 * Method called by the PropertyChangeListener when the application gets a
 	 * new access token from facebook.
+	 * @deprecated
 	 */
 	private void relogin(){
 		if(sendLoginRequest()){
 			//chooseDate();
 		}
 	}
-	private void clear(){
-		searchFrom.setText("");
-		searchTo.setText("");
-		searchDate = null;
-		journeys = new ArrayList<Journey>();
-		driverList.setAdapter(new JourneyAdapter(this, 0, journeys));
-	}
-	private void mapMode(){
-		Intent mapIntent = new Intent(getApplicationContext(), MapActivitySearch.class);
-		startActivityForResult(mapIntent, 7331);
-	}
-	private void chooseDate(){
-		dc.show();
-	}
 	/**
 	 * Search for journeys on the server and updates the list of journeys accordingly.
 	 */
 	private void doSearch(){
 		try {
+			//If date is set to 'Upcoming' then run search 7 times and increase date for each iteration
 			if(pickDate.getSelectedItemPosition() == 0) {
+				Log.e("Upcoming","Yes");
 				Calendar c = Calendar.getInstance();
 				journeys = new ArrayList<Journey>();
 				for(int i = 0; i < 7; i++) {
 					searchDate.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 					List<Journey> tempList = search();
 					for(int j = 0; j < tempList.size(); j++) {
-						journeys.add(tempList.get(i));
+						journeys.add(tempList.get(j));
 					}
+					c.add(Calendar.DAY_OF_MONTH, 2); //2?
 				}
 			} else {
 				journeys = search();
 			}
-			
+			if(journeys.size() == 0) {
+				Toast.makeText(this, "No rides matched your search", Toast.LENGTH_LONG);
+			}
 			driverList.setAdapter(new JourneyAdapter(this, 0, journeys));
 		} catch (NullPointerException e) {
 			Toast toast = Toast.makeText(FindDriver.this, "ERROR in receiving journeys", 2);
@@ -332,7 +304,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	 * Sends a search request to the server, with start and stop locations.
 	 * Creates a dialog if the request is not sent.
 	 * 
-	 * @return
+	 * @return List of Journeys
 	 */
 	private List<Journey> search() {
 		JourneyResponse res = null;
@@ -367,13 +339,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			createAlertDialog(this, false, "Search request","sent", "IOException");
 			e.printStackTrace();
 		}   
-
-		if(res.getJourneys().size() == 0){
-			String msg = "No results...";
-			Toast toast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
-			toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
-			toast.show();
-		}
 		return res.getJourneys();
 	}
 
@@ -396,19 +361,27 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		searchTo.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter2, searchTo));
 
 	}
+	/**
+	 * Called when GPS has determined the user's current location
+	 * Converts coordinates to address and puts the result in the Origin field
+	 * @param location The user's current location
+	 */
 	public void gotLocation(android.location.Location location) {
-		Log.e("Reached","gotLocation");
-		//searchFrom.setText(GeoHelper.getAddressAtPointString(new GeoPoint((int)(location.getLatitude()* 1E6), (int)(location.getLongitude()* 1E6))));
-		//Log.e("Test",GeoHelper.getAddressAtPointString(new GeoPoint((int)(location.getLatitude()* 1E6), (int)(location.getLongitude()* 1E6))));
 		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 		try {
 			List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-			searchFrom.setText(addresses.get(0).getAddressLine(0));
+			searchFrom.setText(addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1));
 		} catch (IOException e) {
 			Log.e("IOError",e.getMessage());
 		}
 		loadingDialog.dismiss();
 	}
+	/**
+	 * Handles the click event when the current location button is clicked
+	 * Starts {@link GpsHandler}, shows a loading screen while waiting for result
+	 * and stops {@link GpsHandler} if no result is returned withing 60 seconds
+	 * @param view
+	 */
 	public void onGpsClicked(View view) {
 		final GpsHandler gps = new GpsHandler(this);
 		gps.findLocation();
@@ -416,9 +389,8 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		new Thread() {
 			public void run() {
 				try {
-					sleep(20000);
+					sleep(60000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				loadingDialog.dismiss();
@@ -427,7 +399,9 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		}.start();
 
 	}
-
+	/**
+	 * @deprecated
+	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent ev) {
 		if(ev.getPropertyName() == SocialHitchhikingApplication.ACCESS_TOKEN){
