@@ -232,15 +232,13 @@ public class Main extends FBConnectionActivity{
 		AlertDialog alert =	new AlertDialog.Builder(this).create();
 		alert.setTitle("ERROR");
 		alert.setMessage(msg);
-
 		alert.setButton(buttonText, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				loginAsNewClicked(showLoginFailed);
 			} });
-		alert.setButton2("Exit", new DialogInterface.OnClickListener() {
-
+			alert.setButton2("Exit", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				finish();
