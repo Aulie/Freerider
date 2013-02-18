@@ -18,6 +18,7 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  *
+ *
  */
 package no.ntnu.idi.socialhitchhiking.journey;
 
@@ -40,7 +41,6 @@ import no.ntnu.idi.freerider.protocol.UserRequest;
 import no.ntnu.idi.freerider.protocol.UserResponse;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
-import no.ntnu.idi.socialhitchhiking.map.MapActivityCreateOrEditRoute;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
@@ -60,16 +60,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * This is the activity where the driver creates a journey.The driver could define a new route for this journey or
- * select a previously created route from a list. When a route is specified, date and time is set, and the journey is created.
+ * This is the activity with a list of previous rides created by the user. The driver can reuse the old ride by selecting the ride form the list.
+* When a ride is selected the driver can change the ride preferences , time and date as he would do when creating a new ride. 
  * @author Pål
  * @author Christian Thurmann-Nielsen
+ * @author Made Ziius
  *
  */
 public class ScheduleDrive extends SocialHitchhikingActivity {
@@ -104,6 +103,7 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.schedule_drive);
 		listRoute = (ListView) findViewById(R.id.routeList);
+		
 		initRoutes();
 
 		listRoute.setChoiceMode(ListView.CHOICE_MODE_SINGLE);  
@@ -288,13 +288,11 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 			{
 				Route current = this.getItem(position);
 				LayoutInflater inflater = getLayoutInflater();
-				row = inflater.inflate(R.layout.route_list_item, parent, false);
-
-				TextView start = (TextView)row.findViewById(R.id.route_item_startpoint);
-				CheckedTextView name = (CheckedTextView)row.findViewById(R.id.route_item_name);
-				TextView stop = (TextView)row.findViewById(R.id.route_item_stoppoint);
-				start.setText("From: "+current.getStartAddress());
-				stop.setText("To: "+current.getEndAddress());
+				row = inflater.inflate(R.layout.list_row, parent, false);
+				//sends the strings with ride info to list_row.xml 
+				TextView rideDescription =(TextView)row.findViewById(R.id.ride_description);
+				TextView name = (TextView)row.findViewById(R.id.ride_title);
+				rideDescription.setText("From: "+current.getStartAddress() +"\n"+ "To: "+current.getEndAddress());
 				name.setText(current.getName());
 				
 			}
