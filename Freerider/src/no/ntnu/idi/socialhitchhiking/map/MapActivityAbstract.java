@@ -308,6 +308,9 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 		mapView.getOverlays().add(gestureOverlay);
 		EditText etF = (EditText)findViewById(R.id.etGoingFrom);
 		EditText etT = (EditText)findViewById(R.id.etGoingTo);
+		
+		//adda av magnus
+		//EditText etA = (EditText)findViewById(R.id.etAddDest);
 
 		//Remove the keyboard:
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);

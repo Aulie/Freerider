@@ -2,8 +2,8 @@
 <resources>
     <string name="mapViewBtnFrom">Driving from</string>
     <string name="mapViewBtnTo">Driving to</string>
-    <string name="mapViewBtnDrawRoute">Draw route on map</string>
-    <string name="mapViewBtnChooseRoute">Choose this route</string>
+    <string name="mapViewBtnAdd">Add Destination</string><string name="mapViewBtnDrawRoute">Draw route on map</string>
+    <string name="mapViewBtnChooseRoute">Next</string>
     <string name="mapViewCheckBoxSave">Save?</string>
     
     <string name="mapViewPickupEtComment">Comment to driver</string>
@@ -25,6 +25,7 @@
     
     <string name="dragAndDropHeader">Drag to choose order</string>
     <string name="dragAndDropOK">OK</string>
+    
     
 </resources>
 

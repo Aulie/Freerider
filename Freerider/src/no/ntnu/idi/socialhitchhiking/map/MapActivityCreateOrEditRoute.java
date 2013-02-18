@@ -81,6 +81,9 @@ import com.google.android.maps.MapView;
  * The activity where a user creates or edits a {@link Route}. 
  */
 public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
+	
+	//adda av magnus
+	private AutoCompleteTextView acAdd;
 
 	/**
 	 * This {@link CheckBox} determines whether a route should be saved or 
@@ -200,6 +203,24 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		acTo.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acTo));
 		
 		acTo.setOnEditorActionListener(new EditText.OnEditorActionListener(){
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if(actionId == EditorInfo.IME_ACTION_DONE){
+					findAndDrawPath(v);
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
+		});
+		
+		acAdd = (AutoCompleteTextView) findViewById(R.id.etAddDest);
+		acAdd.setAdapter(adapter);
+		acAdd.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acAdd));
+		
+		acAdd.setOnEditorActionListener(new EditText.OnEditorActionListener(){
 			@Override
 			public boolean onEditorAction(TextView v, int actionId,
 					KeyEvent event) {
