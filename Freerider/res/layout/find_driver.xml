@@ -8,7 +8,7 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-
+				<!-- Layout for allowing overlap -->
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
@@ -21,7 +21,7 @@
 
                     <requestFocus />
                 </AutoCompleteTextView>
-
+				<!-- Current location button -->
                 <ImageButton
                     android:id="@+id/gpsButton"
                     android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
             android:layout_width="fill_parent"
             android:layout_height="55dp"
             android:orientation="horizontal" >
-
+			<!-- Dropdown list -->
             <Spinner
                 android:id="@+id/pickDate"
                 android:layout_width="wrap_content"
