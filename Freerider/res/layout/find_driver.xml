@@ -8,7 +8,7 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-
+				<!-- Layout for allowing overlap -->
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
@@ -17,13 +17,14 @@
                     android:id="@+id/searchText"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:hint="Origin" >
+                    android:hint="@string/origin" >
 
                     <requestFocus />
                 </AutoCompleteTextView>
-
+				<!-- Current location button -->
                 <ImageButton
                     android:id="@+id/gpsButton"
+                    android:contentDescription="@string/current_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
@@ -43,7 +44,7 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/search2" 
-                    android:hint="Destination"   
+                    android:hint="@string/destination"   
                     android:layout_height="55dp"
                     android:layout_width="0dip"
                     android:layout_weight="1" />
@@ -52,10 +53,10 @@
             android:layout_width="fill_parent"
             android:layout_height="55dp"
             android:orientation="horizontal" >
-
+			<!-- Dropdown list -->
             <Spinner
                 android:id="@+id/pickDate"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
@@ -72,8 +73,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="0.40"
                 android:onClick="search"
-                android:text="Search" />
-
+                android:text="@string/search"/>
         </LinearLayout>
 
         <ListView

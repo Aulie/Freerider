@@ -15,5 +15,10 @@
         <item>Specific date</item>
     </string-array>
     
+    <string name="search">Search</string>
+    <string name="destination">Destination</string>
+    <string name="current_location">Current location</string>
+    <string name="origin">Origin</string>
+    
 
 </resources>
