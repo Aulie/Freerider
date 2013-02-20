@@ -49,6 +49,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,6 +69,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -82,8 +85,8 @@ import com.google.android.maps.MapView;
  */
 public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	
-	//adda av magnus
-	private AutoCompleteTextView acAdd;
+	//adda
+	private FrameLayout AddDestFrameLayout;
 
 	/**
 	 * This {@link CheckBox} determines whether a route should be saved or 
@@ -118,7 +121,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		super.onCreate(icicle);
 
 		initAutocomplete();
-
+		//initAddDestButton();
+		
 		Bundle extras = getIntent().getExtras();
 		if(extras != null){
 			inEditMode = extras.getBoolean("editMode");
@@ -134,6 +138,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 		}
 		
+		//initAddDestButton();
+		
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -144,20 +150,127 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 					createOneTimeJourney();
 			}
 		});
+		
+		
+	}
+	
+	protected void setLayoutParams(){
+		AddDestFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, 80));
+	}
+	
+	
+	protected void initAddDestButton(){
+		
+		//Den blir kjørt, men av en eller annen grunn dukker den ikke opp
+		Log.e("initAddDestButton", "har blitt kjort");
+		AddDestFrameLayout = new FrameLayout(this);
+		
+		AddDestFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+		AddDestFrameLayout.setEnabled(true);
+		//AddDestFrameLayout.bringToFront();
+		//AddDestFrameLayout.set
+		
+		ImageView destAddIcon = new ImageView(this);
+		destAddIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+		destAddIcon.setPadding(7, 1, 0, 0);
+		destAddIcon.setImageResource(R.drawable.cross_dropoff);
+		
+		AddDestFrameLayout.addView(destAddIcon);
+		
+		TextView destAddText = new TextView(this);
+		destAddText.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+		destAddText.setPadding(40, 4, 0, 0);
+		destAddText.setTextSize(15);
+		destAddText.setText(R.string.mapViewBtnAdd);
+		
+		AddDestFrameLayout.addView(destAddText);
+		
+		Log.e("intAddDestButton", "Er ferdig");
+		AddDestFrameLayout.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				
+				initDestFrameLayout();
+				setLayoutParams();
+				//AddDestFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, 80));
+				
+			}
+			
+		});
+	}
+	
+	protected void initDestFrameLayout(){
+		
+		//LinearLayout
+		//sclLayout = (LinearLayout) findViewById(R.id.sclLayout);
+		
+		
+		//The FrameLayout
+		FrameLayout destFrameLayout = new FrameLayout(this);
+		destFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+		
+		
+		//The acTextField
+		AutoCompleteTextView acAdd1 = new AutoCompleteTextView(this);
+		acAdd1.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+		acAdd1.setEms(10);
+		acAdd1.setHint(R.string.mapViewBtnAdd);
+		acAdd1.setImeOptions(6);
+		acAdd1.setPadding(40, 0, 0, 0);
+		acAdd1.setSingleLine();
+		acAdd1.setTextSize(15);
+		acAdd1.setId(192341);
+		
+		//Adds the AcTextField to the layout
+		destFrameLayout.addView(acAdd1);
+		
+		//The Image Icon
+		ImageView destIcon = new ImageView(this);
+		destIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+		destIcon.setPadding(7, 7, 0, 0);
+		destIcon.setImageResource(R.drawable.cross_dropoff);
+		
+		destFrameLayout.addView(destIcon);
+		
+		
+		//LayoutParams params2 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 80);
+		//buttonAdd.setLayoutParams(params2);
+		//sclLayout.addView(destFrameLayout);
+		
+		//acAdd1 = (AutoCompleteTextView) findViewById(192341);
+		acAdd1.setAdapter(adapter);
+		acAdd1.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acAdd1));
+		//acAdd1.setBackgroundColor(Color.TRANSPARENT);
+		
+		acAdd1.setOnEditorActionListener(new EditText.OnEditorActionListener(){
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if(actionId == EditorInfo.IME_ACTION_DONE){
+					findAndDrawPath(v);
+					
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
+		});
+		
 	}
 
 	@Override
 	protected void initContentView() {
 		setContentView(R.layout.mapactivity_create_route);
 		
-		//Setter drawable mbl
-		//Drawable myDrawable = getResources().getDrawable(R.drawable.google_marker_thumb_mini_start);
 		
 	}
 
 	@Override
 	protected void initMapView(){
 		mapView = (MapView)findViewById(R.id.map_view);
+		
 	}
 	
 	@Override
@@ -202,11 +315,14 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		acTo.setAdapter(adapter);
 		acTo.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acTo));
 		
+		initAddDestButton();
+		
 		acTo.setOnEditorActionListener(new EditText.OnEditorActionListener(){
 			@Override
 			public boolean onEditorAction(TextView v, int actionId,
 					KeyEvent event) {
 				if(actionId == EditorInfo.IME_ACTION_DONE){
+					
 					findAndDrawPath(v);
 					return true;
 				}
@@ -216,23 +332,6 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			}
 		});
 		
-		acAdd = (AutoCompleteTextView) findViewById(R.id.etAddDest);
-		acAdd.setAdapter(adapter);
-		acAdd.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acAdd));
-		
-		acAdd.setOnEditorActionListener(new EditText.OnEditorActionListener(){
-			@Override
-			public boolean onEditorAction(TextView v, int actionId,
-					KeyEvent event) {
-				if(actionId == EditorInfo.IME_ACTION_DONE){
-					findAndDrawPath(v);
-					return true;
-				}
-				else{
-					return false;
-				}
-			}
-		});
 
 	}
 	

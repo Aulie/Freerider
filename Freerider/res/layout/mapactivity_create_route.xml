@@ -11,98 +11,76 @@
         android:orientation="horizontal"
         android:weightSum="100" >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
             android:layout_weight="25"
-            android:orientation="vertical"
              >
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+            <LinearLayout
+                android:id="@+id/sclLayout"
+                android:layout_width="319dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="25"
+                android:orientation="vertical" >
 
-                <AutoCompleteTextView
-                    android:id="@+id/etGoingFrom"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="40dip"
-                    android:ems="10"
-                    android:hint="@string/mapViewBtnFrom"
-                    android:textSize="15sp"
-                    android:imeOptions="actionNext"
-                    android:singleLine="true"
-                    /><requestFocus />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
 
-                <ImageView
-                    android:id="@+id/etGoingFromIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|center_vertical"
-                    android:src="@drawable/google_marker_thumb_mini_start"
-                    android:layout_marginBottom="2dip"
-                    android:layout_marginLeft="10dip" />
-                    
-            </FrameLayout>
+                    <AutoCompleteTextView
+                        android:id="@+id/etGoingFrom"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/mapViewBtnFrom"
+                        android:imeOptions="actionNext"
+                        android:paddingLeft="40dip"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <AutoCompleteTextView
-                    android:id="@+id/etGoingTo"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="40dip"
-                    android:ems="10"
-                    android:hint="@string/mapViewBtnTo"
-                    android:textSize="15sp"
-                    android:imeOptions="actionDone"
-                    android:singleLine="true" >
-
-                    
-                </AutoCompleteTextView>
-
-                <ImageView
-                    android:id="@+id/etGoingToIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|center_vertical"
-                    android:src="@drawable/google_marker_thumb_mini_stop"
-                    android:layout_marginBottom="2dip"
-                    android:layout_marginLeft="10dip" />
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                    <ImageView
+                        android:id="@+id/etGoingFromIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginBottom="2dip"
+                        android:layout_marginLeft="10dip"
+                        android:src="@drawable/google_marker_thumb_mini_start" />
+                </FrameLayout>
                 
-                <AutoCompleteTextView
-                    android:id="@+id/etAddDest"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="40dip"
-                    android:ems="10"
-                    android:hint="@string/mapViewBtnAdd"
-                    android:textSize="15sp"
-                    android:layout_marginTop="6dip"
-                    android:imeOptions="actionDone"
-                    android:singleLine="true"
-                    android:background="@null"
-                    />
+				<!-- Add Going to Field -->
+                
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
 
-                <ImageView
-                    android:id="@+id/etAddDestIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|center_vertical"
-                    android:src="@drawable/google_marker_thumb_mini_through"
-                    android:layout_marginBottom="2dip"
-                    android:layout_marginLeft="10dip" />
-            </FrameLayout>
+                    <AutoCompleteTextView
+                        android:id="@+id/etGoingTo"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/mapViewBtnTo"
+                        android:imeOptions="actionDone"
+                        android:paddingLeft="40dip"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
 
-        </LinearLayout>
+                    <ImageView
+                        android:id="@+id/etGoingToIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginBottom="2dip"
+                        android:layout_marginLeft="10dip"
+                        android:src="@drawable/google_marker_thumb_mini_stop" />
+                </FrameLayout>
+                
+            </LinearLayout>
+
+        </ScrollView>
+
     </LinearLayout>
 
     <LinearLayout
