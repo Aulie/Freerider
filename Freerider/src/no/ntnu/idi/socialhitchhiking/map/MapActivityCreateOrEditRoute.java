@@ -24,6 +24,7 @@ package no.ntnu.idi.socialhitchhiking.map;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -87,6 +88,9 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	
 	//adda
 	private FrameLayout AddDestFrameLayout;
+	private LinearLayout sclLayout;
+	private ArrayList<AutoCompleteTextView> acList;
+	private String[] acStringList;
 
 	/**
 	 * This {@link CheckBox} determines whether a route should be saved or 
@@ -119,9 +123,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
+		
+		acList = new ArrayList<AutoCompleteTextView>();
 
 		initAutocomplete();
-		//initAddDestButton();
+		initAddDestButton();
 		
 		Bundle extras = getIntent().getExtras();
 		if(extras != null){
@@ -138,7 +144,6 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 		}
 		
-		//initAddDestButton();
 		
 		button.setOnClickListener(new OnClickListener() {
 			@Override
@@ -155,20 +160,65 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	}
 	
 	protected void setLayoutParams(){
-		AddDestFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, 80));
+		sclLayout.removeView(AddDestFrameLayout);
+		initAddDestButton();
+	}
+	
+	private void addToAcList(AutoCompleteTextView dest){
+		acList.add(dest);
+	}
+	
+	
+	private String[] getStringList(){
+		
+		
+		AutoCompleteTextView acV1 = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
+		AutoCompleteTextView acV2 = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
+		
+		
+		ArrayList<AutoCompleteTextView> mid = new ArrayList<AutoCompleteTextView>();
+		mid = getAcList();
+		
+		acStringList = new String[mid.size()+2];
+		
+		//Adds the Going from location to the list
+		
+		acStringList[0] = acV1.getText().toString();
+		
+				
+		//Adds all the locations between start/stop to the list
+		for(int i=1; i<mid.size()+1; i++){
+			
+			AutoCompleteTextView etD1 = mid.get(i-1);
+			
+			acStringList[i] = etD1.getText().toString();
+		}
+		
+		//Adds going To location to the list
+		acStringList[mid.size()+1] = acV2.getText().toString();
+		
+		
+		//check
+		for(int j=0; j<acStringList.length; j++){
+			Log.e("StringList" + j, "nr:" + acStringList[j]);
+		}
+		
+		return acStringList;
+		
+	}
+	
+	public ArrayList<AutoCompleteTextView> getAcList(){
+		return acList;
 	}
 	
 	
 	protected void initAddDestButton(){
 		
-		//Den blir kjørt, men av en eller annen grunn dukker den ikke opp
-		Log.e("initAddDestButton", "har blitt kjort");
 		AddDestFrameLayout = new FrameLayout(this);
 		
-		AddDestFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+		AddDestFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, 80));
 		AddDestFrameLayout.setEnabled(true);
-		//AddDestFrameLayout.bringToFront();
-		//AddDestFrameLayout.set
+		
 		
 		ImageView destAddIcon = new ImageView(this);
 		destAddIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
@@ -185,7 +235,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		
 		AddDestFrameLayout.addView(destAddText);
 		
-		Log.e("intAddDestButton", "Er ferdig");
+		//Ber til starwars
+		sclLayout = (LinearLayout) findViewById(R.id.sclLayout);
+		sclLayout.addView(AddDestFrameLayout, sclLayout.getChildCount());
+		
 		AddDestFrameLayout.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -193,7 +246,6 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				
 				initDestFrameLayout();
 				setLayoutParams();
-				//AddDestFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, 80));
 				
 			}
 			
@@ -201,10 +253,6 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	}
 	
 	protected void initDestFrameLayout(){
-		
-		//LinearLayout
-		//sclLayout = (LinearLayout) findViewById(R.id.sclLayout);
-		
 		
 		//The FrameLayout
 		FrameLayout destFrameLayout = new FrameLayout(this);
@@ -233,23 +281,23 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		
 		destFrameLayout.addView(destIcon);
 		
+		sclLayout.addView(destFrameLayout);
 		
-		//LayoutParams params2 = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 80);
-		//buttonAdd.setLayoutParams(params2);
-		//sclLayout.addView(destFrameLayout);
 		
-		//acAdd1 = (AutoCompleteTextView) findViewById(192341);
+		//ber til starwars
+		addToAcList(acAdd1);
+		
 		acAdd1.setAdapter(adapter);
 		acAdd1.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acAdd1));
-		//acAdd1.setBackgroundColor(Color.TRANSPARENT);
+		
 		
 		acAdd1.setOnEditorActionListener(new EditText.OnEditorActionListener(){
 			@Override
 			public boolean onEditorAction(TextView v, int actionId,
 					KeyEvent event) {
 				if(actionId == EditorInfo.IME_ACTION_DONE){
-					findAndDrawPath(v);
-					
+					//findAndDrawPath(v);
+					createMap();
 					return true;
 				}
 				else{
@@ -259,6 +307,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		});
 		
 	}
+	
+	protected void createMap(){
+		drawPathOnMap(GeoHelper.getLocationList(getStringList()));
+	}
+	
 
 	@Override
 	protected void initContentView() {
@@ -315,7 +368,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		acTo.setAdapter(adapter);
 		acTo.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acTo));
 		
-		initAddDestButton();
+		
 		
 		acTo.setOnEditorActionListener(new EditText.OnEditorActionListener(){
 			@Override
