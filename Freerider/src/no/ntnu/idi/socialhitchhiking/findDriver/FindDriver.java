@@ -32,8 +32,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.android.maps.GeoPoint;
-
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.Route;
@@ -46,7 +44,6 @@ import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.map.AutoCompleteTextWatcher;
 import no.ntnu.idi.socialhitchhiking.map.GeoHelper;
-import no.ntnu.idi.socialhitchhiking.map.MapActivitySearch;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
 import no.ntnu.idi.socialhitchhiking.utility.GpsHandler;
@@ -60,12 +57,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -74,10 +73,10 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -99,7 +98,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	protected Cursor cursor;
 	protected ListAdapter adapter;
 	private Button search;
-	private ImageButton clear,mapmode;
 	ArrayAdapter<String> adapter2;
 	protected ListView driverList;
 	private Journey selectedJourney;
@@ -109,11 +107,11 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	private Location goingFrom;
 	private Location goingTo;
 	private Spinner pickDate;
-	private DatePickerDialog datePicker;
 	private OnDateSetListener odsl;
 	private ArrayList<SpinnerEntry> spinnerList;
 	private ArrayAdapter<SpinnerEntry> spinnerAdapter;
 	private ProgressDialog loadingDialog;
+	private ProgressDialog searchingDialog;
 
 
 	/** Called when the activity is first created. */
@@ -220,6 +218,8 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		};
 	}
 	
+	
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -257,32 +257,8 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	 * Search for journeys on the server and updates the list of journeys accordingly.
 	 */
 	private void doSearch(){
-		try {
-			//If date is set to 'Upcoming' then run search 7 times and increase date for each iteration
-			if(pickDate.getSelectedItemPosition() == 0) {
-				Log.e("Upcoming","Yes");
-				Calendar c = Calendar.getInstance();
-				journeys = new ArrayList<Journey>();
-				for(int i = 0; i < 7; i++) {
-					searchDate.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-					List<Journey> tempList = search();
-					for(int j = 0; j < tempList.size(); j++) {
-						journeys.add(tempList.get(j));
-					}
-					c.add(Calendar.DAY_OF_MONTH, 2); //2?
-				}
-			} else {
-				journeys = search();
-			}
-			if(journeys.size() == 0) {
-				Toast.makeText(this, "No rides matched your search", Toast.LENGTH_LONG);
-			}
-			driverList.setAdapter(new JourneyAdapter(this, 0, journeys));
-		} catch (NullPointerException e) {
-			Toast toast = Toast.makeText(FindDriver.this, "ERROR in receiving journeys", 2);
-			toast.show();
-			e.printStackTrace();
-		}
+		searchingDialog = ProgressDialog.show(this, "Searching", "Searching");
+		new RideSearch().execute();
 	}
 
 	/**
@@ -412,6 +388,75 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			doSearch();
 		}
 	}
+	private class RideSearch extends AsyncTask<Void, Integer, String> {
+
+		@Override
+		protected String doInBackground(Void... params) {
+			//Looper.prepare();
+			try {
+				//If date is set to 'Upcoming' then run search 7 times and increase date for each iteration
+				if(pickDate.getSelectedItemPosition() == 0) {
+					//Log.e("Upcoming","Yes");
+					Calendar c = Calendar.getInstance();
+					journeys = new ArrayList<Journey>();
+					for(int i = 0; i < 7; i++) {
+						searchDate.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+						List<Journey> tempList = search();
+						for(int j = 0; j < tempList.size(); j++) {
+							journeys.add(tempList.get(j));
+						}
+						c.add(Calendar.DAY_OF_MONTH, 2); //2?
+					}
+				} else {
+					journeys = search();
+				}
+				if(journeys.size() == 0) {
+					//Toast.makeText(FindDriver.this, "No rides matched your search", Toast.LENGTH_LONG);
+				}
+				
+			} catch (NullPointerException e) {
+				//Toast toast = Toast.makeText(FindDriver.this, "ERROR in receiving journeys", Toast.LENGTH_LONG);
+				//toast.show();
+				Log.e("Error",e.getMessage());
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			driverList.setAdapter(new JourneyAdapter(FindDriver.this, 0, journeys){
+
+				public View getView(int position, View convertView, ViewGroup parent) {
+					View row;
+					try
+					{
+						Journey current = this.getItem(position);
+						LayoutInflater inflater = getLayoutInflater();
+						row = inflater.inflate(R.layout.list_row, parent, false);
+						//sends the strings with ride info to list_row.xml 
+						TextView rideDescription =(TextView)row.findViewById(R.id.ride_description);
+						TextView name = (TextView)row.findViewById(R.id.ride_title);
+						rideDescription.setText("From: "+current.getRoute().getStartAddress()+"\n"+ "To: "+current.getRoute().getEndAddress());
+						name.setText(current.getDriver().getFullName());
+						
+					}
+					catch(NullPointerException e)
+					{
+					 row = convertView;
+					}
+					return row;
+				}
+
+				
+			});
+			for(int i = 0; i < journeys.size(); i++) {
+				Log.e("Stuff",journeys.get(i).getDriver().getFirstName());
+			}
+			searchingDialog.dismiss();
+		}
+		
+	}
 	private class SpinnerEntry{
 		String name;
 		Calendar date;
@@ -424,12 +469,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		}
 		public void setDate(Calendar date) {
 			this.date = date;
-		}
-		public Calendar getDate() {
-			return this.date;
-		}
-		public void clearDate() {
-			this.date = null;
 		}
 		public String toString() {
 			if(date != null) {

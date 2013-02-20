@@ -3,11 +3,6 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
 				<!-- Layout for allowing overlap -->
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -18,7 +13,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:hint="@string/origin" >
-
                     <requestFocus />
                 </AutoCompleteTextView>
 				<!-- Current location button -->
@@ -30,12 +24,7 @@
                     android:layout_gravity="right|center_vertical"
                     android:src="@drawable/ic_menu_mylocation" 
                     android:onClick="onGpsClicked"/>
-
-                </FrameLayout>
-
-
-         
-        </LinearLayout>     
+                </FrameLayout>  
          
         <LinearLayout 
             android:orientation="horizontal"
