@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
 
     <application
+        android:theme="@style/NewTheme"
         android:name="SocialHitchhikingApplication"
         android:debuggable="false"
         android:icon="@drawable/car_icon"
