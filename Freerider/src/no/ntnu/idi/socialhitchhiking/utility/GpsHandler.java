@@ -8,7 +8,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-
+/**
+ * Starts a GPS listener and returns current location to FindDriver class
+ * @author Thomas
+ *
+ */
 public class GpsHandler {
 	private LocationManager locManager;
 	private LocationListener locListener;

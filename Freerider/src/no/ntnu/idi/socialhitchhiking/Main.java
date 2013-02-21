@@ -250,7 +250,9 @@ public class Main extends FBConnectionActivity{
 	 * Starts the Intent FindDriver
 	 */
 	private void startInbox(){
-		initActivity(no.ntnu.idi.socialhitchhiking.inbox.Inbox.class);
+		//initActivity(no.ntnu.idi.socialhitchhiking.inbox.Inbox.class);
+		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.inbox.Inbox.class);
+		startActivity(intent);
 	}
 	/**
 	 * Starts the Intent FindDriver
