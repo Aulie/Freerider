@@ -198,7 +198,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		acStringList[mid.size()+1] = acV2.getText().toString();
 		
 		
-		//check
+		//check the inputs
 		for(int j=0; j<acStringList.length; j++){
 			Log.e("StringList" + j, "nr:" + acStringList[j]);
 		}
@@ -207,6 +207,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		
 	}
 	
+	//Get/return the acArray
 	public ArrayList<AutoCompleteTextView> getAcList(){
 		return acList;
 	}
@@ -214,52 +215,59 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	
 	protected void initAddDestButton(){
 		
+		//Adds/enables the FrameLayout
 		AddDestFrameLayout = new FrameLayout(this);
-		
 		AddDestFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, 80));
 		AddDestFrameLayout.setEnabled(true);
 		
-		
+		//Fills the Image Icon
 		ImageView destAddIcon = new ImageView(this);
 		destAddIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 		destAddIcon.setPadding(7, 1, 0, 0);
 		destAddIcon.setImageResource(R.drawable.cross_dropoff);
 		
+		//Adds the imageicon to the framelayout/enables it 
 		AddDestFrameLayout.addView(destAddIcon);
 		
+		//Fills/sets the text
 		TextView destAddText = new TextView(this);
 		destAddText.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 		destAddText.setPadding(40, 4, 0, 0);
 		destAddText.setTextSize(15);
 		destAddText.setText(R.string.mapViewBtnAdd);
 		
+		//Adds the text to the framelayout
 		AddDestFrameLayout.addView(destAddText);
 		
-		//Ber til starwars
+		//Adds the framelayout to the linearlayout (in the scrollview)
 		sclLayout = (LinearLayout) findViewById(R.id.sclLayout);
 		sclLayout.addView(AddDestFrameLayout, sclLayout.getChildCount());
 		
+		//Adds a clicklistener to the frameLayout
 		AddDestFrameLayout.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				
+				//Adds a new destination field
 				initDestFrameLayout();
-				setLayoutParams();
 				
+				//Moves the botton to the buttom
+				setLayoutParams();
 			}
 			
 		});
 	}
 	
+	//Adds a new destination field
 	protected void initDestFrameLayout(){
 		
-		//The FrameLayout
+		//Adds/enables a new frameLayout
 		FrameLayout destFrameLayout = new FrameLayout(this);
 		destFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 		
 		
-		//The acTextField
+		//The acTextField, adds the autoCompleteTextView/sets it/enables it
 		AutoCompleteTextView acAdd1 = new AutoCompleteTextView(this);
 		acAdd1.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 		acAdd1.setEms(10);
@@ -270,33 +278,34 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		acAdd1.setTextSize(15);
 		acAdd1.setId(192341);
 		
-		//Adds the AcTextField to the layout
+		//Adds the AcTextField to the frameLayout
 		destFrameLayout.addView(acAdd1);
 		
-		//The Image Icon
+		//The Image Icon/sets it/enables it
 		ImageView destIcon = new ImageView(this);
 		destIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 		destIcon.setPadding(7, 7, 0, 0);
 		destIcon.setImageResource(R.drawable.cross_dropoff);
 		
+		//adds the imageicon to the frameLayout
 		destFrameLayout.addView(destIcon);
 		
+		//adds the frameLayout to the linearLayout
 		sclLayout.addView(destFrameLayout);
 		
-		
-		//ber til starwars
+		//adds the autoCompleteTextView to the acArray
 		addToAcList(acAdd1);
 		
+		//adds the adapter for the textChangedListener
 		acAdd1.setAdapter(adapter);
 		acAdd1.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acAdd1));
 		
-		
+		//sets the done button on the keyboard
 		acAdd1.setOnEditorActionListener(new EditText.OnEditorActionListener(){
 			@Override
 			public boolean onEditorAction(TextView v, int actionId,
 					KeyEvent event) {
 				if(actionId == EditorInfo.IME_ACTION_DONE){
-					//findAndDrawPath(v);
 					createMap();
 					return true;
 				}
@@ -309,6 +318,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	}
 	
 	protected void createMap(){
+		//calls the MapActivityAbstract method to generate the map points/lines
 		drawPathOnMap(GeoHelper.getLocationList(getStringList()));
 	}
 	
@@ -316,14 +326,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	@Override
 	protected void initContentView() {
 		setContentView(R.layout.mapactivity_create_route);
-		
-		
 	}
 
 	@Override
 	protected void initMapView(){
 		mapView = (MapView)findViewById(R.id.map_view);
-		
 	}
 	
 	@Override
