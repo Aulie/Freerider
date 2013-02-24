@@ -23,6 +23,7 @@ package no.ntnu.idi.socialhitchhiking.service;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
@@ -36,10 +37,19 @@ public class JourneyReminder extends BroadcastReceiver{
 
 	@Override
 	public void onReceive(Context con, Intent intent) {
+
 		app = (SocialHitchhikingApplication) con.getApplicationContext();
 		List<Journey> jour;
 		if(app.getSettings().isPullNotifications()){
-			jour = app.sendJourneysRequest();
+			try {
+				jour = app.sendJourneysRequest();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				jour = app.getJourneys();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				jour = app.getJourneys();
+			}
 		}
 		else jour = app.getJourneys();
 		Calendar nextHour = Calendar.getInstance();

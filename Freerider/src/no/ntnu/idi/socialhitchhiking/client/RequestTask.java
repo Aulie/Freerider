@@ -26,6 +26,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import no.ntnu.idi.freerider.protocol.JourneyResponse;
 import no.ntnu.idi.freerider.protocol.Request;
@@ -104,14 +109,27 @@ public class RequestTask {
 	 * @throws MalformedURLException
 	 * @throws FileNotFoundException
 	 * @throws IOException
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	 */
-	public static Response sendRequest(Request req,Context c) throws ClientProtocolException, IOException  {
-		String xml = RequestSerializer.serialize(req);
-		con = c;
-		String url = con.getResources().getString(R.string.server_url);
-		RequestTask requestTask = new RequestTask(url,xml);
+	public static Response sendRequest(final Request req,final Context c) throws ClientProtocolException, IOException, InterruptedException, ExecutionException  {
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		
+	    Callable<Response> callable = new Callable<Response>() {
+	        @Override
+	        public Response call() throws ClientProtocolException, IOException {
+	        	String xml = RequestSerializer.serialize(req);
+	    		con = c;
+	    		String url = con.getResources().getString(R.string.server_url);
+	    		RequestTask requestTask = new RequestTask(url,xml);
 
-		return ResponseParser.parse(requestTask.getResponse());
+	    		return ResponseParser.parse(requestTask.getResponse());
+	        }
+	    };
+	    Future<Response> future = executor.submit(callable);
+	    Response ret = future.get();
+	    executor.shutdown();
+	    return ret;
 	}
 
 }

@@ -44,6 +44,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -87,7 +88,20 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			if(msg.obj instanceof User){
-				initiateUser(msg);
+				final Message temp = msg;
+				Thread t = new Thread() {
+					public void run() {
+						initiateUser(temp);
+					}
+				};
+				t.start();
+				try {
+					t.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					Log.e("Interrupted","Exc");
+				}
+				
 			}
 			else if(msg.what == failCounter){
 				main.createCantConnectDialog("Can't connect to Facebook!\nAre you sure you're connected?", "Retry");

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
@@ -251,7 +252,7 @@ public class SocialHitchhikingApplication extends Application{
 		int tenMinutes = 600000;
 		am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, tenMinutes/10, tenMinutes, journeyReminder);
 	}
-	public List<Journey> sendJourneysRequest(){
+	public List<Journey> sendJourneysRequest() throws InterruptedException, ExecutionException{
 		if(user != null && user.getID() != ""){
 			Request req = new UserRequest(RequestType.GET_JOURNEYS, getUser());
 			JourneyResponse res = null;

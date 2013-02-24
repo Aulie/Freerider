@@ -23,6 +23,7 @@ package no.ntnu.idi.socialhitchhiking.service;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.protocol.NotificationResponse;
 import no.ntnu.idi.freerider.protocol.RequestType;
@@ -78,6 +79,12 @@ public class AlarmService extends BroadcastReceiver{
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

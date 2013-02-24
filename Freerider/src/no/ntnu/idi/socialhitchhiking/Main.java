@@ -22,6 +22,7 @@
 package no.ntnu.idi.socialhitchhiking;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.User;
 import no.ntnu.idi.freerider.protocol.Request;
@@ -40,6 +41,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -66,21 +68,30 @@ public class Main extends FBConnectionActivity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        //StrictMode.setThreadPolicy(policy);
 		initLoadingScreen();
-		setConnection(this);
-		user = getApp().getUser();
+		new Thread() {
+			
+			public void run() {
+				
+				
+				setConnection(Main.this);
+				user = getApp().getUser();
 
-		if(user == null){
-			loginButtonClicked();
+				if(user == null){
+					loginButtonClicked();
 
-		}
-		else{
-			initMainScreen();
-			if(!isSession()){
-				resetSession();
+				}
+				else{
+					initMainScreen();
+					if(!isSession()){
+						resetSession();
+					}
+				}
+			}	
+			}.start();
 			}
-		}
-	}
 
 	/**
 	 * Initializes GUI components.
@@ -90,60 +101,71 @@ public class Main extends FBConnectionActivity{
 	 */
 	public void initMainScreen(){
 		user = getApp().getUser();
-		setContentView(R.layout.main_layout);
+		
 		if(!getApp().isKey("main"))sendLoginRequest();
+		
+		runOnUiThread(new Runnable(){
 
-		sceduleDrive = (Button) findViewById(R.id.startScreenDrive);
-		notifications = (Button) findViewById(R.id.startScreenInbox);
-		hitchhike = (Button) findViewById(R.id.startScreenHitchhike);
-		myAccount = (Button) findViewById(R.id.startScreenMyAccount);
-		myTrips = (Button) findViewById(R.id.startScreenMyTrips);
-		name = (TextView) findViewById(R.id.startScreenProfileName);
-		picture = (ImageView) findViewById(R.id.startScreenProfilePicture);
-		name.setText(user.getFullName());
-		picture.setImageBitmap(getFacebookPicture(user));
+			@Override
+			public void run() {
+				setContentView(R.layout.main_layout);
+				sceduleDrive = (Button) findViewById(R.id.startScreenDrive);
+				notifications = (Button) findViewById(R.id.startScreenInbox);
+				hitchhike = (Button) findViewById(R.id.startScreenHitchhike);
+				myAccount = (Button) findViewById(R.id.startScreenMyAccount);
+				myTrips = (Button) findViewById(R.id.startScreenMyTrips);
+				name = (TextView) findViewById(R.id.startScreenProfileName);
+				picture = (ImageView) findViewById(R.id.startScreenProfilePicture);
+				name.setText(user.getFullName());
+				picture.setImageBitmap(getFacebookPicture(user));
 
-		picture.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				loginAsNewClicked(true);
+				picture.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						loginAsNewClicked(true);
+					}
+				}); 
+				sceduleDrive.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						startCreateJourney();
+					}
+				});
+				hitchhike.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						startFindDriver();
+					}
+				});
+				notifications.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						startInbox();
+					}
+				});
+				pbLogin.setVisibility(View.GONE);
+				checkSettings();
+
 			}
-		}); 
-		sceduleDrive.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startCreateJourney();
-			}
+			
 		});
-		hitchhike.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				startFindDriver();
-			}
-		});
-		notifications.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				startInbox();
-			}
-		});
-		pbLogin.setVisibility(View.GONE);
-		checkSettings();
 		if(getApp().getSettings().isPullNotifications() && !getApp().isKey("alarmService"))
 			getApp().startService();
 		getApp().setKeyState("main",true);
+		
 	}
 	/**
 	 * Method to be called by the {@link FBConnectionActivity} when a user succesfully
 	 * logs in via Facebook.
 	 */
 	public void onResult(){
-		if(!getApp().isKey("main"))createNewUser();
-		getApp().startService();
-		getApp().startJourneyReminder();
-		initMainScreen();
+				if(!getApp().isKey("main"))createNewUser();
+				getApp().startService();
+				getApp().startJourneyReminder();
+				initMainScreen();
+		
 	}
 	@Override
 	public boolean isSession(){
@@ -330,6 +352,13 @@ public class Main extends FBConnectionActivity{
 			e.printStackTrace();
 		}
 		//System.out.println(res.toString()+", caused by: "+res.getErrorMessage());
+ catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * 

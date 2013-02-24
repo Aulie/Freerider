@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="NewTheme" parent="android:Theme.Holo.Light">
+         <item name="android:windowBackground">@drawable/background_holo_light</item>
+         <item name="android:textColorHint">#000000</item>
+    </style>
+</resources>

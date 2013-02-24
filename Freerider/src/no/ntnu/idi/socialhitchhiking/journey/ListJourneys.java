@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
@@ -92,7 +93,15 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		setContentView(R.layout.journey_view);
 		listview = (ListView)findViewById(R.id.journey_view_list);
 
-		journeys = getApp().sendJourneysRequest();
+		try {
+			journeys = getApp().sendJourneysRequest();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if(journeys == null) journeys = new ArrayList<Journey>();
 		initCalendars();
@@ -239,6 +248,12 @@ public class ListJourneys extends SocialHitchhikingActivity{
 			
 		} catch (IOException e) {
 			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return notifications;
 	}
@@ -334,6 +349,12 @@ public class ListJourneys extends SocialHitchhikingActivity{
 			return succeded;
 		} catch (ClientProtocolException e) {
 		} catch (IOException e) {
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return false;
 	}

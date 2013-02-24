@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Notification;
@@ -157,6 +158,12 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -361,7 +368,7 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 
 	}
 
-	public void showInMap(Notification n) {
+	public void showInMap(Notification n) throws InterruptedException, ExecutionException {
 		getApp().setJourneyPickupPoint(n.getStartPoint());
 		getApp().setJourneyDropoffPoint(n.getStopPoint());
 

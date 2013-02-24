@@ -22,6 +22,7 @@
 package no.ntnu.idi.socialhitchhiking.utility;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.protocol.LoginRequest;
 import no.ntnu.idi.freerider.protocol.Response;
@@ -138,6 +139,12 @@ public abstract class SocialHitchhikingActivity extends Activity{
 			e.printStackTrace();
 		} catch (IOException e) {
 			createAlertDialog(this, false, "Login", "accepted", "Server is probably down, or you're not connected to the internet.\nExiting");
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;

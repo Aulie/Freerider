@@ -28,6 +28,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
@@ -113,22 +118,34 @@ public class GeoHelper {
 	 * @param maxAddressLines The maximum number of lines in the addresses. This should be high if you want a complete address! If it is smaller than the total number of lines in the address, it cuts off the last part...) 
 	 * @return Returns the {@link List} of addresses (as {@link String}s).
 	 */
-	public static List<String> getAddressesAtPoint(GeoPoint location, int maxResults, int maxAddressLines){
+	public static List<String> getAddressesAtPoint(final GeoPoint location, final int maxResults, int maxAddressLines){
 		List<String> addressList = new ArrayList<String>();
 		List<Address> possibleAddresses = new ArrayList<Address>();
 		Address address = new Address(Locale.getDefault());
 		String addressString = "Could not find the address...";
-		try {
-			possibleAddresses = fancyGeocoder.getFromLocation(
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+	    
+		Callable<List<Address>> callable = new Callable<List<Address>>() {
+	        @Override
+	        public List<Address> call() throws IOException {
+	        	return fancyGeocoder.getFromLocation(
+						location.getLatitudeE6() / 1E6, 
+						location.getLongitudeE6()/ 1E6, maxResults);
+	        }
+	    };
+	    Future<List<Address>> future = executor.submit(callable);
+	    try {
+			possibleAddresses = future.get();
+		} catch (InterruptedException e1) {
+			possibleAddresses = GeoHelper.getAddressesFromLocation(
 					location.getLatitudeE6() / 1E6, 
 					location.getLongitudeE6()/ 1E6, maxResults);
-		} catch (Exception e) {
-			//Geocoder doesn't work under emulation... 
-			//This is a workaround:
+		} catch (ExecutionException e1) {
 			possibleAddresses = GeoHelper.getAddressesFromLocation(
 					location.getLatitudeE6() / 1E6, 
 					location.getLongitudeE6()/ 1E6, maxResults);
 		}
+	    executor.shutdown();
 		
 		if (possibleAddresses.size() > 0){
 			for (int i = 0; i < possibleAddresses.size(); i++) {
@@ -230,26 +247,42 @@ public class GeoHelper {
 		return new GeoPoint((int) (lat * 1E6), (int) (lon * 1E6));
 	}
 
-	private static JSONObject getLocationInfo(String address) {
-		StringBuilder stringBuilder = new StringBuilder();
-		try {
-			address = address.replaceAll(" ","%20");    
-			address = address.replaceAll("\n", "%20");
-			HttpPost httppost = new HttpPost("http://maps.google.com/maps/api/geocode/json?address=" + address + "&sensor=false");
-			HttpClient client = new DefaultHttpClient();
-			HttpResponse response;
-			stringBuilder = new StringBuilder();
+	private static JSONObject getLocationInfo(final String adr) {
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+	    Callable<StringBuilder> callable = new Callable<StringBuilder>() {
+	        @Override
+	        public StringBuilder call() throws ClientProtocolException, IOException {
+	        	StringBuilder stringBuilder = new StringBuilder();
+	        		String address;
+	    			address = adr.replaceAll(" ","%20");    
+	    			address = address.replaceAll("\n", "%20");
+	    			HttpPost httppost = new HttpPost("http://maps.google.com/maps/api/geocode/json?address=" + address + "&sensor=false");
+	    			HttpClient client = new DefaultHttpClient();
+	    			HttpResponse response;
+	    			stringBuilder = new StringBuilder();
 
-			response = client.execute(httppost);
-			HttpEntity entity = response.getEntity();
-			InputStream stream = entity.getContent();
-			int b;
-			while ((b = stream.read()) != -1) {
-				stringBuilder.append((char) b);
-			}
-		} catch (ClientProtocolException e) {
-		} catch (IOException e) {
+	    			response = client.execute(httppost);
+	    			HttpEntity entity = response.getEntity();
+	    			InputStream stream = entity.getContent();
+	    			int b;
+	    			while ((b = stream.read()) != -1) {
+	    				stringBuilder.append((char) b);
+	    			}
+	    			return stringBuilder;
+	        }
+	    };
+	    Future<StringBuilder> future = executor.submit(callable);
+	    StringBuilder stringBuilder;
+		try {
+			stringBuilder = future.get();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			stringBuilder = new StringBuilder();
+		} catch (ExecutionException e1) {
+			stringBuilder = new StringBuilder();
 		}
+	    executor.shutdown();
+		
 
 		JSONObject jsonObject = new JSONObject();
 		try {

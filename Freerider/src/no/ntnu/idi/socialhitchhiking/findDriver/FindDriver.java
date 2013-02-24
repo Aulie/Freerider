@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
@@ -313,6 +314,12 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			e.printStackTrace();
 		} catch (IOException e) {
 			createAlertDialog(this, false, "Search request","sent", "IOException");
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}   
 		return res.getJourneys();

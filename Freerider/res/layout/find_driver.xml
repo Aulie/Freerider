@@ -29,7 +29,7 @@
                     	android:id="@+id/searchText"
                     	android:layout_width="match_parent"
                     	android:layout_height="55dp"
-                    	android:hint="@string/origin" >
+                    	android:hint="@string/origin">
                     	<requestFocus />
                 	</AutoCompleteTextView>
 				<!-- Current location button -->

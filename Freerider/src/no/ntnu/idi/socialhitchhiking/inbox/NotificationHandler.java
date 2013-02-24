@@ -22,6 +22,7 @@
 package no.ntnu.idi.socialhitchhiking.inbox;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.NotificationType;
@@ -140,7 +141,15 @@ public class NotificationHandler{
 		setNegativeButton("Show in map", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				in.showInMap(n);
+				try {
+					in.showInMap(n);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}).
 		show();
@@ -226,6 +235,12 @@ public class NotificationHandler{
 			return succeded;
 		} catch (ClientProtocolException e) {
 		} catch (IOException e) {
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return false;
 	}
