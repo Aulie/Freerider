@@ -161,32 +161,47 @@ public class GeoHelper {
 		return addressList;
 	}
 	
-	private static JSONArray getJSONArrayFromLocation(double lat, double lon, int maxResults) {
-		String urlStr = "http://maps.google.com/maps/geo?q=" + lat + "," + lon + "&output=json&sensor=false";
-		String response = "";
-		HttpClient client = new DefaultHttpClient();
+	private static JSONArray getJSONArrayFromLocation(final double lat, final double lon, int maxResults) {
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+	    
+		Callable<JSONArray> callable = new Callable<JSONArray>() {
+	        @Override
+	        public JSONArray call() throws IOException {
+	        	String urlStr = "http://maps.google.com/maps/geo?q=" + lat + "," + lon + "&output=json&sensor=false";
+	    		String response = "";
+	    		HttpClient client = new DefaultHttpClient();
+	    			HttpResponse hr = client.execute(new HttpGet(urlStr));
+	    			HttpEntity entity = hr.getEntity();
+	    			BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+	    			String buff = null;
+	    			while ((buff = br.readLine()) != null)
+	    				response += buff;
 
-		try {
-			HttpResponse hr = client.execute(new HttpGet(urlStr));
-			HttpEntity entity = hr.getEntity();
-			BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
-			String buff = null;
-			while ((buff = br.readLine()) != null)
-				response += buff;
+	    			br.close();
+	    		JSONArray responseArray = null;
+	    		try {
+	    			JSONObject jsonObject = new JSONObject(response);
+	    			responseArray = jsonObject.getJSONArray("Placemark");
+	    		} catch (JSONException e) {
+	    			return null;
+	    		}
+	    		return responseArray;
+	        }
+	    };
+	    Future<JSONArray> future = executor.submit(callable);
+	    JSONArray ret;
+			try {
+				ret = future.get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				ret = null;
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				ret = null;
+			}
+		
 
-			br.close();
-		} catch (IOException e) {
-		}
-
-		JSONArray responseArray = null;
-		try {
-			JSONObject jsonObject = new JSONObject(response);
-			responseArray = jsonObject.getJSONArray("Placemark");
-		} catch (JSONException e) {
-			return null;
-		}
-
-		return responseArray;
+		return ret;
 	}
 	
 	/**
