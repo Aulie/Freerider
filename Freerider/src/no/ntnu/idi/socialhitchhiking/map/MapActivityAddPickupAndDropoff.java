@@ -132,31 +132,40 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
+		// Getting the selected journey
 		Journey journey = getApp().getSelectedJourney();
+		
 		// Setting up tabs
 		TabHost tabs = (TabHost)findViewById(R.id.tabhost);
 		tabs.setup();
 		
-		TabHost.TabSpec spec = tabs.newTabSpec("tag1");
-		spec.setContent(R.id.ride_tab);
-		spec.setIndicator("Ride");
-		tabs.addTab(spec);
+		// Adding Ride tab
+		TabHost.TabSpec specRide = tabs.newTabSpec("tag1");
+		specRide.setContent(R.id.ride_tab);
+		specRide.setIndicator("Ride");
+		tabs.addTab(specRide);
 		
-		spec = tabs.newTabSpec("tag2");
-		spec.setContent(R.id.driver_tab);
-		spec.setIndicator("Driver");
-		tabs.addTab(spec);
+		// Adding Driver tab
+		TabHost.TabSpec specDriver = tabs.newTabSpec("tag2");
+		specDriver.setContent(R.id.driver_tab);
+		specDriver.setIndicator("Driver");
+		tabs.addTab(specDriver);
 		
+		// Adding image of the driver
 		try{
 			((ImageView)findViewById(R.id.mapViewPickupImage)).setImageBitmap(getPicture(journey.getRoute().getOwner()));
 		}catch (Exception e) {
-			//Uses facebook logo
+			//Uses facebook logo if exception
 		}
+		// Adding the name of the driver
 		((TextView)findViewById(R.id.mapViewPickupTextViewName)).setText(journey.getRoute().getOwner().getFullName());
+		
+		// Adding the date of ride
 		Date d = journey.getStart().getTime();
 		String s = d.toLocaleString();
 		((TextView)findViewById(R.id.mapViewPickupTextViewDate)).setText(s);
 		
+		// Adding onClickListener for the button "Ask for a ride"
 		btnSendRequest = (Button)findViewById(no.ntnu.idi.socialhitchhiking.R.id.mapViewPickupBtnSendRequest);
 		btnSendRequest.setOnClickListener(new OnClickListener() {
 			@Override
@@ -177,9 +186,11 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				String comment = ((EditText)findViewById(R.id.mapViewPickupEtComment)).getText().toString();
 				int journeyID = getApp().getSelectedJourney().getSerial();
 				
+				// Creating a new notification to be sendt to the driver
 				Notification n = new Notification(senderID, recipientID, senderName, comment, journeyID, NotificationType.HITCHHIKER_REQUEST, pickupPoint, dropoffPoint, Calendar.getInstance());
 				req = new NotificationRequest(RequestType.SEND_NOTIFICATION, getApp().getUser(), n);
 				
+				// Sending notification
 				try {
 					res = RequestTask.sendRequest(req,getApp());
 					if(res instanceof UserResponse){
@@ -213,9 +224,11 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 			}
 		});
 		
+		// Adding buttons where you choose between pickup point and dropoff point
 		btnSelectPickupPoint = (Button)findViewById(R.id.mapViewPickupBtnPickup);
 		btnSelectDropoffPoint = (Button)findViewById(R.id.mapViewPickupBtnDropoff);
 		
+		// Setting the selected pickup point
 		setSelectingPickupPoint();
 		btnSelectPickupPoint.setOnClickListener(new OnClickListener() {
 			@Override
@@ -223,12 +236,15 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				setSelectingPickupPoint();
 			}
 		});
+		
+		// Setting the selected dropoff point
 		btnSelectDropoffPoint.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				setSelectingDropoffPoint();
 			}
 		});
+		
 		
 		Bundle extras = getIntent().getExtras();
 		if(extras != null){
