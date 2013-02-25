@@ -19,6 +19,7 @@
     <string name="destination">Destination</string>
     <string name="current_location">Current location</string>
     <string name="origin">Origin</string>
-    
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
