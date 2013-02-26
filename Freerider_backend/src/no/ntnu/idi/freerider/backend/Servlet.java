@@ -21,6 +21,7 @@
  */
 package no.ntnu.idi.freerider.backend;
 
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 
@@ -59,6 +60,8 @@ public class Servlet extends HttpServlet {
 		DBConfigurator.init(getServletContext().getRealPath("WEB-INF/DBConfig.xml"));
 		
 		processor = new RequestProcessor();	
+		//Start scheduler for regular maintenance
+		//new Scheduler();
 	}
 
 	/**
