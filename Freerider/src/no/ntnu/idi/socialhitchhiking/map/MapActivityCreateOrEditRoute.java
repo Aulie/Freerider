@@ -90,8 +90,9 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	//adda
 	private FrameLayout AddDestFrameLayout;
 	private LinearLayout sclLayout;
-	private ArrayList<AutoCompleteTextView> acList;
+	private ArrayList<InitDestFrame> acList;
 	private String[] acStringList;
+	private int id = 0;
 
 	/**
 	 * This {@link CheckBox} determines whether a route should be saved or 
@@ -125,7 +126,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
-		acList = new ArrayList<AutoCompleteTextView>();
+		acList = new ArrayList<InitDestFrame>();
 
 		initAutocomplete();
 		initAddDestButton();
@@ -157,7 +158,6 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			}
 		});
 		
-		
 	}
 	
 	protected void setLayoutParams(){
@@ -165,10 +165,19 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		initAddDestButton();
 	}
 	
-	private void addToAcList(AutoCompleteTextView dest){
+	private void addToAcList(InitDestFrame dest){
 		acList.add(dest);
 	}
 	
+	private void removeFromAcList(int number){
+		for(int i=0; i<acList.size();i++){
+			if(acList.get(i).getId()==number){
+				sclLayout.removeView(acList.get(i).getFrame());
+				acList.remove(acList.get(i));
+				break;
+			}
+		}
+	}
 	
 	private String[] getStringList(){
 		
@@ -177,7 +186,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		AutoCompleteTextView acV2 = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
 		
 		
-		ArrayList<AutoCompleteTextView> mid = new ArrayList<AutoCompleteTextView>();
+		ArrayList<InitDestFrame> mid = new ArrayList<InitDestFrame>();
 		mid = getAcList();
 		
 		acStringList = new String[mid.size()+2];
@@ -190,14 +199,13 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		//Adds all the locations between start/stop to the list
 		for(int i=1; i<mid.size()+1; i++){
 			
-			AutoCompleteTextView etD1 = mid.get(i-1);
+			InitDestFrame etD1 = mid.get(i-1);
 			
-			acStringList[i] = etD1.getText().toString();
+			acStringList[i] = etD1.getAcField().getText().toString();
 		}
 		
 		//Adds going To location to the list
 		acStringList[mid.size()+1] = acV2.getText().toString();
-		
 		
 		//check the inputs
 		for(int j=0; j<acStringList.length; j++){
@@ -205,11 +213,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		}
 		
 		return acStringList;
-		
 	}
 	
 	//Get/return the acArray
-	public ArrayList<AutoCompleteTextView> getAcList(){
+	public ArrayList<InitDestFrame> getAcList(){
 		return acList;
 	}
 	
@@ -224,16 +231,16 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		//Fills the Image Icon
 		ImageView destAddIcon = new ImageView(this);
 		destAddIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-		destAddIcon.setPadding(7, 1, 0, 0);
+		destAddIcon.setPadding(11, 8, 0, 12);
 		destAddIcon.setImageResource(R.drawable.cross_dropoff);
-		
+
 		//Adds the imageicon to the framelayout/enables it 
 		AddDestFrameLayout.addView(destAddIcon);
 		
 		//Fills/sets the text
 		TextView destAddText = new TextView(this);
 		destAddText.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-		destAddText.setPadding(40, 4, 0, 0);
+		destAddText.setPadding(60, 11, 0, 0);
 		destAddText.setTextSize(15);
 		destAddText.setText(R.string.mapViewBtnAdd);
 		
@@ -262,60 +269,108 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	
 	//Adds a new destination field
 	protected void initDestFrameLayout(){
+		addToAcList(new InitDestFrame(id));
+		id++;
+	}
+	
+	/*
+	public void deleteFrame(InitDestFrame view){
 		
-		//Adds/enables a new frameLayout
-		FrameLayout destFrameLayout = new FrameLayout(this);
-		destFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+	}
+	*/
+	
+public class InitDestFrame{
 		
-		
-		//The acTextField, adds the autoCompleteTextView/sets it/enables it
-		AutoCompleteTextView acAdd1 = new AutoCompleteTextView(this);
-		acAdd1.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-		acAdd1.setEms(10);
-		acAdd1.setHint(R.string.mapViewBtnAdd);
-		acAdd1.setImeOptions(6);
-		acAdd1.setPadding(40, 0, 0, 0);
-		acAdd1.setSingleLine();
-		acAdd1.setTextSize(15);
-		acAdd1.setId(192341);
-		
-		//Adds the AcTextField to the frameLayout
-		destFrameLayout.addView(acAdd1);
-		
-		//The Image Icon/sets it/enables it
-		ImageView destIcon = new ImageView(this);
-		destIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-		destIcon.setPadding(7, 7, 0, 0);
-		destIcon.setImageResource(R.drawable.cross_dropoff);
-		
-		//adds the imageicon to the frameLayout
-		destFrameLayout.addView(destIcon);
-		
-		//adds the frameLayout to the linearLayout
-		sclLayout.addView(destFrameLayout);
-		
-		//adds the autoCompleteTextView to the acArray
-		addToAcList(acAdd1);
-		
-		//adds the adapter for the textChangedListener
-		acAdd1.setAdapter(adapter);
-		acAdd1.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acAdd1));
-		
-		//sets the done button on the keyboard
-		acAdd1.setOnEditorActionListener(new EditText.OnEditorActionListener(){
-			@Override
-			public boolean onEditorAction(TextView v, int actionId,
-					KeyEvent event) {
-				if(actionId == EditorInfo.IME_ACTION_DONE){
-					createMap();
-					return true;
+		private FrameLayout destFrameLayout;
+		private AutoCompleteTextView acAdd;
+		private ImageView destIcon;
+		private final int id;
+		private ImageView extIcon;
+
+		public InitDestFrame(final int id){
+			this.destFrameLayout = new FrameLayout(MapActivityCreateOrEditRoute.this);
+			this.acAdd = new AutoCompleteTextView(MapActivityCreateOrEditRoute.this);
+			this.destIcon = new ImageView(MapActivityCreateOrEditRoute.this);
+			this.extIcon = new ImageView(MapActivityCreateOrEditRoute.this);
+			this.id = id;
+			
+			//Adds/enables a new frameLayout
+			destFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+			
+			//The acTextField, adds the autoCompleteTextView/sets it/enables it
+			FrameLayout.LayoutParams lli = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+			lli.setMargins(0, 10, 0, 0);
+			acAdd.setLayoutParams(lli);
+			acAdd.setEms(10);
+			acAdd.setHint(R.string.mapViewBtnAdd);
+			acAdd.setImeOptions(6);
+			acAdd.setPadding(60, 0, 0, 0);
+			acAdd.setSingleLine();
+			acAdd.setTextSize(15);
+			acAdd.setId(id);
+			acAdd.requestFocus();
+			
+			//Adds the AcTextField to the frameLayout
+			destFrameLayout.addView(acAdd);
+			
+			//The Image Icon/sets it/enables it
+			FrameLayout.LayoutParams lli2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, 16);
+			lli2.setMargins(10, 3, 0, 2);
+			destIcon.setLayoutParams(lli2);
+			destIcon.setPadding(5, 0, 0, 0);
+			destIcon.setImageResource(R.drawable.google_marker_thumb_mini_through);
+			
+			//adds the imageicon to the frameLayout
+			destFrameLayout.addView(destIcon);
+			
+			//The exit icon for closing the entire frame
+			extIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, 5));
+			extIcon.setPadding(0,12,17,0);
+			extIcon.setImageResource(R.drawable.speech_bubble_overlay_close);
+			extIcon.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v) {
+					removeFromAcList(id);
 				}
-				else{
-					return false;
+			});
+			
+			//adds the exit imageicon to the framelayout
+			destFrameLayout.addView(extIcon);
+			
+			//adds the frameLayout to the linearLayout
+			sclLayout.addView(destFrameLayout);
+			
+			//adds the adapter for the textChangedListener
+			acAdd.setAdapter(adapter);
+			acAdd.addTextChangedListener(new AutoCompleteTextWatcher(MapActivityCreateOrEditRoute.this, adapter, acAdd));
+			
+			//sets the done button on the keyboard
+			acAdd.setOnEditorActionListener(new EditText.OnEditorActionListener(){
+				@Override
+				public boolean onEditorAction(TextView v, int actionId,
+						KeyEvent event) {
+					if(actionId == EditorInfo.IME_ACTION_DONE){
+						createMap();
+						return true;
+					}
+					else{
+						return false;
+					}
 				}
-			}
-		});
+			});
+		}
 		
+		public AutoCompleteTextView getAcField(){
+			return acAdd;
+		}
+		
+		public int getId(){
+			return id;
+		}
+		
+		public FrameLayout getFrame(){
+			return destFrameLayout;
+		}
 	}
 	
 	protected void createMap(){
