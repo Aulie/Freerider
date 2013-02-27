@@ -51,10 +51,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -93,7 +95,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	private ArrayList<InitDestFrame> acList;
 	private String[] acStringList;
 	private int id = 0;
-
+	private Resources r;
+	
 	/**
 	 * This {@link CheckBox} determines whether a route should be saved or 
 	 * only be used as a "one time route".
@@ -127,7 +130,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		super.onCreate(icicle);
 		
 		acList = new ArrayList<InitDestFrame>();
-
+		r = getResources();
 		initAutocomplete();
 		initAddDestButton();
 		
@@ -220,6 +223,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		return acList;
 	}
 	
+	public int dipToPx(int dip){
+		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, r.getDisplayMetrics());
+		return (int)px;
+	}
+	
 	
 	protected void initAddDestButton(){
 		
@@ -230,9 +238,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		
 		//Fills the Image Icon
 		ImageView destAddIcon = new ImageView(this);
-		destAddIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-		destAddIcon.setPadding(15, 5, 0, 12);
-		//destAddIcon.setPadding(left, top, right, bottom);
+		FrameLayout.LayoutParams lliDestIcon = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+		lliDestIcon.setMargins(dipToPx(10), 0, 0, dipToPx(2));
+		destAddIcon.setLayoutParams(lliDestIcon);
+		destAddIcon.setPadding(0, dipToPx(5), 0, 0);
 		destAddIcon.setImageResource(R.drawable.google_marker_thumb_mini_through);
 		
 		//Adds the imageicon to the framelayout/enables it 
@@ -240,8 +249,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		
 		//Fills/sets the text
 		TextView destAddText = new TextView(this);
-		destAddText.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-		destAddText.setPadding(60, 12, 0, 0);
+		FrameLayout.LayoutParams lliDest = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+		lliDest.setMargins(0, dipToPx(5), 0, 0);
+		destAddText.setLayoutParams(lliDest);
+		destAddText.setPadding(dipToPx(40), 0, 0, 0);
 		destAddText.setTextSize(15);
 		destAddText.setText(R.string.mapViewBtnAdd);
 		
