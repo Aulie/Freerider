@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="fill_parent" >
 
     <LinearLayout
         android:id="@+id/mapLayoutTop"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:orientation="horizontal"
@@ -13,14 +13,14 @@
 
         <ScrollView
             android:id="@+id/scrollView1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="135dp"
             android:layout_weight="25"
              >
 
             <LinearLayout
                 android:id="@+id/sclLayout"
-                android:layout_width="319dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="25"
                 android:orientation="vertical" >
@@ -31,7 +31,7 @@
 
                     <AutoCompleteTextView
                         android:id="@+id/etGoingFrom"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/mapViewBtnFrom"
@@ -60,7 +60,7 @@
 
                     <AutoCompleteTextView
                         android:id="@+id/etGoingTo"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/mapViewBtnTo"

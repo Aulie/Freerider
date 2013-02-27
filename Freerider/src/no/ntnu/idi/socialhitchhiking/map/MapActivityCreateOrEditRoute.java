@@ -231,16 +231,17 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		//Fills the Image Icon
 		ImageView destAddIcon = new ImageView(this);
 		destAddIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-		destAddIcon.setPadding(11, 8, 0, 12);
-		destAddIcon.setImageResource(R.drawable.cross_dropoff);
-
+		destAddIcon.setPadding(15, 5, 0, 12);
+		//destAddIcon.setPadding(left, top, right, bottom);
+		destAddIcon.setImageResource(R.drawable.google_marker_thumb_mini_through);
+		
 		//Adds the imageicon to the framelayout/enables it 
 		AddDestFrameLayout.addView(destAddIcon);
 		
 		//Fills/sets the text
 		TextView destAddText = new TextView(this);
 		destAddText.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-		destAddText.setPadding(60, 11, 0, 0);
+		destAddText.setPadding(60, 12, 0, 0);
 		destAddText.setTextSize(15);
 		destAddText.setText(R.string.mapViewBtnAdd);
 		
