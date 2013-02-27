@@ -252,7 +252,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		FrameLayout.LayoutParams lliDest = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
 		lliDest.setMargins(0, dipToPx(5), 0, 0);
 		destAddText.setLayoutParams(lliDest);
-		destAddText.setPadding(dipToPx(40), 0, 0, 0);
+		destAddText.setPadding(dipToPx(40), dipToPx(6), 0, 0);
 		destAddText.setTextSize(15);
 		destAddText.setText(R.string.mapViewBtnAdd);
 		
@@ -311,12 +311,12 @@ public class InitDestFrame{
 			
 			//The acTextField, adds the autoCompleteTextView/sets it/enables it
 			FrameLayout.LayoutParams lli = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-			lli.setMargins(0, 10, 0, 0);
+			lli.setMargins(0, dipToPx(5), 0, 0);
 			acAdd.setLayoutParams(lli);
 			acAdd.setEms(10);
 			acAdd.setHint(R.string.mapViewBtnAdd);
 			acAdd.setImeOptions(6);
-			acAdd.setPadding(60, 0, 0, 0);
+			acAdd.setPadding(dipToPx(40), 0, 0, 0);
 			acAdd.setSingleLine();
 			acAdd.setTextSize(15);
 			acAdd.setId(id);
@@ -327,9 +327,9 @@ public class InitDestFrame{
 			
 			//The Image Icon/sets it/enables it
 			FrameLayout.LayoutParams lli2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, 16);
-			lli2.setMargins(10, 3, 0, 2);
+			lli2.setMargins(dipToPx(10), 0, 0, dipToPx(7));
 			destIcon.setLayoutParams(lli2);
-			destIcon.setPadding(5, 0, 0, 0);
+			destIcon.setPadding(0, dipToPx(5), 0, 0);
 			destIcon.setImageResource(R.drawable.google_marker_thumb_mini_through);
 			
 			//adds the imageicon to the frameLayout
