@@ -34,7 +34,7 @@
 	        	<TextView
 	        	    android:id="@+id/mapViewPickupTextViewDate"
 	        	    android:layout_width="match_parent"
-	        	    android:layout_height="fill_parent"
+	        	    android:layout_height="wrap_content"
 	        	    android:layout_gravity="left"
 	        	    android:layout_weight="1"
 	        	    android:textSize="15sp"
@@ -43,7 +43,7 @@
         	    <TextView
         	        android:id="@+id/mapViewPickupTextViewSeats"
         	        android:layout_width="match_parent"
-        	        android:layout_height="fill_parent"
+        	        android:layout_height="wrap_content"
         	        android:layout_gravity="right"
         	        android:layout_weight="1"
         	        android:textSize="15sp"
@@ -65,6 +65,7 @@
 	            android:layout_gravity="left"
 	            android:layout_marginRight="2dp"
 	            android:layout_weight="1"
+	            android:background="@drawable/list_selector"
 	            />
 	        	<Button
 	            android:id="@+id/mapViewPickupBtnDropoff"
@@ -74,6 +75,7 @@
 	            android:layout_gravity="right"
 	            android:layout_marginLeft="2dp"
 	            android:layout_weight="1"
+	            android:background="@drawable/list_selector"
 	            />
 			</LinearLayout>
        		<LinearLayout
@@ -100,9 +102,9 @@
 
        		<LinearLayout
            	android:layout_width="fill_parent"
-          	android:layout_height="0dp"
+          	android:layout_height="fill_parent"
           	android:orientation="vertical" 
-           	android:layout_weight="10">
+           	>
 
 	           <EditText 
 	               android:id="@+id/mapViewPickupEtComment"
@@ -110,14 +112,13 @@
 	               android:layout_height="wrap_content"
 	               android:hint="@string/mapViewPickupEtComment" 
 	               android:textSize="15sp"
-	               android:layout_weight="1"
 	               />
 	           <Button
 	               android:id="@+id/mapViewPickupBtnSendRequest"
 	               android:layout_width="fill_parent"
 	               android:layout_height="wrap_content"
 	               android:text="@string/mapViewPickupBtnSendRequest" 
-	               android:layout_weight="1"
+	               android:background="@drawable/list_selector"
 	               />
        		</LinearLayout>
    		</LinearLayout>
@@ -158,6 +159,7 @@
 			    android:layout_weight="1"
 			    android:textSize="15sp"
 			    android:text="[NAME]"
+			    android:background="@drawable/list_selector"
 			    />
 				<TextView 
 			    android:id="@+id/mapViewPickupTextViewAge"
@@ -166,6 +168,7 @@
 			    android:layout_weight="1"
 			    android:textSize="15sp"
 			    android:text="[AGE]"
+			    android:background="@drawable/list_selector"
 			    />
 				<TextView 
 			    android:id="@+id/mapViewPickupTextViewGender"
@@ -174,6 +177,7 @@
 			    android:layout_weight="1"
 			    android:textSize="15sp"
 			    android:text="[GENDER]"
+			    android:background="@drawable/list_selector"
 			    />
 			</LinearLayout>
         </LinearLayout>
@@ -184,6 +188,7 @@
 		    android:layout_height="20dp"
 		    android:text="[MOBILE]"
 		    android:textSize="15sp"
+		    android:background="@drawable/list_selector"
 	 	/>
         <TextView
         	android:id="@+id/mapViewPickupTextViewBreaks"
@@ -191,6 +196,7 @@
 		    android:layout_height="20dp"
 		    android:text="[BREAKS]"
 		    android:textSize="15sp"
+		    android:background="@drawable/list_selector"
       	/>
         <TextView
         	android:id="@+id/mapViewPickupTextViewAnimals"
@@ -198,6 +204,7 @@
 		    android:layout_height="20dp"
 		    android:text="[ANIMALS]"
 		    android:textSize="15sp"
+		    android:background="@drawable/list_selector"
       	/>
         <TextView
         	android:id="@+id/mapViewPickupTextViewMusic"
@@ -205,6 +212,7 @@
 		    android:layout_height="20dp"
 		    android:text="[MUSIC]"
 		    android:textSize="15sp"
+		    android:background="@drawable/list_selector"
       	/>
         <TextView
         	android:id="@+id/mapViewPickupTextViewTalking"
@@ -212,6 +220,7 @@
 		    android:layout_height="20dp"
 		    android:text="[TALKING]"
 		    android:textSize="15sp"
+		    android:background="@drawable/list_selector"
       	/>
         <TextView
         	android:id="@+id/mapViewPickupTextViewSmoking"
@@ -219,6 +228,7 @@
 		    android:layout_height="20dp"
 		    android:text="[SMOKING]"
 		    android:textSize="15sp"
+		    android:background="@drawable/list_selector"
       	/>
         <TextView
         	android:id="@+id/mapViewPickupTextViewCar"
@@ -226,6 +236,7 @@
 		    android:layout_height="wrap_content"
 		    android:text="[THE CAR]"
 		    android:textSize="15sp"
+		    android:background="@drawable/list_selector"
       	/>
       </LinearLayout>
     </FrameLayout>
