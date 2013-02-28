@@ -91,13 +91,20 @@ public class DateChooser {
 		dd.setTitle(dateMsg);
 		td.setTitle(timeMsg);
 	}
+	public void setTitleDate(String dateMsg){
+		dd.setTitle(dateMsg);
+	}
+	public void setTitleTime(String timeMsg){
+		td.setTitle(timeMsg);
+	}
 	public void show(){
 		showDatePicker();
 	}
-	private void showDatePicker(){
+	
+	public void showDatePicker(){
 		dd.show();
 	}
-	private void showTimePicker(){
+	public void showTimePicker(){
 		td.show();
 	}
 	private void fireCancelEvent(){

@@ -1,56 +1,95 @@
 package no.ntnu.idi.socialhitchhiking.journey;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Set;
 
 import org.apache.http.client.ClientProtocolException;
 
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.TripPreferences;
+import no.ntnu.idi.freerider.model.Visibility;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
+import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
+import no.ntnu.idi.freerider.protocol.RouteRequest;
+import no.ntnu.idi.freerider.protocol.RouteResponse;
+import no.ntnu.idi.freerider.protocol.UserRequest;
+import no.ntnu.idi.freerider.protocol.UserResponse;
+
+import no.ntnu.idi.socialhitchhiking.Main;
 import no.ntnu.idi.socialhitchhiking.R;
+import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
 import no.ntnu.idi.socialhitchhiking.utility.TripOptionAdapter;
+import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
+
 import android.R.array;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Spinner;
+import android.widget.NumberPicker;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 
-public class TripOptions extends Activity {
-
+public class TripOptions extends SocialHitchhikingActivity {
+	
     private ListView listView1;
+    private Calendar dateAndTime;
+	private DateChooser dc;
+	private NumberPicker seats;
+	private Journey currentJourney;
+	private TripPreferences tripPreferences;
+    private PropertyChangeListener propLis = new PropertyChangeListener() {
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			if(event.getPropertyName() == DateChooser.DATE_CHANGED){
+				dateAndTime = (Calendar) event.getNewValue();
+				if(dateAndTime != null){
+					//sendJourneyRequest();
+				}
+				else{
+				}
+			}
+		}
+	};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trip_options);
         
+        //TODO
+        //Options that will appear in the list. I have to fill the last parameter of trip option with the actual data
+        //as it is now is only for showing how it would look like
         TripOption trip_options_data[] = new TripOption[]
         {
-            new TripOption(R.drawable.trip_icon_calendar, "Date"),
-            new TripOption(R.drawable.trip_icon_clock, "Time"),
-            new TripOption(R.drawable.trip_icon_seats, "Seats"),
-            new TripOption(R.drawable.trip_icon_fb, "Privacy"),
-            new TripOption(R.drawable.trip_icon_plus, "Extras")
+            new TripOption(R.drawable.trip_icon_calendar, "Date","12/12/13"),
+            new TripOption(R.drawable.trip_icon_clock, "Time","12:30"),
+            new TripOption(R.drawable.trip_icon_seats, "Seats Available", "1"),
+            new TripOption(R.drawable.trip_icon_fb, "Privacy", "Friends of Friends"),
+            new TripOption(R.drawable.trip_icon_plus, "Extras", "Breaks/Animals/Music/Talking/Smoking")
         };
         
         TripOptionAdapter adapter = new TripOptionAdapter(this, 
@@ -94,114 +133,115 @@ public class TripOptions extends Activity {
         
     }
     void setDate(){
-    	// TODO
-	    AlertDialog.Builder b = new AlertDialog.Builder(this);
-		b.setTitle("Choose Date");
-		b.setMessage("Change date");
-//		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface dialog, int which) {
-//				dc = new DateChooser(TripOptions3.this, propLis);
-//				dc.setTitle("Set Date of Journey", "Set Time of Journey");
-//				dc.show();
-//			}
-//		});
+        //TODO Must change this to change only the date
+    	
+    	AlertDialog.Builder b = new AlertDialog.Builder(this);
+		b.setTitle("Set Date");
+		b.setMessage("Do you want to set the date of the Trip?");
+		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dc = new DateChooser(TripOptions.this, propLis);
+				dc.setTitleDate("Set Date of Trip");
+				dc.showDatePicker();
+			}
+		});
 		b.setNegativeButton("Cancel", null);
 		b.show();
     }
     
     void setTime(){
-    	// TODO
-	    AlertDialog.Builder b = new AlertDialog.Builder(this);
-		b.setTitle("Choose Date");
-		b.setMessage("Change date");
-//		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface dialog, int which) {
-//				dc = new DateChooser(TripOptions3.this, propLis);
-//				dc.setTitle("Set Date of Journey", "Set Time of Journey");
-//				dc.show();
-//			}
-//		});
+    	//TODO I must change this so it only changes the time
+
+    	AlertDialog.Builder b = new AlertDialog.Builder(this);
+		b.setTitle("Set Date");
+		b.setMessage("Do you want to set the date of the Trip?");
+		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dc = new DateChooser(TripOptions.this, propLis);
+				dc.setTitleDate("Set Date of Trip");
+				dc.showDatePicker();
+			}
+		});
 		b.setNegativeButton("Cancel", null);
 		b.show();
     }
     void setSeats(){
-    	
+    	//TODO Update seats in TripPreferences and show it on TripOptions Activity
 	    AlertDialog.Builder b = new AlertDialog.Builder(this);
-		b.setTitle("Seats");
-		b.setMessage("Seats available");
-//		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface dialog, int which) {
-//				dc = new DateChooser(TripOptions3.this, propLis);
-//				dc.setTitle("Set Date of Journey", "Set Time of Journey");
-//				dc.show();
-//			}
-//		});
+		b.setTitle("Seats Avalilable");
+		b.setMessage("Set Seats available");
+		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//TODO number picker for selecting seats. Store data in TripPreferences atributte in Journey/Ride
+				//seats = new NumberPicker(getApp().getApplicationContext());
+				
+			}
+		});
 		b.setNegativeButton("Cancel", null);
 		b.show();
     }
     void setPrivacy(){
-    	
-	    AlertDialog.Builder b = new AlertDialog.Builder(this);
-		b.setTitle("Select Privacy");
-		b.setMessage("Friends, FoF, Public");
-		
-		b.setNegativeButton("Cancel", null);
-		b.show();
+    	//TODO Change this to save visibility preferences in current Journey/trip
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setTitle("Set Privacy");
+    	builder.setSingleChoiceItems(R.array.privacy_setting, -1, new DialogInterface.OnClickListener() {
+    	    public void onClick(DialogInterface dialog, int item) {
+    	        //Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+    	        //int selected = item;
+    	        
+    	    }
+    	});
+    	builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //currentJourney.setVisibility(Visibility.FRIENDS_OF_FRIENDS);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                 dialog.cancel();
+            }
+        });
+    	AlertDialog alert = builder.create();
+    	alert.show();
     }
     void setExtras(){
-    	// TODO It doesn't work now
-	    DialogFragment d = new ExtrasDialogFragment();
-	    //d.show(getDialogFragmentManager(), "Extras");
+    	//TODO This should record which are the Trip extras and write it in Journey/Ride in the attribute TripPreferences
+    	final CharSequence[] items = {"Breaks", "Animals", "Music", "Talking", "Smoking"};
+    	final boolean [] selected = {false, false, false, false, false};
+
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setTitle("Pick extras");
+    	builder.setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+				// TODO Auto-generated method stub
+				//Toast.makeText(getApplicationContext(), items[which], Toast.LENGTH_SHORT).show();
+				//selected[which] = isChecked;
+			}
+    	});
+    	builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            
+               //TODO Check which check boxes are marked and update the tripPreferences
+            }
+        });
+    	 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+             public void onClick(DialogInterface dialog, int id) {
+                  dialog.cancel();
+             }
+         });
+    	AlertDialog alert = builder.create();
+    	alert.show();
     }
+  //When next button is clicked it goes to RideInfo? or back to Main. Right now it goes back to the Main Activity
     public void onNextClick(View v){
-		Intent intent = new Intent(TripOptions.this, CreateOrLoadRide.class);
+    	Toast.makeText(getApplicationContext(), "Trip created", Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(TripOptions.this, Main.class);
 		startActivity(intent);
 	}
 
-    public class ExtrasDialogFragment extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-	        final ArrayList<Integer> mSelectedItems = new ArrayList<Integer>();  // Where we track the selected items
-	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	        // Set the dialog title
-	        builder.setTitle("Extras")
-	        // Specify the list array, the items to be selected by default (null for none),
-	        // and the listener through which to receive callbacks when items are selected
-	               .setMultiChoiceItems(R.array.privacy_values, null,
-	                          new DialogInterface.OnMultiChoiceClickListener() {
-	                   @Override
-	                   public void onClick(DialogInterface dialog, int which,
-	                           boolean isChecked) {
-	                       if (isChecked) {
-	                           // If the user checked the item, add it to the selected items
-	                           mSelectedItems.add(which);
-	                       } else if (mSelectedItems.contains(which)) {
-	                           // Else, if the item is already in the array, remove it 
-	                           mSelectedItems.remove(Integer.valueOf(which));
-	                       }
-	                   }
-	               })
-	        // Set the action buttons
-	               .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-	                   @Override
-	                   public void onClick(DialogInterface dialog, int id) {
-	                       // User clicked OK, so save the mSelectedItems results somewhere
-	                       // or return them to the component that opened the dialog
-	                       
-	                   }
-	               })
-	               
-	               .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-	                   @Override
-	                   public void onClick(DialogInterface dialog, int id) {
-	                       
-	                   }
-	               });
-	
-	        return builder.create();
-        }
-    }
 }

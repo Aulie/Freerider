@@ -22,6 +22,7 @@
 package no.ntnu.idi.freerider.model;
 
 import java.util.Calendar;
+import java.util.Set;
 
 /** A Journey using a specific Route at a specific time, with a specific hitchhiker.*/
 public class Journey {
@@ -30,6 +31,7 @@ public class Journey {
 	private User hitchhiker;
 	private final int serial;
 	private Visibility visibility;
+	private TripPreferences tripPreferences;
 	
 	public Journey(int serial){
 		this.serial = serial;
@@ -88,5 +90,11 @@ public class Journey {
 	public void setVisibility(Visibility visibility) {
 		this.visibility = visibility;
 	}
-
+	
+	public void setSeatsAvailable(Integer seats){
+		tripPreferences.setSeatsAvailable(seats);
+	}
+	public Integer getSeatsAvailable(){
+		return tripPreferences.getSeatsAvailable();
+	}
 }

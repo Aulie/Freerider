@@ -37,6 +37,7 @@ public class TripOptionAdapter extends ArrayAdapter<TripOption>{
             holder = new TripOptionHolder();
             holder.imgIcon = (ImageView)row.findViewById(R.id.imgIcon);
             holder.txtTitle = (TextView)row.findViewById(R.id.txtTitle);
+            holder.txtSubtitle = (TextView)row.findViewById(R.id.txtSubtitle);
             
             row.setTag(holder);
         }
@@ -46,15 +47,17 @@ public class TripOptionAdapter extends ArrayAdapter<TripOption>{
         }
         
         TripOption option = data[position];
-        holder.txtTitle.setText(option.title);
         holder.imgIcon.setImageResource(option.icon);
+        holder.txtTitle.setText(option.title);
+        holder.txtSubtitle.setText(option.subtitle);
         
         return row;
     }
     
     static class TripOptionHolder
     {
-        ImageView imgIcon;
+    	ImageView imgIcon;
+        TextView txtSubtitle;
         TextView txtTitle;
     }
 }

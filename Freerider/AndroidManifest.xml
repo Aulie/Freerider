@@ -54,6 +54,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".journey.TripOptions"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="no.ntnu.idi.socialhitchhiking.journey.TRIPOPTIONS" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".findDriver.DriverDetails"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >

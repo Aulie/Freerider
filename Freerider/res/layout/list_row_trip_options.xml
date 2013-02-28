@@ -22,12 +22,23 @@
         android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        
+        
         android:layout_toRightOf="@+id/imgIcon"
         android:textColor="#040404"
-        android:textSize="15dip"
+        android:textSize="18dip"
         android:textStyle="bold"
         android:typeface="sans" />
-
+    <TextView
+        android:id="@+id/txtSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#343434"
+        android:textSize="14dip"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/imgIcon"
+        android:layout_alignBottom="@+id/imgIcon"/>
+	
     <!-- Rightend Arrow -->
     <ImageView
         android:layout_width="wrap_content"
