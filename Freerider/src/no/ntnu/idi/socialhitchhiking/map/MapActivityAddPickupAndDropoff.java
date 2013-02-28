@@ -165,8 +165,8 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		picture = (ImageView) findViewById(R.id.mapViewPickupImage);
 		
 		// Create an object for subclass of AsyncTask
-        GetXMLTask task = new GetXMLTask(picture);
-        // Execute the task
+        GetImage task = new GetImage(picture);
+        // Execute the task: Get image from url and add it to the ImageView
         task.execute(driver.getPictureURL());
 		
 		// Adding the name of the driver
@@ -466,56 +466,4 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		}
 		return true;
 	}
-	
-	/**
-	 * Class that fetches images from URLs. Used here to get profile pictures from Facebook.
-	 * Call execute from an instance of this class with a URL as a parameter to display the image.
-	 * @author Kristoffer
-	 * 
-	 */
-	private class GetXMLTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView imageView;
-		
-        /**
-         * Constructor takes the ImageView used to display the image.
-         * @param iv 
-         */
-        public GetXMLTask(ImageView iv){
-			this.imageView = iv;
-		}
-		@Override
-        protected Bitmap doInBackground(String... urls) {
-            Bitmap map = null;
-            for (String url : urls) {
-                map = downloadImage(url);
-            }
-            return map;
-        }
- 
-        // Sets the Bitmap returned by doInBackground
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            imageView.setImageBitmap(result);
-        }
- 
-        // Creates Bitmap from InputStream and returns it
-        private Bitmap downloadImage(String url) {
-            Bitmap bitmap = null;
-            URL urltest = null;
-            try {
-				urltest = new URL(url);
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            try {
-                bitmap = BitmapFactory.decodeStream(urltest.openConnection().getInputStream());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            return bitmap;
-        }
- 
-    }
-	
 }
