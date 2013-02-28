@@ -22,7 +22,12 @@
 package no.ntnu.idi.socialhitchhiking.map;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +52,8 @@ import org.apache.http.client.ClientProtocolException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.hardware.Camera.Parameters;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -127,36 +134,50 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 */
 	private Overlay overlayDropoffCross = null;
 	
+	private ImageView picture;
+	
 	
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
+		// Getting the selected journey
 		Journey journey = getApp().getSelectedJourney();
+		
 		// Setting up tabs
 		TabHost tabs = (TabHost)findViewById(R.id.tabhost);
 		tabs.setup();
 		
-		TabHost.TabSpec spec = tabs.newTabSpec("tag1");
-		spec.setContent(R.id.ride_tab);
-		spec.setIndicator("Ride");
-		tabs.addTab(spec);
+		// Adding Ride tab
+		TabHost.TabSpec specRide = tabs.newTabSpec("tag1");
+		specRide.setContent(R.id.ride_tab);
+		specRide.setIndicator("Ride");
+		tabs.addTab(specRide);
 		
-		spec = tabs.newTabSpec("tag2");
-		spec.setContent(R.id.driver_tab);
-		spec.setIndicator("Driver");
-		tabs.addTab(spec);
+		// Adding Driver tab
+		TabHost.TabSpec specDriver = tabs.newTabSpec("tag2");
+		specDriver.setContent(R.id.driver_tab);
+		specDriver.setIndicator("Driver");
+		tabs.addTab(specDriver);
 		
-		try{
-			((ImageView)findViewById(R.id.mapViewPickupImage)).setImageBitmap(getPicture(journey.getRoute().getOwner()));
-		}catch (Exception e) {
-			//Uses facebook logo
-		}
+		// Adding image of the driver
+		User driver = journey.getRoute().getOwner();
+		picture = (ImageView) findViewById(R.id.mapViewPickupImage);
+		
+		// Create an object for subclass of AsyncTask
+        GetXMLTask task = new GetXMLTask(picture);
+        // Execute the task
+        task.execute(driver.getPictureURL());
+		
+		// Adding the name of the driver
 		((TextView)findViewById(R.id.mapViewPickupTextViewName)).setText(journey.getRoute().getOwner().getFullName());
+		
+		// Adding the date of ride
 		Date d = journey.getStart().getTime();
 		String s = d.toLocaleString();
 		((TextView)findViewById(R.id.mapViewPickupTextViewDate)).setText(s);
 		
+		// Adding onClickListener for the button "Ask for a ride"
 		btnSendRequest = (Button)findViewById(no.ntnu.idi.socialhitchhiking.R.id.mapViewPickupBtnSendRequest);
 		btnSendRequest.setOnClickListener(new OnClickListener() {
 			@Override
@@ -177,9 +198,11 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				String comment = ((EditText)findViewById(R.id.mapViewPickupEtComment)).getText().toString();
 				int journeyID = getApp().getSelectedJourney().getSerial();
 				
+				// Creating a new notification to be sendt to the driver
 				Notification n = new Notification(senderID, recipientID, senderName, comment, journeyID, NotificationType.HITCHHIKER_REQUEST, pickupPoint, dropoffPoint, Calendar.getInstance());
 				req = new NotificationRequest(RequestType.SEND_NOTIFICATION, getApp().getUser(), n);
 				
+				// Sending notification
 				try {
 					res = RequestTask.sendRequest(req,getApp());
 					if(res instanceof UserResponse){
@@ -213,9 +236,11 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 			}
 		});
 		
+		// Adding buttons where you choose between pickup point and dropoff point
 		btnSelectPickupPoint = (Button)findViewById(R.id.mapViewPickupBtnPickup);
 		btnSelectDropoffPoint = (Button)findViewById(R.id.mapViewPickupBtnDropoff);
 		
+		// Setting the selected pickup point
 		setSelectingPickupPoint();
 		btnSelectPickupPoint.setOnClickListener(new OnClickListener() {
 			@Override
@@ -223,12 +248,15 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				setSelectingPickupPoint();
 			}
 		});
+		
+		// Setting the selected dropoff point
 		btnSelectDropoffPoint.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				setSelectingDropoffPoint();
 			}
 		});
+		
 		
 		Bundle extras = getIntent().getExtras();
 		if(extras != null){
@@ -326,7 +354,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 * @param id - String, containing a Facebook users id.
 	 * @return {@link Bitmap} of the users profile picture.
 	 */
-	private static Bitmap getPicture(User user){
+	/*private static Bitmap getPicture(User user){
 		Bitmap mIcon1 = null;
 		try {
 			mIcon1 = BitmapFactory.decodeStream(user.getPictureURL().openConnection().getInputStream());
@@ -336,7 +364,11 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		}
 
 		return mIcon1;
-	}
+	}*/
+	/*private Bitmap getPicture(User user){
+		Bitmap bm = BitmapFactory.decodeByteArray(user.getPicture(), 0, user.getPicture().length);
+		return bm;
+	}*/
 
 	/**
 	 * This method loops trough the route path, to find out which {@link Location} is 
@@ -435,5 +467,55 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		return true;
 	}
 	
+	/**
+	 * Class that fetches images from URLs. Used here to get profile pictures from Facebook.
+	 * Call execute from an instance of this class with a URL as a parameter to display the image.
+	 * @author Kristoffer
+	 * 
+	 */
+	private class GetXMLTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView imageView;
+		
+        /**
+         * Constructor takes the ImageView used to display the image.
+         * @param iv 
+         */
+        public GetXMLTask(ImageView iv){
+			this.imageView = iv;
+		}
+		@Override
+        protected Bitmap doInBackground(String... urls) {
+            Bitmap map = null;
+            for (String url : urls) {
+                map = downloadImage(url);
+            }
+            return map;
+        }
+ 
+        // Sets the Bitmap returned by doInBackground
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+        }
+ 
+        // Creates Bitmap from InputStream and returns it
+        private Bitmap downloadImage(String url) {
+            Bitmap bitmap = null;
+            URL urltest = null;
+            try {
+				urltest = new URL(url);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            try {
+                bitmap = BitmapFactory.decodeStream(urltest.openConnection().getInputStream());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return bitmap;
+        }
+ 
+    }
 	
 }

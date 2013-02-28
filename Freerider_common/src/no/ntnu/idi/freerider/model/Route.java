@@ -73,10 +73,11 @@ public class Route {
 	}
 	
 	public String getStartAddress(){
-		return mapPoints.get(0).getAddress();
+		return mapPoints.get(0).getShortAddress();
 	}
 	public String getEndAddress(){
-		return mapPoints.get(mapPoints.size()-1).getAddress();
+		return mapPoints.get(mapPoints.size()-1).getShortAddress();
+	
 	}
 	
 	public void setMapPoints(List<MapLocation> mapPoints){

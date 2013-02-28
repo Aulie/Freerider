@@ -145,6 +145,15 @@ public class Main extends FBConnectionActivity{
 						startInbox();
 					}
 				});
+				
+				myAccount.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						startMyAccount();
+					}
+				});
 				pbLogin.setVisibility(View.GONE);
 				checkSettings();
 
@@ -295,6 +304,11 @@ public class Main extends FBConnectionActivity{
 		//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 		
+	}
+	
+	private void startMyAccount(){
+		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.My_account.class);
+		startActivity(intent);
 	}
 
 	/**

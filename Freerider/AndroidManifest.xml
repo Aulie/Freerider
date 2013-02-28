@@ -157,6 +157,41 @@
                 <action android:name="no.ntnu.idi.socialhitchhiking.inbox.INBOX" />
             </intent-filter>
         </activity>
+                <activity
+            android:name="no.ntnu.idi.socialhitchhiking.My_account"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            
+             <intent-filter>
+                <action android:name="no.ntnu.idi.socialhitchhiking.My_accaunt.MYACCOUNT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="no.ntnu.idi.socialhitchhiking.MyAccountMeActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+             
+            <intent-filter>
+            <action android:name="no.ntnu.idi.socialhitchhiking.Me_activity.ME" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="no.ntnu.idi.socialhitchhiking.MyAccountCar"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+                       
+            <intent-filter>
+            <action android:name="no.ntnu.idi.socialhitchhiking.MyAccountCar.MYACCOUNTCAR" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="no.ntnu.idi.socialhitchhiking.MyAccountPreferences"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+             <intent-filter>
+            <action android:name="no.ntnu.idi.socialhitchhiking.MyAccountPreferences.MYACCOUNTPREFERENCES" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".demo.DemoService"

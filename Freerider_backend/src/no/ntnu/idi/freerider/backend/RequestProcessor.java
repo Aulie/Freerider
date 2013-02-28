@@ -75,6 +75,7 @@ public class RequestProcessor {
 		ResponseStatus status = ResponseStatus.OK;
 		RequestType type = request.getType();
 		List<Journey> journeys = null;
+		logger.error("Test");
 		switch(type){
 		case CREATE_USER:
 			User newUser = request.getUser();

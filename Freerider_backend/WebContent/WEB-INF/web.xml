@@ -9,4 +9,10 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <listener>
+    <listener-class>no.ntnu.idi.freerider.backend.Config</listener-class>
+</listener>
+<listener>
+    <listener-class>no.ntnu.idi.freerider.backend.Scheduler</listener-class>
+</listener>
 </web-app>

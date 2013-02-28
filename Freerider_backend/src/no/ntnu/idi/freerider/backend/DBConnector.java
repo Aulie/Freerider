@@ -21,8 +21,10 @@
  */
 package no.ntnu.idi.freerider.backend;
 
+
 import java.net.InetAddress;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -77,13 +79,18 @@ public class DBConnector {
 
 	/** Save a Route, then return it with its new, correct serial value. */
 	public Route addRoute(Route route) throws SQLException{
-		PreparedStatement pstmt = conn.prepareStatement("INSERT INTO routes(name,route, owner,maplocations,addresses) VALUES (?,?,?,?,?)");
+
+		
+		PreparedStatement pstmt = conn.prepareStatement("INSERT INTO routes(name,route, owner,maplocations,addresses,date_modified) VALUES (?,?,?,?,?,?)");
 		pstmt.setString(1, route.getName());
 		LineString test = route.getRouteDataAsLineString();
 		pstmt.setObject(2, test ,Types.OTHER);
 		pstmt.setString(3, route.getOwner().getID());
 		pstmt.setObject(4, route.getMapPointsAsLineString(),Types.OTHER);
 		pstmt.setString(5, route.getAddressString());
+		java.util.Date now = new java.util.Date();
+		Date sqlNow = new Date(now.getTime());
+		pstmt.setDate(6, sqlNow);
 		pstmt.executeUpdate();
 		return getRoute(route.getName(),route.getOwner().getID());
 	}
@@ -99,13 +106,16 @@ public class DBConnector {
 		String name = "ADHOC:" + rs.getInt(1);
 		rs.close();
 		pstmt.close();
-		pstmt = conn.prepareStatement("INSERT INTO routes(name,route, owner,maplocations,addresses,ad_hoc) VALUES (?,?,?,?,?,true)");
+		pstmt = conn.prepareStatement("INSERT INTO routes(name,route, owner,maplocations,addresses,date_modified,ad_hoc) VALUES (?,?,?,?,?,?,true)");
 		pstmt.setString(1, name);
 		LineString test = route.getRouteDataAsLineString();
 		pstmt.setObject(2, test ,Types.OTHER);
 		pstmt.setString(3, route.getOwner().getID());
 		pstmt.setObject(4, route.getMapPointsAsLineString(),Types.OTHER);
 		pstmt.setString(5, route.getAddressString());
+		java.util.Date now = new java.util.Date();
+		Date sqlNow = new Date(now.getTime());
+		pstmt.setDate(6, sqlNow);
 		pstmt.executeUpdate();
 		return getRoute(name,route.getOwner().getID());
 	}
@@ -212,9 +222,31 @@ public class DBConnector {
 		}
 		return ret;
 	}
+	public List<SimpleRoute> getAllSimpleRoutes() throws SQLException{
+		PreparedStatement stmt = conn.prepareStatement("SELECT serial,date_modified FROM routes");
+		ResultSet rs = stmt.executeQuery();
+		ArrayList<SimpleRoute> ret = new ArrayList<SimpleRoute>();
+		
+		while(rs.next()){
+			int serial = rs.getInt("serial");
+			java.sql.Date date = rs.getDate("date_modified");
+			ret.add(new SimpleRoute(serial, date));
+		}
+		return ret;
+	}
+
+
+
+public void deleteRouteBySerial(int serial) throws SQLException{
+		PreparedStatement stmt = conn.prepareStatement("DELETE FROM routes WHERE serial=?");
+		stmt.setInt(1, serial);
+		if(stmt.executeUpdate() !=1){
+			throw new SQLException("No such route found.");
+		}
+	}
 
 	public void deleteTestRoute() throws SQLException{
-		PreparedStatement stmt = conn.prepareStatement("DELETE from routes WHERE name='testroute' AND owner='bobbytables'");
+		PreparedStatement stmt = conn.prepareStatement("DELETE from routes WHERE name='testroute' AND owner='bobbytables'"); //LOL
 		stmt.execute();
 	}
 
@@ -290,7 +322,7 @@ public class DBConnector {
 		ret.setRating(rs.getDouble("rating"));
 		return ret;
 	}
-	
+
 	public void addUser(User newUser) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(name, surname, id, rating) VALUES (?,?,?,0)");
 		stmt.setString(1, newUser.getFirstName());
@@ -485,14 +517,14 @@ public class DBConnector {
 		Journey journey = new Journey(serial, route, start, hitchhiker, visibility);
 		return journey;
 	}
-	
+
 	public void addHitchhiker(String hikerID, int journeySerial) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE journeys SET hitchhiker=? WHERE serial=?");
 		stmt.setString(1, hikerID);
 		stmt.setInt(2, journeySerial);
 		if(stmt.executeUpdate() != 1) throw new SQLException("No such journey found.");
 	}
-	
+
 	public void removeHitchhiker(int journeySerial) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE journeys SET hitchhiker=NULL WHERE serial=?");
 		stmt.setInt(1, journeySerial);
@@ -520,7 +552,7 @@ public class DBConnector {
 
 
 	// ====================== Things to do with Notifications ======================= //
-	
+
 	public void addNotification(Notification note) throws SQLException{
 		PreparedStatement stmt = conn.prepareStatement("INSERT INTO notifications(time_sent, recipient,sender, concerning_journey, type, startpoint, endpoint, comment) VALUES ( current_timestamp, ?, ?, ?, ?::notification_type, ?, ?,?)");
 		stmt.setString(1, note.getRecipientID());
@@ -582,4 +614,3 @@ public class DBConnector {
 	}
 
 }
-
