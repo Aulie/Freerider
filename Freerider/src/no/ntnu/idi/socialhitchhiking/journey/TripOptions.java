@@ -184,7 +184,7 @@ public class TripOptions extends SocialHitchhikingActivity {
 		b.show();
     }
     void setPrivacy(){
-    	//TODO Change this to save visibility preferences in current Journey/trip
+    	//TODO Change this to save visibility preferences in current Journey/trip.
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Set Privacy");
     	builder.setSingleChoiceItems(R.array.privacy_setting, -1, new DialogInterface.OnClickListener() {
