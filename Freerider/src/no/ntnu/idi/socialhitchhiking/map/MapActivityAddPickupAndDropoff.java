@@ -22,8 +22,12 @@
 package no.ntnu.idi.socialhitchhiking.map;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +52,8 @@ import org.apache.http.client.ClientProtocolException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.hardware.Camera.Parameters;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -155,9 +161,13 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		tabs.addTab(specDriver);
 		
 		// Adding image of the driver
-		//TROR DET ER FEIL HER
-		//picture = (ImageView) findViewById(R.id.mapViewPickupImage);
-		//picture.setImageBitmap(getPicture(journey.getRoute().getOwner()));
+		User driver = journey.getRoute().getOwner();
+		picture = (ImageView) findViewById(R.id.mapViewPickupImage);
+		
+		// Create an object for subclass of AsyncTask
+        GetXMLTask task = new GetXMLTask(picture);
+        // Execute the task
+        task.execute(driver.getPictureURL());
 		
 		// Adding the name of the driver
 		((TextView)findViewById(R.id.mapViewPickupTextViewName)).setText(journey.getRoute().getOwner().getFullName());
@@ -355,10 +365,10 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 
 		return mIcon1;
 	}*/
-	private Bitmap getPicture(User user){
+	/*private Bitmap getPicture(User user){
 		Bitmap bm = BitmapFactory.decodeByteArray(user.getPicture(), 0, user.getPicture().length);
 		return bm;
-	}
+	}*/
 
 	/**
 	 * This method loops trough the route path, to find out which {@link Location} is 
@@ -457,5 +467,55 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		return true;
 	}
 	
+	/**
+	 * Class that fetches images from URLs. Used here to get profile pictures from Facebook.
+	 * Call execute from an instance of this class with a URL as a parameter to display the image.
+	 * @author Kristoffer
+	 * 
+	 */
+	private class GetXMLTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView imageView;
+		
+        /**
+         * Constructor takes the ImageView used to display the image.
+         * @param iv 
+         */
+        public GetXMLTask(ImageView iv){
+			this.imageView = iv;
+		}
+		@Override
+        protected Bitmap doInBackground(String... urls) {
+            Bitmap map = null;
+            for (String url : urls) {
+                map = downloadImage(url);
+            }
+            return map;
+        }
+ 
+        // Sets the Bitmap returned by doInBackground
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+        }
+ 
+        // Creates Bitmap from InputStream and returns it
+        private Bitmap downloadImage(String url) {
+            Bitmap bitmap = null;
+            URL urltest = null;
+            try {
+				urltest = new URL(url);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            try {
+                bitmap = BitmapFactory.decodeStream(urltest.openConnection().getInputStream());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return bitmap;
+        }
+ 
+    }
 	
 }

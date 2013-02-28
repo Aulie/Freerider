@@ -39,7 +39,7 @@ public class User {
 	
 	public User(String name,String id){
 		this.firstName = name;
-		this.ID = id;
+		this.ID = id.replaceAll("\\s", "");
 		friends = new ArrayList<User>();
 	}
 	
@@ -86,17 +86,11 @@ public class User {
 	 * Method that gets a users Facebook profile picture URL.
 	 * 
 	 * @param id - String, containing a Facebook users id.
-	 * @return {@link URL} of the users profile picture.
+	 * @return {@link String} of the users profile picture.
 	 */
-	public URL getPictureURL(){
-		URL img_value = null;
-		try {
-			img_value = new URL("http://graph.facebook.com/"+ID+"/picture?type=normal");
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-
-		return img_value;
+	public String getPictureURL(){
+		return "http://graph.facebook.com/"+ ID + "/picture?type=normal";
+		//return "http://graph.facebook.com/710406250/picture?type=normal";
 	}
 	@Override
 	public boolean equals(Object obj) {
