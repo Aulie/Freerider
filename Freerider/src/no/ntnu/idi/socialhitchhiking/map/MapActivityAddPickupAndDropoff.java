@@ -23,6 +23,7 @@ package no.ntnu.idi.socialhitchhiking.map;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -127,6 +128,8 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 */
 	private Overlay overlayDropoffCross = null;
 	
+	private ImageView picture;
+	
 	
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -152,11 +155,10 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		tabs.addTab(specDriver);
 		
 		// Adding image of the driver
-		try{
-			((ImageView)findViewById(R.id.mapViewPickupImage)).setImageBitmap(getPicture(journey.getRoute().getOwner()));
-		}catch (Exception e) {
-			//Uses facebook logo if exception
-		}
+		//TROR DET ER FEIL HER
+		//picture = (ImageView) findViewById(R.id.mapViewPickupImage);
+		//picture.setImageBitmap(getPicture(journey.getRoute().getOwner()));
+		
 		// Adding the name of the driver
 		((TextView)findViewById(R.id.mapViewPickupTextViewName)).setText(journey.getRoute().getOwner().getFullName());
 		
@@ -342,7 +344,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 * @param id - String, containing a Facebook users id.
 	 * @return {@link Bitmap} of the users profile picture.
 	 */
-	private static Bitmap getPicture(User user){
+	/*private static Bitmap getPicture(User user){
 		Bitmap mIcon1 = null;
 		try {
 			mIcon1 = BitmapFactory.decodeStream(user.getPictureURL().openConnection().getInputStream());
@@ -352,6 +354,10 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		}
 
 		return mIcon1;
+	}*/
+	private Bitmap getPicture(User user){
+		Bitmap bm = BitmapFactory.decodeByteArray(user.getPicture(), 0, user.getPicture().length);
+		return bm;
 	}
 
 	/**

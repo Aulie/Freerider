@@ -136,14 +136,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
-
+			<!-- Comment 
         	<ImageView 
             android:id="@+id/mapViewPickupImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/facebook_logo"
             android:scaleType="centerCrop"
-            />
+            />-->
+        	<ImageView
+            android:id="@+id/mapViewPickupImage"
+            android:layout_width="40dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/facebook_logo" />
         
         	<LinearLayout
         	android:id="@+id/mapViewPickupDriverInfoLayout"
