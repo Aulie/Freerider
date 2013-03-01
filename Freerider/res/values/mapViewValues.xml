@@ -2,7 +2,9 @@
 <resources>
     <string name="mapViewBtnFrom">Driving from</string>
     <string name="mapViewBtnTo">Driving to</string>
-    <string name="mapViewBtnAdd">Add Destination</string><string name="mapViewBtnDrawRoute">Draw route on map</string>
+    <string name="mapViewBtnAdd">Add Destination</string>
+    <string name="mapViewBtnDrawRoute">Draw route on map</string>
+    <string name="mapViewAcField">Driving through</string>
     <string name="mapViewBtnChooseRoute">Next</string>
     <string name="mapViewCheckBoxSave">Save?</string>
     
