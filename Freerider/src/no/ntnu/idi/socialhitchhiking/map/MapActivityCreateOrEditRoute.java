@@ -154,7 +154,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(chk_saveRoute.isChecked() || inEditMode || checkFields()){
+				if((chk_saveRoute.isChecked() || inEditMode) && checkFields()){
 					createInputDialog("Route", "Insert name of Route", false);
 				}
 				else
