@@ -93,7 +93,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	private FrameLayout AddDestFrameLayout;
 	private LinearLayout sclLayout;
 	private ArrayList<InitDestFrame> acList;
-	private String[] acStringList;
+	//private String[] acStringList;
 	private int id = 0;
 	private Resources r;
 	
@@ -147,20 +147,56 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			chk_saveRoute.setVisibility(View.GONE);
 			button.setText("Update the route");
 			button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+			fillFieldsInEdit();
 		}
 		
 		
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(chk_saveRoute.isChecked() || inEditMode){
+				if(chk_saveRoute.isChecked() || inEditMode || checkFields()){
 					createInputDialog("Route", "Insert name of Route", false);
 				}
 				else
+					/*
+					if(checkFields() == false){
+						
+					}
+					*/
 					createOneTimeJourney();
 			}
 		});
 		
+	}
+	
+	protected boolean checkFields(){
+		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
+		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
+		if(acFrom.getText().equals("")){
+			makeToast("You have to fill in the Driving from field");
+			return false;
+		}
+		if(acTo.getText().equals("")){
+			makeToast("You have to fill in the Driving to field");
+			return false;
+		}
+		return true;
+	}
+	
+	protected void fillFieldsInEdit(){
+		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
+		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
+		
+		acFrom.setText(selectedRoute.getMapPoints().get(0).getShortAddress());
+		acTo.setText(selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getShortAddress());
+		Log.e("SR-SIZE", selectedRoute.getMapPoints().size() + "");
+		
+		for(int i=1; i<selectedRoute.getMapPoints().size()-1; i++){
+			initDestFrameLayout();
+			acList.get(i-1).getAcField().setText(selectedRoute.getMapPoints().get(i).getShortAddress());
+			Log.e("AcList", acList.size() + "");
+			setLayoutParams();
+		}
 	}
 	
 	protected void setLayoutParams(){
@@ -183,7 +219,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	}
 	
 	private String[] getStringList(){
-		
+		String[] acStringList;
 		
 		AutoCompleteTextView acV1 = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		AutoCompleteTextView acV2 = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
@@ -311,10 +347,10 @@ public class InitDestFrame{
 			
 			//The acTextField, adds the autoCompleteTextView/sets it/enables it
 			FrameLayout.LayoutParams lli = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-			lli.setMargins(0, dipToPx(5), 0, 0);
+			lli.setMargins(0, dipToPx(8), 0, 0);
 			acAdd.setLayoutParams(lli);
 			acAdd.setEms(10);
-			acAdd.setHint(R.string.mapViewBtnAdd);
+			acAdd.setHint(R.string.mapViewAcField);
 			acAdd.setImeOptions(6);
 			acAdd.setPadding(dipToPx(40), 0, 0, 0);
 			acAdd.setSingleLine();
@@ -327,7 +363,7 @@ public class InitDestFrame{
 			
 			//The Image Icon/sets it/enables it
 			FrameLayout.LayoutParams lli2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, 16);
-			lli2.setMargins(dipToPx(10), 0, 0, dipToPx(7));
+			lli2.setMargins(dipToPx(10), 0, 0, dipToPx(2));
 			destIcon.setLayoutParams(lli2);
 			destIcon.setPadding(0, dipToPx(5), 0, 0);
 			destIcon.setImageResource(R.drawable.google_marker_thumb_mini_through);
@@ -343,6 +379,11 @@ public class InitDestFrame{
 				@Override
 				public void onClick(View v) {
 					removeFromAcList(id);
+					for(int s=0; s<getAcList().size(); s++){
+						Log.e("acList", getAcList().get(s).getAcField().getText() + "");
+					}
+					mapView.getOverlays().clear();
+					createMap();
 				}
 			});
 			
@@ -543,13 +584,15 @@ public class InitDestFrame{
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (NullPointerException e){
+			e.printStackTrace();
 		}
 		return null;
 	}
 
 	private void translateRoute() {
 		List<Location> list = selectedRoute.getRouteData();
-
+		
 		String name = "";
 		int serial = -1;
 
@@ -560,6 +603,10 @@ public class InitDestFrame{
 
 		commonRouteSelected = new Route(getUser(), name, list, serial);
 		commonRouteSelected.setMapPoints(selectedRoute.getMapPoints());
+		
+		for(int i=0; i<selectedRoute.getMapPoints().size(); i++){
+			Log.e("locARRAY", selectedRoute.getMapPoints().get(i).getAddress() + "");
+		}
 	}
 	
 	private void sendJourneyRequest(Calendar cal){
@@ -635,10 +682,12 @@ public class InitDestFrame{
 			addPointDialog();
 			return true;
 		}
+		/*
 		else if(item.getItemId() == R.id.mapmenu_clear){
 			clearMap();
 			return true;
 		}
+		*/
 		else if(item.getItemId() == R.id.mapmenu_order){
 			changeOrder();
 			return true;
