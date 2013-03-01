@@ -8,13 +8,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:layout_marginBottom="10dp">
 
 <!-- The banner -->
     <LinearLayout
-        android:layout_width="300dp"
+        android:layout_width="fill_parent"
         android:layout_height="100dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal" 
+        android:layout_weight="2">
 
         <ImageView
             android:id="@+id/startScreenLogo"
@@ -22,126 +24,202 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/project_logo_small" />
+            android:src="@drawable/frbanner" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/tableRow1"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:baselineAligned="false"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_weight="3"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal" >
+		<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
+        <LinearLayout
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="16"
+            android:background="@drawable/facebook_border"
+            android:baselineAligned="false"
+            android:orientation="vertical" >
 
-        <!-- Facebook profile picture -->
+            <LinearLayout
+                android:id="@+id/faceTitle"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/facebook_title"
+                android:orientation="vertical"
+                android:paddingLeft="7dp"
+                android:paddingTop="5dp" >
 
-        <ImageView
-            android:id="@+id/startScreenProfilePicture"
-            android:layout_width="40dp"
-            android:layout_height="80dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="0.47"
-            android:src="@drawable/facebook_logo" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Logged on Facebook as"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+			
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent" >
 
-        <TextView
-            android:id="@+id/startScreenProfileName"
-            android:layout_width="180dp"
-            android:layout_height="86dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="15dp"
-            android:text="NAVN:"
-            android:textStyle="bold"
-            android:typeface="serif" />
+                <ImageView
+                    android:id="@+id/startScreenProfilePicture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/facebook_logo" />
+
+                <TextView
+                    android:id="@+id/startScreenProfileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="NAVN:"
+                    android:textSize="20sp"
+                    android:typeface="serif" />
+            </LinearLayout>
+        </LinearLayout>
+			<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/tableRow2"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:baselineAligned="false"
-        android:orientation="horizontal" >
-
+        android:orientation="horizontal"
+        android:layout_weight="1" >
+		<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
         <Button
             android:id="@+id/startScreenDrive"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:drawableLeft="@drawable/car_icon_small"
             android:drawablePadding="-50dp"
             android:paddingLeft="10dp"
+            android:layout_weight="16"
             android:text="Schedule Drive" />
-
+		<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal" >
-
+        android:orientation="horizontal" 
+        android:layout_weight="1">
+		<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
         <Button
             android:id="@+id/startScreenHitchhike"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:drawableLeft="@android:drawable/ic_menu_add"
             android:drawablePadding="-50dp"
             android:paddingLeft="10dp"
+            android:layout_weight="16"
             android:text="Hitch a Ride" />
-
+		<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/tableRow2"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:baselineAligned="false"
-        android:orientation="horizontal" >
-
+        android:orientation="horizontal" 
+        android:layout_weight="1">
+		<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
         <Button
             android:id="@+id/startScreenInbox"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:drawableLeft="@android:drawable/ic_menu_info_details"
             android:drawablePadding="-50dp"
             android:paddingLeft="10dp"
+            android:layout_weight="16"
             android:text="Notifications" />
-
+		<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/tableRow5"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal" >
-
+        android:orientation="horizontal" 
+        android:layout_weight="1">
+		<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
         <Button
             android:id="@+id/startScreenMyTrips"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:drawableLeft="@android:drawable/ic_menu_info_details"
             android:drawablePadding="-50dp"
             android:paddingLeft="10dp"
+            android:layout_weight="16"
             android:onClick="onMyTripsClicked"
             android:text="My Trips" />
-
+		<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/tableRow6"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal" >
-
+        android:orientation="horizontal" 
+        android:layout_weight="1">
+		<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
         <Button
             android:id="@+id/startScreenMyAccount"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-
+			android:layout_weight="16"
             android:drawableLeft="@android:drawable/ic_menu_info_details"
             android:drawablePadding="-50dp"
             android:paddingLeft="10dp"
             android:text="My Account" />
-
+		<View 
+		    android:layout_width="0dp"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"/>
     </LinearLayout>
+
 </LinearLayout>
 
 </RelativeLayout>
