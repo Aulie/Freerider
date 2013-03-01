@@ -58,9 +58,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -108,13 +110,12 @@ public class ListJourneys extends SocialHitchhikingActivity{
 
 		initAdapter(adapter, journeys);
 
-		listview.setOnItemClickListener(new OnItemClickListener() {
-
+		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View child, int pos,
-					long arg3) {
+			public boolean onItemLongClick(AdapterView<?> parentView, View childView, final int pos, long id) {
 				Journey j = (Journey) adapter.getItem(pos);
 				cancelJourney(j);
+				return false;
 			}
 		});
 		listview.setAdapter(adapter);
