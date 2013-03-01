@@ -14,7 +14,13 @@
         <item>Upcoming</item>
         <item>Specific date</item>
     </string-array>
-    
+    <string-array name="preferences_array">
+        <item>Music</item>
+        <item>Animals</item>
+        <item>Breaks</item>
+        <item>Talking</item>
+        <item>Smoking</item>
+    </string-array>
     <string name="search">Search</string>
     <string name="destination">Destination</string>
     <string name="current_location">Current location</string>
