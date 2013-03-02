@@ -18,7 +18,7 @@
         android:theme="@style/NewTheme"
         android:name="SocialHitchhikingApplication"
         android:debuggable="false"
-        android:icon="@drawable/car_icon"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <uses-library android:name="com.google.android.maps" />
 
