@@ -1,7 +1,7 @@
 package no.ntnu.idi.socialhitchhiking;
-import android.os.Bundle;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
