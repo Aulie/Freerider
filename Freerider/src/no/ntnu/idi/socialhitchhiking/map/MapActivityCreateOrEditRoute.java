@@ -432,9 +432,9 @@ public class InitDestFrame{
 		Log.e("Length","Test");
 		//calls the MapActivityAbstract method to generate the map points/lines
 		drawPathOnMap(GeoHelper.getLocationList(getStringList()));
-		commonRouteSelected = new MapRoute(selectedRoute,GeoHelper.getLocationList(getStringList()),false);
-		Log.e("Common Length", Integer.toString((commonRouteSelected.getRouteData().size())));
-		Log.e("Selected Length", Integer.toString((selectedRoute.getRouteData().size())));
+		//commonRouteSelected = new MapRoute(selectedRoute,GeoHelper.getLocationList(getStringList()),false);
+		//Log.e("Common Length", Integer.toString((commonRouteSelected.getRouteData().size())));
+		//Log.e("Selected Length", Integer.toString((selectedRoute.getRouteData().size())));
 	}
 	
 
