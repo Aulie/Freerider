@@ -329,6 +329,7 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 	 */
 	protected void drawPathOnMap(String from, String to){
 		drawPathOnMap(GeoHelper.getLocationList(new String[]{from, to}));
+		
 	}
 
 	/**

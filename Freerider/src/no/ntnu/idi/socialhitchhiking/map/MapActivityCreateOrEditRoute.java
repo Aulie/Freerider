@@ -405,7 +405,7 @@ public class InitDestFrame{
 				public boolean onEditorAction(TextView v, int actionId,
 						KeyEvent event) {
 					if(actionId == EditorInfo.IME_ACTION_DONE){
-						//createMap();
+						createMap();
 						return true;
 					}
 					else{
