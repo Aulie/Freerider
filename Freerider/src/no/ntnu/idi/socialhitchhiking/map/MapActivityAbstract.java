@@ -26,6 +26,7 @@ import java.util.List;
 
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
+import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.User;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
@@ -146,6 +147,8 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 	 * An integer used when in edit mode, to remember what position the route had in the list of created routes.
 	 */
 	protected int positionOfRoute;
+	
+	protected Route drawableRoute;
 	
 	/**
 	 * A {@link Handler} that receives {@link Message}s from the 
@@ -347,7 +350,7 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 							onDrawingPathEnded();
 							return;
 						}
-						mapRoute = new MapRoute(selectedRoute, locationList);
+						mapRoute = new MapRoute(selectedRoute, locationList,true);
 					} catch (Exception e){
 						String message = "Could not load the route from Google Maps...";
 						Toast toast = Toast.makeText(MapActivityAbstract.this, message, Toast.LENGTH_LONG);
@@ -358,6 +361,7 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 					boolean success = drawPathOnMap(mapRoute);
 					if(!success) return; 
 					PersistHelper.saveRouteToCache(mapRoute);
+					//mapRoute = new MapRoute(selectedRoute, locationList,false);
 				}
 			}
 		}).start();
@@ -485,7 +489,7 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 	            		MapRoute mapRoute;
 
 	            		try {
-							mapRoute = new MapRoute(selectedRoute, drivingThrough);
+							mapRoute = new MapRoute(selectedRoute, drivingThrough,true);
 						} catch (Exception e){ 
 							makeToast("Could not load the route from Google Maps...");
 							return;

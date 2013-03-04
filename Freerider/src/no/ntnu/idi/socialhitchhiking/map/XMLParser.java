@@ -23,9 +23,10 @@ import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 public class XMLParser 
 {
 	private static final String ns = null;
-	public XMLParser()
+	private boolean drawable;
+	public XMLParser(boolean drawable)
 	{
-		
+		this.drawable = drawable;
 	}
 	
 	/**
@@ -111,9 +112,11 @@ public class XMLParser
 				}
 				route.addCoordinate(new MapLocation(Double.parseDouble(step.getStartLatitude()), Double.parseDouble(step.getStartLongitude())));
 				//Polyline
-				for(int i = 0; i < step.mapPoints.size(); i++) {
-					route.addCoordinate(new MapLocation(step.mapPoints.get(i).latitude, step.mapPoints.get(i).longitude));
-					route.addToDrivingThroughList(new MapLocation(step.mapPoints.get(i).latitude, step.mapPoints.get(i).longitude));
+				if(drawable){
+					for(int i = 0; i < step.mapPoints.size(); i++) {
+						route.addCoordinate(new MapLocation(step.mapPoints.get(i).latitude, step.mapPoints.get(i).longitude));
+						//route.addToDrivingThroughList(new MapLocation(step.mapPoints.get(i).latitude, step.mapPoints.get(i).longitude));
+					}
 				}
 				//End polyline
 				route.addCoordinate(new MapLocation(Double.parseDouble(step.getEndLatitude()), Double.parseDouble(step.getEndLongitude())));

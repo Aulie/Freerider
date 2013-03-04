@@ -123,6 +123,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	 * The {@link Route} that is saved, when {@link #chk_saveRoute} is checked.
 	 */
 	private Route commonRouteSelected;
+	
+	
 
 	
 	@Override
@@ -403,7 +405,7 @@ public class InitDestFrame{
 				public boolean onEditorAction(TextView v, int actionId,
 						KeyEvent event) {
 					if(actionId == EditorInfo.IME_ACTION_DONE){
-						createMap();
+						//createMap();
 						return true;
 					}
 					else{
@@ -427,8 +429,12 @@ public class InitDestFrame{
 	}
 	
 	protected void createMap(){
+		Log.e("Length","Test");
 		//calls the MapActivityAbstract method to generate the map points/lines
 		drawPathOnMap(GeoHelper.getLocationList(getStringList()));
+		commonRouteSelected = new MapRoute(selectedRoute,GeoHelper.getLocationList(getStringList()),false);
+		Log.e("Common Length", Integer.toString((commonRouteSelected.getRouteData().size())));
+		Log.e("Selected Length", Integer.toString((selectedRoute.getRouteData().size())));
 	}
 	
 
@@ -493,6 +499,10 @@ public class InitDestFrame{
 				if(actionId == EditorInfo.IME_ACTION_DONE){
 					
 					findAndDrawPath(v);
+					
+					//selectedRoute = new MapRoute(selectedRoute,GeoHelper.getLocationList(getStringList()),false);
+					//Log.e("Common Length", Integer.toString((commonRouteSelected.getRouteData().size())));
+					//Log.e("Selected Length", Integer.toString((selectedRoute.getRouteData().size())));
 					return true;
 				}
 				else{
@@ -519,7 +529,12 @@ public class InitDestFrame{
 	private Response chooseRoute() { 
 		String action = "created";
 		boolean saveRoute = chk_saveRoute.isChecked();
+		MapRoute tempRoute = new MapRoute(selectedRoute,GeoHelper.getLocationList(getStringList()),false);
+		selectedRoute.setRouteData(tempRoute.getRouteData());
 		commonRouteSelected = getApp().getSelectedRoute();
+		
+		
+		//Log.e("Length",Integer.toString(commonRouteSelected.getRouteData().size()));
 		if(commonRouteSelected != null){
 			commonRouteSelected.setMapPoints(selectedRoute.getMapPoints());
 			commonRouteSelected.setRouteData(selectedRoute.getRouteData());

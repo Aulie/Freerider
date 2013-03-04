@@ -28,12 +28,23 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
+import no.ntnu.idi.freerider.protocol.Response;
+import no.ntnu.idi.freerider.xml.RequestSerializer;
+import no.ntnu.idi.freerider.xml.ResponseParser;
+import no.ntnu.idi.socialhitchhiking.R;
+import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 
+import org.apache.http.client.ClientProtocolException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -62,22 +73,42 @@ public class RouteProvider {
 	 * @throws IOException
 	 * @throws XmlPullParserException 
 	 */
-	public static MapRoute getRoute(double fromLat, double fromLon, double toLat, double toLon) throws MalformedURLException, IOException, XmlPullParserException {
-		String url = RouteProvider.getUrl(fromLat, fromLon, toLat, toLon);
-		Log.e("TestLL","FL " + fromLat + " FL " + fromLon + " TL " + toLat + " TL " + toLon);
-		Log.e("URL",url);
-		InputStream is = RouteProvider.getConnectionInputStream(url);
+	public static MapRoute getRoute(double fromLat, double fromLon, double toLat, double toLon, final boolean drawable) throws MalformedURLException, IOException, XmlPullParserException {
+		final String url = RouteProvider.getUrl(fromLat, fromLon, toLat, toLon);
+		ExecutorService executor = Executors.newSingleThreadExecutor();
 		
-		MapRoute temp = new MapRoute();
-		temp = RouteProvider.getRoute(is);
-
-		Log.e("Reached","A MapRoute");
-		return temp;
+	    Callable<MapRoute> callable = new Callable<MapRoute>() {
+	        @Override
+	        public MapRoute call() throws ClientProtocolException, IOException, XmlPullParserException {
+	        	InputStream is = RouteProvider.getConnectionInputStream(url);
+	    		
+	    		MapRoute temp = new MapRoute();
+	    		temp = RouteProvider.getRoute(is, drawable);
+	    		return temp;
+	        }
+	    };
+	    Future<MapRoute> future = executor.submit(callable);
+	    MapRoute ret;
+		try {
+			ret = future.get();
+		} catch (InterruptedException e) {
+			ret = null;
+			Log.e("Error","klikk");
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			ret = null;
+			Log.e("Error","klikk");
+		}
+	    executor.shutdown();
+	    return ret;
+		
 	}
 
 	
-	private static MapRoute getRoute(InputStream is) throws IOException, XmlPullParserException {
-		XMLParser parser = new XMLParser();
+	private static MapRoute getRoute(InputStream is, boolean drawable) throws IOException, XmlPullParserException {
+		Log.e("Reached","getRoute Start");
+		XMLParser parser = new XMLParser(drawable);
+		Log.e("Reached","getRoute Middle");
 		return parser.parse(is);
 	}
 

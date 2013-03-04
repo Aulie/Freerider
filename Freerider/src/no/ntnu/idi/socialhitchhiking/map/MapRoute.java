@@ -21,16 +21,21 @@
  */
 package no.ntnu.idi.socialhitchhiking.map;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.User;
 import android.content.Context;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 
@@ -57,6 +62,11 @@ public class MapRoute extends Route implements Serializable{
 	 */
 	private int distanceInMinutes = 0;
 	
+	private boolean drawable = false;
+	
+	public void setDrawable(boolean drawable){
+		this.drawable = drawable;
+	}
 	public MapRoute(){
 		super(); 
 		this.routeData = new ArrayList<Location>();
@@ -71,11 +81,12 @@ public class MapRoute extends Route implements Serializable{
 		loadRoutePath(drivingThrough);
 	}
 		
-	public MapRoute(Route oldRoute, List<MapLocation> newDrivingThroughList){
+	public MapRoute(Route oldRoute, List<MapLocation> newDrivingThroughList, boolean drawable){
 		this();
 		this.name = oldRoute.getName();
 		this.owner = oldRoute.getOwner();
 		this.serial = oldRoute.getSerial();
+		this.drawable = drawable;
 		/*
 		List<Location> tempList = new ArrayList<Location>();
 		for(int i = 0; i < newDrivingThroughList.size(); i++)
@@ -118,13 +129,26 @@ public class MapRoute extends Route implements Serializable{
 			toLon = 	(destPoint.getLongitudeE6()  / 1E6);
 
 			MapRoute route;
-			try{
-				route = RouteProvider.getRoute(fromLat, fromLon, toLat, toLon);
-			}catch (Exception e) {
-				//ERROR
-				//Log.e("Error",e.getCause().toString());
-				return null; 
-			}
+			
+				try {
+					route = RouteProvider.getRoute(fromLat, fromLon, toLat, toLon, drawable);
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					Log.e("Errpr",e1.getMessage());
+					return null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					Log.e("Errpr",e1.getMessage());
+					return null;
+				} catch (XmlPullParserException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					Log.e("Errpr",e1.getMessage());
+					return null;
+				}
+
 			
 			entireRoute.addRouteAsPartOfThis(route, (directionRequestCounter == 0)); 
 
