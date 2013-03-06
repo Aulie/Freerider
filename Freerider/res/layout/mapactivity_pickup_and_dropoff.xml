@@ -7,10 +7,13 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <TabWidget android:id="@android:id/tabs"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-    />
+
+    <TabWidget
+        android:id="@android:id/tabs"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right" />
+
     <FrameLayout android:id="@android:id/tabcontent"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent">
@@ -229,14 +232,40 @@
 		    android:textSize="15sp"
 		    android:background="@drawable/list_selector"
       	/>
-        <TextView
-        	android:id="@+id/mapViewPickupTextViewCar"
-     		android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:text="[THE CAR]"
-		    android:textSize="15sp"
-		    android:background="@drawable/list_selector"
-      	/>
+        <ImageView
+            android:id="@+id/mapViewPickupTextViewCar"
+            android:layout_width="fill_parent"
+            android:layout_height="101dp"
+            android:src="@drawable/car" >
+</ImageView>
+
+		<RelativeLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="match_parent" >
+
+		  <RatingBar
+		      android:id="@+id/ratingBar2"
+		      android:layout_width="wrap_content"
+		      android:layout_height="wrap_content"
+		      android:layout_centerHorizontal="true"
+		      android:layout_centerVertical="true"
+		      android:isIndicator="true"
+		      android:numStars="5"
+		      android:rating="3"
+		      android:scaleX="0.5"
+		      android:scaleY="0.5" />
+
+		  <TextView
+		      android:id="@+id/mapViewPickupAndDropoffComfort"
+		      android:layout_width="fill_parent"
+		      android:layout_height="20dp"
+		      android:layout_alignParentRight="true"
+		      android:layout_centerVertical="true"
+		      android:layout_margin="10dp"
+		      android:text="Comfort:"
+		      android:textSize="15sp" />
+
+			</RelativeLayout>
       </LinearLayout>
     </FrameLayout>
   </LinearLayout>

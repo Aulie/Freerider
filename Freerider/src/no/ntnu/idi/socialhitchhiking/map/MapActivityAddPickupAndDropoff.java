@@ -171,8 +171,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		((TextView)findViewById(R.id.mapViewPickupTextViewDate)).setText(s);
 		
 		//Adding Gender to the driver
-		
-		User gender = new User();
+		User gender = new User(); //this must be changed to some database stuff
 		gender.setGender("Male");
 		ImageView iv_image;
 	    iv_image = (ImageView) findViewById(R.id.gender);
@@ -187,6 +186,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		    Drawable female = getResources().getDrawable(R.drawable.female);
 		    iv_image.setImageDrawable(female);
 		    }
+		    
 		
 		// Adding onClickListener for the button "Ask for a ride"
 		btnSendRequest = (Button)findViewById(no.ntnu.idi.socialhitchhiking.R.id.mapViewPickupBtnSendRequest);
