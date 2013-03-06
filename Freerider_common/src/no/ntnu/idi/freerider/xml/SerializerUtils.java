@@ -65,7 +65,7 @@ class SerializerUtils {
 		routeElement.addAttribute(ProtocolConstants.ROUTE_NAME, route.getName());
 		routeElement.addAttribute(ProtocolConstants.ROUTE_SERIAL, Integer.toString(route.getSerial()));
 		routeElement.add(serializeUser(route.getOwner()));
-		routeElement.addAttribute(ProtocolConstants.ROUTE_FREQUENCY,Integer.toString(route.getFrequency()));
+		//routeElement.addAttribute(ProtocolConstants.ROUTE_FREQUENCY,Integer.toString(route.getFrequency()));
 		if(route.getRouteData() != null){
 			for (Location location : route.getRouteData()) {
 				Element locationElement = serializeLocation(location);

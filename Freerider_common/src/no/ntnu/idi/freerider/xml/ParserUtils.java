@@ -79,7 +79,7 @@ class ParserUtils {
 			}
 		}
 		Route ret = new Route(owner, routeName, routeData, serial); 
-		ret.setFrequency((Integer.parseInt(routeElement.attributeValue(ProtocolConstants.ROUTE_FREQUENCY))));
+		//ret.setFrequency((Integer.parseInt(routeElement.attributeValue(ProtocolConstants.ROUTE_FREQUENCY))));
 		ret.setMapPoints(mapLocations);
 		return ret;
 	}
