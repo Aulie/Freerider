@@ -36,13 +36,16 @@ public class User {
 	private InetAddress ip;
 	private byte[] picture;
 	private List<User> friends;
+	private String gender;
 	
 	public User(String name,String id){
 		this.firstName = name;
 		this.ID = id.replaceAll("\\s", "");
 		friends = new ArrayList<User>();
 	}
-	
+	public User (){
+		
+	}
 	public String getFullName() {
 		return firstName+" "+surName;
 	}
@@ -82,6 +85,14 @@ public class User {
 	public void setPicture(byte[] picture) {
 		this.picture = picture;
 	}
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	/**
 	 * Method that gets a users Facebook profile picture URL.
 	 * 

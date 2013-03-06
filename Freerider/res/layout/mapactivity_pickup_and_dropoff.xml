@@ -159,7 +159,6 @@
 			    android:layout_weight="1"
 			    android:textSize="15sp"
 			    android:text="[NAME]"
-			    android:background="@drawable/list_selector"
 			    />
 				<TextView 
 			    android:id="@+id/mapViewPickupTextViewAge"
@@ -167,18 +166,18 @@
 			    android:layout_width="fill_parent"
 			    android:layout_weight="1"
 			    android:textSize="15sp"
-			    android:text="[AGE]"
-			    android:background="@drawable/list_selector"
-			    />
-				<TextView 
-			    android:id="@+id/mapViewPickupTextViewGender"
+			    android:text="[AGE]"/>
+				
+				<ImageView
+			    android:id="@+id/gender"
 			    android:layout_height="20dp"
-			    android:layout_width="fill_parent"
-			    android:layout_weight="1"
-			    android:textSize="15sp"
-			    android:text="[GENDER]"
-			    android:background="@drawable/list_selector"
-			    />
+			    android:layout_width="wrap_content"
+			    android:gravity="left"
+			    android:scaleX="1.5"
+			    android:scaleY="1.5"
+			    android:layout_marginLeft="10dp"
+			    android:layout_marginBottom="10dp"
+			    android:layout_weight="1" />
 			</LinearLayout>
         </LinearLayout>
 

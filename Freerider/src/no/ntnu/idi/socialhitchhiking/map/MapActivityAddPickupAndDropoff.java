@@ -22,12 +22,7 @@
 package no.ntnu.idi.socialhitchhiking.map;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -49,12 +44,10 @@ import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 
 import org.apache.http.client.ClientProtocolException;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.hardware.Camera.Parameters;
-import android.os.AsyncTask;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -176,6 +169,24 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		Date d = journey.getStart().getTime();
 		String s = d.toLocaleString();
 		((TextView)findViewById(R.id.mapViewPickupTextViewDate)).setText(s);
+		
+		//Adding Gender to the driver
+		
+		User gender = new User();
+		gender.setGender("Male");
+		ImageView iv_image;
+	    iv_image = (ImageView) findViewById(R.id.gender);
+
+		    if (gender.getGender().equals("Male")){
+		    
+		    Drawable male = getResources().getDrawable(R.drawable.male);
+		    iv_image.setImageDrawable(male);
+		    }
+
+		    else{
+		    Drawable female = getResources().getDrawable(R.drawable.female);
+		    iv_image.setImageDrawable(female);
+		    }
 		
 		// Adding onClickListener for the button "Ask for a ride"
 		btnSendRequest = (Button)findViewById(no.ntnu.idi.socialhitchhiking.R.id.mapViewPickupBtnSendRequest);
@@ -466,4 +477,5 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		}
 		return true;
 	}
+	
 }
