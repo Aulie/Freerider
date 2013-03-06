@@ -27,5 +27,8 @@
     <string name="origin">Origin</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="one">1</string>
 
 </resources>
