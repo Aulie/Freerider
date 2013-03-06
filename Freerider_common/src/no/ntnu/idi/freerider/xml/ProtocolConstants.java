@@ -93,6 +93,7 @@ interface ProtocolConstants {
 	/**The name of a {@link ROUTE}'s serial field. */
 	static final String ROUTE_SERIAL = "serial";
 	static final String ROUTE_OWNER = "owner";
+	static final String ROUTE_FREQUENCY = "frequency";
 	
 	/**The name of an element representing a Journey. */
 	static final String JOURNEY = "JOURNEY";

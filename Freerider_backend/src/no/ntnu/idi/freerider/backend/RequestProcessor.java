@@ -104,7 +104,7 @@ public class RequestProcessor {
 				routes.add(savedRoute);
 				return new RouteResponse(type,ResponseStatus.OK,routes);
 			} catch (SQLException e) {
-				logger.error("Error saving route.",e);
+				ServerLogger.write("Error saving route" + e.getMessage());
 				return new RouteResponse(type,ResponseStatus.FAILED,e.getMessage(),routes);
 			}
 		case CREATE_AD_HOC_ROUTE:
@@ -132,12 +132,15 @@ public class RequestProcessor {
 			}
 		case GET_ROUTES:
 			routes = null;
+			ServerLogger.write("GET_ROUTES");
 			String id = request.getUser().getID();
 			try {
+				ServerLogger.write("Route start");
 				routes = db.getRoutes(id);
+				ServerLogger.write("Route returned");
 				return new RouteResponse(type,ResponseStatus.OK,routes);
 			} catch (SQLException e1) {
-				logger.error("Error retrieving routes",e1);
+				ServerLogger.write("Error retrieving routes: " + e1.getMessage());
 				return new RouteResponse(type,ResponseStatus.FAILED,e1.getMessage(),routes);
 			}
 		case GET_ROUTE:
@@ -146,7 +149,7 @@ public class RequestProcessor {
 			try {
 				routes.add(db.getRoute(serial));
 			} catch (SQLException e2) {
-				logger.error("Error retrieving route " + serial,e2);
+				ServerLogger.write("Error retrieving route: " + e2.getMessage());
 				return new RouteResponse(type,ResponseStatus.FAILED,e2.getMessage(),routes);
 			}
 		case DELETE_ROUTE:
@@ -164,7 +167,7 @@ public class RequestProcessor {
 				journeys.add(savedJourney);
 				return new JourneyResponse(type, ResponseStatus.OK, journeys);
 			}catch (SQLException e) {
-				logger.error("Error saving journey.",e);
+				ServerLogger.write("Error saving journey: " + e.getMessage());
 				return new JourneyResponse(type, ResponseStatus.FAILED,e.getMessage(),journeys);
 			}
 		case UPDATE_JOURNEY:

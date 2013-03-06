@@ -202,15 +202,19 @@ public class DBConnector {
 		String addressList = rs.getString("addresses");
 		String[] addresses = addressList.split(Route.ADDRESS_STRING_DELIMITER);
 		List<MapLocation> mapLocations = readMapLocationData(rs, addresses);
+		//ret.setFrequency(rs.getInt("frequency"));
 		ret.setMapPoints(mapLocations);
 		return ret;
 	}
 
 	public List<Route> getRoutes(String ownerID) throws SQLException {
+		ServerLogger.write("getRoutes TOP");
 		List<Route> ret = new ArrayList<Route>();
-		PreparedStatement stmt = conn.prepareStatement("SELECT name, route::geometry, owner, serial, maplocations::geometry,addresses FROM routes WHERE owner=? AND ad_hoc=false");
+		//Changed
+		PreparedStatement stmt = conn.prepareStatement("SELECT name, route::geometry, owner, serial, maplocations::geometry,addresses,frequency FROM routes WHERE owner=? AND ad_hoc=false ORDERBY frequency");
 		stmt.setString(1,ownerID);
 		ResultSet rs = stmt.executeQuery();
+		ServerLogger.write("Before while");
 		while(rs.next()){
 			List<Location> routeData = readRouteData(rs);
 			User user = getUser(rs.getString("owner"));
@@ -218,7 +222,10 @@ public class DBConnector {
 			String[] addresses = rs.getString("addresses").split(Route.ADDRESS_STRING_DELIMITER); 
 			List<MapLocation> mapLocations = readMapLocationData(rs, addresses);
 			toAdd.setMapPoints(mapLocations);
+			ServerLogger.write("Before try");
+			ServerLogger.write("After setFreq");
 			ret.add(toAdd);
+			ServerLogger.write("After ret.add(toadd)");
 		}
 		return ret;
 	}
@@ -416,6 +423,8 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		ret.setVisibility(journey.getVisibility());
 		rs.close();
 		stmt.close();
+		setDateModified(journey.getRoute());
+		incrementFrequency(journey.getRoute());
 		return ret;
 	}
 
@@ -610,6 +619,33 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		stmt.setString(2,note.getSenderID());
 		stmt.setInt(3, note.getJourneySerial());
 		stmt.setString(4, note.getType().toString());
+		stmt.executeUpdate();
+	}
+	private void setDateModified(Route route) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("UPDATE routes SET date_modified=? WHERE serial=?");
+		java.util.Date now = new java.util.Date();
+		Date sqlNow = new Date(now.getTime());
+		stmt.setDate(1,sqlNow);
+		stmt.setInt(2, route.getSerial());
+		stmt.executeUpdate();
+	}
+	private void incrementFrequency(Route route) throws SQLException {
+		int freq = getFrequency(route);
+		freq++;
+		setFrequency(route, freq);
+	}
+	private int getFrequency(Route route) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("SELECT frequency FROM routes WHERE serial=?");
+		stmt.setInt(1, route.getSerial());
+		ResultSet rs = stmt.executeQuery();
+		if(!rs.next()) throw new SQLException("Couldn't find route with serial: " + route.getSerial());
+		int ret = rs.getInt(1);
+		return ret;
+	}
+	private void setFrequency(Route route, int frequency) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("UPDATE routes SET frequency=? WHERE serial=?");
+		stmt.setInt(1, frequency);
+		stmt.setInt(2,route.getSerial());
 		stmt.executeUpdate();
 	}
 
