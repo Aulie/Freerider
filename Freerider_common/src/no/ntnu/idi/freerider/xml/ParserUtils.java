@@ -65,6 +65,7 @@ class ParserUtils {
 		catch(NumberFormatException e){
 			logger.warn("Error parsing Route serial", e);
 		}
+		
 		User owner = parseUser(routeElement.element(ProtocolConstants.USER_ELEMENT));
 		@SuppressWarnings("unchecked")
 		List<Element> routeContents = routeElement.elements();
@@ -78,6 +79,7 @@ class ParserUtils {
 			}
 		}
 		Route ret = new Route(owner, routeName, routeData, serial); 
+		ret.setFrequency((Integer.parseInt(routeElement.attributeValue(ProtocolConstants.ROUTE_FREQUENCY))));
 		ret.setMapPoints(mapLocations);
 		return ret;
 	}

@@ -35,9 +35,16 @@ public class Route {
 	protected List<Location> routeData;
 	protected List<MapLocation> mapPoints;
 	protected int serial;
+	protected int frequency;
 
 	public Route(){
 		
+	}
+	public int getFrequency() {
+		return frequency;
+	}
+	public void setFrequency(int frequency) {
+		this.frequency = frequency;
 	}
 	public Route(Route r){
 		name = String.valueOf(r.getName());
