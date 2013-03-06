@@ -21,7 +21,14 @@
  */
 package no.ntnu.idi.socialhitchhiking.journey;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -51,12 +58,15 @@ import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 
 import org.apache.http.client.ClientProtocolException;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
@@ -65,11 +75,33 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ListJourneys extends SocialHitchhikingActivity{
 	private ListView listview;
 	private List<Journey> journeys;
 	private Calendar now, hr24, hr72,in14Days,nextMonth;
+	
+	public void showMain(List<Journey> journeys){
+		setContentView(R.layout.journey_view);
+		listview = (ListView)findViewById(R.id.journey_view_list);
+
+		if(journeys == null) journeys = new ArrayList<Journey>();
+		initCalendars();
+
+		initAdapter(adapter, journeys);
+		setContentView(R.layout.journey_view);
+		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parentView, View childView, final int pos, long id) {
+				Journey j = (Journey) adapter.getItem(pos);
+				cancelJourney(j);
+				return false;
+			}
+		});
+		listview.setAdapter(adapter);
+	}
+	
 	private SectionedListViewAdapter adapter = new SectionedListViewAdapter() {
 		@Override
 		protected View getHeaderView(String caption, int index, View convertView,
@@ -92,33 +124,11 @@ public class ListJourneys extends SocialHitchhikingActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.journey_view);
-		listview = (ListView)findViewById(R.id.journey_view_list);
-
-		try {
-			journeys = getApp().sendJourneysRequest();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		if(journeys == null) journeys = new ArrayList<Journey>();
-		initCalendars();
-
-		initAdapter(adapter, journeys);
-
-		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parentView, View childView, final int pos, long id) {
-				Journey j = (Journey) adapter.getItem(pos);
-				cancelJourney(j);
-				return false;
-			}
-		});
-		listview.setAdapter(adapter);
+		setContentView(R.layout.main_loading);
+		new Loader(this).execute();
+		
+		
 	}
 	private void initCalendars(){
 		now = Calendar.getInstance();
@@ -373,4 +383,34 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		}
 	}
 	
+}
+
+class Loader extends AsyncTask<Void, Integer, List<Journey>>{
+	
+	ListJourneys activity;
+	public Loader(ListJourneys activity){
+		this.activity = (ListJourneys) activity;
+	}
+	
+	protected List<Journey> doInBackground(Void... params) {
+		List<Journey> journeys;
+		try {
+			journeys = activity.getApp().sendJourneysRequest();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			journeys = new ArrayList<Journey>();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			journeys = new ArrayList<Journey>();
+		}
+		return journeys;
+	}
+
+	@Override
+	protected void onPostExecute(List<Journey> result) {
+		Log.e("12345", "1");
+		activity.showMain(result);
+		
+	}
+
 }

@@ -107,7 +107,7 @@ public abstract class SocialHitchhikingActivity extends Activity{
 	protected void onPause() {
 		super.onPause();
 	}
-	protected SocialHitchhikingApplication getApp(){
+	public SocialHitchhikingApplication getApp(){
 		return app;
 	}
 	/**
