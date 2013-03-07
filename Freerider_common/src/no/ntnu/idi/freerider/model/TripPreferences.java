@@ -1,26 +1,96 @@
 package no.ntnu.idi.freerider.model;
 
+import java.util.BitSet;
+
 public class TripPreferences {
 	Integer seatsAvailable;
-	Boolean[] extras;
+	Boolean music;
+	Boolean animals;
+	Boolean breaks;
+	Boolean talking;
+	Boolean smoking;
 	
 	public TripPreferences(){
 		seatsAvailable=1;
-		for(Boolean b:extras){
-			b=false;
-		}
-	}
-	public Integer getSeatsAvailable(){
-		return seatsAvailable;
-	}
-	public void setSeatsAvailable(Integer seatsAvailable){
-		this.seatsAvailable = seatsAvailable;
+		music=false;
+		animals=false;
+		breaks=false;
+		talking=false;
+		smoking=false;
 	}
 	
-	public boolean getBreaks(){
-		return extras[0];
+	public TripPreferences(Integer seatsAvailable, Boolean music,
+			Boolean animals, Boolean breaks, Boolean talking, Boolean smoking) {
+		super();
+		this.seatsAvailable = seatsAvailable;
+		this.music = music;
+		this.animals = animals;
+		this.breaks = breaks;
+		this.talking = talking;
+		this.smoking = smoking;
 	}
-	public boolean getAnimals(){
-		return extras[1];
+	public BitSet getExtras(){
+		BitSet extras = new BitSet(5);
+		extras.set(0, music);
+		extras.set(1, animals);
+		extras.set(2, breaks);
+		extras.set(3, talking);
+		extras.set(4, smoking);
+		return extras;
 	}
+	public void setExtras(BitSet extras){
+		this.music=extras.get(0);
+		this.animals=extras.get(1);
+		this.breaks=extras.get(2);
+		this.talking=extras.get(3);
+		this.smoking=extras.get(4);
+	}
+	public Integer getSeatsAvailable() {
+		return seatsAvailable;
+	}
+
+	public void setSeatsAvailable(Integer seatsAvailable) {
+		this.seatsAvailable = seatsAvailable;
+	}
+
+	public Boolean getMusic() {
+		return music;
+	}
+
+	public void setMusic(Boolean music) {
+		this.music = music;
+	}
+
+	public Boolean getAnimals() {
+		return animals;
+	}
+
+	public void setAnimals(Boolean animals) {
+		this.animals = animals;
+	}
+
+	public Boolean getBreaks() {
+		return breaks;
+	}
+
+	public void setBreaks(Boolean breaks) {
+		this.breaks = breaks;
+	}
+
+	public Boolean getTalking() {
+		return talking;
+	}
+
+	public void setTalking(Boolean talking) {
+		this.talking = talking;
+	}
+
+	public Boolean getSmoking() {
+		return smoking;
+	}
+
+	public void setSmoking(Boolean smoking) {
+		this.smoking = smoking;
+	}
+	
 }
