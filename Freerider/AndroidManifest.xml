@@ -100,7 +100,8 @@
         <activity
             android:name=".map.MapActivityAddPickupAndDropoff"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" 
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="no.ntnu.idi.socialhitchhiking.map.MAPACTIVITYADDPICKUPANDDROPOFF" />
             </intent-filter>

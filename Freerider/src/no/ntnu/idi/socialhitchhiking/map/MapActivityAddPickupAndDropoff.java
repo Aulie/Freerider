@@ -49,9 +49,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -73,22 +77,22 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	/**
 	 * When this field is true, the user should select a pickup point, by touching the map.
 	 */
-	private boolean isSelectingPickupPoint = true;
+	//private boolean isSelectingPickupPoint = true;
 	
 	/**
 	 * When this field is true, the user should select a dropoff point, by touching the map.
 	 */
-	private boolean isSelectingDropoffPoint = false;
+	//private boolean isSelectingDropoffPoint = false;
 	
 	/**
 	 * The button to be pressed when the user should select a pickup point. 
 	 */
-	private Button btnSelectPickupPoint;
+	//private Button btnSelectPickupPoint;
 	
 	/**
 	 * The button to be pressed when the user should select a dropoff point.
 	 */
-	private Button btnSelectDropoffPoint;
+	//private Button btnSelectDropoffPoint;
 	
 	/**
 	 * The button to press for sending a request.
@@ -130,6 +134,10 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	
 	private ImageView picture;
 	
+	private AutoCompleteTextView acPickup;
+
+	private AutoCompleteTextView acDropoff;
+	
 	
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -153,6 +161,12 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		specDriver.setContent(R.id.driver_tab);
 		specDriver.setIndicator("Driver");
 		tabs.addTab(specDriver);
+		
+		// Adding the pickup location address text
+		((AutoCompleteTextView)findViewById(R.id.pickupText)).setText(getIntent().getExtras().getString("pickupString"));
+				
+		// Adding the dropoff location address text
+		((AutoCompleteTextView)findViewById(R.id.dropoffText)).setText(getIntent().getExtras().getString("dropoffString"));
 		
 		// Adding image of the driver
 		User driver = journey.getRoute().getOwner();
@@ -188,7 +202,9 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		    iv_image.setImageDrawable(female);
 		    }
 
-		
+		 // Initializing the two autocomplete textviews pickup and dropoff
+	    initAutocomplete();
+	    
 		// Adding onClickListener for the button "Ask for a ride"
 		btnSendRequest = (Button)findViewById(no.ntnu.idi.socialhitchhiking.R.id.mapViewPickupBtnSendRequest);
 		btnSendRequest.setOnClickListener(new OnClickListener() {
@@ -249,9 +265,9 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		});
 		
 		// Adding buttons where you choose between pickup point and dropoff point
-		btnSelectPickupPoint = (Button)findViewById(R.id.mapViewPickupBtnPickup);
-		btnSelectDropoffPoint = (Button)findViewById(R.id.mapViewPickupBtnDropoff);
-		
+		//btnSelectPickupPoint = (Button)findViewById(R.id.mapViewPickupBtnPickup);
+		//btnSelectDropoffPoint = (Button)findViewById(R.id.mapViewPickupBtnDropoff);
+		/*
 		// Setting the selected pickup point
 		setSelectingPickupPoint();
 		btnSelectPickupPoint.setOnClickListener(new OnClickListener() {
@@ -268,7 +284,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				setSelectingDropoffPoint();
 			}
 		});
-		
+		*/
 		
 		Bundle extras = getIntent().getExtras();
 		if(extras != null){
@@ -283,6 +299,45 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		}
 	}
 	
+	/**
+	 * Initialize the {@link AutoCompleteTextView}'s with an {@link ArrayAdapter} 
+	 * and a listener ({@link AutoCompleteTextWatcher}). The listener gets autocomplete 
+	 * data from the Google Places API and updates the ArrayAdapter with these.
+	 */
+	private void initAutocomplete() {
+		adapter = new ArrayAdapter<String>(this,R.layout.item_list);
+		adapter.setNotifyOnChange(true); 
+		
+		acPickup = (AutoCompleteTextView) findViewById(R.id.pickupText);
+		acPickup.setAdapter(adapter);
+		acPickup.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acPickup));
+		acPickup.setThreshold(1);	
+		
+		acDropoff = (AutoCompleteTextView) findViewById(R.id.dropoffText);
+		acDropoff.setAdapter(adapter);
+		//acTo.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acTo));
+		
+		//adds the adapter for the textChangedListener
+		//acAdd.setAdapter(adapter);
+		acDropoff.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acDropoff));
+		
+		//sets the done button on the keyboard
+		acDropoff.setOnEditorActionListener(new EditText.OnEditorActionListener(){
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if(actionId == EditorInfo.IME_ACTION_DONE){
+					setPickupLocation();
+					setDropOffLocation();
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
+		});
+	}
+	
 	//These two fields are used to make sure the toast "select a pickup point", doesn't pop up too often.
 	private int pickCount = 0;
 	private long pickLastTime = 0;
@@ -291,11 +346,11 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 * This method should be called when the user should select a pickup point.
 	 */
 	private void setSelectingPickupPoint(){
-		isSelectingPickupPoint = true;
+		/*isSelectingPickupPoint = true;
 		isSelectingDropoffPoint = false;
 		btnSelectPickupPoint.setBackgroundColor(selected); 
 		btnSelectDropoffPoint.setBackgroundColor(notSelected);
-		
+		*/
 		if(pickCount == 0 || (System.currentTimeMillis()-pickLastTime) > 2000){
 			makeToast("Select a pickup point.");
 			pickLastTime = System.currentTimeMillis();
@@ -318,11 +373,11 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 * This method should be called when the user should select a dropoff point.
 	 */
 	private void setSelectingDropoffPoint(){
-		isSelectingPickupPoint = false;
+		/*isSelectingPickupPoint = false;
 		isSelectingDropoffPoint = true;
 		btnSelectPickupPoint.setBackgroundColor(notSelected); 
 		btnSelectDropoffPoint.setBackgroundColor(selected);
-		
+		*/
 		if(dropCount == 0 || (System.currentTimeMillis()-dropLastTime) > 2000){
 			makeToast("Select a dropoff point.");
 			dropLastTime = System.currentTimeMillis();
@@ -340,12 +395,12 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	/**
 	 * Should be called when both a pickup point and a dropoff point has been selected.
 	 */
-	private void setDoneSelecting(){
+	/*private void setDoneSelecting(){
 		isSelectingPickupPoint = false;
 		isSelectingDropoffPoint = false;
 		btnSelectPickupPoint.setBackgroundColor(notSelected); 
 		btnSelectDropoffPoint.setBackgroundColor(notSelected);
-	}
+	}*/
 
 	@Override
 	protected void initContentView() {
@@ -359,28 +414,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	protected void initProgressBar() {
 		setProgressBar((ProgressBar)findViewById(R.id.mapViewPickupProgressBar));
 	}
-	
-	/**
-	 * Static method that retrieves a users Facebook profile picture.
-	 * 
-	 * @param id - String, containing a Facebook users id.
-	 * @return {@link Bitmap} of the users profile picture.
-	 */
-	/*private static Bitmap getPicture(User user){
-		Bitmap mIcon1 = null;
-		try {
-			mIcon1 = BitmapFactory.decodeStream(user.getPictureURL().openConnection().getInputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return mIcon1;
-	}*/
-	/*private Bitmap getPicture(User user){
-		Bitmap bm = BitmapFactory.decodeByteArray(user.getPicture(), 0, user.getPicture().length);
-		return bm;
-	}*/
 
 	/**
 	 * This method loops trough the route path, to find out which {@link Location} is 
@@ -427,6 +460,58 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		//Does nothing
 	} 
 	
+	/**
+	 * Adds the pickup location to the map route.
+	 */
+	private void setPickupLocation(){
+		acPickup = (AutoCompleteTextView)findViewById(R.id.pickupText);
+		GeoPoint pickupGeo = GeoHelper.getGeoPoint(acPickup.getText().toString());
+
+		MapLocation mapLocation = (MapLocation) GeoHelper.getLocation(pickupGeo);
+		
+		Location temp = findClosestLocationOnRoute(mapLocation);
+		
+		if(dropoffPoint == null){
+			pickupPoint = temp;
+			overlayPickupCross = drawCross(pickupPoint, true);
+			setSelectingDropoffPoint();
+		}else{
+			List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
+			if(l.indexOf(temp) < l.indexOf(dropoffPoint)){
+				makeToast("The pickup point has to be before the dropoff point");
+			}else{
+				pickupPoint = temp;
+				overlayPickupCross = drawCross(pickupPoint, true);
+				//setDoneSelecting();
+			}
+		}
+	}
+	
+	/**
+	 * Adds the dropoff location to the map route.
+	 */
+	private void setDropOffLocation(){
+		acDropoff = (AutoCompleteTextView)findViewById(R.id.dropoffText);
+		GeoPoint dropoffGeo = GeoHelper.getGeoPoint(acDropoff.getText().toString());
+		MapLocation mapLocation = (MapLocation) GeoHelper.getLocation(dropoffGeo);
+		
+		Location temp = findClosestLocationOnRoute(mapLocation);
+		
+		if(pickupPoint == null){
+			dropoffPoint = temp;
+			overlayDropoffCross = drawCross(dropoffPoint, false);
+			setSelectingPickupPoint();
+		}else{
+			List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
+			if(l.indexOf(temp) > l.indexOf(pickupPoint)){
+				makeToast("The droppoff point has to be after the pickup point");
+			}else{
+				dropoffPoint = temp;
+				overlayDropoffCross = drawCross(dropoffPoint, false);
+				//setDoneSelecting();
+			}
+		}
+	}
 	
 	/**
 	 * When someone presses the map, this method is called and draws the pickup 
@@ -435,7 +520,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 */
 	@Override
 	public synchronized boolean onSingleTapUp(MotionEvent e) {
-		if(!isSelectingDropoffPoint && !isSelectingPickupPoint) return false;
+		/*if(!isSelectingDropoffPoint && !isSelectingPickupPoint) return false;
 		GeoPoint gp = mapView.getProjection().fromPixels(
 				(int) e.getX(),
 				(int) e.getY());
@@ -475,7 +560,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 					setDoneSelecting();
 				}
 			}
-		}
+		}*/
 		return true;
 	}
 	
