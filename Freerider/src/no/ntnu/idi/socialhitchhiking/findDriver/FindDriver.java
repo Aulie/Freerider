@@ -150,6 +150,8 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 				intent.putExtra("journey", true);
 				intent.putExtra("searchFrom", (Serializable)goingFrom);
 				intent.putExtra("searchTo", (Serializable)goingTo);
+				intent.putExtra("pickupString", searchFrom.getText().toString());
+				intent.putExtra("dropoffString", searchTo.getText().toString());
 				MapRoute mr = new MapRoute(sr.getOwner(), sr.getName(), sr.getSerial(), sr.getMapPoints());
 				getApp().setSelectedMapRoute(mr);
 				getApp().setSelectedJourney(selectedJourney);

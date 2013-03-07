@@ -30,10 +30,9 @@
         	<LinearLayout 
         	android:id="@+id/mapViewDateAndSeatsLayout"
         	android:layout_width="fill_parent"
-        	android:layout_height="40dp"
+        	android:layout_height="wrap_content"
         	android:orientation="horizontal"
         	>
-
 	        	<TextView
 	        	    android:id="@+id/mapViewPickupTextViewDate"
 	        	    android:layout_width="match_parent"
@@ -57,33 +56,68 @@
         	<LinearLayout 
         	android:id="@+id/mapViewPickupDropoffLayout"
         	android:layout_width="fill_parent"
-        	android:layout_height="40dp"
-        	android:orientation="horizontal"
+        	android:layout_height="wrap_content"
+        	android:orientation="vertical"
         	>
-	       		<Button
-	            android:id="@+id/mapViewPickupBtnPickup"
-	            android:layout_width="fill_parent"
-	            android:layout_height="fill_parent"
-	            android:text="@string/mapViewPickupBtnPickup" 
-	            android:layout_gravity="left"
-	            android:layout_marginRight="2dp"
-	            android:layout_weight="1"
-	            android:background="@drawable/list_selector"
-	            />
-	        	<Button
-	            android:id="@+id/mapViewPickupBtnDropoff"
-	            android:layout_width="fill_parent"
-	            android:layout_height="fill_parent"
-	            android:text="@string/mapViewPickupBtnDropoff" 
-	            android:layout_gravity="right"
-	            android:layout_marginLeft="2dp"
-	            android:layout_weight="1"
-	            android:background="@drawable/list_selector"
-	            />
+	       		<FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/pickupText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/mapViewBtnFrom"
+                        android:imeOptions="actionNext"
+                        android:paddingLeft="40dip"
+                        android:layout_marginTop="5dip"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/etGoingFromIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:paddingTop="5dip"
+                        android:layout_marginBottom="2dip"
+                        android:layout_marginLeft="10dip"
+                        android:src="@drawable/google_marker_thumb_mini_start" />
+                </FrameLayout>
+                
+				<!-- Add Going to Field -->
+                
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/dropoffText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/mapViewBtnTo"
+                        android:imeOptions="actionDone"
+                        android:paddingLeft="40dip"
+                        android:layout_marginTop="5dip"
+                        android:singleLine="true"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/etGoingToIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:paddingTop="5dip"
+                        android:layout_marginBottom="2dip"
+                        android:layout_marginLeft="10dip"
+                        android:src="@drawable/google_marker_thumb_mini_stop" />
+                </FrameLayout>
 			</LinearLayout>
        		<LinearLayout
            	android:layout_width="fill_parent"
-          	android:layout_height="250dp"
+          	android:layout_height="fill_parent"
           	android:orientation="vertical"
           	>
            	<com.google.android.maps.MapView
@@ -101,19 +135,13 @@
                android:layout_height="wrap_content"
                android:visibility="gone"/> 
 
-       		</LinearLayout>
-
-       		<LinearLayout
-           	android:layout_width="fill_parent"
-          	android:layout_height="fill_parent"
-          	android:orientation="vertical" 
-           	>
-
 	           <EditText 
 	               android:id="@+id/mapViewPickupEtComment"
 	               android:layout_width="fill_parent"
 	               android:layout_height="wrap_content"
 	               android:hint="@string/mapViewPickupEtComment" 
+	               android:singleLine="true"
+	               android:scrollbars="vertical"
 	               android:textSize="15sp"
 	               />
 	           <Button
