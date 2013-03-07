@@ -26,6 +26,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -44,6 +45,7 @@ import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
+import no.ntnu.idi.socialhitchhiking.utility.RouteComparator;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 
 import org.apache.http.client.ClientProtocolException;
@@ -70,6 +72,7 @@ import android.widget.TextView;
  * @author Pål
  * @author Christian Thurmann-Nielsen
  * @author Made Ziius
+ * @author Thomas Gjerde
  *
  */
 public class ScheduleDrive extends SocialHitchhikingActivity {
@@ -111,6 +114,7 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		listRoute.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parentView, View childView, final int position, long id) {
+				Log.e("Freq",Integer.toString(((Route)listRoute.getItemAtPosition(position)).getFrequency()));
 				AlertDialog.Builder alertbox = new AlertDialog.Builder(ScheduleDrive.this);
 				alertbox.setTitle("Edit route");
 				alertbox.setMessage("Do you want to change the route?");
@@ -205,7 +209,9 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 			routes = getApp().getRoutes();
 		}
 		if(routes != null){
-			routeAdap = new RouteAdapter(this, 0, getApp().getRoutes());
+			List<Route> tempList = getApp().getRoutes();
+			Collections.sort(tempList,new RouteComparator());
+			routeAdap = new RouteAdapter(this, 0, tempList);
 			listRoute.setAdapter(routeAdap);
 		}
 	}

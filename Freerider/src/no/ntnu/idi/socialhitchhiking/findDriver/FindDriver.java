@@ -460,6 +460,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			for(int i = 0; i < journeys.size(); i++) {
 				Log.e("Stuff",journeys.get(i).getDriver().getFirstName());
 			}
+			//Log.e("Freq",Integer.toString(journeys.get(0).getRoute().getFrequency()));
 			searchingDialog.dismiss();
 		}
 		

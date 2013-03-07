@@ -81,7 +81,7 @@ public class Servlet extends HttpServlet {
 		Response responseObject = processor.process(req);
 		String xmlResponse = ResponseSerializer.serialize(responseObject);
 		response.getOutputStream().write(xmlResponse.getBytes(PREFERRED_CHARSET));
-		logger.debug("Sent response:\n{}",xmlResponse);
+		ServerLogger.write("Sent response:\n{}" + xmlResponse);
 	}
 
 

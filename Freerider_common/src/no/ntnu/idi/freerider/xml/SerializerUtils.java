@@ -42,6 +42,7 @@ class SerializerUtils {
 		journeyElement.addAttribute(ProtocolConstants.JOURNEY_SERIAL, Integer.toString(journey.getSerial()));
 		journeyElement.addAttribute(ProtocolConstants.JOURNEY_START, serializeCalendar(journey.getStart()));
 		journeyElement.addAttribute(ProtocolConstants.JOURNEY_VISIBILITY, journey.getVisibility().toString());
+		//journeyElement.addAttribute("Melvin", "Melvin");
 		if(journey.getHitchhiker() != null){
 			journeyElement.add(serializeUser(journey.getHitchhiker()));
 		}
@@ -64,8 +65,9 @@ class SerializerUtils {
 		Element routeElement = new DefaultElement(ProtocolConstants.ROUTE);
 		routeElement.addAttribute(ProtocolConstants.ROUTE_NAME, route.getName());
 		routeElement.addAttribute(ProtocolConstants.ROUTE_SERIAL, Integer.toString(route.getSerial()));
+		routeElement.addAttribute(ProtocolConstants.ROUTE_FREQUENCY, Integer.toString(route.getFrequency()));
 		routeElement.add(serializeUser(route.getOwner()));
-		//routeElement.addAttribute(ProtocolConstants.ROUTE_FREQUENCY,Integer.toString(route.getFrequency()));
+		
 		if(route.getRouteData() != null){
 			for (Location location : route.getRouteData()) {
 				Element locationElement = serializeLocation(location);

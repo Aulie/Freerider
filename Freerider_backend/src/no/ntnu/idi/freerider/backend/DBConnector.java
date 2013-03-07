@@ -141,7 +141,7 @@ public class DBConnector {
 	}
 
 	public Route getRoute(String name, String ownerID) throws SQLException{
-		PreparedStatement stmt = conn.prepareStatement("SELECT name, route::geometry, owner, serial,maplocations::geometry,addresses FROM routes WHERE name=? AND owner=?");
+		PreparedStatement stmt = conn.prepareStatement("SELECT name, route::geometry, owner, serial,maplocations::geometry,addresses,frequency FROM routes WHERE name=? AND owner=?");
 		stmt.setString(1, name);
 		stmt.setString(2,ownerID);
 		ResultSet rs = stmt.executeQuery();
@@ -154,7 +154,7 @@ public class DBConnector {
 	}
 
 	public Route getShortformRoute(String name, String ownerID) throws SQLException{
-		PreparedStatement stmt = conn.prepareStatement("SELECT name, owner, serial,maplocations::geometry,addresses FROM routes WHERE name=? AND owner=?");
+		PreparedStatement stmt = conn.prepareStatement("SELECT name, owner, serial,maplocations::geometry,addresses,frequency FROM routes WHERE name=? AND owner=?");
 		stmt.setString(1, name);
 		stmt.setString(2,ownerID);
 		ResultSet rs = stmt.executeQuery();
@@ -167,7 +167,7 @@ public class DBConnector {
 	}
 
 	public Route getRoute(int serial) throws SQLException{
-		PreparedStatement stmt = conn.prepareStatement("SELECT name, route::geometry, owner, serial,maplocations::geometry,addresses FROM routes WHERE serial=?");
+		PreparedStatement stmt = conn.prepareStatement("SELECT name, route::geometry, owner, serial,maplocations::geometry,addresses,frequency FROM routes WHERE serial=?");
 		stmt.setInt(1, serial);
 		ResultSet rs = stmt.executeQuery();
 		if(!rs.next()){
@@ -177,7 +177,7 @@ public class DBConnector {
 	}
 
 	public Route getShortformRoute(int serial) throws SQLException{
-		PreparedStatement stmt = conn.prepareStatement("SELECT name, owner, serial,maplocations::geometry,addresses FROM routes WHERE serial=?");
+		PreparedStatement stmt = conn.prepareStatement("SELECT name, owner, serial,maplocations::geometry,addresses,frequency FROM routes WHERE serial=?");
 		stmt.setInt(1, serial);
 		ResultSet rs = stmt.executeQuery();
 		if(!rs.next()){
@@ -202,7 +202,8 @@ public class DBConnector {
 		String addressList = rs.getString("addresses");
 		String[] addresses = addressList.split(Route.ADDRESS_STRING_DELIMITER);
 		List<MapLocation> mapLocations = readMapLocationData(rs, addresses);
-		//ret.setFrequency(rs.getInt("frequency"));
+		ret.setFrequency(rs.getInt("frequency"));
+		ServerLogger.write("" + ret.getFrequency());
 		ret.setMapPoints(mapLocations);
 		return ret;
 	}
@@ -211,7 +212,7 @@ public class DBConnector {
 		ServerLogger.write("getRoutes TOP");
 		List<Route> ret = new ArrayList<Route>();
 		//Changed
-		PreparedStatement stmt = conn.prepareStatement("SELECT name, route::geometry, owner, serial, maplocations::geometry,addresses,frequency FROM routes WHERE owner=? AND ad_hoc=false ORDERBY frequency");
+		PreparedStatement stmt = conn.prepareStatement("SELECT name, route::geometry, owner, serial, maplocations::geometry,addresses,frequency FROM routes WHERE owner=? AND ad_hoc=false ORDER BY frequency");
 		stmt.setString(1,ownerID);
 		ResultSet rs = stmt.executeQuery();
 		ServerLogger.write("Before while");
@@ -222,6 +223,7 @@ public class DBConnector {
 			String[] addresses = rs.getString("addresses").split(Route.ADDRESS_STRING_DELIMITER); 
 			List<MapLocation> mapLocations = readMapLocationData(rs, addresses);
 			toAdd.setMapPoints(mapLocations);
+			toAdd.setFrequency(rs.getInt("frequency"));
 			ServerLogger.write("Before try");
 			ServerLogger.write("After setFreq");
 			ret.add(toAdd);
@@ -381,6 +383,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 			String[] addresses = rs.getString("addresses").split(Route.ADDRESS_STRING_DELIMITER);
 			List<MapLocation> mapPoints = readMapLocationData(rs, addresses);
 			route.setMapPoints(mapPoints);
+			//route.setFrequency(rs.getInt("frequency"));
 			journey.setRoute(route);
 			journey.setStart(convertToCalendar(rs.getTimestamp("starttime")));
 			journey.setVisibility(Visibility.valueOf(rs.getString("visibility")));
