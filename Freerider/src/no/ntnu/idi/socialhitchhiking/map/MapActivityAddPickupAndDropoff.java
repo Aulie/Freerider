@@ -39,14 +39,15 @@ import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.freerider.protocol.UserResponse;
-import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 
 import org.apache.http.client.ClientProtocolException;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,7 +58,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
-
+import no.ntnu.idi.socialhitchhiking.R;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
@@ -186,7 +187,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		    Drawable female = getResources().getDrawable(R.drawable.female);
 		    iv_image.setImageDrawable(female);
 		    }
-		    
+
 		
 		// Adding onClickListener for the button "Ask for a ride"
 		btnSendRequest = (Button)findViewById(no.ntnu.idi.socialhitchhiking.R.id.mapViewPickupBtnSendRequest);

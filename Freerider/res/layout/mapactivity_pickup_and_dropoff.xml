@@ -128,6 +128,7 @@
      	
       </FrameLayout>
       
+      <!-- Driver tab layout -->
       <LinearLayout android:id="@+id/driver_tab"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -145,6 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/facebook_logo"
+            android:layout_margin="10dp"
             android:scaleType="centerCrop"
             />
         
@@ -160,8 +162,8 @@
 			    android:layout_height="20dp"
 			    android:layout_width="fill_parent"
 			    android:layout_weight="1"
+			    android:layout_margin="10dp"
 			    android:textSize="15sp"
-			    android:text="[NAME]"
 			    />
 				<TextView 
 			    android:id="@+id/mapViewPickupTextViewAge"
@@ -184,14 +186,16 @@
 			</LinearLayout>
         </LinearLayout>
 
-        <TextView 
-		    android:id="@+id/mapViewPickupTextViewMobile"
-		    android:layout_width="fill_parent"
-		    android:layout_height="20dp"
-		    android:text="[MOBILE]"
-		    android:textSize="15sp"
-		    android:background="@drawable/list_selector"
-	 	/>
+        <TextView
+		      android:id="@+id/phone"
+		      android:layout_width="fill_parent"
+		      android:layout_height="wrap_content"
+		      android:ems="15"
+		      android:hint="phone"
+		      android:background="@drawable/list_selector" >
+
+		  </TextView>
+
         <TextView
         	android:id="@+id/mapViewPickupTextViewBreaks"
      		android:layout_width="fill_parent"
