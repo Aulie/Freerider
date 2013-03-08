@@ -61,6 +61,10 @@ public class MapRoute extends Route implements Serializable{
 	 * Approximately how long the route is, in minutes.
 	 */
 	private int distanceInMinutes = 0;
+	/**
+	 * Approximately how long the route is, in hours and minutes.
+	 */
+	private String distanceInHoursAndMinutes = "";
 	
 	private boolean drawable = false;
 	
@@ -258,6 +262,9 @@ public class MapRoute extends Route implements Serializable{
 	public double getDistanceInMinutes(){
 		return distanceInMinutes;
 	}
+	public String getDistanceInHoursAndMinutes(){
+		return distanceInHoursAndMinutes;
+	}
 	public void setDistanceInKilometers(double distKM){
 		double formatted;
 		try{
@@ -273,6 +280,10 @@ public class MapRoute extends Route implements Serializable{
 			distanceInMinutes = ((int)distMin);
 			if(distanceInMinutes == 0){
 				distanceInMinutes = 1;
+			}else if(distanceInMinutes > 60){
+				int hours = distanceInMinutes / 60;
+				int minutes = distanceInMinutes % 60;
+				distanceInHoursAndMinutes = hours+"h "+minutes+"min";
 			}
 		}catch (Exception e) {
 			distanceInMinutes = 1;
@@ -348,8 +359,10 @@ public class MapRoute extends Route implements Serializable{
 			routeDistanceDescription = "Distance: "+distanceInKilometers+"km (about "+distanceInMinutes+" mins)";
 		}else if(distanceInKilometers > 0){
 			routeDistanceDescription = "Distance: "+distanceInKilometers+"km";
-		}else if(distanceInMinutes > 0){
-			routeDistanceDescription = "Distance: About "+distanceInMinutes+" minutes";
+		}else if(distanceInMinutes > 0 && distanceInMinutes < 60){
+			routeDistanceDescription = "Distance: About "+distanceInMinutes + " mins";
+		}else if(distanceInHoursAndMinutes.length() > 1){
+			routeDistanceDescription = "Distance: About "+distanceInHoursAndMinutes;
 		}else{
 			routeDistanceDescription = "";
 		}
