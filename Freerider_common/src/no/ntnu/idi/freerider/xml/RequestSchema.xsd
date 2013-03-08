@@ -41,6 +41,9 @@
 			<enumeration value="START_JOURNEY"></enumeration>
 			<enumeration value="RATE_JOURNEY"></enumeration>
 			<enumeration value="GET_ROUTES"></enumeration>
+			<enumeration value="GET_PREFERENCE"></enumeration>
+			<enumeration value="CREATE_PREFERENCE"></enumeration>
+			<enumeration value="UPDATE_PREFERENCE"></enumeration>
 		</restriction>
 	</simpleType>
 

@@ -24,8 +24,10 @@ package no.ntnu.idi.freerider.xml;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.protocol.JourneyResponse;
 import no.ntnu.idi.freerider.protocol.NotificationResponse;
+import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.freerider.protocol.RouteResponse;
@@ -85,6 +87,13 @@ public class ResponseSerializer {
 		for(Notification note : ((NotificationResponse) responseObject).getNotifications()){
 			Element noteElement = SerializerUtils.serializeNotification(note);
 			if(noteElement != null) responseData.add(noteElement);
+		}
+		if(responseObject instanceof PreferenceResponse && ((PreferenceResponse)responseObject).getPreferences() != null){
+			Element prefElement = SerializerUtils.serializePreference(((PreferenceResponse)responseObject).getPreferences());
+			if(prefElement != null) 
+			{
+				responseData.add(prefElement);
+			}
 		}
 		
 		return xmlResponse.asXML();

@@ -24,6 +24,7 @@ package no.ntnu.idi.freerider.xml;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.LoginRequest;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
+import no.ntnu.idi.freerider.protocol.PreferenceRequest;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RouteRequest;
 import no.ntnu.idi.freerider.protocol.SearchRequest;
@@ -67,6 +68,8 @@ public class RequestSerializer {
 			Element token = new DefaultElement(ProtocolConstants.ACCESS_TOKEN_ELEMENT);
 			token.setText(((LoginRequest) request).getAccessToken());
 			data.add(token);
+		}else if(request instanceof PreferenceRequest) {
+			data.add(SerializerUtils.serializePreference(((PreferenceRequest)request).getPreference()));
 		}
 		
 		

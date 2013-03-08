@@ -42,6 +42,7 @@ import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.NotificationType;
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
 import no.ntnu.idi.freerider.model.Visibility;
 
@@ -614,6 +615,37 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		ResultSet rs = stmt.executeQuery();
 		rs.next();
 		return rs.getBoolean(1);
+	}
+	
+	public TripPreferences getPreference(int id) throws SQLException{
+		PreparedStatement stmt = conn.prepareStatement("SELECT * FROM preferences WHERE id=?");
+		stmt.setInt(1, id);
+		ResultSet rs = stmt.executeQuery();
+		rs.next();
+		TripPreferences ret = new TripPreferences(rs.getInt("seats"), rs.getBoolean("music"), rs.getBoolean("animals"), rs.getBoolean("breaks"), rs.getBoolean("talking"), rs.getBoolean("smoking"));
+		ret.setPrefId(rs.getInt("id"));
+		return ret;
+	}
+	public void createPreference(TripPreferences preference) throws SQLException{
+		PreparedStatement stmt = conn.prepareStatement("INSERT INTO preferences(animals,breaks,music,seats,smoking,talking) VALUES (?,?,?,?,?,?)");
+		stmt.setBoolean(1, preference.getAnimals());
+		stmt.setBoolean(2, preference.getBreaks());
+		stmt.setBoolean(3, preference.getMusic());
+		stmt.setInt(4,preference.getSeatsAvailable());
+		stmt.setBoolean(5, preference.getSmoking());
+		stmt.setBoolean(6, preference.getTalking());
+		stmt.executeUpdate();
+	}
+	public void updatePreference(TripPreferences preference) throws SQLException{
+		PreparedStatement stmt = conn.prepareStatement("UPDATE preferences SET (animals,breaks,music,seats,smoking,talking) = (?,?,?,?,?,?) WHERE id=?");
+		stmt.setBoolean(1, preference.getAnimals());
+		stmt.setBoolean(2, preference.getBreaks());
+		stmt.setBoolean(3, preference.getMusic());
+		stmt.setInt(4,preference.getSeatsAvailable());
+		stmt.setBoolean(5, preference.getSmoking());
+		stmt.setBoolean(6, preference.getTalking());
+		stmt.setInt(7, preference.getPrefId());
+		stmt.executeUpdate();
 	}
 
 	public void setNotificationRead(Notification note) throws SQLException {

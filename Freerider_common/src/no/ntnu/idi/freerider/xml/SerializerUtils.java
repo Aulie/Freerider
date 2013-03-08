@@ -29,6 +29,7 @@ import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
 
 import org.dom4j.Element;
@@ -110,7 +111,17 @@ class SerializerUtils {
 		stopEl.addAttribute(ProtocolConstants.LONGITUDE, Double.toString(start.getLongitude()));
 		return search;
 	}
-
+	static Element serializePreference(TripPreferences preference) {
+		Element ret = new DefaultElement(ProtocolConstants.PREFERENCE);
+		ret.addAttribute(ProtocolConstants.PREFERENCE_ID, preference.getPrefId().toString());
+		ret.addAttribute(ProtocolConstants.PREFERENCE_ANIMALS, preference.getAnimals().toString());
+		ret.addAttribute(ProtocolConstants.PREFERENCE_BREAKS, preference.getBreaks().toString());
+		ret.addAttribute(ProtocolConstants.PREFERENCE_MUSIC, preference.getMusic().toString());
+		ret.addAttribute(ProtocolConstants.PREFERENCE_SEATS, preference.getSeatsAvailable().toString());
+		ret.addAttribute(ProtocolConstants.PREFERENCE_SMOKING, preference.getSmoking().toString());
+		ret.addAttribute(ProtocolConstants.PREFERENCE_TALKING, preference.getTalking().toString());
+		return ret;
+	}
 	static Element serializeUser(User user){
 		Element ret = new DefaultElement(ProtocolConstants.USER_ELEMENT);
 		ret.addAttribute(ProtocolConstants.USER_NAME, user.getFirstName());

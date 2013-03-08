@@ -62,7 +62,13 @@ public enum RequestType {
 	/** Get Routes owned by this user. Routes returned are in short form, including MapLocations but no other route data. */
 	GET_ROUTES,
 	/** Get the full details of a specific Route. */
-	GET_ROUTE
+	GET_ROUTE,
+	/**Get specified preference */
+	GET_PREFERENCE,
+	/** Add preference */
+	CREATE_PREFERENCE,
+	/** Update specified preference */
+	UPDATE_PREFERENCE
 	;
 
 	/**
@@ -82,6 +88,12 @@ public enum RequestType {
 			return (Class<Request>) NotificationRequest.class.asSubclass(Request.class);
 		case LOGIN:
 			return (Class<Request>) LoginRequest.class.asSubclass(Request.class);
+		case GET_PREFERENCE:
+			return (Class<Request>) PreferenceRequest.class.asSubclass(Request.class);
+		case CREATE_PREFERENCE:
+			return (Class<Request>) PreferenceRequest.class.asSubclass(Request.class);
+		case UPDATE_PREFERENCE:
+			return (Class<Request>) PreferenceRequest.class.asSubclass(Request.class);
 		default: 
 			return (Class<Request>) UserRequest.class.asSubclass(Request.class);
 		}
@@ -100,6 +112,12 @@ public enum RequestType {
 			return (Class<Response>) RouteResponse.class.asSubclass(Response.class);
 		case PULL_NOTIFICATIONS:
 			return (Class<Response>) NotificationResponse.class.asSubclass(Response.class);
+		case GET_PREFERENCE:
+			return (Class<Response>) PreferenceResponse.class.asSubclass(Response.class);
+		case CREATE_PREFERENCE:
+			return (Class<Response>) PreferenceResponse.class.asSubclass(Response.class);
+		case UPDATE_PREFERENCE:
+			return (Class<Response>) PreferenceResponse.class.asSubclass(Response.class);
 		default:
 			return (Class<Response>) UserResponse.class.asSubclass(Response.class);
 		}
