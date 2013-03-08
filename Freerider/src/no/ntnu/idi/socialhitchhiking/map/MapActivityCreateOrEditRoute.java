@@ -55,6 +55,8 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -143,33 +145,189 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		}
 		
 		chk_saveRoute = (CheckBox)findViewById(R.id.checkBoxSave);
-		Button button = ((Button)findViewById(R.id.btnChooseRoute));
+		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
+		
 		
 		if(inEditMode){
 			chk_saveRoute.setVisibility(View.GONE);
 			button.setText("Update the route");
 			button.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 			fillFieldsInEdit();
+			button.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					createInputDialog("Route", "Insert name of Route", false);
+				}
+			});
+		} else{
+			button.setText("Show on map");
+			button.setEnabled(false);
 		}
+		
+		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
+		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
+		
+		acFrom.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if(checkFields() && selectedRoute.getMapPoints().size()>2){
+					button.setEnabled(true);
+					button.setText("Next");
+					button.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							createOneTimeJourney();
+						}
+					});
+				}
+				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
+					button.setEnabled(true);
+					button.setText("Show on map");
+					button.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							createMap();
+						}
+					});
+				}
+				else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
+					button.setText("Show on map");
+					button.setEnabled(false);
+				}
+				else if(inEditMode){
+					button.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							createInputDialog("Route", "Insert name of Route", false);
+						}
+					});
+				}
+				else{
+					button.setText("Show on map");
+					button.setEnabled(false);
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+		});
+		
+		acTo.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if(checkFields() && selectedRoute.getMapPoints().size()>2){
+					button.setEnabled(true);
+					button.setText("Next");
+					button.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							createOneTimeJourney();
+						}
+					});
+				}
+				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
+					button.setEnabled(true);
+					button.setText("Show on map");
+					button.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							createMap();
+						}
+					});
+				}
+				else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
+					button.setText("Show on map");
+					button.setEnabled(false);
+				}
+				else if(inEditMode){
+					button.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							createInputDialog("Route", "Insert name of Route", false);
+						}
+					});
+				}
+				else{
+					button.setText("Show on map");
+					button.setEnabled(false);
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if((chk_saveRoute.isChecked() || inEditMode) && checkFields()){
-					createInputDialog("Route", "Insert name of Route", false);
+				if(checkFields() && selectedRoute.getMapPoints().size()>2){
+					button.setEnabled(true);
+					button.setText("Next");
+					button.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							createOneTimeJourney();
+						}
+					});
 				}
-				else
-					/*
-					if(checkFields() == false){
-						
-					}
-					*/
-					createOneTimeJourney();
+				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
+					button.setEnabled(true);
+					button.setText("Show on map");
+					button.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							createMap();
+						}
+					});
+				}
+				else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
+					button.setText("Show on map");
+					button.setEnabled(false);
+				}
+				else if(inEditMode){
+					button.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							createInputDialog("Route", "Insert name of Route", false);
+						}
+					});
+				}
+				else{
+					button.setText("Show on map");
+					button.setEnabled(false);
+				}
 			}
 		});
 		
+		
 	}
+		
 	
 	protected boolean checkFields(){
 		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
