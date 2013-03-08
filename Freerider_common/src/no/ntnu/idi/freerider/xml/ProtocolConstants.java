@@ -129,6 +129,16 @@ interface ProtocolConstants {
 	
 	static final String ACCESS_TOKEN_ELEMENT = "AccessToken";
 	
+	static final String PREFERENCE = "Preference";
+	static final String PREFERENCE_ELEMENT = "preference_element";
+	static final String PREFERENCE_ID = "preference_id";
+	static final String PREFERENCE_SEATS = "preference_seats";
+	static final String PREFERENCE_MUSIC = "preference_music";
+	static final String PREFERENCE_ANIMALS = "preference_animals";
+	static final String PREFERENCE_BREAKS = "preference_breaks";
+	static final String PREFERENCE_TALKING = "preference_talking";
+	static final String PREFERENCE_SMOKING = "preference_smoking";
+	
 	
 
 }

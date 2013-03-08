@@ -86,11 +86,10 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		setContentView(R.layout.journey_view);
 		listview = (ListView)findViewById(R.id.journey_view_list);
 
-		if(journeys == null) journeys = new ArrayList<Journey>();
+		this.journeys = journeys;
 		initCalendars();
 
 		initAdapter(adapter, journeys);
-		setContentView(R.layout.journey_view);
 		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parentView, View childView, final int pos, long id) {

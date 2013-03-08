@@ -33,10 +33,13 @@ import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.NotificationType;
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
 import no.ntnu.idi.freerider.protocol.NotificationResponse;
+import no.ntnu.idi.freerider.protocol.PreferenceRequest;
+import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.JourneyResponse;
@@ -72,6 +75,7 @@ public class RequestProcessor {
 		if(request == null){
 			return new UserResponse(RequestType.CREATE_USER, ResponseStatus.CLIENT_ERROR,"Could not parse request.");
 		}
+		ServerLogger.write(request.toString());
 		ResponseStatus status = ResponseStatus.OK;
 		RequestType type = request.getType();
 		List<Journey> journeys = null;
@@ -246,6 +250,39 @@ public class RequestProcessor {
 				logger.error("Error marking notification read.", e);
 				return new UserResponse(type,ResponseStatus.FAILED,e.getMessage());
 			}
+		case GET_PREFERENCE:
+			ServerLogger.write("Before prefReq");
+			TripPreferences prefReq = ((PreferenceRequest)request).getPreference();
+			//db.getPreference(prefReq.getPrefId());
+			
+			try {
+				TripPreferences preference;
+				preference = db.getPreference(prefReq.getPrefId());
+				return new PreferenceResponse(type, status, preference);
+			} catch (SQLException e) {
+				ServerLogger.write("SQLERROR: " + e.getMessage());
+				return new UserResponse(type, ResponseStatus.FAILED, e.getMessage());
+			}
+		case CREATE_PREFERENCE:
+			TripPreferences prefReq2 = ((PreferenceRequest)request).getPreference();
+			//ServerLogger.write(prefReq2.getSeatsAvailable().toString());
+			try {
+				db.createPreference(prefReq2);
+				return new PreferenceResponse(type, status, prefReq2);
+			} catch (SQLException e) {
+				ServerLogger.write("SQLERROR: " + e.getMessage());
+				return new UserResponse(type, ResponseStatus.FAILED, e.getMessage());
+			}
+		case UPDATE_PREFERENCE:
+			TripPreferences prefReq3 = ((PreferenceRequest)request).getPreference();
+			try {
+				db.updatePreference(prefReq3);
+				return new PreferenceResponse(type, status, prefReq3);
+			} catch (SQLException e) {
+				ServerLogger.write("SQLERROR: " + e.getMessage());
+				return new UserResponse(type, ResponseStatus.FAILED, e.getMessage());
+			}
+			
 		default:
 			status = ResponseStatus.UNKNOWN;
 			return new UserResponse(type, status);

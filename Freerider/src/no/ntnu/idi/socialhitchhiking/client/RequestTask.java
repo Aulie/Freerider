@@ -56,6 +56,7 @@ import org.apache.http.message.BasicRequestLine;
 import org.apache.http.protocol.HttpContext;
 
 import android.content.Context;
+import android.util.Log;
 
 public class RequestTask {
 	private HttpClient httpclient;
@@ -119,6 +120,7 @@ public class RequestTask {
 	        @Override
 	        public Response call() throws ClientProtocolException, IOException {
 	        	String xml = RequestSerializer.serialize(req);
+	        	Log.e("XML",xml);
 	    		con = c;
 	    		String url = con.getResources().getString(R.string.server_url);
 	    		RequestTask requestTask = new RequestTask(url,xml);

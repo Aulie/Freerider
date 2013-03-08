@@ -163,7 +163,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		search.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.e("Clicked","Search");
+				//Log.e("Clicked","Search");
 				checkAccess();
 				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(searchFrom.getWindowToken(), 0);
@@ -188,12 +188,12 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 				    }
 				}
 				
-				Log.e("Pos",Integer.toString(position));
+				
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				Log.e("Nothing","Selected");
+				//Log.e("Nothing","Selected");
 				
 			}
 			
@@ -357,7 +357,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 			searchFrom.setText(addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1));
 		} catch (IOException e) {
-			Log.e("IOError",e.getMessage());
+			//Log.e("IOError",e.getMessage());
 		}
 		loadingDialog.dismiss();
 	}
@@ -426,7 +426,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			} catch (NullPointerException e) {
 				//Toast toast = Toast.makeText(FindDriver.this, "ERROR in receiving journeys", Toast.LENGTH_LONG);
 				//toast.show();
-				Log.e("Error",e.getMessage());
+				//Log.e("Error",e.getMessage());
 				e.printStackTrace();
 			}
 			return null;
@@ -459,9 +459,9 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 
 				
 			});
-			for(int i = 0; i < journeys.size(); i++) {
-				Log.e("Stuff",journeys.get(i).getDriver().getFirstName());
-			}
+			//for(int i = 0; i < journeys.size(); i++) {
+				//Log.e("Stuff",journeys.get(i).getDriver().getFirstName());
+			//}
 			//Log.e("Freq",Integer.toString(journeys.get(0).getRoute().getFrequency()));
 			searchingDialog.dismiss();
 		}

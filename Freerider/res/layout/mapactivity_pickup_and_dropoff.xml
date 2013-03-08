@@ -73,6 +73,7 @@
                         android:paddingLeft="40dip"
                         android:layout_marginTop="5dip"
                         android:singleLine="true"
+                        android:selectAllOnFocus="true"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -83,7 +84,7 @@
                         android:paddingTop="5dip"
                         android:layout_marginBottom="2dip"
                         android:layout_marginLeft="10dip"
-                        android:src="@drawable/google_marker_thumb_mini_start" />
+                        android:src="@drawable/thumb_green" />
                 </FrameLayout>
                 
 				<!-- Add Going to Field -->
@@ -102,6 +103,7 @@
                         android:paddingLeft="40dip"
                         android:layout_marginTop="5dip"
                         android:singleLine="true"
+                        android:selectAllOnFocus="true"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -112,7 +114,7 @@
                         android:paddingTop="5dip"
                         android:layout_marginBottom="2dip"
                         android:layout_marginLeft="10dip"
-                        android:src="@drawable/google_marker_thumb_mini_stop" />
+                        android:src="@drawable/thumb_red" />
                 </FrameLayout>
 			</LinearLayout>
        		<LinearLayout

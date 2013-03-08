@@ -3,6 +3,7 @@ package no.ntnu.idi.freerider.model;
 import java.util.BitSet;
 
 public class TripPreferences {
+	Integer prefId;
 	Integer seatsAvailable;
 	Boolean music;
 	Boolean animals;
@@ -11,6 +12,7 @@ public class TripPreferences {
 	Boolean smoking;
 	
 	public TripPreferences(){
+		prefId = -1;
 		seatsAvailable=1;
 		music=false;
 		animals=false;
@@ -19,6 +21,14 @@ public class TripPreferences {
 		smoking=false;
 	}
 	
+	public Integer getPrefId() {
+		return prefId;
+	}
+
+	public void setPrefId(Integer prefId) {
+		this.prefId = prefId;
+	}
+
 	public TripPreferences(Integer seatsAvailable, Boolean music,
 			Boolean animals, Boolean breaks, Boolean talking, Boolean smoking) {
 		super();

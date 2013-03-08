@@ -33,10 +33,13 @@ import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.LoginRequest;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
+import no.ntnu.idi.freerider.protocol.PreferenceRequest;
+import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.RouteRequest;
@@ -111,6 +114,9 @@ public class RequestParser {
 			Element tokenElement = Data.element(ProtocolConstants.ACCESS_TOKEN_ELEMENT);
 			String accessToken = tokenElement.getTextTrim();
 			return new LoginRequest(user,accessToken);
+		}else if(type.getRequestClass() == PreferenceRequest.class.asSubclass(Request.class)){
+			TripPreferences preference = ParserUtils.parsePreference(Data.element(ProtocolConstants.PREFERENCE));
+			return new PreferenceRequest(type,user,preference);
 		}
 		else return null;	
 	}

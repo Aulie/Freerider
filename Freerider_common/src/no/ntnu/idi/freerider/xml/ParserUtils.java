@@ -35,6 +35,7 @@ import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.NotificationType;
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
 import no.ntnu.idi.freerider.model.Visibility;
 
@@ -83,7 +84,18 @@ class ParserUtils {
 		ret.setMapPoints(mapLocations);
 		return ret;
 	}
-
+	static TripPreferences parsePreference(Element element) {
+		Integer id = Integer.parseInt(element.attributeValue(ProtocolConstants.PREFERENCE_ID));
+		Integer seatsAvailable = Integer.parseInt(element.attributeValue(ProtocolConstants.PREFERENCE_SEATS));
+		Boolean music = Boolean.parseBoolean(element.attributeValue(ProtocolConstants.PREFERENCE_MUSIC));
+		Boolean animals = Boolean.parseBoolean(element.attributeValue(ProtocolConstants.PREFERENCE_ANIMALS));
+		Boolean breaks = Boolean.parseBoolean(element.attributeValue(ProtocolConstants.PREFERENCE_BREAKS));
+		Boolean talking = Boolean.parseBoolean(element.attributeValue(ProtocolConstants.PREFERENCE_TALKING));
+		Boolean smoking = Boolean.parseBoolean(element.attributeValue(ProtocolConstants.PREFERENCE_SMOKING));
+		TripPreferences ret = new TripPreferences(seatsAvailable, music, animals, breaks, talking, smoking);
+		ret.setPrefId(id);
+		return ret;
+	}
 	static User parseUser(Element element) {
 		String name = element.attributeValue(ProtocolConstants.USER_NAME);
 		String id = element.attributeValue(ProtocolConstants.USER_ID);

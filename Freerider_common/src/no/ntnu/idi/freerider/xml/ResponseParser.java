@@ -29,7 +29,9 @@ import java.util.List;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.protocol.NotificationResponse;
+import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.JourneyResponse;
 import no.ntnu.idi.freerider.protocol.Response;
@@ -101,6 +103,15 @@ public class ResponseParser {
 				}
 			}
 			return new NotificationResponse(type, status, notes);
+		}else if(type.getResponseClass() == PreferenceResponse.class.asSubclass(Response.class)){
+			@SuppressWarnings("unchecked")
+			List<Element> prefList = Data.elements();
+			for(Element element : prefList){
+				if(element.getName().equals(ProtocolConstants.PREFERENCE)){
+					return new PreferenceResponse(type,status,ParserUtils.parsePreference(element));
+				}
+			}
+			return new PreferenceResponse(type, status, new TripPreferences());
 		}
 
 		return new UserResponse(type, status, errorMessage);
