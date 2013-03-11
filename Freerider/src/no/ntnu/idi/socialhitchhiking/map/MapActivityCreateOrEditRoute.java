@@ -332,15 +332,18 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	protected boolean checkFields(){
 		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
-		if(acFrom.getText().equals("")){
+		
+		if(acFrom.getText().equals("") && acFrom.getText().equals("")){
+			return false;
+		}else if(acFrom.getText().equals("")){
 			makeToast("You have to fill in the Driving from field");
 			return false;
-		}
-		if(acTo.getText().equals("")){
+		}else if(acTo.getText().equals("")){
 			makeToast("You have to fill in the Driving to field");
 			return false;
+		}else{
+			return true;
 		}
-		return true;
 	}
 	
 	protected void fillFieldsInEdit(){
