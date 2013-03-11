@@ -92,7 +92,7 @@ public class AutoCompleteTextWatcher implements TextWatcher{
 			new AsyncTask<Integer, Void, ArrayList<String>> () {
 				@Override
 				protected synchronized void onPostExecute(ArrayList<String> resultList) {
-					setAutoCompleteArrayAdapter(resultList, autoCompleteTextView, true);
+					setAutoCompleteArrayAdapter(resultList, autoCompleteTextView, false);
 					PersistHelper.addAutoCompleteCacheElement(context, String.valueOf(s), resultList);
 				}
 				@Override
