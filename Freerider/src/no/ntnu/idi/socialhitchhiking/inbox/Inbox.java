@@ -31,6 +31,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.http.client.ClientProtocolException;
+
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.Route;
@@ -45,12 +47,14 @@ import no.ntnu.idi.freerider.protocol.UserRequest;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
+import no.ntnu.idi.socialhitchhiking.journey.ListJourneys;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 import no.ntnu.idi.socialhitchhiking.utility.SectionedListViewAdapter;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -114,37 +118,20 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.inbox);
-		history = false;
-		header = (CheckedTextView) findViewById(R.id.inbox_header);
-		header.setText("Active Notifications");
-		sorted = new ArrayList<Notification>();
-		notifHistory = new ArrayList<Notification>();
-		notifications = (ListView) findViewById(R.id.notification_list);
-		notifications.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View child, int pos,
-					long arg3) {
-				sel = (Notification) notifications.getAdapter().getItem(pos);
-				NotificationHandler.handleNotification(sel, getApp(),Inbox.this);
-
-			}
-		});
-		initCalendars();
-		pullNotifications();
-		if(!getApp().isKey("inbox") && getApp().getSettings().isCheckSettings()){
-			Toast toast = Toast.makeText(getApp(), "Notification history available in menu", Toast.LENGTH_LONG);
-			toast.show();
-			getApp().setKeyState("inbox", true);
-		}
+		
+		setContentView(R.layout.main_loading);
+		new InboxLoader(this).execute();
 	}
 
 	private void pullNotifications(){
+		/*
 		UserRequest req = new UserRequest(RequestType.PULL_NOTIFICATIONS,getApp().getUser());
 		Response response = null;
 		try {
-			response = RequestTask.sendRequest(req,getApp());
-			NotificationResponse notif = null;
+			response = RequestTask.sendRequest(req,getApp());*/
+			
+		
+		/*NotificationResponse notif = null;
 			if(response instanceof NotificationResponse && response.getStatus() == ResponseStatus.OK){
 				notif = (NotificationResponse) response;
 				getApp().setNotifications(notif.getNotifications());
@@ -165,7 +152,7 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} */
 	}
 	/**
 	 * Create custom {@link Menu} in the Inbox activity. Gives a user the possibility
@@ -422,5 +409,86 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 			Notification n = (Notification) ev.getNewValue();
 			setNotificationRead(n);
 		}
+	}
+
+	public void showMain(Response response) {
+		
+		
+		
+		
+		Log.e("hit?", "KAKE ER JÆÆÆÆVLIG GODT");
+		
+		setContentView(R.layout.inbox);
+		history = false;
+		header = (CheckedTextView) findViewById(R.id.inbox_header);
+		header.setText("Active Notifications");
+		sorted = new ArrayList<Notification>();
+		notifHistory = new ArrayList<Notification>();
+		notifications = (ListView) findViewById(R.id.notification_list);
+		notifications.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View child, int pos,
+					long arg3) {
+				sel = (Notification) notifications.getAdapter().getItem(pos);
+				NotificationHandler.handleNotification(sel, getApp(),Inbox.this);
+
+			}
+		});
+		
+		NotificationResponse notif = null;
+		if(response instanceof NotificationResponse && response.getStatus() == ResponseStatus.OK){
+			notif = (NotificationResponse) response;
+			getApp().setNotifications(notif.getNotifications());
+			Log.e("hit?", "KAKE ER GODT");
+			notifHistory = getApp().getNotifications();			
+			sorted = sortNotifications(notifHistory);
+			System.out.println("JoYo Inbox" + notifHistory.size());
+			initAdapter(active,sorted);
+			initAdapter(historyAdap,notifHistory);
+			notifications.setAdapter(active);
+			Log.e("hit?", "KAKE ER BÆLGODT");
+		}
+		
+		initCalendars();
+		pullNotifications();
+		if(!getApp().isKey("inbox") && getApp().getSettings().isCheckSettings()){
+			Toast toast = Toast.makeText(getApp(), "Notification history available in menu", Toast.LENGTH_LONG);
+			toast.show();
+			getApp().setKeyState("inbox", true);
+		}
+		
+	}
+}
+
+class InboxLoader extends AsyncTask<Void, Integer, Response>{
+	
+	Inbox activity;
+	public InboxLoader(Inbox activity){
+		this.activity = (Inbox) activity;
+	}
+	
+	protected Response doInBackground(Void... params) {
+		UserRequest req = new UserRequest(RequestType.PULL_NOTIFICATIONS,activity.getApp().getUser());
+		Response response = null;
+		try {
+			response = RequestTask.sendRequest(req,activity.getApp());
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return response;
+	}
+
+	protected void onPostExecute(Response result) {
+		activity.showMain(result);	
 	}
 }
