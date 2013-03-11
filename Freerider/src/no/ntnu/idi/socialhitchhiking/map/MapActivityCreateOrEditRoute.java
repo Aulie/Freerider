@@ -144,6 +144,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			positionOfRoute = extras.getInt("routePosition");
 		}
 		
+		
 		chk_saveRoute = (CheckBox)findViewById(R.id.checkBoxSave);
 		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
 		
