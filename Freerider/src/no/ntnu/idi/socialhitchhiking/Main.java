@@ -41,7 +41,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -306,7 +305,7 @@ public class Main extends FBConnectionActivity{
 		
 	}
 	public void onMyTripsClicked(View view){
-		Intent intent = new Intent(this,no.ntnu.idi.socialhitchhiking.journey.ListJourneys.class);
+		Intent intent = new Intent(this,no.ntnu.idi.socialhitchhiking.mytrips.MyTrips.class);
 		startActivity(intent);
 	}
 	

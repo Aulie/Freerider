@@ -198,7 +198,34 @@
             <action android:name="no.ntnu.idi.socialhitchhiking.MyAccountPreferences.MYACCOUNTPREFERENCES" />
             </intent-filter>
         </activity>
+                <activity
+            android:name="no.ntnu.idi.socialhitchhiking.mytrips.MyTrips"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            
+             <intent-filter>
+                <action android:name="no.ntnu.idi.socialhitchhiking.my_trips_view.MYTRIPS" />
+            </intent-filter>
+        </activity>
 
+        <activity
+            android:name="no.ntnu.idi.socialhitchhiking.mytrips.MyRides"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+                       
+            <intent-filter>
+            <action android:name="no.ntnu.idi.socialhitchhiking.mytrips.MYRIDES" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="no.ntnu.idi.socialhitchhiking.mytrips.HitchedRides"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+             <intent-filter>
+            <action android:name="no.ntnu.idi.socialhitchhiking.mytrips.HICHEDRIDES" />
+            </intent-filter>
+        </activity>
+        
         <service
             android:name=".demo.DemoService"
             android:label="@string/app_name" >
