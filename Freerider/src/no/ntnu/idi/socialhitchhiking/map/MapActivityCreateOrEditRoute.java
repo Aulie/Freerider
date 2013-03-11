@@ -176,6 +176,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				if(checkFields() && selectedRoute.getMapPoints().size()>2){
 					button.setEnabled(true);
 					button.setText("Next");
+					Log.e("IF1","vi kom hit");
 					button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
@@ -186,6 +187,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
 					button.setEnabled(true);
 					button.setText("Show on map");
+					Log.e("IF2","vi kom hit");
 					button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
@@ -196,8 +198,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
 					button.setText("Show on map");
 					button.setEnabled(false);
+					Log.e("IF3","vi kom hit");
 				}
 				else if(inEditMode){
+					Log.e("IF4","vi kom hit");
 					button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
@@ -206,6 +210,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 					});
 				}
 				else{
+					Log.e("IF5","vi kom hit");
 					button.setText("Show on map");
 					button.setEnabled(false);
 				}
@@ -234,6 +239,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				if(checkFields() && selectedRoute.getMapPoints().size()>2){
 					button.setEnabled(true);
 					button.setText("Next");
+					Log.e("IF1","vi kom hit");
 					button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
@@ -244,6 +250,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
 					button.setEnabled(true);
 					button.setText("Show on map");
+					Log.e("IF2","vi kom hit");
 					button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
@@ -254,8 +261,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
 					button.setText("Show on map");
 					button.setEnabled(false);
+					Log.e("IF3","vi kom hit");
 				}
 				else if(inEditMode){
+					Log.e("IF4","vi kom hit");
 					button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
@@ -266,6 +275,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				else{
 					button.setText("Show on map");
 					button.setEnabled(false);
+					Log.e("IF5","vi kom hit");
 				}
 				
 			}
@@ -289,8 +299,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			@Override
 			public void onClick(View v) {
 				if(checkFields() && selectedRoute.getMapPoints().size()>2){
-					button.setEnabled(true);
-					button.setText("Next");
+					//button.setEnabled(true);
+					//button.setText("Next");
 					button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
@@ -299,8 +309,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 					});
 				}
 				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
-					button.setEnabled(true);
-					button.setText("Show on map");
+					//button.setEnabled(true);
+					//button.setText("Show on map");
 					button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
@@ -309,8 +319,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 					});
 				}
 				else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
-					button.setText("Show on map");
-					button.setEnabled(false);
+					//button.setText("Show on map");
+					//button.setEnabled(false);
 				}
 				else if(inEditMode){
 					button.setOnClickListener(new OnClickListener() {
@@ -321,8 +331,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 					});
 				}
 				else{
-					button.setText("Show on map");
-					button.setEnabled(false);
+					//button.setText("Show on map");
+					//button.setEnabled(false);
 				}
 			}
 		});
@@ -335,15 +345,19 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
 		
-		if(acFrom.getText().equals("") && acFrom.getText().equals("")){
+		if((acFrom.getText().equals("") || acFrom.getText().toString().equals("")) && (acTo.getText().equals("") || acTo.getText().toString().equals(""))){
+			Log.e("checkFields_1", "false");
 			return false;
-		}else if(acFrom.getText().equals("")){
-			makeToast("You have to fill in the Driving from field");
+		}else if(acTo.getText().equals("") || acTo.getText().toString().equals("")){
+			Log.e("checkFields_3", "false");
+			//makeToast("You have to fill in the Driving from field");
 			return false;
-		}else if(acTo.getText().equals("")){
-			makeToast("You have to fill in the Driving to field");
+		}else if(acFrom.getText().equals("") || acFrom.getText().toString().equals("")){
+			Log.e("checkFields_3", "false");
+			//makeToast("You have to fill in the Driving to field");
 			return false;
 		}else{
+			Log.e("checkFields_4", "true");
 			return true;
 		}
 	}
