@@ -33,6 +33,7 @@ import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
@@ -181,6 +182,9 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		jour.setRoute(selectedRoute);
 		jour.setStart(dateAndTime);
 		jour.setVisibility(getApp().getSettings().getFacebookPrivacy());
+		TripPreferences preference = new TripPreferences(7, true, true, true, true, true);
+		preference.setPrefId(1);
+		jour.setTripPreferences(preference);
 		JourneyRequest req = new JourneyRequest(RequestType.CREATE_JOURNEY, getApp().getUser(), jour);
 
 		Response res = null;
