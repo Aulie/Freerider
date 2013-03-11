@@ -127,6 +127,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	 */
 	private Route commonRouteSelected;
 	
+	//final Button button = ((Button)findViewById(R.id.btnChooseRoute));
+	
 	
 
 	
@@ -168,7 +170,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		
 		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
-		
+		/*
+		InputMethodManager imm = (InputMethodManager)getSystemService(
+			      Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(acFrom.getWindowToken(), 0);
+		*/	
 		acFrom.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -305,6 +311,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 						@Override
 						public void onClick(View v) {
 							createOneTimeJourney();
+							InputMethodManager inputManager = (InputMethodManager)
+	                                getSystemService(Context.INPUT_METHOD_SERVICE); 
+
+							inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+									InputMethodManager.HIDE_NOT_ALWAYS);
 						}
 					});
 				}
@@ -314,7 +325,15 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 					button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
+							mapView.getOverlays().clear();
 							createMap();
+							InputMethodManager inputManager = (InputMethodManager)
+	                                  getSystemService(Context.INPUT_METHOD_SERVICE); 
+
+							inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+	                           InputMethodManager.HIDE_NOT_ALWAYS);
+							
+							
 						}
 					});
 				}
@@ -327,6 +346,9 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 						@Override
 						public void onClick(View v) {
 							createInputDialog("Route", "Insert name of Route", false);
+							InputMethodManager imm = (InputMethodManager)getSystemService(
+								      Context.INPUT_METHOD_SERVICE);
+							imm.hideSoftInputFromWindow(button.getWindowToken(), 0);
 						}
 					});
 				}
@@ -469,7 +491,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		destAddText.setLayoutParams(lliDest);
 		destAddText.setPadding(dipToPx(40), dipToPx(6), 0, 0);
 		destAddText.setTextSize(15);
-		destAddText.setText(R.string.mapViewBtnAdd);
+		destAddText.setText(R.string.mapViewAcField);
 		
 		//Adds the text to the framelayout
 		AddDestFrameLayout.addView(destAddText);
@@ -609,6 +631,14 @@ public class InitDestFrame{
 		Log.e("Length","Test");
 		//calls the MapActivityAbstract method to generate the map points/lines
 		drawPathOnMap(GeoHelper.getLocationList(getStringList()));
+		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
+		button.setText("Next");
+		button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				createOneTimeJourney();
+			}
+		});
 		//commonRouteSelected = new MapRoute(selectedRoute,GeoHelper.getLocationList(getStringList()),false);
 		//Log.e("Common Length", Integer.toString((commonRouteSelected.getRouteData().size())));
 		//Log.e("Selected Length", Integer.toString((selectedRoute.getRouteData().size())));
