@@ -123,6 +123,8 @@ class ParserUtils {
 			User user = parseUser(hiker);
 			ret.setHitchhiker(user);
 		}
+		TripPreferences preference = parsePreference(element.element(ProtocolConstants.PREFERENCE));
+		ret.setTripPreferences(preference);
 		return ret;
 	}
 

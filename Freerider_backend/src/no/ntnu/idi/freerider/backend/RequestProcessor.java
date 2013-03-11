@@ -169,6 +169,7 @@ public class RequestProcessor {
 				Journey savedJourney = db.addJourney(((JourneyRequest) request).getJourney());
 				journeys = new ArrayList<Journey>();
 				journeys.add(savedJourney);
+				ServerLogger.write("Before Journey Return");
 				return new JourneyResponse(type, ResponseStatus.OK, journeys);
 			}catch (SQLException e) {
 				ServerLogger.write("Error saving journey: " + e.getMessage());

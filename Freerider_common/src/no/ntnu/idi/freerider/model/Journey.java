@@ -45,6 +45,16 @@ public class Journey {
 		this.visibility = visibility;
 	}
 	
+	public TripPreferences getTripPreferences()
+	{
+		return tripPreferences;
+	}
+
+	public void setTripPreferences(TripPreferences tripPreferences)
+	{
+		this.tripPreferences = tripPreferences;
+	}
+
 	public Route getRoute() {
 		return route;
 	}

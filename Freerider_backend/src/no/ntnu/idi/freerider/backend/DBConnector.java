@@ -29,6 +29,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -204,7 +205,7 @@ public class DBConnector {
 		String[] addresses = addressList.split(Route.ADDRESS_STRING_DELIMITER);
 		List<MapLocation> mapLocations = readMapLocationData(rs, addresses);
 		ret.setFrequency(rs.getInt("frequency"));
-		ServerLogger.write("" + ret.getFrequency());
+		//ServerLogger.write("" + ret.getFrequency());
 		ret.setMapPoints(mapLocations);
 		return ret;
 	}
@@ -407,10 +408,12 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 
 	public Journey addJourney(Journey journey) throws SQLException{
 		//Insertion
-		PreparedStatement stmt = conn.prepareStatement("INSERT INTO journeys(route_used, starttime, hitchhiker, visibility) VALUES (?, ?, NULL,?::visibility);");
+		PreparedStatement stmt = conn.prepareStatement("INSERT INTO journeys(route_used, starttime, preferenceid, hitchhiker, visibility) VALUES (?, ?, ?, NULL,?::visibility);");
 		stmt.setInt(1, journey.getRoute().getSerial());
 		stmt.setTimestamp(2, convertToTimestamp(journey.getStart()));
-		stmt.setString(3, journey.getVisibility().toString());
+		int prefId = createPreference(journey.getTripPreferences());
+		stmt.setInt(3, prefId);
+		stmt.setString(4, journey.getVisibility().toString());
 		stmt.executeUpdate();
 		stmt.close();
 
@@ -425,10 +428,12 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		ret.setRoute(getShortformRoute(journey.getRoute().getSerial()));
 		ret.setStart(journey.getStart());
 		ret.setVisibility(journey.getVisibility());
+		ret.setTripPreferences(journey.getTripPreferences());
 		rs.close();
 		stmt.close();
 		setDateModified(journey.getRoute());
 		incrementFrequency(journey.getRoute());
+		ServerLogger.write("END Add journey");
 		return ret;
 	}
 
@@ -440,6 +445,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		stmt.setString(3, journey.getVisibility().toString());
 		stmt.setInt(4, journey.getSerial());
 		stmt.executeUpdate();
+		updatePreference(journey.getTripPreferences());
 		return getShortformJourney(journey.getSerial());
 	}
 
@@ -462,6 +468,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 			" journeys.serial," +
 			" starttime," +
 			" hitchhiker," +
+			" preferenceid," +
 			" visibility " +
 			"FROM journeys, routes " +
 			"WHERE " +
@@ -504,7 +511,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	}
 
 	public Journey getShortformJourney(int serial) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("SELECT serial, route_used,starttime,hitchhiker,visibility FROM journeys WHERE serial=?");
+		PreparedStatement stmt = conn.prepareStatement("SELECT serial, route_used,starttime,hitchhiker,visibility,preferenceid FROM journeys WHERE serial=?");
 		stmt.setInt(1, serial);
 		ResultSet rs = stmt.executeQuery();
 		rs.next();
@@ -518,6 +525,8 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		User hitchhiker = getUser(rs.getString("hitchhiker"));
 		Visibility visibility = Visibility.valueOf(rs.getString("visibility"));
 		Journey journey = new Journey(serial, route, start, hitchhiker, visibility);
+		TripPreferences preference = getPreference(rs.getInt("preferenceid"));
+		journey.setTripPreferences(preference);
 		return journey;
 	}
 
@@ -528,6 +537,8 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		User hitchhiker = getUser(rs.getString("hitchhiker"));
 		Visibility visibility = Visibility.valueOf(rs.getString("visibility"));
 		Journey journey = new Journey(serial, route, start, hitchhiker, visibility);
+		TripPreferences preference = getPreference(rs.getInt("preferenceid"));
+		journey.setTripPreferences(preference);
 		return journey;
 	}
 
@@ -626,8 +637,8 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		ret.setPrefId(rs.getInt("id"));
 		return ret;
 	}
-	public void createPreference(TripPreferences preference) throws SQLException{
-		PreparedStatement stmt = conn.prepareStatement("INSERT INTO preferences(animals,breaks,music,seats,smoking,talking) VALUES (?,?,?,?,?,?)");
+	public int createPreference(TripPreferences preference) throws SQLException{
+		PreparedStatement stmt = conn.prepareStatement("INSERT INTO preferences(animals,breaks,music,seats,smoking,talking) VALUES (?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 		stmt.setBoolean(1, preference.getAnimals());
 		stmt.setBoolean(2, preference.getBreaks());
 		stmt.setBoolean(3, preference.getMusic());
@@ -635,6 +646,11 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		stmt.setBoolean(5, preference.getSmoking());
 		stmt.setBoolean(6, preference.getTalking());
 		stmt.executeUpdate();
+		ResultSet keys = stmt.getGeneratedKeys();
+		keys.next();
+		int id = keys.getInt(1);
+		keys.close();
+		return id;
 	}
 	public void updatePreference(TripPreferences preference) throws SQLException{
 		PreparedStatement stmt = conn.prepareStatement("UPDATE preferences SET (animals,breaks,music,seats,smoking,talking) = (?,?,?,?,?,?) WHERE id=?");

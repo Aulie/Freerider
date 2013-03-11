@@ -51,7 +51,9 @@ class SerializerUtils {
 		if(route==null){
 			return null;
 		}
+		Element preferences = serializePreference(journey.getTripPreferences());
 		journeyElement.add(route);
+		journeyElement.add(preferences);
 		return journeyElement;
 	}
 
