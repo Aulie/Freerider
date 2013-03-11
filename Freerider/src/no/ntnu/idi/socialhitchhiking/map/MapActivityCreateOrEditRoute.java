@@ -33,6 +33,7 @@ import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.Visibility;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.Request;
@@ -791,6 +792,8 @@ public class InitDestFrame{
 		jour.setRoute(oneTimeRoute);
 		jour.setStart(cal);
 		jour.setVisibility(Visibility.PUBLIC);
+		TripPreferences pref = new TripPreferences(7,true,true,true,true,true);
+		jour.setTripPreferences(pref);
 		JourneyRequest req = new JourneyRequest(RequestType.CREATE_JOURNEY, getApp().getUser(), jour);
 
 		Response res = null;
