@@ -69,15 +69,11 @@ public class TripOptions extends SocialHitchhikingActivity {
     private Calendar dateAndTime;
 	private DateChooser dc;
 	private Route selectedRoute;
-	private Journey currentJourney;
 	private TripPreferences tripPreferences;
-	private Integer seats;
 	private Integer selectedPrivacy = null;
-	private Integer counter;
-	private EditText display;
 	private Visibility privacyPreference;
 	private TripOptionAdapter adapter;
-	private TripOption trip_options_data[];
+	private TripOption trip_options_data[];	
     
 	private PropertyChangeListener propLis = new PropertyChangeListener() {
 		@Override
@@ -101,17 +97,22 @@ public class TripOptions extends SocialHitchhikingActivity {
         tripPreferences= new TripPreferences();
         tripPreferences.setPrefId(0);
         selectedRoute=getApp().getSelectedRoute();
-
+        dateAndTime=Calendar.getInstance();
         //TODO
         //Options that will appear in the list. I have to fill the last parameter of trip option with the actual data
         //as it is now is only for showing how it would look like
         trip_options_data = new TripOption[]
         {
-            new TripOption(R.drawable.trip_icon_calendar, "Date",""),
-            new TripOption(R.drawable.trip_icon_clock, "Time",""),
-            new TripOption(R.drawable.trip_icon_seats, "Seats Available", tripPreferences.getSeatsAvailable().toString()),
-            new TripOption(R.drawable.trip_icon_fb, "Privacy", privacyPreference.toString()+" (Default)"),
-            new TripOption(R.drawable.trip_icon_plus, "Extras", "Not set")
+        		new TripOption(R.drawable.trip_icon_calendar, "Date",dateAndTime.getTime().toString()),
+                new TripOption(R.drawable.trip_icon_clock, "Time",""),
+                new TripOption(R.drawable.trip_icon_seats, "Seats Available", ""),
+                new TripOption(R.drawable.trip_icon_fb, "Privacy", ""),
+                new TripOption(R.drawable.trip_icon_plus, "Extras", "")
+//            new TripOption(R.drawable.trip_icon_calendar, "Date",""),
+//            new TripOption(R.drawable.trip_icon_clock, "Time",""),
+//            new TripOption(R.drawable.trip_icon_seats, "Seats Available", tripPreferences.getSeatsAvailable().toString() +" (Default)"),
+//            new TripOption(R.drawable.trip_icon_fb, "Privacy", privacyPreference.toString()+" (Default)"),
+//            new TripOption(R.drawable.trip_icon_plus, "Extras", "Not set")
         };
         
         adapter = new TripOptionAdapter(this, R.layout.list_row_trip_options, trip_options_data);
@@ -173,19 +174,19 @@ public class TripOptions extends SocialHitchhikingActivity {
     void setTime(){
     	//TODO I must change this so it only changes the time
 
-    	AlertDialog.Builder b = new AlertDialog.Builder(this);
-		b.setTitle("Set Date");
-		b.setMessage("Do you want to set the date of the Trip?");
-		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dc = new DateChooser(TripOptions.this, propLis);
-				dc.setTitleDate("Set Date of Trip");
-				dc.showTimePicker();
-			}
-		});
-		b.setNegativeButton("Cancel", null);
-		b.show();
+//    	AlertDialog.Builder b = new AlertDialog.Builder(this);
+//		b.setTitle("Set Date");
+//		b.setMessage("Do you want to set the date of the Trip?");
+//		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				dc = new DateChooser(TripOptions.this, propLis);
+//				dc.setTitleDate("Set Date of Trip");
+//				dc.showTimePicker();
+//			}
+//		});
+//		b.setNegativeButton("Cancel", null);
+//		b.show();
     }
     void setSeats(){	
     	
@@ -195,14 +196,18 @@ public class TripOptions extends SocialHitchhikingActivity {
     	    builder.setMessage("Select seats available");
     	    // Get the layout inflater
     	    LayoutInflater inflater = this.getLayoutInflater();
-    	        	    
-    	    builder.setView(inflater.inflate(R.layout.number_picker, null));
-    	   
+//    	    LayoutInflater factory = LayoutInflater.from(this);
+    	    final View textEntryView = inflater.inflate(R.layout.number_picker, null);
+    	    final EditText editTextField = (EditText) textEntryView.findViewById(R.id.numberofseats);
+    	    //builder.setView(inflater.inflate(R.layout.number_picker, null));
+    	    builder.setView(textEntryView);
     	    // Add action buttons
     	    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
-					tripPreferences.setSeatsAvailable(2);
+                    String editTextFieldValue = editTextField.getText().toString();
+					tripPreferences.setSeatsAvailable(Integer.valueOf(editTextFieldValue));
+					Toast.makeText(getApplicationContext(), "Seats Available: "+editTextFieldValue, Toast.LENGTH_LONG).show();
 				}
     	    });
     	    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
