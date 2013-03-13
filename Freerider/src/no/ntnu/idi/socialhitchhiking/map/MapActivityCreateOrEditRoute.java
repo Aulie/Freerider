@@ -837,6 +837,7 @@ public class InitDestFrame{
 		jour.setStart(cal);
 		jour.setVisibility(Visibility.PUBLIC);
 		TripPreferences pref = new TripPreferences(7,true,true,true,true,true);
+		pref.setPrefId(1);
 		jour.setTripPreferences(pref);
 		JourneyRequest req = new JourneyRequest(RequestType.CREATE_JOURNEY, getApp().getUser(), jour);
 
@@ -860,8 +861,7 @@ public class InitDestFrame{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("Error",e.getMessage());
 		}
 	}
 
