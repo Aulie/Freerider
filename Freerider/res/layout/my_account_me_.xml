@@ -5,16 +5,106 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
  
-  <!-- Screen Design for Photos -->
+  <!-- Screen Design for user(ME) -->
+      <LinearLayout android:id="@+id/me"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        >
+     	<LinearLayout
+        android:id="@+id/meLayoutTop1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+			
+        	<ImageView 
+            android:id="@+id/meImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/facebook_logo"
+            android:layout_margin="10dp"
+            android:scaleType="centerCrop"
+            />
+        
+        	<LinearLayout
+        	android:id="@+id/meInfoLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" 
+			>
+			
+				<TextView 
+			    android:id="@+id/meName"
+			    android:layout_height="20dp"
+			    android:layout_width="fill_parent"
+			    android:layout_weight="1"
+			    android:textSize="15sp"
+			    />
 
-  <TextView
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:paddingBottom="15dp"
-      android:paddingLeft="10dp"
-      android:paddingRight="15dp"
-      android:paddingTop="15dp"
-      android:text="ME"
-      android:textSize="15dp" />
- 
+				<LinearLayout
+				    android:id="@+id/meInfoLayout"
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal" >
+				   
+				<TextView 
+			    android:id="@+id/meAge"
+			    android:layout_height="20dp"
+			    android:layout_width="match_parent"
+			    android:layout_weight="1"
+			    android:textSize="15sp"
+			    android:text="Age:"/>
+
+				<EditText
+				    android:id="@+id/editAge"
+				    android:layout_width="50dp"
+				    android:layout_height="wrap_content"
+				    android:layout_marginRight="30dp"
+				    android:inputType="number" />
+
+				</LinearLayout>
+				
+				<ImageView
+			    android:id="@+id/gender"
+			    android:layout_height="20dp"
+			    android:layout_width="wrap_content"
+			    android:gravity="left"
+			    android:scaleX="1.5"
+			    android:scaleY="1.5"
+			    android:layout_marginLeft="10dp"
+			    android:layout_marginBottom="10dp"
+			    android:layout_weight="1" />
+			</LinearLayout>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:hint="Phone"
+            android:textColorHint="#999999"
+            android:ems="10"
+            android:inputType="phone" >
+
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="249dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="About me:"
+            android:textSize="15dp" />
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="120"
+            android:inputType="textMultiLine" />
+
+</LinearLayout>
 </LinearLayout>
