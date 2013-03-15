@@ -640,6 +640,17 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		ret.setPrefId(rs.getInt("id"));
 		return ret;
 	}
+	
+	public TripPreferences getPreference(String userid) throws SQLException{
+		PreparedStatement stmt = conn.prepareStatement("SELECT * FROM preferences,users WHERE preferences.id=users.preferenceid AND users.id=?");
+		stmt.setString(1, userid);
+		ResultSet rs = stmt.executeQuery();
+		rs.next();
+		TripPreferences ret = new TripPreferences(rs.getInt("seats"), rs.getBoolean("music"), rs.getBoolean("animals"), rs.getBoolean("breaks"), rs.getBoolean("talking"), rs.getBoolean("smoking"));
+		ret.setPrefId(rs.getInt("id"));
+		return ret;
+	}
+	
 	public int createPreference(TripPreferences preference) throws SQLException{
 		PreparedStatement stmt = conn.prepareStatement("INSERT INTO preferences(animals,breaks,music,seats,smoking,talking) VALUES (?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 		stmt.setBoolean(1, preference.getAnimals());

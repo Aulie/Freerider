@@ -131,7 +131,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	
 	//final Button button = ((Button)findViewById(R.id.btnChooseRoute));
 	
-	
+	private boolean hasDrawn;
 
 	
 	@Override
@@ -142,6 +142,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		r = getResources();
 		initAutocomplete();
 		initAddDestButton();
+		
+		hasDrawn = false;
 		
 		Bundle extras = getIntent().getExtras();
 		if(extras != null){
@@ -170,38 +172,54 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			button.setEnabled(false);
 		}
 		
-		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
-		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
-		/*
-		InputMethodManager imm = (InputMethodManager)getSystemService(
-			      Context.INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(acFrom.getWindowToken(), 0);
-		*/	
+		final AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
+		final AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
+		ImageView bClearFrom = ((ImageView)findViewById(R.id.etGoingFromClearIcon));
+		ImageView bClearTo = ((ImageView)findViewById(R.id.etGoingToClearIcon));
+		
+		bClearFrom.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				acFrom.setText("");
+				button.setEnabled(false);
+				button.setText("Show on Map");
+				
+			}
+			
+		});
+		
+		bClearTo.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				acTo.setText("");
+				button.setEnabled(false);
+				button.setText("Show on Map");
+				
+			}
+			
+		});
+		
 		acFrom.addTextChangedListener(new TextWatcher() {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if(checkFields() && selectedRoute.getMapPoints().size()>2){
+				hasDrawn = false;
+				if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
 					button.setEnabled(true);
 					button.setText("Next");
 					Log.e("IF1","vi kom hit");
-					button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							createOneTimeJourney();
-						}
-					});
+				}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
+					button.setEnabled(true);
+					button.setText("Show on Map");
+					
 				}
 				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
 					button.setEnabled(true);
 					button.setText("Show on map");
 					Log.e("IF2","vi kom hit");
-					button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							createMap();
-						}
-					});
+					
 				}
 				else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
 					button.setText("Show on map");
@@ -210,12 +228,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				}
 				else if(inEditMode){
 					Log.e("IF4","vi kom hit");
-					button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							createInputDialog("Route", "Insert name of Route", false);
-						}
-					});
+					
 				}
 				else{
 					Log.e("IF5","vi kom hit");
@@ -244,27 +257,21 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if(checkFields() && selectedRoute.getMapPoints().size()>2){
+				hasDrawn = false;
+				if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
 					button.setEnabled(true);
 					button.setText("Next");
 					Log.e("IF1","vi kom hit");
-					button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							createOneTimeJourney();
-						}
-					});
+				}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
+					button.setEnabled(true);
+					button.setText("Show on Map");
+					
 				}
 				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
 					button.setEnabled(true);
 					button.setText("Show on map");
 					Log.e("IF2","vi kom hit");
-					button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							createMap();
-						}
-					});
+					
 				}
 				else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
 					button.setText("Show on map");
@@ -273,17 +280,12 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				}
 				else if(inEditMode){
 					Log.e("IF4","vi kom hit");
-					button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							createInputDialog("Route", "Insert name of Route", false);
-						}
-					});
+					
 				}
 				else{
+					Log.e("IF5","vi kom hit");
 					button.setText("Show on map");
 					button.setEnabled(false);
-					Log.e("IF5","vi kom hit");
 				}
 				
 			}
@@ -300,63 +302,39 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				// TODO Auto-generated method stub
 				
 			}
+
 		});
 		
 		
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(checkFields() && selectedRoute.getMapPoints().size()>2){
-					//button.setEnabled(true);
-					//button.setText("Next");
-					button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							createOneTimeJourney();
-							InputMethodManager inputManager = (InputMethodManager)
-	                                getSystemService(Context.INPUT_METHOD_SERVICE); 
-
-							inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-									InputMethodManager.HIDE_NOT_ALWAYS);
-						}
-					});
+				if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
+					button.setText("Next");
+					createOneTimeJourney();
+					
+					
+				}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
+					mapView.getOverlays().clear();
+					createMap();
+					button.setText("Next");
+					//createOneTimeJourney();
 				}
 				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
-					//button.setEnabled(true);
-					//button.setText("Show on map");
-					button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							mapView.getOverlays().clear();
-							createMap();
-							InputMethodManager inputManager = (InputMethodManager)
-	                                  getSystemService(Context.INPUT_METHOD_SERVICE); 
-
-							inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-	                           InputMethodManager.HIDE_NOT_ALWAYS);
-							
-							
-						}
-					});
+					mapView.getOverlays().clear();
+					createMap();
+					button.setText("Next");
+					
 				}
 				else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
-					//button.setText("Show on map");
-					//button.setEnabled(false);
 				}
 				else if(inEditMode){
-					button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							createInputDialog("Route", "Insert name of Route", false);
-							InputMethodManager imm = (InputMethodManager)getSystemService(
-								      Context.INPUT_METHOD_SERVICE);
-							imm.hideSoftInputFromWindow(button.getWindowToken(), 0);
-						}
-					});
+					createInputDialog("Route", "Insert name of Route", false);
+					button.setText("Next");
+					
 				}
 				else{
-					//button.setText("Show on map");
-					//button.setEnabled(false);
+					
 				}
 			}
 		});
@@ -369,14 +347,14 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
 		
-		if((acFrom.getText().equals("") || acFrom.getText().toString().equals("")) && (acTo.getText().equals("") || acTo.getText().toString().equals(""))){
+		if((acFrom.getText().toString().equals("") || acFrom.getText().toString().equals("")) && (acTo.getText().toString().equals("") || acTo.getText().toString().equals("") && checkAddFields() == false)){
 			Log.e("checkFields_1", "false");
 			return false;
-		}else if(acTo.getText().equals("") || acTo.getText().toString().equals("")){
-			Log.e("checkFields_3", "false");
+		}else if(acTo.getText().toString().equals("") || acTo.getText().toString().equals("") || checkAddFields() == false){
+			Log.e("checkFields_2", "false");
 			//makeToast("You have to fill in the Driving from field");
 			return false;
-		}else if(acFrom.getText().equals("") || acFrom.getText().toString().equals("")){
+		}else if(acFrom.getText().toString().equals("") || acFrom.getText().toString().equals("") || checkAddFields() == false){
 			Log.e("checkFields_3", "false");
 			//makeToast("You have to fill in the Driving to field");
 			return false;
@@ -384,6 +362,17 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			Log.e("checkFields_4", "true");
 			return true;
 		}
+	}
+	
+	protected boolean checkAddFields(){
+		boolean check = true;
+		for(int i=0; i<acList.size(); i++){
+			if(acList.get(i).getAcField().getText().toString().equals("") || acList.get(i).getAcField().getText().toString().length() == 0){
+				Log.e("CHECKADDFIELDS", "nr: er tom" + i);
+				check = false;
+			}
+		}
+		return check;
 	}
 	
 	protected void fillFieldsInEdit(){
@@ -502,6 +491,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		sclLayout = (LinearLayout) findViewById(R.id.sclLayout);
 		sclLayout.addView(AddDestFrameLayout, sclLayout.getChildCount());
 		
+		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
+		
 		//Adds a clicklistener to the frameLayout
 		AddDestFrameLayout.setOnClickListener(new OnClickListener(){
 
@@ -513,6 +504,14 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				
 				//Moves the botton to the buttom
 				setLayoutParams();
+				
+				if(checkFields() == false){
+					button.setEnabled(false);
+					button.setText("Show on map");
+				}else{
+					mapView.getOverlays().clear();
+					createMap();
+				}
 			}
 			
 		});
@@ -537,6 +536,7 @@ public class InitDestFrame{
 		private ImageView destIcon;
 		private final int id;
 		private ImageView extIcon;
+		private boolean checks;
 
 		public InitDestFrame(final int id){
 			this.destFrameLayout = new FrameLayout(MapActivityCreateOrEditRoute.this);
@@ -544,6 +544,7 @@ public class InitDestFrame{
 			this.destIcon = new ImageView(MapActivityCreateOrEditRoute.this);
 			this.extIcon = new ImageView(MapActivityCreateOrEditRoute.this);
 			this.id = id;
+			this.checks = true;
 			
 			//Adds/enables a new frameLayout
 			destFrameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
@@ -570,6 +571,7 @@ public class InitDestFrame{
 			destIcon.setLayoutParams(lli2);
 			destIcon.setPadding(0, dipToPx(5), 0, 0);
 			destIcon.setImageResource(R.drawable.google_marker_thumb_mini_through);
+			//destIcon.setImageResource(R.drawable.google_marker_thumb_mini_through);
 			
 			//adds the imageicon to the frameLayout
 			destFrameLayout.addView(destIcon);
@@ -577,16 +579,32 @@ public class InitDestFrame{
 			//The exit icon for closing the entire frame
 			extIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, 5));
 			extIcon.setPadding(0,12,17,0);
-			extIcon.setImageResource(R.drawable.speech_bubble_overlay_close);
+			extIcon.setImageResource(R.drawable.cross_dropoff);
 			extIcon.setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View v) {
-					removeFromAcList(id);
-					for(int s=0; s<getAcList().size(); s++){
-						Log.e("acList", getAcList().get(s).getAcField().getText() + "");
+					if(acAdd.getText().toString().equals("")){
+						//extIcon.setImageResource(R.drawable.cross_dropoff);
+						removeFromAcList(id);
+						for(int s=0; s<getAcList().size(); s++){
+							Log.e("acList", getAcList().get(s).getAcField().getText() + "");
+							if(getAcList().get(s).getAcField().getText().toString().equals("") || getAcList().get(s).getAcField().getText().toString().length() == 0){
+								checks = false;
+							}
+						}
+						if(checks == true && checkFields()){
+							mapView.getOverlays().clear();
+							createMap();
+						}else{
+							checks = false;
+						}
+					}else{
+						//At det her funker er på høyde med tyngdekraft, universett og alt annet fantastisk!
+						extIcon.setImageResource(R.drawable.cross_dropoff);
+						acAdd.setText("");
+						extIcon.setImageResource(R.drawable.cross_dropoff);
+						//acList.get(id).getAcField().setText(acAdd.getText().toString());
 					}
-					mapView.getOverlays().clear();
-					createMap();
 				}
 			});
 			
@@ -595,6 +613,8 @@ public class InitDestFrame{
 			
 			//adds the frameLayout to the linearLayout
 			sclLayout.addView(destFrameLayout);
+			
+			final Button button = ((Button)findViewById(R.id.btnChooseRoute));
 			
 			//adds the adapter for the textChangedListener
 			acAdd.setAdapter(adapter);
@@ -606,6 +626,39 @@ public class InitDestFrame{
 				public boolean onEditorAction(TextView v, int actionId,
 						KeyEvent event) {
 					if(actionId == EditorInfo.IME_ACTION_DONE){
+						
+						hasDrawn = true;
+						if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
+							//mapView.getOverlays().clear();
+							//createMap();
+							createOneTimeJourney();
+							button.setEnabled(true);
+							button.setText("Next");
+							Log.e("IF1","vi kom hit");
+						}
+						else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
+							mapView.getOverlays().clear();
+							createMap();
+							button.setEnabled(true);
+							button.setText("Show on map");
+							Log.e("IF2","vi kom hit");
+							
+						}
+						else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
+							button.setText("Show on map");
+							button.setEnabled(false);
+							Log.e("IF3","vi kom hit");
+						}
+						else if(inEditMode){
+							Log.e("IF4","vi kom hit");
+							
+						}
+						else{
+							Log.e("IF5","vi kom hit");
+							button.setText("Show on map");
+							button.setEnabled(false);
+						}
+						mapView.getOverlays().clear();
 						createMap();
 						return true;
 					}
@@ -613,6 +666,65 @@ public class InitDestFrame{
 						return false;
 					}
 				}
+			});
+			
+			
+			acAdd.addTextChangedListener(new TextWatcher() {
+				
+				@Override
+				public void onTextChanged(CharSequence s, int start, int before, int count) {
+					if(acAdd.getText().toString() != ""){
+						extIcon.setImageResource(R.drawable.speech_bubble_overlay_close);
+					}else{
+						extIcon.setImageResource(R.drawable.cross_dropoff);
+					}
+					
+					hasDrawn = false;
+					if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
+						button.setEnabled(true);
+						button.setText("Next");
+						Log.e("IF1","vi kom hit");
+					}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
+						button.setEnabled(true);
+						button.setText("Show on Map");
+						
+					}
+					else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
+						button.setEnabled(true);
+						button.setText("Show on map");
+						Log.e("IF2","vi kom hit");
+						
+					}
+					else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
+						button.setText("Show on map");
+						button.setEnabled(false);
+						Log.e("IF3","vi kom hit");
+					}
+					else if(inEditMode){
+						Log.e("IF4","vi kom hit");
+						
+					}
+					else{
+						Log.e("IF5","vi kom hit");
+						button.setText("Show on map");
+						button.setEnabled(false);
+					}
+					
+				}
+				
+				@Override
+				public void beforeTextChanged(CharSequence s, int start, int count,
+						int after) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void afterTextChanged(Editable s) {
+					// TODO Auto-generated method stub
+					
+				}
+
 			});
 		}
 		
@@ -631,19 +743,8 @@ public class InitDestFrame{
 	
 	protected void createMap(){
 		Log.e("Length","Test");
-		//calls the MapActivityAbstract method to generate the map points/lines
+		hasDrawn = true;
 		drawPathOnMap(GeoHelper.getLocationList(getStringList()));
-		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
-		button.setText("Next");
-		button.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				createOneTimeJourney();
-			}
-		});
-		//commonRouteSelected = new MapRoute(selectedRoute,GeoHelper.getLocationList(getStringList()),false);
-		//Log.e("Common Length", Integer.toString((commonRouteSelected.getRouteData().size())));
-		//Log.e("Selected Length", Integer.toString((selectedRoute.getRouteData().size())));
 	}
 	
 
@@ -717,11 +818,9 @@ public class InitDestFrame{
 					KeyEvent event) {
 				if(actionId == EditorInfo.IME_ACTION_DONE){
 					
-					findAndDrawPath(v);
-					
-					//selectedRoute = new MapRoute(selectedRoute,GeoHelper.getLocationList(getStringList()),false);
-					//Log.e("Common Length", Integer.toString((commonRouteSelected.getRouteData().size())));
-					//Log.e("Selected Length", Integer.toString((selectedRoute.getRouteData().size())));
+					//findAndDrawPath(v);
+					mapView.getOverlays().clear();
+					createMap();
 					return true;
 				}
 				else{

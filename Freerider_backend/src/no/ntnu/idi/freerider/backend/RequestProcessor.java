@@ -253,12 +253,13 @@ public class RequestProcessor {
 			}
 		case GET_PREFERENCE:
 			ServerLogger.write("Before prefReq");
-			TripPreferences prefReq = ((PreferenceRequest)request).getPreference();
+			//TripPreferences prefReq = ((PreferenceRequest)request).getPreference();
+			
 			//db.getPreference(prefReq.getPrefId());
 			
 			try {
 				TripPreferences preference;
-				preference = db.getPreference(prefReq.getPrefId());
+				preference = db.getPreference(request.getUser().getID());
 				return new PreferenceResponse(type, status, preference);
 			} catch (SQLException e) {
 				ServerLogger.write("SQLERROR: " + e.getMessage());
