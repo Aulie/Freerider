@@ -54,7 +54,7 @@ public class TripOptionAdapter extends ArrayAdapter<TripOption>{
             holder = (TripOptionHolder)row.getTag();
         }
         
-//        TripOption option = data[position];
+//       TripOption option = data[position];
         TripOption option = lto.get(position);
         
         holder.imgIcon.setImageResource(option.icon);

@@ -99,11 +99,7 @@ public class TripOptions extends SocialHitchhikingActivity {
 				list_trip_options.set(1, new TripOption(R.drawable.trip_icon_clock, "Time", formatedTime));
 				
 				adapter.notifyDataSetChanged();
-//				if(dateAndTime != null){
-//					//sendJourneyRequest();
-//					//Toast.makeText(getApplicationContext(), dateAndTime.getTime().toString(), Toast.LENGTH_LONG).show();
-//
-//				}
+				
 			}
 		}
 	};
