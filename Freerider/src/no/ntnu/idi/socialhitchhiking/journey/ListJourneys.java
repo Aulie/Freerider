@@ -83,7 +83,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 	private Calendar now, hr24, hr72,in14Days,nextMonth;
 	
 	public void showMain(List<Journey> journeys){
-		setContentView(R.layout.journey_view);
+		setContentView(R.layout.my_rides);
 		listview = (ListView)findViewById(R.id.journey_view_list);
 
 		this.journeys = journeys;

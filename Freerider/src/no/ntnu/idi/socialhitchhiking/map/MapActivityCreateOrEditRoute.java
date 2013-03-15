@@ -44,6 +44,8 @@ import no.ntnu.idi.freerider.protocol.RouteRequest;
 import no.ntnu.idi.freerider.protocol.RouteResponse;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
+import no.ntnu.idi.socialhitchhiking.journey.ScheduleDrive;
+import no.ntnu.idi.socialhitchhiking.journey.TripOptions;
 import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
 
 import org.apache.http.client.ClientProtocolException;
@@ -127,6 +129,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	 */
 	private Route commonRouteSelected;
 	
+	//final Button button = ((Button)findViewById(R.id.btnChooseRoute));
+	
 	
 
 	
@@ -168,7 +172,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		
 		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
-		
+		/*
+		InputMethodManager imm = (InputMethodManager)getSystemService(
+			      Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(acFrom.getWindowToken(), 0);
+		*/	
 		acFrom.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -305,6 +313,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 						@Override
 						public void onClick(View v) {
 							createOneTimeJourney();
+							InputMethodManager inputManager = (InputMethodManager)
+	                                getSystemService(Context.INPUT_METHOD_SERVICE); 
+
+							inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+									InputMethodManager.HIDE_NOT_ALWAYS);
 						}
 					});
 				}
@@ -314,7 +327,15 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 					button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
+							mapView.getOverlays().clear();
 							createMap();
+							InputMethodManager inputManager = (InputMethodManager)
+	                                  getSystemService(Context.INPUT_METHOD_SERVICE); 
+
+							inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+	                           InputMethodManager.HIDE_NOT_ALWAYS);
+							
+							
 						}
 					});
 				}
@@ -327,6 +348,9 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 						@Override
 						public void onClick(View v) {
 							createInputDialog("Route", "Insert name of Route", false);
+							InputMethodManager imm = (InputMethodManager)getSystemService(
+								      Context.INPUT_METHOD_SERVICE);
+							imm.hideSoftInputFromWindow(button.getWindowToken(), 0);
 						}
 					});
 				}
@@ -469,7 +493,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		destAddText.setLayoutParams(lliDest);
 		destAddText.setPadding(dipToPx(40), dipToPx(6), 0, 0);
 		destAddText.setTextSize(15);
-		destAddText.setText(R.string.mapViewBtnAdd);
+		destAddText.setText(R.string.mapViewAcField);
 		
 		//Adds the text to the framelayout
 		AddDestFrameLayout.addView(destAddText);
@@ -609,6 +633,14 @@ public class InitDestFrame{
 		Log.e("Length","Test");
 		//calls the MapActivityAbstract method to generate the map points/lines
 		drawPathOnMap(GeoHelper.getLocationList(getStringList()));
+		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
+		button.setText("Next");
+		button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				createOneTimeJourney();
+			}
+		});
 		//commonRouteSelected = new MapRoute(selectedRoute,GeoHelper.getLocationList(getStringList()),false);
 		//Log.e("Common Length", Integer.toString((commonRouteSelected.getRouteData().size())));
 		//Log.e("Selected Length", Integer.toString((selectedRoute.getRouteData().size())));
@@ -636,21 +668,31 @@ public class InitDestFrame{
 	}
 	private void createOneTimeJourney(){
 		final Response res = chooseRoute();
-		DateChooser dc = new DateChooser(this, new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				if(event.getPropertyName() == DateChooser.DATE_CHANGED){
-					if(res.getStatus() == ResponseStatus.OK){
-						sendJourneyRequest((Calendar) event.getNewValue());
-					}
-					else createConfirmDialog(false,"Journey","created","");
-				}
-			}
-		});
-		dc.show();
+		if(res.getStatus() == ResponseStatus.OK){
+			getApp().setSelectedRoute(oneTimeRoute);
+			setTripOptions();
+		}
+		else 
+			createConfirmDialog(false,"Journey","created","");
+		
+//		DateChooser dc = new DateChooser(this, new PropertyChangeListener() {
+//			@Override
+//			public void propertyChange(PropertyChangeEvent event) {
+//				if(event.getPropertyName() == DateChooser.DATE_CHANGED){
+//					if(res.getStatus() == ResponseStatus.OK){
+//						sendJourneyRequest((Calendar) event.getNewValue());
+//					}
+//					else createConfirmDialog(false,"Journey","created","");
+//				}
+//			}
+//		});
+//		dc.show();
+		
 	}
-	
+	private void setTripOptions(){
+		Intent intent = new Intent(MapActivityCreateOrEditRoute.this, no.ntnu.idi.socialhitchhiking.journey.TripOptions.class);
+		startActivity(intent);
+	}
 	/**
 	 * Initialize the {@link AutoCompleteTextView}'s with an {@link ArrayAdapter} 
 	 * and a listener ({@link AutoCompleteTextWatcher}). The listener gets autocomplete 
@@ -807,6 +849,7 @@ public class InitDestFrame{
 		jour.setStart(cal);
 		jour.setVisibility(Visibility.PUBLIC);
 		TripPreferences pref = new TripPreferences(7,true,true,true,true,true);
+		pref.setPrefId(1);
 		jour.setTripPreferences(pref);
 		JourneyRequest req = new JourneyRequest(RequestType.CREATE_JOURNEY, getApp().getUser(), jour);
 
@@ -830,8 +873,7 @@ public class InitDestFrame{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("Error",e.getMessage());
 		}
 	}
 

@@ -25,15 +25,12 @@ package no.ntnu.idi.socialhitchhiking.journey;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Route;
-import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
@@ -47,7 +44,6 @@ import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
-import no.ntnu.idi.socialhitchhiking.utility.RouteComparator;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 
 import org.apache.http.client.ClientProtocolException;
@@ -56,7 +52,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -75,7 +70,6 @@ import android.widget.TextView;
  * @author Pål
  * @author Christian Thurmann-Nielsen
  * @author Made Ziius
- * @author Thomas Gjerde
  *
  */
 public class ScheduleDrive extends SocialHitchhikingActivity {
@@ -108,10 +102,55 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_loading);
-		new LoaderScheduleDrive(this).execute();
+		setContentView(R.layout.schedule_drive);
+		listRoute = (ListView) findViewById(R.id.routeList);
 		
-		
+		initRoutes();
+
+		listRoute.setChoiceMode(ListView.CHOICE_MODE_SINGLE);  
+		listRoute.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parentView, View childView, final int position, long id) {
+				AlertDialog.Builder alertbox = new AlertDialog.Builder(ScheduleDrive.this);
+				alertbox.setTitle("Edit route");
+				alertbox.setMessage("Do you want to change the route?");
+				alertbox.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						selectedRoute = (Route) listRoute.getItemAtPosition(position);
+						getApp().setOldEditRoute(new Route(selectedRoute));
+						
+						Intent intent = new Intent(ScheduleDrive.this, no.ntnu.idi.socialhitchhiking.map.MapActivityCreateOrEditRoute.class);
+						MapRoute mr = new MapRoute(selectedRoute.getOwner(), selectedRoute.getName(), selectedRoute.getSerial(), selectedRoute.getMapPoints());
+						getApp().setSelectedMapRoute(mr);
+						intent.putExtra("editMode", true);
+						intent.putExtra("routePosition", position);
+						startActivity(intent);
+					}
+				}); 
+				alertbox.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						selectedRoute = (Route) listRoute.getItemAtPosition(position);
+						deleteRoute(selectedRoute);
+					}
+				});
+				alertbox.setNegativeButton("Cancel", null);
+				alertbox.show();
+				return false;
+			}
+		});
+
+		listRoute.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
+				listRoute.setItemChecked(position, true);
+				selectedRoute = (Route) listRoute.getItemAtPosition(position);
+				getApp().setSelectedRoute(selectedRoute);
+				createJourney(); 
+			}
+		});
 
 	}
 
@@ -151,8 +190,30 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 			e.printStackTrace();
 		}
 	}
+	
+	private void initRoutes() {
+		List<Route> routes = null;
+		if(getApp().getRoutes() == null){
+			try {
+				routes = getRoutes();
+				getApp().setRoutes(routes);
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			}catch(NullPointerException e){
+			}
+		}
+		else{
+			routes = getApp().getRoutes();
+		}
+		if(routes != null){
+			routeAdap = new RouteAdapter(this, 0, getApp().getRoutes());
+			listRoute.setAdapter(routeAdap);
+		}
+	}
 
-	protected List<Route> getRoutes()throws ClientProtocolException{
+
+
+	private List<Route> getRoutes()throws ClientProtocolException{
 		Request req = new UserRequest(RequestType.GET_ROUTES, getApp().getUser());
 		Response res = null;
 		try {
@@ -182,9 +243,6 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		jour.setRoute(selectedRoute);
 		jour.setStart(dateAndTime);
 		jour.setVisibility(getApp().getSettings().getFacebookPrivacy());
-		TripPreferences preference = new TripPreferences(7, true, true, true, true, true);
-		preference.setPrefId(1);
-		jour.setTripPreferences(preference);
 		JourneyRequest req = new JourneyRequest(RequestType.CREATE_JOURNEY, getApp().getUser(), jour);
 
 		Response res = null;
@@ -211,19 +269,24 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		}
 	}
 	private void createJourney(){
-		AlertDialog.Builder b = new AlertDialog.Builder(this);
-		b.setTitle("Create Journey");
-		b.setMessage("Do you want to create a journey?");
-		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dc = new DateChooser(ScheduleDrive.this, propLis);
-				dc.setTitle("Set Date of Journey", "Set Time of Journey");
-				dc.show();
-			}
-		});
-		b.setNegativeButton("Cancel", null);
-		b.show();
+		
+		Intent intent = new Intent(ScheduleDrive.this, no.ntnu.idi.socialhitchhiking.journey.TripOptions.class);
+		startActivity(intent);
+//		AlertDialog.Builder b = new AlertDialog.Builder(this);
+//		b.setTitle("Create a trip");
+//		b.setMessage("Do you want to create a trip with this route?");
+//		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				dc = new DateChooser(ScheduleDrive.this, propLis);
+//				dc.setTitle("Set Date of Journey", "Set Time of Journey");
+//				dc.show();
+////				Intent intent = new Intent(ScheduleDrive.this, no.ntnu.idi.socialhitchhiking.journey.TripOptions.class);
+////				startActivity(intent);
+//			}
+//		});
+//		b.setNegativeButton("Cancel", null);
+//		b.show();
 		
 	}
 	@Override
@@ -264,100 +327,6 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 			}
 			return row;
 		}
-	}
-	
-	public void showMain(List<Route> routes) {
-		
-		
-		Log.e("KOMMET HIT", "ONEONEONEONEONEONEONEONE");
-		
-		setContentView(R.layout.schedule_drive);
-		listRoute = (ListView) findViewById(R.id.routeList);
-		
-		Log.e("ringring", "hallo hallo?");
-		if(routes == null)Log.e("NEEEEEI :(", "segeg");
-		if(routes != null){
-			List<Route> tempList = getApp().getRoutes();
-			Collections.sort(tempList,new RouteComparator());
-			routeAdap = new RouteAdapter(this, 0, tempList);
-			listRoute.setAdapter(routeAdap);
-			Log.e("MOTHERFUCKER", "ting&sånn");
-		}
-
-		listRoute.setChoiceMode(ListView.CHOICE_MODE_SINGLE);  
-		listRoute.setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parentView, View childView, final int position, long id) {
-				Log.e("Freq",Integer.toString(((Route)listRoute.getItemAtPosition(position)).getFrequency()));
-				AlertDialog.Builder alertbox = new AlertDialog.Builder(ScheduleDrive.this);
-				alertbox.setTitle("Edit route");
-				alertbox.setMessage("Do you want to change the route?");
-				alertbox.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface arg0, int arg1) {
-						selectedRoute = (Route) listRoute.getItemAtPosition(position);
-						getApp().setOldEditRoute(new Route(selectedRoute));
-						
-						Intent intent = new Intent(ScheduleDrive.this, no.ntnu.idi.socialhitchhiking.map.MapActivityCreateOrEditRoute.class);
-						MapRoute mr = new MapRoute(selectedRoute.getOwner(), selectedRoute.getName(), selectedRoute.getSerial(), selectedRoute.getMapPoints());
-						getApp().setSelectedMapRoute(mr);
-						intent.putExtra("editMode", true);
-						intent.putExtra("routePosition", position);
-						startActivity(intent);
-					}
-				}); 
-				alertbox.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface arg0, int arg1) {
-						selectedRoute = (Route) listRoute.getItemAtPosition(position);
-						deleteRoute(selectedRoute);
-					}
-				});
-				alertbox.setNegativeButton("Cancel", null);
-				alertbox.show();
-				return false;
-			}
-		});
-
-		listRoute.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
-				listRoute.setItemChecked(position, true);
-				selectedRoute = (Route) listRoute.getItemAtPosition(position);
-				createJourney(); 
-			}
-		});
-	}
-
-}
-
-class LoaderScheduleDrive extends AsyncTask<Void, Integer, List<Route>>{
-	
-	ScheduleDrive activity;
-	public LoaderScheduleDrive(ScheduleDrive activity){
-		this.activity = (ScheduleDrive) activity;
-	}
-	
-	protected List<Route> doInBackground(Void... params) {
-		List<Route> routes = null;
-		if(activity.getApp().getRoutes() == null){
-			try {
-				routes = activity.getRoutes();
-				activity.getApp().setRoutes(routes);
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-			}catch(NullPointerException e){
-			}
-		}
-		else{
-			routes = activity.getApp().getRoutes();
-		}
-		return routes;
-	}
-
-	protected void onPostExecute(List<Route> result) {
-		activity.showMain(result);
 	}
 
 }

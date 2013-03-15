@@ -201,7 +201,7 @@ public class RequestProcessor {
 				String accessToken = db.getAccessToken(req.getUser().getID());
 				filterService.filterSearch(journeys, req.getUser().getID(),accessToken);
 			} catch (SQLException e) {
-				logger.error("Error performing search.",e);
+				ServerLogger.write("Error performing search:" +e.getMessage());
 				return new JourneyResponse(type,ResponseStatus.FAILED,e.getMessage(),journeys);
 			}
 			return new JourneyResponse(type,status,journeys);

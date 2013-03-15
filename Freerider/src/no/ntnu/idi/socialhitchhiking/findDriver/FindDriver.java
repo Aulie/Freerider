@@ -55,6 +55,7 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
@@ -113,6 +114,8 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	private ArrayAdapter<SpinnerEntry> spinnerAdapter;
 	private ProgressDialog loadingDialog;
 	private ProgressDialog searchingDialog;
+	private ArrayList<PreviousSearch> previousSearch;
+	private ArrayAdapter<PreviousSearch> previousAdapter;
 
 
 	/** Called when the activity is first created. */
@@ -124,6 +127,39 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		
 		getApp().addPropertyListener(this);
 		setContentView(R.layout.find_driver);
+		previousSearch = getPreviousSearch();
+		previousAdapter = new ArrayAdapter<FindDriver.PreviousSearch>(this, R.layout.simple_spinner_with_newline);
+		previousAdapter.add(new PreviousSearch("[Select previous search]", ""));
+		for(int i = 0; i < previousSearch.size(); i++) {
+			if(previousSearch.get(i).getFrom() != null) {
+				previousAdapter.add(previousSearch.get(i));
+			}
+		}
+		Spinner previousSpinner = (Spinner)findViewById(R.id.previous);
+		previousSpinner.setAdapter(previousAdapter);
+		previousSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
+		{
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3)
+			{
+				if(arg2 != 0){
+					PreviousSearch ps = (PreviousSearch)arg0.getItemAtPosition(arg2);
+					searchFrom.setText(ps.getFrom());
+					searchTo.setText(ps.getTo());
+				}
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		searchTo = (AutoCompleteTextView) findViewById (R.id.search2);
 		searchFrom = (AutoCompleteTextView) findViewById (R.id.searchText);
 		pickDate = (Spinner) findViewById(R.id.pickDate);
@@ -261,6 +297,9 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	 */
 	private void doSearch(){
 		searchingDialog = ProgressDialog.show(this, "Searching", "Searching");
+		PreviousSearch tempPrev = new PreviousSearch(searchFrom.getText().toString(), searchTo.getText().toString());
+		previousSearch.add(tempPrev);
+		setPreviousSearch();
 		new RideSearch().execute();
 	}
 
@@ -396,6 +435,61 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			if(ev.getNewValue() != null)searchDate = (Calendar) ev.getNewValue();
 			doSearch();
 		}
+	}
+	public void setPreviousSearch() {
+		SharedPreferences settings = getSharedPreferences("PreviousSearch", 0);
+		SharedPreferences.Editor editor = settings.edit();
+		for(int i = 0; i < 5; i++) {
+			editor.putString("from_" + i, previousSearch.get((previousSearch.size() -1) - i).getFrom());
+			editor.putString("to_" + i, previousSearch.get((previousSearch.size() -1) - i).getTo());
+		}
+		editor.commit();
+	}
+	public ArrayList<PreviousSearch> getPreviousSearch(){
+		SharedPreferences settings = getSharedPreferences("PreviousSearch", 0);
+		ArrayList<PreviousSearch> ret = new ArrayList<FindDriver.PreviousSearch>();
+		for(int i = 4; i >= 0; i--) {
+			PreviousSearch tempPrev = new PreviousSearch();
+			tempPrev.setFrom(settings.getString("from_" + i, null));
+			tempPrev.setTo(settings.getString("to_" + i, null));
+			ret.add(tempPrev);
+		}
+		return ret;
+	}
+	private class PreviousSearch {
+		private String from;
+		private String to;
+		public PreviousSearch(){
+			
+		}
+		public PreviousSearch(String from, String to){
+			this.from = from;
+			this.to = to;
+		}
+		public String getFrom(){
+			return from;
+		}
+		public void setFrom(String from){
+			this.from = from;
+		}
+		public String getTo(){
+			return to;
+		}
+		public void setTo(String to){
+			this.to = to;
+		}
+		@Override
+		public String toString()
+		{
+			if(to.equals("")){
+				return from;
+			}
+			else{
+				return "From: " + from + "\nTo: " + to;
+			}
+			
+		}
+		
 	}
 	private class RideSearch extends AsyncTask<Void, Integer, String> {
 

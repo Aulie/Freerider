@@ -51,6 +51,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 
@@ -75,7 +76,7 @@ public class GeoHelper {
 			String addressLine;
 			try {
 				jsonObj = responseArray.getJSONObject(i);
-				addressLine = jsonObj.getString("address");
+				addressLine = jsonObj.getString("formatted_address");
 				if(addressLine.contains(",")){
 					String[] lines = addressLine.split(",");
 					for (int j = 0; j < lines.length; j++) {
@@ -167,7 +168,8 @@ public class GeoHelper {
 		Callable<JSONArray> callable = new Callable<JSONArray>() {
 	        @Override
 	        public JSONArray call() throws IOException {
-	        	String urlStr = "http://maps.google.com/maps/geo?q=" + lat + "," + lon + "&output=json&sensor=false";
+	        	String urlStr = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lon + "&sensor=false";
+	        	Log.e("URL",urlStr);
 	    		String response = "";
 	    		HttpClient client = new DefaultHttpClient();
 	    			HttpResponse hr = client.execute(new HttpGet(urlStr));
@@ -181,8 +183,9 @@ public class GeoHelper {
 	    		JSONArray responseArray = null;
 	    		try {
 	    			JSONObject jsonObject = new JSONObject(response);
-	    			responseArray = jsonObject.getJSONArray("Placemark");
+	    			responseArray = jsonObject.getJSONArray("results");
 	    		} catch (JSONException e) {
+	    			Log.e("Jason",e.getMessage());
 	    			return null;
 	    		}
 	    		return responseArray;

@@ -5,8 +5,10 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Calendar;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -15,6 +17,8 @@ import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.Visibility;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
+import no.ntnu.idi.freerider.protocol.PreferenceRequest;
+import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
@@ -43,6 +47,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
 import android.text.style.BulletSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,20 +68,22 @@ public class TripOptions extends SocialHitchhikingActivity {
     private ListView listView1;
     private Calendar dateAndTime;
 	private DateChooser dc;
-	private NumberPicker seats;
-	private Journey currentJourney;
+	private Route selectedRoute;
 	private TripPreferences tripPreferences;
-	private Integer selectedPrivacy;
+	private Integer selectedPrivacy = null;
 	private Visibility privacyPreference;
-    private PropertyChangeListener propLis = new PropertyChangeListener() {
+	private TripOptionAdapter adapter;
+	private TripOption trip_options_data[];	
+    
+	private PropertyChangeListener propLis = new PropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
 			if(event.getPropertyName() == DateChooser.DATE_CHANGED){
 				dateAndTime = (Calendar) event.getNewValue();
 				if(dateAndTime != null){
 					//sendJourneyRequest();
-				}
-				else{
+					Toast.makeText(getApplicationContext(), dateAndTime.getTime().toString(), Toast.LENGTH_LONG).show();
+
 				}
 			}
 		}
@@ -86,22 +93,29 @@ public class TripOptions extends SocialHitchhikingActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trip_options);
-        
+        privacyPreference=getApp().getSettings().getFacebookPrivacy();
+        tripPreferences= new TripPreferences();
+        tripPreferences.setPrefId(0);
+        selectedRoute=getApp().getSelectedRoute();
+        dateAndTime=Calendar.getInstance();
         //TODO
         //Options that will appear in the list. I have to fill the last parameter of trip option with the actual data
         //as it is now is only for showing how it would look like
-        TripOption trip_options_data[] = new TripOption[]
+        trip_options_data = new TripOption[]
         {
-            new TripOption(R.drawable.trip_icon_calendar, "Date","12/12/13"),
-            new TripOption(R.drawable.trip_icon_clock, "Time","12:30"),
-            new TripOption(R.drawable.trip_icon_seats, "Seats Available", "1"),
-            new TripOption(R.drawable.trip_icon_fb, "Privacy", "Friends of Friends"),
-            new TripOption(R.drawable.trip_icon_plus, "Extras", "Breaks/Animals/Music/Talking/Smoking")
+        		new TripOption(R.drawable.trip_icon_calendar, "Date",dateAndTime.getTime().toString()),
+                new TripOption(R.drawable.trip_icon_clock, "Time",""),
+                new TripOption(R.drawable.trip_icon_seats, "Seats Available", ""),
+                new TripOption(R.drawable.trip_icon_fb, "Privacy", ""),
+                new TripOption(R.drawable.trip_icon_plus, "Extras", "")
+//            new TripOption(R.drawable.trip_icon_calendar, "Date",""),
+//            new TripOption(R.drawable.trip_icon_clock, "Time",""),
+//            new TripOption(R.drawable.trip_icon_seats, "Seats Available", tripPreferences.getSeatsAvailable().toString() +" (Default)"),
+//            new TripOption(R.drawable.trip_icon_fb, "Privacy", privacyPreference.toString()+" (Default)"),
+//            new TripOption(R.drawable.trip_icon_plus, "Extras", "Not set")
         };
         
-        TripOptionAdapter adapter = new TripOptionAdapter(this, 
-                R.layout.list_row_trip_options, trip_options_data);
-        
+        adapter = new TripOptionAdapter(this, R.layout.list_row_trip_options, trip_options_data);
         
         listView1 = (ListView)findViewById(R.id.list);
          
@@ -160,26 +174,21 @@ public class TripOptions extends SocialHitchhikingActivity {
     void setTime(){
     	//TODO I must change this so it only changes the time
 
-    	AlertDialog.Builder b = new AlertDialog.Builder(this);
-		b.setTitle("Set Date");
-		b.setMessage("Do you want to set the date of the Trip?");
-		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dc = new DateChooser(TripOptions.this, propLis);
-				dc.setTitleDate("Set Date of Trip");
-				dc.showDatePicker();
-			}
-		});
-		b.setNegativeButton("Cancel", null);
-		b.show();
+//    	AlertDialog.Builder b = new AlertDialog.Builder(this);
+//		b.setTitle("Set Date");
+//		b.setMessage("Do you want to set the date of the Trip?");
+//		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				dc = new DateChooser(TripOptions.this, propLis);
+//				dc.setTitleDate("Set Date of Trip");
+//				dc.showTimePicker();
+//			}
+//		});
+//		b.setNegativeButton("Cancel", null);
+//		b.show();
     }
-    void setSeats(){
-//    	counter = 0;
-//    	Button add = (Button) findViewById(R.id.bAdd);
-//    	Button sub = (Button) findViewById(R.id.bSub);
-//    	final EditText display = (EditText) findViewById(R.id.numberofseats);
-    	
+    void setSeats(){	
     	
     	//TODO Update seats in TripPreferences and show it on TripOptions Activity
     	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -187,31 +196,18 @@ public class TripOptions extends SocialHitchhikingActivity {
     	    builder.setMessage("Select seats available");
     	    // Get the layout inflater
     	    LayoutInflater inflater = this.getLayoutInflater();
-    	    
-//    	    add.setOnClickListener(new View.OnClickListener() {
-//
-//    	    	public void onClick(View v) {
-//    	    		counter++;
-//    	    		display.setText( "" + counter);
-//    	    	}
-//    	    });
-//    	    sub.setOnClickListener(new View.OnClickListener() {
-//
-//    	    	public void onClick(View v) {
-//    	    		counter--;
-//    	    		display.setText( "" + counter);
-//    	    	}
-//    	    });
-    	    // Inflate and set the layout for the dialog
-    	    // Pass null as the parent view because its going in the dialog layout
-    	    
-    	    builder.setView(inflater.inflate(R.layout.number_picker, null));
-    	    
+//    	    LayoutInflater factory = LayoutInflater.from(this);
+    	    final View textEntryView = inflater.inflate(R.layout.number_picker, null);
+    	    final EditText editTextField = (EditText) textEntryView.findViewById(R.id.numberofseats);
+    	    //builder.setView(inflater.inflate(R.layout.number_picker, null));
+    	    builder.setView(textEntryView);
     	    // Add action buttons
     	    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
-				       // sign in the user ...
+                    String editTextFieldValue = editTextField.getText().toString();
+					tripPreferences.setSeatsAvailable(Integer.valueOf(editTextFieldValue));
+					Toast.makeText(getApplicationContext(), "Seats Available: "+editTextFieldValue, Toast.LENGTH_LONG).show();
 				}
     	    });
     	    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -221,20 +217,18 @@ public class TripOptions extends SocialHitchhikingActivity {
     	    });      
     	    builder.show();
     }
+    
     void setPrivacy(){
-    	//TODO Change this to save visibility preferences in current Journey/trip.
     	selectedPrivacy=-1;
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Set Privacy");
     	builder.setSingleChoiceItems(R.array.privacy_setting, -1, new DialogInterface.OnClickListener() {
     	    public void onClick(DialogInterface dialog, int item) {
-    	        //Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
     	        selectedPrivacy = item;
     	    }
     	});
     	builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                //currentJourney.setVisibility(Visibility.FRIENDS_OF_FRIENDS);
             	switch (selectedPrivacy) {
 				case 0:
 					privacyPreference=Visibility.FRIENDS;
@@ -248,7 +242,6 @@ public class TripOptions extends SocialHitchhikingActivity {
 				default:
 					break;
 				}
-            	Toast.makeText(getApplicationContext(), privacyPreference.toString(), Toast.LENGTH_SHORT).show();
             }
           
         });
@@ -261,9 +254,8 @@ public class TripOptions extends SocialHitchhikingActivity {
     	alert.show();
     }
     void setExtras(){
-    	//TODO This should record which are the Trip extras and write it in Journey/Ride in the attribute TripPreferences
-    	final CharSequence[] items = {"Breaks", "Animals", "Music", "Talking", "Smoking"};
-    	final boolean [] selectedExtras = {false, false, false, false, false};
+    	final String[] items = {"Music", "Animals", "Breaks", "Talking", "Smoking"};
+    	final BitSet sExtras = new BitSet(5);
 
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Pick extras");
@@ -271,18 +263,20 @@ public class TripOptions extends SocialHitchhikingActivity {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-				// TODO Auto-generated method stub
-				//Toast.makeText(getApplicationContext(), items[which], Toast.LENGTH_SHORT).show();
-				selectedExtras[which] = isChecked;
+				sExtras.set(which,isChecked);
 			}
     	});
     	builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                //TODO Check which check boxes are marked and update the tripPreferences
-//            	for(int i=0;i<items.length;i++){
-//            		if
-//            	}
-//            	Toast.makeText(getApplicationContext(), items[which], Toast.LENGTH_SHORT).show();
+            	tripPreferences.setExtras(sExtras);
+            	String ex = " ";
+            	for(int i=0 ; i<sExtras.length() ; i++){
+            		if(sExtras.get(i)){
+            			ex=ex+items[i]+" ";
+            		}
+            	}
+            	Toast.makeText(getApplicationContext(), ex , Toast.LENGTH_SHORT).show();
             }
         });
     	 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -295,8 +289,65 @@ public class TripOptions extends SocialHitchhikingActivity {
     }
   //When next button is clicked it goes to RideInfo? or back to Main. Right now it goes back to the Main Activity
     public void onNextClick(View v){
-    	Toast.makeText(getApplicationContext(), "Trip created", Toast.LENGTH_SHORT).show();
+    	sendJourneyRequest();
 		Intent intent = new Intent(TripOptions.this, Main.class);
-		startActivity(intent);
+		startActivity(intent);		
+	}
+    
+    private void sendJourneyRequest(){
+    	Journey jour = new Journey(-1);
+		jour.setRoute(selectedRoute);
+		jour.setStart(dateAndTime);
+		jour.setVisibility(privacyPreference);
+		jour.setTripPreferences(tripPreferences);
+		JourneyRequest req = new JourneyRequest(RequestType.CREATE_JOURNEY, getApp().getUser(), jour);
+		
+		Response res = null;
+		try {
+			res = RequestTask.sendRequest(req,getApp());
+			if(res.getStatus() != ResponseStatus.OK){
+				createAlertDialog(this, false,  "Journey","created","");
+			}
+			else{
+				if(getApp().getJourneys() != null)
+					getApp().getJourneys().add(jour);
+				createAlertDialog(this, true, "Journey","created","");
+			}
+		} catch (ClientProtocolException e) {
+			createAlertDialog(this, false,  "Journey","created","");
+		} catch (IOException e) {
+			createAlertDialog(this, false,"Journey","created","");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Request req2 = new PreferenceRequest(RequestType.CREATE_PREFERENCE,getApp().getUser(),tripPreferences);
+		try {
+			PreferenceResponse res2 = (PreferenceResponse) RequestTask.sendRequest(req2,getApp());
+			if(res2.getStatus() != ResponseStatus.OK){
+				createAlertDialog(this, false,  "Preferences","created","");
+			}
+			else{
+//				if(getApp().g != null)
+//					getApp().getJourneys().add(jour);
+//				createAlertDialog(this, true, "Preferences","created","");
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
