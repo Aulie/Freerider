@@ -50,6 +50,15 @@
                         android:layout_marginBottom="2dip"
                         android:layout_marginLeft="10dip"
                         android:src="@drawable/google_marker_thumb_mini_start" />
+                    
+                   <ImageView
+                        android:id="@+id/etGoingFromClearIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="8dip"
+                        android:layout_marginRight="11dip"
+                        android:src="@drawable/speech_bubble_overlay_close" />
                 </FrameLayout>
                 
 				<!-- Add Going to Field -->
@@ -79,6 +88,15 @@
                         android:layout_marginBottom="2dip"
                         android:layout_marginLeft="10dip"
                         android:src="@drawable/google_marker_thumb_mini_stop" />
+                    
+                    <ImageView
+                        android:id="@+id/etGoingToClearIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="8dip"
+                        android:layout_marginRight="11dip"
+                        android:src="@drawable/speech_bubble_overlay_close" />
                 </FrameLayout>
                 
             </LinearLayout>

@@ -172,8 +172,34 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			button.setEnabled(false);
 		}
 		
-		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
-		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
+		final AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
+		final AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
+		ImageView bClearFrom = ((ImageView)findViewById(R.id.etGoingFromClearIcon));
+		ImageView bClearTo = ((ImageView)findViewById(R.id.etGoingToClearIcon));
+		
+		bClearFrom.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				acFrom.setText("");
+				button.setEnabled(false);
+				button.setText("Show on Map");
+				
+			}
+			
+		});
+		
+		bClearTo.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				acTo.setText("");
+				button.setEnabled(false);
+				button.setText("Show on Map");
+				
+			}
+			
+		});
 		
 		acFrom.addTextChangedListener(new TextWatcher() {
 			
@@ -545,6 +571,7 @@ public class InitDestFrame{
 			destIcon.setLayoutParams(lli2);
 			destIcon.setPadding(0, dipToPx(5), 0, 0);
 			destIcon.setImageResource(R.drawable.google_marker_thumb_mini_through);
+			//destIcon.setImageResource(R.drawable.google_marker_thumb_mini_through);
 			
 			//adds the imageicon to the frameLayout
 			destFrameLayout.addView(destIcon);
@@ -552,22 +579,31 @@ public class InitDestFrame{
 			//The exit icon for closing the entire frame
 			extIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, 5));
 			extIcon.setPadding(0,12,17,0);
-			extIcon.setImageResource(R.drawable.speech_bubble_overlay_close);
+			extIcon.setImageResource(R.drawable.cross_dropoff);
 			extIcon.setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View v) {
-					removeFromAcList(id);
-					for(int s=0; s<getAcList().size(); s++){
-						Log.e("acList", getAcList().get(s).getAcField().getText() + "");
-						if(getAcList().get(s).getAcField().getText().toString().equals("") || getAcList().get(s).getAcField().getText().toString().length() == 0){
+					if(acAdd.getText().toString().equals("")){
+						//extIcon.setImageResource(R.drawable.cross_dropoff);
+						removeFromAcList(id);
+						for(int s=0; s<getAcList().size(); s++){
+							Log.e("acList", getAcList().get(s).getAcField().getText() + "");
+							if(getAcList().get(s).getAcField().getText().toString().equals("") || getAcList().get(s).getAcField().getText().toString().length() == 0){
+								checks = false;
+							}
+						}
+						if(checks == true && checkFields()){
+							mapView.getOverlays().clear();
+							createMap();
+						}else{
 							checks = false;
 						}
-					}
-					if(checks == true){
-						mapView.getOverlays().clear();
-						createMap();
 					}else{
-						checks = false;
+						//At det her funker er på høyde med tyngdekraft, universett og alt annet fantastisk!
+						extIcon.setImageResource(R.drawable.cross_dropoff);
+						acAdd.setText("");
+						extIcon.setImageResource(R.drawable.cross_dropoff);
+						//acList.get(id).getAcField().setText(acAdd.getText().toString());
 					}
 				}
 			});
@@ -637,6 +673,12 @@ public class InitDestFrame{
 				
 				@Override
 				public void onTextChanged(CharSequence s, int start, int before, int count) {
+					if(acAdd.getText().toString() != ""){
+						extIcon.setImageResource(R.drawable.speech_bubble_overlay_close);
+					}else{
+						extIcon.setImageResource(R.drawable.cross_dropoff);
+					}
+					
 					hasDrawn = false;
 					if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
 						button.setEnabled(true);
