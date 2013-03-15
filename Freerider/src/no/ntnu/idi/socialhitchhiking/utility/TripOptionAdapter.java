@@ -1,5 +1,8 @@
 package no.ntnu.idi.socialhitchhiking.utility;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.journey.TripOption;
 import android.app.Activity;
@@ -16,12 +19,17 @@ public class TripOptionAdapter extends ArrayAdapter<TripOption>{
     Context context; 
     int layoutResourceId;    
     TripOption data[] = null;
+    List<TripOption> lto;
     
-    public TripOptionAdapter(Context context, int layoutResourceId, TripOption[] data) {
+//    public TripOptionAdapter(Context context, int layoutResourceId, TripOption[] data) {
+    public TripOptionAdapter(Context context, int layoutResourceId, List<TripOption> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
-        this.data = data;
+//        this.data = data;
+        
+        lto = new ArrayList<TripOption>();
+        this.lto=data;
     }
 
     @Override
@@ -46,11 +54,12 @@ public class TripOptionAdapter extends ArrayAdapter<TripOption>{
             holder = (TripOptionHolder)row.getTag();
         }
         
-        TripOption option = data[position];
+//        TripOption option = data[position];
+        TripOption option = lto.get(position);
+        
         holder.imgIcon.setImageResource(option.icon);
         holder.txtTitle.setText(option.title);
         holder.txtSubtitle.setText(option.subtitle);
-        
         return row;
     }
     
