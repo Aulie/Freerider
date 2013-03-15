@@ -179,11 +179,15 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				hasDrawn = true;
-				if(checkFields() && selectedRoute.getMapPoints().size()>2){
+				hasDrawn = false;
+				if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
 					button.setEnabled(true);
 					button.setText("Next");
 					Log.e("IF1","vi kom hit");
+				}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
+					button.setEnabled(true);
+					button.setText("Show on Map");
+					
 				}
 				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
 					button.setEnabled(true);
@@ -227,11 +231,14 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				hasDrawn = true;
-				if(checkFields() && selectedRoute.getMapPoints().size()>2){
+				hasDrawn = false;
+				if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
 					button.setEnabled(true);
 					button.setText("Next");
 					Log.e("IF1","vi kom hit");
+				}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
+					button.setEnabled(true);
+					button.setText("Show on Map");
 					
 				}
 				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
@@ -250,9 +257,9 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 					
 				}
 				else{
+					Log.e("IF5","vi kom hit");
 					button.setText("Show on map");
 					button.setEnabled(false);
-					Log.e("IF5","vi kom hit");
 				}
 				
 			}
@@ -269,29 +276,35 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				// TODO Auto-generated method stub
 				
 			}
+
 		});
 		
 		
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
+				if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
+					button.setText("Next");
 					createOneTimeJourney();
 					
-				}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
+					
+				}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
 					mapView.getOverlays().clear();
 					createMap();
-					createOneTimeJourney();
+					button.setText("Next");
+					//createOneTimeJourney();
 				}
 				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
 					mapView.getOverlays().clear();
 					createMap();
+					button.setText("Next");
 					
 				}
 				else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
 				}
 				else if(inEditMode){
 					createInputDialog("Route", "Insert name of Route", false);
+					button.setText("Next");
 					
 				}
 				else{
@@ -565,6 +578,8 @@ public class InitDestFrame{
 			//adds the frameLayout to the linearLayout
 			sclLayout.addView(destFrameLayout);
 			
+			final Button button = ((Button)findViewById(R.id.btnChooseRoute));
+			
 			//adds the adapter for the textChangedListener
 			acAdd.setAdapter(adapter);
 			acAdd.addTextChangedListener(new AutoCompleteTextWatcher(MapActivityCreateOrEditRoute.this, adapter, acAdd));
@@ -575,6 +590,38 @@ public class InitDestFrame{
 				public boolean onEditorAction(TextView v, int actionId,
 						KeyEvent event) {
 					if(actionId == EditorInfo.IME_ACTION_DONE){
+						
+						hasDrawn = true;
+						if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
+							//mapView.getOverlays().clear();
+							//createMap();
+							createOneTimeJourney();
+							button.setEnabled(true);
+							button.setText("Next");
+							Log.e("IF1","vi kom hit");
+						}
+						else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
+							mapView.getOverlays().clear();
+							createMap();
+							button.setEnabled(true);
+							button.setText("Show on map");
+							Log.e("IF2","vi kom hit");
+							
+						}
+						else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
+							button.setText("Show on map");
+							button.setEnabled(false);
+							Log.e("IF3","vi kom hit");
+						}
+						else if(inEditMode){
+							Log.e("IF4","vi kom hit");
+							
+						}
+						else{
+							Log.e("IF5","vi kom hit");
+							button.setText("Show on map");
+							button.setEnabled(false);
+						}
 						mapView.getOverlays().clear();
 						createMap();
 						return true;
@@ -585,21 +632,26 @@ public class InitDestFrame{
 				}
 			});
 			
-			final Button button = ((Button)findViewById(R.id.btnChooseRoute));
+			
 			acAdd.addTextChangedListener(new TextWatcher() {
 				
 				@Override
 				public void onTextChanged(CharSequence s, int start, int before, int count) {
 					hasDrawn = false;
-					if(checkFields() && selectedRoute.getMapPoints().size()>2){
+					if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
 						button.setEnabled(true);
 						button.setText("Next");
 						Log.e("IF1","vi kom hit");
+					}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
+						button.setEnabled(true);
+						button.setText("Show on Map");
+						
 					}
 					else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
 						button.setEnabled(true);
 						button.setText("Show on map");
 						Log.e("IF2","vi kom hit");
+						
 					}
 					else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
 						button.setText("Show on map");
@@ -608,11 +660,12 @@ public class InitDestFrame{
 					}
 					else if(inEditMode){
 						Log.e("IF4","vi kom hit");
+						
 					}
 					else{
+						Log.e("IF5","vi kom hit");
 						button.setText("Show on map");
 						button.setEnabled(false);
-						Log.e("IF5","vi kom hit");
 					}
 					
 				}
@@ -629,6 +682,7 @@ public class InitDestFrame{
 					// TODO Auto-generated method stub
 					
 				}
+
 			});
 		}
 		
@@ -722,11 +776,9 @@ public class InitDestFrame{
 					KeyEvent event) {
 				if(actionId == EditorInfo.IME_ACTION_DONE){
 					
-					findAndDrawPath(v);
-					
-					//selectedRoute = new MapRoute(selectedRoute,GeoHelper.getLocationList(getStringList()),false);
-					//Log.e("Common Length", Integer.toString((commonRouteSelected.getRouteData().size())));
-					//Log.e("Selected Length", Integer.toString((selectedRoute.getRouteData().size())));
+					//findAndDrawPath(v);
+					mapView.getOverlays().clear();
+					createMap();
 					return true;
 				}
 				else{
