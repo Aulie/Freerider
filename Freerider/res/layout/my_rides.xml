@@ -8,12 +8,7 @@
 <!--  Screen Design for My Rides -->
 <!-- Shows users created trips -->
         
-    <CheckedTextView
-        android:id="@+id/journey_view_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/journey_main_title" />
+
 
     <ListView
         android:id="@+id/journey_view_list"

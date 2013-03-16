@@ -81,30 +81,44 @@ public class ListJourneys extends SocialHitchhikingActivity{
 	private ListView listview;
 	private List<Journey> journeys;
 	private Calendar now, hr24, hr72,in14Days,nextMonth;
+	private boolean owned;
 	
 	public void showMain(List<Journey> journeys){
 		setContentView(R.layout.my_rides);
 		listview = (ListView)findViewById(R.id.journey_view_list);
 
-		this.journeys = journeys;
-		initCalendars();
+		//this.journeys = journeys;
+		
+		List<Journey> tempJourneys = new ArrayList<Journey>();
 		for(int i = 0; i < journeys.size(); i++) {
 			if(journeys.get(i).getHitchhiker() != null){
 				if(journeys.get(i).getHitchhiker().getID().equals(getApp().getUser().getID())){
 					Log.e("Hitchhiker", Integer.toString(journeys.get(i).getSerial()));
+					if(!owned) {
+						tempJourneys.add(journeys.get(i));
+					}
 				}
 				else
 				{
 					Log.e("Owner", Integer.toString(journeys.get(i).getSerial()));
+					if(owned){
+						tempJourneys.add(journeys.get(i));
+					}
 				}
 			}
 			else
 			{
 				Log.e("Owner", Integer.toString(journeys.get(i).getSerial()));
+				if(owned) {
+					tempJourneys.add(journeys.get(i));
+				}
 			}
 			
 		}
-		initAdapter(adapter, journeys);
+		this.journeys = tempJourneys;
+		initCalendars();
+
+		initAdapter(adapter, this.journeys);
 		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parentView, View childView, final int pos, long id) {
@@ -138,7 +152,9 @@ public class ListJourneys extends SocialHitchhikingActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		Intent intent = getIntent();
+		owned = intent.getBooleanExtra("owned", true);
+		Log.e("Owned",Boolean.toString(owned));
 		setContentView(R.layout.main_loading);
 		new Loader(this).execute();
 		

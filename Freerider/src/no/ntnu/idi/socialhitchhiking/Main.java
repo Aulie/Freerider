@@ -305,7 +305,7 @@ public class Main extends FBConnectionActivity{
 		
 	}
 	public void onMyTripsClicked(View view){
-		Intent intent = new Intent(this,no.ntnu.idi.socialhitchhiking.journey.ListJourneys.class);
+		Intent intent = new Intent(this,no.ntnu.idi.socialhitchhiking.journey.ListTrips.class);
 		startActivity(intent);
 	}
 	
