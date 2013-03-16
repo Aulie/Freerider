@@ -88,7 +88,22 @@ public class ListJourneys extends SocialHitchhikingActivity{
 
 		this.journeys = journeys;
 		initCalendars();
-
+		for(int i = 0; i < journeys.size(); i++) {
+			if(journeys.get(i).getHitchhiker() != null){
+				if(journeys.get(i).getHitchhiker().getID().equals(getApp().getUser().getID())){
+					Log.e("Hitchhiker", Integer.toString(journeys.get(i).getSerial()));
+				}
+				else
+				{
+					Log.e("Owner", Integer.toString(journeys.get(i).getSerial()));
+				}
+			}
+			else
+			{
+				Log.e("Owner", Integer.toString(journeys.get(i).getSerial()));
+			}
+			
+		}
 		initAdapter(adapter, journeys);
 		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
