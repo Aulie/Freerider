@@ -53,6 +53,7 @@ import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.freerider.protocol.UserRequest;
+import no.ntnu.idi.freerider.protocol.UserResponse;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
@@ -121,7 +122,53 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		}
 		this.journeys = tempJourneys;
 		initCalendars();
+		/*
+		Request req2 = new UserRequest(RequestType.GET_USER, getApp().getUser());
+		UserResponse res2 = null;
+		try
+		{
+			res2 = (UserResponse)RequestTask.sendRequest(req2, getApp());
+			Log.e("CarId",Integer.toString(res2.getUser().getCarId()));
+		} catch (ClientProtocolException e1)
+		{
+			Log.e("Error",e1.getMessage());
+		} catch (IOException e1)
+		{
+			Log.e("Error",e1.getMessage());
+		} catch (InterruptedException e1)
+		{
+			Log.e("Error",e1.getMessage());
+		} catch (ExecutionException e1)
+		{
+			Log.e("Error",e1.getMessage());
+		}
 		
+		
+		Car car = new Car(getApp().getUser().getCarId(),"Dummy",0.0);
+		//Log.e("CARID",Integer.toString(car.getCarId());
+		Request req = new CarRequest(RequestType.GET_CAR, getApp().getUser(), car);
+		CarResponse res = null;
+		try
+		{
+			res = (CarResponse) RequestTask.sendRequest(req,getApp());
+			Log.e("Result",res.getCar().getPhotoAsBase64());
+		} catch (ClientProtocolException e)
+		{
+			Log.e("Error:" , e.getMessage());
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			Log.e("Error:" , e.getMessage());
+		} catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			Log.e("Error:" , e.getMessage());
+		} catch (ExecutionException e)
+		{
+			// TODO Auto-generated catch block
+			Log.e("Error:" , e.getMessage());
+		}
+		*/
 		initAdapter(adapter, this.journeys);
 		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override

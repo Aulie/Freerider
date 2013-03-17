@@ -74,7 +74,8 @@ public enum RequestType {
 	/** Create new car */
 	CREATE_CAR,
 	/** Update specified car */
-	UPDATE_CAR
+	UPDATE_CAR,
+	GET_USER
 	;
 
 	/**

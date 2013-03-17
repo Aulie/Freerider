@@ -111,6 +111,9 @@ class ParserUtils {
 		User user = new User(name,id);
 		user.setSurname(element.attributeValue(ProtocolConstants.USER_SURNAME));
 		user.setRating(Double.parseDouble(element.attributeValue(ProtocolConstants.USER_RATING)));
+		user.setGender(element.attributeValue(ProtocolConstants.USER_GENDER));
+		user.setAbout(element.attributeValue(ProtocolConstants.USER_ABOUT));
+		user.setCarId(Integer.parseInt(element.attributeValue(ProtocolConstants.USER_CARID)));
 		return user;
 	}
 

@@ -35,9 +35,28 @@ public class User {
 	private String ID;
 	private InetAddress ip;
 	private byte[] picture;
+	public int getCarId()
+	{
+		return carId;
+	}
+	public void setCarId(int carId)
+	{
+		this.carId = carId;
+	}
+
 	private List<User> friends;
 	private String gender;
+	private int carId;
+	private String about;
 	
+	public String getAbout()
+	{
+		return about;
+	}
+	public void setAbout(String about)
+	{
+		this.about = about;
+	}
 	public User(String name,String id){
 		this.firstName = name;
 		this.ID = id.replaceAll("\\s", "");
