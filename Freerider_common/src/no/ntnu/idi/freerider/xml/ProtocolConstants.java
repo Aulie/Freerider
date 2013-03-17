@@ -108,11 +108,15 @@ interface ProtocolConstants {
 	static final String STARTTIME = "Starttime";
 	static final String XML_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 	
+	static final String USER = "user_top";
 	static final String USER_ELEMENT = "User";
 	static final String USER_NAME = "name";
 	static final String USER_SURNAME = "surname";
 	static final String USER_ID = "id";
 	static final String USER_RATING = "rating";
+	static final String USER_GENDER = "user_gender";
+	static final String USER_ABOUT = "user_about";
+	static final String USER_CARID = "user_carid";
 	
 	static final String NOTIFICATION_ELEMENT = "Notification";
 	static final String NOTIFICATION_TYPE = "type";

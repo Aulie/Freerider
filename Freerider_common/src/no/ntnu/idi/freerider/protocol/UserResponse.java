@@ -21,10 +21,25 @@
  */
 package no.ntnu.idi.freerider.protocol;
 
-public class UserResponse extends Response{
+import no.ntnu.idi.freerider.model.User;
 
+public class UserResponse extends Response{
+	private User user;
 	public UserResponse(RequestType type, ResponseStatus status) {
 		super(type, status);
+	}
+	
+	public UserResponse(RequestType type, ResponseStatus status, User user) {
+		super(type, status);
+		this.user = user;
+	}
+	
+	public User getUser(){
+		return user;
+	}
+
+	public void setUser(User user){
+		this.user = user;
 	}
 
 	public UserResponse(RequestType type, ResponseStatus status, String errorMessage) {

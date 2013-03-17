@@ -139,6 +139,9 @@ class SerializerUtils {
 		ret.addAttribute(ProtocolConstants.USER_SURNAME, user.getSurname());
 		ret.addAttribute(ProtocolConstants.USER_ID,user.getID());
 		ret.addAttribute(ProtocolConstants.USER_RATING, Double.toString(user.getRating()));
+		ret.addAttribute(ProtocolConstants.USER_GENDER, user.getGender());
+		ret.addAttribute(ProtocolConstants.USER_ABOUT, user.getAbout());
+		ret.addAttribute(ProtocolConstants.USER_CARID, Integer.toString(user.getCarId()));
 		return ret;
 	}
 

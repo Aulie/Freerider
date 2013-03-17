@@ -121,6 +121,14 @@ public class ResponseParser {
 					return new CarResponse(type, status, ParserUtils.parseCar(element));
 				}
 			}
+		}else if(type.getResponseClass() == UserResponse.class.asSubclass(Response.class)) {
+			@SuppressWarnings("unchecked")
+			List<Element> userList = Data.elements();
+			for(Element element : userList) {
+				if(element.getName().equals(ProtocolConstants.USER_ELEMENT)) {
+					return new UserResponse(type, status, ParserUtils.parseUser(element));
+				}
+			}
 		}
 
 		return new UserResponse(type, status, errorMessage);

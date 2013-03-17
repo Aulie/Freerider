@@ -32,6 +32,7 @@ import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.freerider.protocol.RouteResponse;
+import no.ntnu.idi.freerider.protocol.UserResponse;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
@@ -101,6 +102,12 @@ public class ResponseSerializer {
 			if(carElement != null) 
 			{
 				responseData.add(carElement);
+			}
+		}
+		if(responseObject instanceof UserResponse && ((UserResponse) responseObject).getUser() != null){
+			Element userElement = SerializerUtils.serializeUser(((UserResponse)responseObject).getUser());
+			if(userElement != null){
+				responseData.add(userElement);
 			}
 		}
 		return xmlResponse.asXML();

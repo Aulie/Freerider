@@ -92,7 +92,7 @@ public class RequestProcessor {
 				logger.error("Error creating new user.",e);
 				return new UserResponse(type,ResponseStatus.FAILED,e.getMessage());
 			}
-			return new UserResponse(type, status);
+			return new UserResponse(type, status,newUser);
 
 		case LOGIN:
 			try {
@@ -101,6 +101,16 @@ public class RequestProcessor {
 			} catch (SQLException e) {
 				logger.error("Error setting access token.",e);
 				return new UserResponse(type,ResponseStatus.FAILED,e.getMessage());
+			}
+		case GET_USER:
+			try
+			{
+				User ret = db.getUser(request.getUser().getID());
+				return new UserResponse(type, status, ret);
+			} catch (SQLException e3)
+			{
+				ServerLogger.write("SQLERROR: " + e3.getMessage());
+				return new UserResponse(type, ResponseStatus.FAILED, e3.getMessage());
 			}
 		case CREATE_ROUTE:
 			List<Route> routes = null;

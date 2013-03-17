@@ -28,6 +28,7 @@ import no.ntnu.idi.freerider.model.User;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.UserRequest;
+import no.ntnu.idi.freerider.protocol.UserResponse;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.facebook.FBConnectionActivity;
 import no.ntnu.idi.socialhitchhiking.utility.SettingsManager;
@@ -41,6 +42,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -99,6 +101,32 @@ public class Main extends FBConnectionActivity{
 	 * @param n - A String which is used to set the users name in a TextField
 	 */
 	public void initMainScreen(){
+		//If create user crashes, this might be the problem
+		Request req2 = new UserRequest(RequestType.GET_USER, getApp().getUser());
+		UserResponse res2 = null;
+		try
+		{
+			res2 = (UserResponse)RequestTask.sendRequest(req2, getApp());
+			User resUser = res2.getUser();
+			User tempUser = getApp().getUser();
+			tempUser.setCarId(resUser.getCarId());
+			tempUser.setAbout(resUser.getAbout());
+			tempUser.setGender(resUser.getGender());
+			tempUser.setRating(resUser.getRating());
+			getApp().setUser(tempUser);
+		} catch (ClientProtocolException e1)
+		{
+			Log.e("Error",e1.getMessage());
+		} catch (IOException e1)
+		{
+			Log.e("Error",e1.getMessage());
+		} catch (InterruptedException e1)
+		{
+			Log.e("Error",e1.getMessage());
+		} catch (ExecutionException e1)
+		{
+			Log.e("Error",e1.getMessage());
+		}
 		user = getApp().getUser();
 		
 		if(!getApp().isKey("main"))sendLoginRequest();

@@ -20,6 +20,8 @@ public class Car{
         this.carId = carId;
     	this.carName = carName;
         this.comfort = comfort;
+        String dummyString = "null";
+        this.photo = dummyString.getBytes();
     }
 
     public Car(int carId, String carName, double comfort, byte[] photo){

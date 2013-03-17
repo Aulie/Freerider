@@ -322,7 +322,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	// ============================= Things to do with Users ===============================//
 
 	public User getUser(String ID) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("SELECT name, surname, ip, rating FROM users WHERE id=?");
+		PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE id=?");
 		stmt.setString(1, ID);
 		ResultSet rs = stmt.executeQuery();
 		if(!rs.next()){
@@ -332,6 +332,9 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		ret.setSurname(rs.getString("surname"));
 		ret.setIp((InetAddress) rs.getObject("ip"));
 		ret.setRating(rs.getDouble("rating"));
+		ret.setGender(rs.getString("gender"));
+		ret.setAbout(rs.getString("about"));
+		ret.setCarId(rs.getInt("carid"));
 		return ret;
 	}
 
@@ -688,7 +691,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		return ret;
 	}
 	public void createCar(Car car) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("INSERT INTO car(name,comfort,picture) = (?,?,?)");
+		PreparedStatement stmt = conn.prepareStatement("INSERT INTO car(name,comfort,picture) VALUES(?,?,?)");
 		stmt.setString(1, car.getCarName());
 		stmt.setDouble(2, car.getComfort());
 		stmt.setString(3, car.getPhotoAsBase64());
