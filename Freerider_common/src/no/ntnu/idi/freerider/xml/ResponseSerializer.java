@@ -25,6 +25,7 @@ import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.TripPreferences;
+import no.ntnu.idi.freerider.protocol.CarResponse;
 import no.ntnu.idi.freerider.protocol.JourneyResponse;
 import no.ntnu.idi.freerider.protocol.NotificationResponse;
 import no.ntnu.idi.freerider.protocol.PreferenceResponse;
@@ -95,7 +96,13 @@ public class ResponseSerializer {
 				responseData.add(prefElement);
 			}
 		}
-		
+		if(responseObject instanceof CarResponse && ((CarResponse)responseObject).getCar() != null){
+			Element carElement = SerializerUtils.serializeCar(((CarResponse)responseObject).getCar());
+			if(carElement != null) 
+			{
+				responseData.add(carElement);
+			}
+		}
 		return xmlResponse.asXML();
 	}
 

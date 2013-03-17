@@ -24,6 +24,7 @@ package no.ntnu.idi.freerider.xml;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import no.ntnu.idi.freerider.model.Car;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
@@ -122,6 +123,14 @@ class SerializerUtils {
 		ret.addAttribute(ProtocolConstants.PREFERENCE_SEATS, preference.getSeatsAvailable().toString());
 		ret.addAttribute(ProtocolConstants.PREFERENCE_SMOKING, preference.getSmoking().toString());
 		ret.addAttribute(ProtocolConstants.PREFERENCE_TALKING, preference.getTalking().toString());
+		return ret;
+	}
+	static Element serializeCar(Car car) {
+		Element ret = new DefaultElement(ProtocolConstants.CAR);
+		ret.addAttribute(ProtocolConstants.CAR_ID, Integer.toString(car.getCarId()));
+		ret.addAttribute(ProtocolConstants.CAR_NAME, car.getCarName());
+		ret.addAttribute(ProtocolConstants.CAR_COMFORT, Double.toString(car.getComfort()));
+		ret.addAttribute(ProtocolConstants.CAR_PHOTO, car.getPhotoAsBase64());
 		return ret;
 	}
 	static Element serializeUser(User user){

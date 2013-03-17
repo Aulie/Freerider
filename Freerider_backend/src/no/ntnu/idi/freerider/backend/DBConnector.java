@@ -37,6 +37,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import no.ntnu.idi.freerider.model.Car;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
@@ -675,6 +676,30 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		stmt.setBoolean(5, preference.getSmoking());
 		stmt.setBoolean(6, preference.getTalking());
 		stmt.setInt(7, preference.getPrefId());
+		stmt.executeUpdate();
+	}
+	public Car getCar(int carId) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("SELECT * FROM car WHERE id=?");
+		stmt.setInt(1, carId);
+		ResultSet rs = stmt.executeQuery();
+		rs.next();
+		Car ret = new Car(carId,rs.getString("name"),rs.getDouble("comfort"));
+		ret.setPhotoAsBase64(rs.getString("picture"));
+		return ret;
+	}
+	public void createCar(Car car) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("INSERT INTO car(name,comfort,picture) = (?,?,?)");
+		stmt.setString(1, car.getCarName());
+		stmt.setDouble(2, car.getComfort());
+		stmt.setString(3, car.getPhotoAsBase64());
+		stmt.executeUpdate();
+	}
+	public void updateCar(Car car) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("UPDATE car SET (name,comfort,picture) = (?,?,?) WHERE id=?");
+		stmt.setString(1, car.getCarName());
+		stmt.setDouble(2, car.getComfort());
+		stmt.setString(3, car.getPhotoAsBase64());
+		stmt.setInt(4, car.getCarId());
 		stmt.executeUpdate();
 	}
 

@@ -29,12 +29,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import no.ntnu.idi.freerider.model.Car;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
+import no.ntnu.idi.freerider.protocol.CarRequest;
+import no.ntnu.idi.freerider.protocol.CarResponse;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.LoginRequest;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
@@ -117,6 +120,9 @@ public class RequestParser {
 		}else if(type.getRequestClass() == PreferenceRequest.class.asSubclass(Request.class)){
 			TripPreferences preference = ParserUtils.parsePreference(Data.element(ProtocolConstants.PREFERENCE));
 			return new PreferenceRequest(type,user,preference);
+		}else if(type.getRequestClass() == CarRequest.class.asSubclass(Request.class)){
+			Car car = ParserUtils.parseCar(Data.element(ProtocolConstants.CAR));
+			return new CarRequest(type,user,car);
 		}
 		else return null;	
 	}

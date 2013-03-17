@@ -21,6 +21,7 @@
  */
 package no.ntnu.idi.freerider.xml;
 
+import no.ntnu.idi.freerider.protocol.CarRequest;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.LoginRequest;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
@@ -70,6 +71,8 @@ public class RequestSerializer {
 			data.add(token);
 		}else if(request instanceof PreferenceRequest) {
 			data.add(SerializerUtils.serializePreference(((PreferenceRequest)request).getPreference()));
+		}else if(request instanceof CarRequest) {
+			data.add(SerializerUtils.serializeCar(((CarRequest)request).getCar()));
 		}
 		
 		

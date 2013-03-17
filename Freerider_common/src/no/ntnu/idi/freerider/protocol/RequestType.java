@@ -68,7 +68,13 @@ public enum RequestType {
 	/** Add preference */
 	CREATE_PREFERENCE,
 	/** Update specified preference */
-	UPDATE_PREFERENCE
+	UPDATE_PREFERENCE,
+	/** Get specified car */
+	GET_CAR,
+	/** Create new car */
+	CREATE_CAR,
+	/** Update specified car */
+	UPDATE_CAR
 	;
 
 	/**
@@ -94,6 +100,12 @@ public enum RequestType {
 			return (Class<Request>) PreferenceRequest.class.asSubclass(Request.class);
 		case UPDATE_PREFERENCE:
 			return (Class<Request>) PreferenceRequest.class.asSubclass(Request.class);
+		case CREATE_CAR:
+			return (Class<Request>) CarRequest.class.asSubclass(Request.class);
+		case UPDATE_CAR:
+			return (Class<Request>) CarRequest.class.asSubclass(Request.class);
+		case GET_CAR:
+			return (Class<Request>) CarRequest.class.asSubclass(Request.class);
 		default: 
 			return (Class<Request>) UserRequest.class.asSubclass(Request.class);
 		}
@@ -118,6 +130,12 @@ public enum RequestType {
 			return (Class<Response>) PreferenceResponse.class.asSubclass(Response.class);
 		case UPDATE_PREFERENCE:
 			return (Class<Response>) PreferenceResponse.class.asSubclass(Response.class);
+		case CREATE_CAR:
+			return (Class<Response>) CarResponse.class.asSubclass(Response.class);
+		case UPDATE_CAR:
+			return (Class<Response>) CarResponse.class.asSubclass(Response.class);
+		case GET_CAR:
+			return (Class<Response>) CarResponse.class.asSubclass(Response.class);
 		default:
 			return (Class<Response>) UserResponse.class.asSubclass(Response.class);
 		}

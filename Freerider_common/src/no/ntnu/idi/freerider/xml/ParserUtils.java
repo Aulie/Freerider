@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import no.ntnu.idi.freerider.model.Car;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
@@ -94,6 +95,14 @@ class ParserUtils {
 		Boolean smoking = Boolean.parseBoolean(element.attributeValue(ProtocolConstants.PREFERENCE_SMOKING));
 		TripPreferences ret = new TripPreferences(seatsAvailable, music, animals, breaks, talking, smoking);
 		ret.setPrefId(id);
+		return ret;
+	}
+	static Car parseCar(Element element) {
+		int carId = Integer.parseInt(element.attributeValue(ProtocolConstants.CAR_ID));
+		String carName = element.attributeValue(ProtocolConstants.CAR_NAME);
+		double comfort = Double.parseDouble(element.attributeValue(ProtocolConstants.CAR_COMFORT));
+		Car ret = new Car(carId,carName,comfort);
+		ret.setPhotoAsBase64(element.attributeValue(ProtocolConstants.CAR_PHOTO));
 		return ret;
 	}
 	static User parseUser(Element element) {

@@ -35,12 +35,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+
+import no.ntnu.idi.freerider.model.Car;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.NotificationType;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.User;
+import no.ntnu.idi.freerider.protocol.CarRequest;
+import no.ntnu.idi.freerider.protocol.CarResponse;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
 import no.ntnu.idi.freerider.protocol.NotificationResponse;
@@ -117,7 +121,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		}
 		this.journeys = tempJourneys;
 		initCalendars();
-
+		
 		initAdapter(adapter, this.journeys);
 		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override

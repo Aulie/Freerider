@@ -30,6 +30,7 @@ import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.TripPreferences;
+import no.ntnu.idi.freerider.protocol.CarResponse;
 import no.ntnu.idi.freerider.protocol.NotificationResponse;
 import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.RequestType;
@@ -112,6 +113,14 @@ public class ResponseParser {
 				}
 			}
 			return new PreferenceResponse(type, status, new TripPreferences());
+		}else if(type.getResponseClass() == CarResponse.class.asSubclass(Response.class)) {
+			@SuppressWarnings("unchecked")
+			List<Element> carList = Data.elements();
+			for(Element element : carList) {
+				if(element.getName().equals(ProtocolConstants.CAR)) {
+					return new CarResponse(type, status, ParserUtils.parseCar(element));
+				}
+			}
 		}
 
 		return new UserResponse(type, status, errorMessage);

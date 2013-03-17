@@ -139,6 +139,11 @@ interface ProtocolConstants {
 	static final String PREFERENCE_TALKING = "preference_talking";
 	static final String PREFERENCE_SMOKING = "preference_smoking";
 	
+	static final String CAR = "Car";
+	static final String CAR_ID = "car_id";
+	static final String CAR_NAME = "car_name";
+	static final String CAR_COMFORT = "car_comfort";
+	static final String CAR_PHOTO = "car_photo";
 	
 
 }

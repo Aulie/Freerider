@@ -29,12 +29,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import no.ntnu.idi.freerider.backend.facebook.FacebookFilter;
+import no.ntnu.idi.freerider.model.Car;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.NotificationType;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
+import no.ntnu.idi.freerider.protocol.CarRequest;
+import no.ntnu.idi.freerider.protocol.CarResponse;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
 import no.ntnu.idi.freerider.protocol.NotificationResponse;
@@ -281,6 +284,39 @@ public class RequestProcessor {
 				db.updatePreference(prefReq3);
 				return new PreferenceResponse(type, status, prefReq3);
 			} catch (SQLException e) {
+				ServerLogger.write("SQLERROR: " + e.getMessage());
+				return new UserResponse(type, ResponseStatus.FAILED, e.getMessage());
+			}
+		case GET_CAR:
+			Car carReq = ((CarRequest)request).getCar();
+			try
+			{
+				Car car = db.getCar(carReq.getCarId());
+				return new CarResponse(type, status, car);
+			} catch (SQLException e)
+			{
+				ServerLogger.write("SQLERROR: " + e.getMessage());
+				return new UserResponse(type, ResponseStatus.FAILED, e.getMessage());
+			}
+		case CREATE_CAR:
+			Car carReq2 = ((CarRequest)request).getCar();
+			try
+			{
+				db.createCar(carReq2);
+				return new CarResponse(type, status, carReq2);
+			} catch (SQLException e)
+			{
+				ServerLogger.write("SQLERROR: " + e.getMessage());
+				return new UserResponse(type, ResponseStatus.FAILED, e.getMessage());
+			}
+		case UPDATE_CAR:
+			Car carReq3 = ((CarRequest)request).getCar();
+			try
+			{
+				db.updateCar(carReq3);
+				return new CarResponse(type, status, carReq3);
+			} catch (SQLException e)
+			{
 				ServerLogger.write("SQLERROR: " + e.getMessage());
 				return new UserResponse(type, ResponseStatus.FAILED, e.getMessage());
 			}
