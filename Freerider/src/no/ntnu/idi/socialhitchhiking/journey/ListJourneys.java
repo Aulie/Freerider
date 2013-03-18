@@ -21,14 +21,7 @@
  */
 package no.ntnu.idi.socialhitchhiking.journey;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -36,15 +29,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
-import no.ntnu.idi.freerider.model.Car;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.NotificationType;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.User;
-import no.ntnu.idi.freerider.protocol.CarRequest;
-import no.ntnu.idi.freerider.protocol.CarResponse;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
 import no.ntnu.idi.freerider.protocol.NotificationResponse;
@@ -53,7 +43,6 @@ import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.freerider.protocol.UserRequest;
-import no.ntnu.idi.freerider.protocol.UserResponse;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
@@ -63,7 +52,6 @@ import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 
 import org.apache.http.client.ClientProtocolException;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -73,10 +61,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -197,6 +183,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 			result.setText(caption);
 			result.setTextColor(Color.BLACK);
 			result.setBackgroundColor(Color.rgb(170, 170, 170));
+			Log.e("ting: ", caption);
 
 			return (result);
 		}
@@ -232,7 +219,6 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		List<Journey> temp = new ArrayList<Journey>(list);
 		Collections.copy(temp, list);
 		List<Journey> result = new ArrayList<Journey>();
-
 
 		result = getNext24(temp);
 		if(result.size() != 0)adp.addSection("Next 24 hours", new JourneyAdapter(this, 0, result));

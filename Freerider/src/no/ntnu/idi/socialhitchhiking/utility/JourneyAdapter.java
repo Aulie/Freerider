@@ -28,11 +28,14 @@ import no.ntnu.idi.socialhitchhiking.R;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Custom ArrayAdapter<Journey> class. Specifies how a journey should be represented
@@ -75,12 +78,21 @@ public class JourneyAdapter extends ArrayAdapter<Journey>{
 				break;
 			}
 			
+			String date = current.getStart().getTime().toString();
+			if(date.length()>0){
+				date = date.replaceAll("CET", "");
+				date = date.replaceAll("CEST", "");
+			}
+			else{
+				date = "ingen dato";
+			}
+			
 			owner.setText(current.getRoute().getOwner().getFullName());
 			visibility.setText(current.getVisibility().getDisplayName());
 			visibility.setTextColor(c);
-			startTime.setText(current.getStart().getTime().toString());
-			start.setText("From: "+current.getRoute().getStartAddress());
-			stop.setText("To: "+current.getRoute().getEndAddress());
+			startTime.setText(Html.fromHtml("<b>" + "Date: " +"</b>\t" + date));
+			start.setText(Html.fromHtml("<b>" + "From: "+"</b> " + current.getRoute().getStartAddress()));
+			stop.setText(Html.fromHtml("<b>" + "To: "+"</b>\t\t" + current.getRoute().getEndAddress()));
 
 
 			return row;
