@@ -745,6 +745,7 @@ public class InitDestFrame{
 		Log.e("Length","Test");
 		hasDrawn = true;
 		drawPathOnMap(GeoHelper.getLocationList(getStringList()));
+		generateName();
 	}
 	
 
@@ -867,8 +868,11 @@ public class InitDestFrame{
 			action = "updated";
 		}
 		else if(saveRoute)req = new RouteRequest(RequestType.CREATE_ROUTE, getUser(), commonRouteSelected);
-		else req = new RouteRequest(RequestType.CREATE_AD_HOC_ROUTE, getUser(), commonRouteSelected);
-		
+		//else req = new RouteRequest(RequestType.CREATE_AD_HOC_ROUTE, getUser(), commonRouteSelected);
+		else {
+			commonRouteSelected.setName(generateName());
+			req = new RouteRequest(RequestType.CREATE_ROUTE, getUser(), commonRouteSelected);
+		}
 		
 		try {
 			
@@ -921,6 +925,33 @@ public class InitDestFrame{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	private String generateName(){
+		
+		String name = "";
+		String midLong = "";
+		String midShort = "";
+		
+		for(int i=0; i<selectedRoute.getMapPoints().size(); i++){
+			midLong = selectedRoute.getMapPoints().get(i).getAddress();
+			Log.e("midLong", midLong + "");
+			for(int j=0; j<midLong.length(); j++){
+				if(midLong.charAt(j) == ','){
+					break;
+				}else{
+					midShort += midLong.charAt(j);
+				}
+			}
+			name += midShort;
+			name += ' ';
+			name += '-';
+			name += ' ';
+			midShort = "";
+		}
+		
+		Log.e("NAME", name + "");
+		return name;
 	}
 
 	private void translateRoute() {
