@@ -146,14 +146,14 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		}
 		
 		
-		Car car = new Car(getApp().getUser().getCarId(),"Dummy",0.0);
+		Car car = new Car(0,"Corollaenj",7.7);
 		//Log.e("CARID",Integer.toString(car.getCarId());
-		Request req = new CarRequest(RequestType.GET_CAR, getApp().getUser(), car);
+		Request req = new CarRequest(RequestType.CREATE_CAR, getApp().getUser(), car);
 		CarResponse res = null;
 		try
 		{
 			res = (CarResponse) RequestTask.sendRequest(req,getApp());
-			Log.e("Result",res.getCar().getPhotoAsBase64());
+			Log.e("Result",Integer.toString(res.getCar().getCarId()));
 		} catch (ClientProtocolException e)
 		{
 			Log.e("Error:" , e.getMessage());

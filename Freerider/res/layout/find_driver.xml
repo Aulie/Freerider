@@ -53,12 +53,13 @@
                     	<requestFocus />
                 	</AutoCompleteTextView>
 				<!-- Current location button -->
-                	<ImageButton
+                	<ImageView
                     	android:id="@+id/gpsButton"
                     	android:contentDescription="@string/current_location"
                     	android:layout_width="wrap_content"
                     	android:layout_height="wrap_content"
                     	android:layout_gravity="right|center_vertical"
+                    	android:layout_marginRight="5dp"
                     	android:src="@drawable/ic_menu_mylocation" 
                     	android:onClick="onGpsClicked"/>
                 </FrameLayout> 

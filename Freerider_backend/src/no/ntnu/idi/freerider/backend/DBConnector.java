@@ -690,12 +690,23 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		ret.setPhotoAsBase64(rs.getString("picture"));
 		return ret;
 	}
-	public void createCar(Car car) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("INSERT INTO car(name,comfort,picture) VALUES(?,?,?)");
+	public int createCar(Car car,User user) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("INSERT INTO car(name,comfort,picture) VALUES(?,?,?)",Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, car.getCarName());
 		stmt.setDouble(2, car.getComfort());
 		stmt.setString(3, car.getPhotoAsBase64());
 		stmt.executeUpdate();
+		ResultSet keys = stmt.getGeneratedKeys();
+		keys.next();
+		int id = keys.getInt(1);
+		keys.close();
+		PreparedStatement stmt2 = conn.prepareStatement("UPDATE users SET carid=? WHERE id=?");
+		stmt2.setInt(1, id);
+		stmt2.setString(2, user.getID());
+		stmt2.executeUpdate();
+		return id;
+		
+		
 	}
 	public void updateCar(Car car) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE car SET (name,comfort,picture) = (?,?,?) WHERE id=?");

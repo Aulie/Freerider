@@ -310,9 +310,11 @@ public class RequestProcessor {
 			}
 		case CREATE_CAR:
 			Car carReq2 = ((CarRequest)request).getCar();
+			User carUserReq = ((CarRequest)request).getUser();
 			try
 			{
-				db.createCar(carReq2);
+				int carid = db.createCar(carReq2,carUserReq);
+				carReq2.setCarId(carid);
 				return new CarResponse(type, status, carReq2);
 			} catch (SQLException e)
 			{

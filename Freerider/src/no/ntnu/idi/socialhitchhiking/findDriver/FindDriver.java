@@ -59,6 +59,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -407,6 +408,11 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	 * @param view
 	 */
 	public void onGpsClicked(View view) {
+		 final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+
+		    if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+		        Toast.makeText(this, "GPS is not activated", Toast.LENGTH_LONG);
+		    }
 		final GpsHandler gps = new GpsHandler(this);
 		gps.findLocation();
 		loadingDialog = ProgressDialog.show(this, "Locating", "Finding your location");
