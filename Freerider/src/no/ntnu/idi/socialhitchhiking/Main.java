@@ -73,14 +73,10 @@ public class Main extends FBConnectionActivity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
 		initLoadingScreen();
 		new Thread() {
 			
 			public void run() {
-				
-				
 				setConnection(Main.this);
 				user = getApp().getUser();
 
@@ -268,44 +264,40 @@ public class Main extends FBConnectionActivity{
 	 * or to exit the application.
 	 */
 	public void createCantConnectDialog(String msg,String buttonText){
-		AlertDialog alert =	new AlertDialog.Builder(this).create();
-		alert.setTitle("ERROR");
-		alert.setMessage(msg);
-
-		alert.setButton(buttonText, new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				getID();
-			} });
-		alert.setButton2("Exit", new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
-			} });
-		alert.show();
+		new AlertDialog.Builder(this)
+	    .setTitle("ERROR")
+	    .setMessage(msg)
+	    .setPositiveButton(buttonText, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	        	getID();
+	        }
+	     })
+	     .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	        	finish();
+	        }
+	     })
+	     .show();
 	}
 	/**
 	 * Creates an AlertDialog to give the user the option to try to relogin
 	 * or to exit the application.
 	 */
 	public void createLoginFailedDialog(final boolean showLoginFailed,String msg,String buttonText){
-		AlertDialog alert =	new AlertDialog.Builder(this).create();
-		alert.setTitle("ERROR");
-		alert.setMessage(msg);
-		alert.setButton(buttonText, new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				loginAsNewClicked(showLoginFailed);
-			} });
-			alert.setButton2("Exit", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
-			} });
-		alert.show();
+		new AlertDialog.Builder(this)
+	    .setTitle("ERROR")
+	    .setMessage(msg)
+	    .setPositiveButton(buttonText, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	        	loginAsNewClicked(showLoginFailed);
+	        }
+	     })
+	     .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	        	finish();
+	        }
+	     })
+	     .show();
 	}
 
 	/**
