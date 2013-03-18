@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Journey;
@@ -47,16 +48,20 @@ import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.journey.ScheduleDrive;
 import no.ntnu.idi.socialhitchhiking.journey.TripOptions;
 import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
+import no.ntnu.idi.socialhitchhiking.utility.GpsHandler;
 
 import org.apache.http.client.ClientProtocolException;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -101,6 +106,9 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	//private String[] acStringList;
 	private int id = 0;
 	private Resources r;
+	
+	//Fra thomas
+	private ProgressDialog loadingDialog;
 	
 	/**
 	 * This {@link CheckBox} determines whether a route should be saved or 
@@ -952,6 +960,36 @@ public class InitDestFrame{
 		
 		Log.e("NAME", name + "");
 		return name;
+	}
+	
+	//Fra thomas
+	public void onGpsClicked(View view) {
+		final GpsHandler gps = new GpsHandler(this);
+		gps.findLocation();
+		loadingDialog = ProgressDialog.show(this, "Locating", "Finding your location");
+		new Thread() {
+			public void run() {
+				try {
+					sleep(60000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				loadingDialog.dismiss();
+				gps.abortGPS();
+			}
+		}.start();
+
+	}
+	
+	public void gotLocation(android.location.Location location) {
+		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+		try {
+			List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+			acFrom.setText(addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1));
+		} catch (IOException e) {
+			//Log.e("IOError",e.getMessage());
+		}
+		loadingDialog.dismiss();
 	}
 
 	private void translateRoute() {

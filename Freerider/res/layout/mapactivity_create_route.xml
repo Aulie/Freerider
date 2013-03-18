@@ -59,6 +59,19 @@
                         android:layout_marginTop="8dip"
                         android:layout_marginRight="11dip"
                         android:src="@drawable/speech_bubble_overlay_close" />
+                   
+                   <ImageButton
+                    	android:id="@+id/gpsButton"
+                    	android:contentDescription="@string/current_location"
+                    	android:layout_width="wrap_content"
+                    	android:layout_height="wrap_content"
+                    	android:layout_gravity="right|center_vertical"
+                    	android:src="@drawable/ic_menu_mylocation" 
+                    	android:scaleX="0.7"
+                    	android:scaleY="0.7"
+                    	android:layout_marginRight="25dip"
+                    	android:layout_marginTop="2dip"
+                    	android:onClick="onGpsClicked"/>
                 </FrameLayout>
                 
 				<!-- Add Going to Field -->
