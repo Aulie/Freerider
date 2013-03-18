@@ -360,7 +360,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+			Log.e("feilmelding: ", e.getCause().toString());
 			e.printStackTrace();
 		}   
 		return res.getJourneys();
