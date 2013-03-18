@@ -22,18 +22,26 @@ package no.ntnu.idi.socialhitchhiking.map;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import no.ntnu.idi.freerider.model.Car;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.NotificationType;
+import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
+import no.ntnu.idi.freerider.protocol.CarRequest;
+import no.ntnu.idi.freerider.protocol.CarResponse;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
+import no.ntnu.idi.freerider.protocol.PreferenceRequest;
+import no.ntnu.idi.freerider.protocol.PreferenceResponse;
+import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
@@ -43,6 +51,9 @@ import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import org.apache.http.client.ClientProtocolException;
 
 import android.content.Context;
+import android.content.res.Resources.NotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -182,30 +193,117 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
         task.execute(driver.getPictureURL());
 		
 		// Adding the name of the driver
-		((TextView)findViewById(R.id.mapViewPickupTextViewName)).setText(journey.getRoute().getOwner().getFullName());
+		((TextView)findViewById(R.id.mapViewPickupTextViewName)).setText(driver.getFullName());
+		
+		// Getting the drivers preferences
+		TripPreferences pref = new TripPreferences(777, true, true, true, true, true);
+		pref.setPrefId(1); //Dummy data
+		Request req = new PreferenceRequest(RequestType.GET_PREFERENCE, driver, pref);
+		PreferenceResponse res = null;
+		try {
+			res = (PreferenceResponse) RequestTask.sendRequest(req,getApp());
+		} catch (ClientProtocolException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ExecutionException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		// Setting the smoking preference
+		if(res.getPreferences().getSmoking()){
+			((TextView)findViewById(R.id.mapViewPickupTextViewSmoking)).setText("Smoking allowed: YES");
+		}else{
+			((TextView)findViewById(R.id.mapViewPickupTextViewSmoking)).setText("Smoking allowed: NO");
+		}
+		// Setting the animals preference
+		if(res.getPreferences().getAnimals()){
+			((TextView)findViewById(R.id.mapViewPickupTextViewAnimals)).setText("Animals allowed: YES");
+		}else{
+			((TextView)findViewById(R.id.mapViewPickupTextViewAnimals)).setText("Animals allowed: NO");
+		}
+		// Setting the breaks preference
+		if(res.getPreferences().getBreaks()){
+			((TextView)findViewById(R.id.mapViewPickupTextViewBreaks)).setText("Time for breaks: YES");
+		}else{
+			((TextView)findViewById(R.id.mapViewPickupTextViewBreaks)).setText("Time for breaks: NO");
+		}
+		// Setting the music preference
+		if(res.getPreferences().getMusic()){
+			((TextView)findViewById(R.id.mapViewPickupTextViewMusic)).setText("OK to listen to music: YES");
+		}else{
+			((TextView)findViewById(R.id.mapViewPickupTextViewMusic)).setText("OK to listen to music: NO");
+		}
+		// Setting the talking preference
+		if(res.getPreferences().getTalking()){
+			((TextView)findViewById(R.id.mapViewPickupTextViewTalking)).setText("OK to talk: YES");
+		}else{
+			((TextView)findViewById(R.id.mapViewPickupTextViewTalking)).setText("OK to talk: NO");
+		}
+		
+		// Setting the number of available seats
+		((TextView)findViewById(R.id.mapViewPickupTextViewSeats)).setText(res.getPreferences().getSeatsAvailable() + " available seats");
+		
+		// Setting the age of the driver
+		//((TextView)findViewById(R.id.mapViewPickupTextViewAge)).setText("Age: " + driver.getAge());
+		
+		// Setting the drivers mobile number
+		//((TextView)findViewById(R.id.mapViewPickupTextViewPhone)).setText("Mobile: " + driver.getMobileNumber());
+		
+		// Getting the car image
+		Car car = new Car(driver.getCarId(),"Dummy",0.0); //"Dummy" and 0.0 are dummy vars. getApp() etc sends the current user's carid
+		Request carReq = new CarRequest(RequestType.GET_CAR, getApp().getUser(), car);
+		try {
+			CarResponse carRes = (CarResponse) RequestTask.sendRequest(carReq,getApp());
+			Bitmap carImage = BitmapFactory.decodeByteArray(carRes.getCar().getPhoto(), 0, carRes.getCar().getPhoto().length);
+			// Setting the car image
+			((ImageView)findViewById(R.id.mapViewPickupImageViewCar)).setImageBitmap(carImage);
+		} catch (ClientProtocolException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ExecutionException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		// Adding the date of ride
 		Date d = journey.getStart().getTime();
-		String s = d.toLocaleString();
-		((TextView)findViewById(R.id.mapViewPickupTextViewDate)).setText(s);
+		SimpleDateFormat sdfDate = new SimpleDateFormat("MMM dd yyyy");
+		SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm zzz");
+		String dateText = "Date: " + sdfDate.format(d);
+		String timeText = "Time: " + sdfTime.format(d);
+		((TextView)findViewById(R.id.mapViewPickupTextViewDate)).setText(dateText + "\n" + timeText);
 		
 		//Adding Gender to the driver
-		User gender = new User(); //this must be changed to some database stuff
-		gender.setGender("Male");
 		ImageView iv_image;
 	    iv_image = (ImageView) findViewById(R.id.gender);
-
-		    if (gender.getGender().equals("Male")){
-		    
-		    Drawable male = getResources().getDrawable(R.drawable.male);
-		    iv_image.setImageDrawable(male);
-		    }
-
-		    else{
-		    Drawable female = getResources().getDrawable(R.drawable.female);
-		    iv_image.setImageDrawable(female);
-		    }
-
+	    
+	    try {
+			if (driver.getGender().equals("Male")){
+				Drawable male = getResources().getDrawable(R.drawable.male);
+				iv_image.setImageDrawable(male);
+			}
+			else if (driver.getGender().equals("Female")){
+				Drawable female = getResources().getDrawable(R.drawable.female);
+				iv_image.setImageDrawable(female);
+			}
+		} catch (NullPointerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
 		 // Initializing the two autocomplete textviews pickup and dropoff
 	    initAutocomplete();
 	    

@@ -217,7 +217,7 @@
         </LinearLayout>
 
         <TextView
-		      android:id="@+id/phone"
+		      android:id="@+id/mapViewPickupTextViewPhone"
 		      android:layout_width="fill_parent"
 		      android:layout_height="wrap_content"
 		      android:ems="15"
@@ -267,7 +267,7 @@
 		    android:background="@drawable/list_selector"
       	/>
         <ImageView
-            android:id="@+id/mapViewPickupTextViewCar"
+            android:id="@+id/mapViewPickupImageViewCar"
             android:layout_width="fill_parent"
             android:layout_height="101dp"
             android:src="@drawable/car" >
