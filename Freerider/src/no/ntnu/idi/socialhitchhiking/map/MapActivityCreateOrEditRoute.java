@@ -1230,6 +1230,35 @@ public class InitDestFrame{
 			}
 		}
 	}
+	
+	protected void fillFieldsOnClick(){
+		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
+		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
+		int aSize = selectedRoute.getMapPoints().size();
+		
+		//Adds the first point to the going from field
+		if(aSize == 1){
+			acFrom.setText(selectedRoute.getMapPoints().get(0).getShortAddress().toString());
+			Log.e("FillFields1", selectedRoute.getMapPoints().get(0).getShortAddress().toString());
+		}else if(aSize == 2){
+			acFrom.setText(selectedRoute.getMapPoints().get(0).getShortAddress().toString());
+			Log.e("FillFields2", selectedRoute.getMapPoints().get(0).getShortAddress().toString());
+			acTo.setText(selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getShortAddress().toString());
+			Log.e("FillFields2", selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getShortAddress().toString());
+		}else if(aSize >= 3){
+			acFrom.setText(selectedRoute.getMapPoints().get(0).getShortAddress().toString());
+			Log.e("FillFields3", selectedRoute.getMapPoints().get(0).getShortAddress().toString());
+			acTo.setText(selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getShortAddress().toString());
+			Log.e("FillFields3", selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getShortAddress().toString());
+			for(int i=1; i<selectedRoute.getMapPoints().size()-1; i++){
+				initDestFrameLayout();
+				acList.get(i-1).getAcField().setText(selectedRoute.getMapPoints().get(i).getShortAddress().toString());
+				Log.e("AcList", acList.size() + "");
+				setLayoutParams();
+				Log.e("FillFields3", selectedRoute.getMapPoints().get(i).getShortAddress().toString());
+			}
+		}
+	}
 
 	/**
 	 * When the user long presses on the screen, a dialog should pop up
@@ -1243,6 +1272,7 @@ public class InitDestFrame{
 		MapLocation mapLocation = (MapLocation) GeoHelper.getLocation(gp);
 
 		addPoint(mapLocation);
+		fillFieldsOnClick();
 	} 
 
 	@Override
