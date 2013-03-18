@@ -13,6 +13,11 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.http.client.ClientProtocolException;
 
+import com.facebook.HttpMethod;
+import com.facebook.RequestAsyncTask;
+import com.facebook.Session;
+import com.facebook.android.Facebook;
+
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.TripPreferences;
@@ -76,11 +81,14 @@ public class TripOptions extends SocialHitchhikingActivity {
 	private Visibility privacyPreference;
 	private TripOptionAdapter adapter;
 	private List<TripOption> list_trip_options;
+	private Facebook fb;
+	private Boolean dateChanged=false;
     
 	private PropertyChangeListener propLis = new PropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
 			if(event.getPropertyName() == DateChooser.DATE_CHANGED){
+				dateChanged=true;
 				dateAndTime = (Calendar) event.getNewValue();
 				
 				String formatedDate = dateAndTime.get(Calendar.DAY_OF_MONTH)
@@ -303,9 +311,25 @@ public class TripOptions extends SocialHitchhikingActivity {
     }
   //When next button is clicked it goes to RideInfo? or back to Main. Right now it goes back to the Main Activity
     public void onNextClick(View v){
-    	sendJourneyRequest();
-		Intent intent = new Intent(TripOptions.this, Main.class);
-		startActivity(intent);		
+    	if(dateChanged){
+	    	sendJourneyRequest();
+			Intent intent = new Intent(TripOptions.this, Main.class);
+			startActivity(intent);
+    	}
+    	else{
+			Toast.makeText(getApplicationContext(), "Date and time of the trip must be set", Toast.LENGTH_LONG).show();
+    	}
+//		AlertDialog.Builder b = new AlertDialog.Builder(this);
+//		b.setTitle("Share");
+//		b.setMessage("Post ride to facebook?");
+//		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				fb.dialog(StartingPlace.this, "feed", new Fa)
+//			}
+//		});
+//		b.setNegativeButton("No", null);
+//		b.show();
 	}
     
     private void sendJourneyRequest(){
