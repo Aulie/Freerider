@@ -161,6 +161,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		
 		
 		chk_saveRoute = (CheckBox)findViewById(R.id.checkBoxSave);
+		chk_saveRoute.setVisibility(8);
 		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
 		
 		
@@ -214,11 +215,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				hasDrawn = false;
-				if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
+				if(checkFields() && selectedRoute.getMapPoints().size()>1 && hasDrawn == true){
 					button.setEnabled(true);
 					button.setText("Next");
 					Log.e("IF1","vi kom hit");
-				}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
+				}else if(checkFields() && selectedRoute.getMapPoints().size()>1 && hasDrawn == false){
 					button.setEnabled(true);
 					button.setText("Show on Map");
 					
@@ -317,12 +318,12 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
+				if(checkFields() && selectedRoute.getMapPoints().size()>1 && hasDrawn == true){
 					button.setText("Next");
 					createOneTimeJourney();
 					
 					
-				}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
+				}else if(checkFields() && selectedRoute.getMapPoints().size()>1 && hasDrawn == false){
 					mapView.getOverlays().clear();
 					createMap();
 					button.setText("Next");
@@ -584,6 +585,8 @@ public class InitDestFrame{
 			//adds the imageicon to the frameLayout
 			destFrameLayout.addView(destIcon);
 			
+			final Button button = ((Button)findViewById(R.id.btnChooseRoute));
+			
 			//The exit icon for closing the entire frame
 			extIcon.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, 5));
 			extIcon.setPadding(0,12,17,0);
@@ -596,15 +599,25 @@ public class InitDestFrame{
 						removeFromAcList(id);
 						for(int s=0; s<getAcList().size(); s++){
 							Log.e("acList", getAcList().get(s).getAcField().getText() + "");
+							/*
 							if(getAcList().get(s).getAcField().getText().toString().equals("") || getAcList().get(s).getAcField().getText().toString().length() == 0){
 								checks = false;
 							}
+							*/
 						}
-						if(checks == true && checkFields()){
+						if(checkFields()){
+							/*
 							mapView.getOverlays().clear();
 							createMap();
+							*/
+							button.setEnabled(true);
+							button.setText("Next");
 						}else{
+							button.setEnabled(false);
+							button.setText("Show on map");
+							/*
 							checks = false;
+							*/
 						}
 					}else{
 						//At det her funker er på høyde med tyngdekraft, universett og alt annet fantastisk!
@@ -622,7 +635,7 @@ public class InitDestFrame{
 			//adds the frameLayout to the linearLayout
 			sclLayout.addView(destFrameLayout);
 			
-			final Button button = ((Button)findViewById(R.id.btnChooseRoute));
+			//final Button button = ((Button)findViewById(R.id.btnChooseRoute));
 			
 			//adds the adapter for the textChangedListener
 			acAdd.setAdapter(adapter);
@@ -688,11 +701,11 @@ public class InitDestFrame{
 					}
 					
 					hasDrawn = false;
-					if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
+					if(checkFields() && selectedRoute.getMapPoints().size()>1 && hasDrawn == true){
 						button.setEnabled(true);
 						button.setText("Next");
 						Log.e("IF1","vi kom hit");
-					}else if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == false){
+					}else if(checkFields() && selectedRoute.getMapPoints().size()>1 && hasDrawn == false){
 						button.setEnabled(true);
 						button.setText("Show on Map");
 						

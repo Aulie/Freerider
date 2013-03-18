@@ -148,15 +148,11 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
             <Button
                 android:id="@+id/btnChooseRoute"
-                android:layout_width="220dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
                 android:text="@string/mapViewBtnChooseRoute" />
 
             <CheckBox
@@ -164,8 +160,9 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:text="@string/mapViewCheckBoxSave" />
-        </LinearLayout>
+                android:text="@string/mapViewCheckBoxSave"
+                android:visibility="gone" />
+        
     </LinearLayout>
 
 </RelativeLayout>
