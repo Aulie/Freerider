@@ -1,6 +1,7 @@
 package no.ntnu.idi.socialhitchhiking.utility;
 
 import no.ntnu.idi.socialhitchhiking.findDriver.FindDriver;
+import no.ntnu.idi.socialhitchhiking.map.MapActivityCreateOrEditRoute;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
@@ -11,16 +12,17 @@ import android.util.Log;
 /**
  * Starts a GPS listener and returns current location to FindDriver class
  * @author Thomas
+ * @param <T>
  *
  */
-public class GpsHandler {
+public class GpsHandler<T> {
 	private LocationManager locManager;
 	private LocationListener locListener;
-	FindDriver activity;
+	Activity activity;
 	public GpsHandler(Activity parent) {
 		locManager = (LocationManager)parent.getSystemService(Context.LOCATION_SERVICE);
 		locListener = new GpsListener();
-		activity = (FindDriver)parent;
+		activity = parent;
 	}
 	public void findLocation() {
 		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
@@ -35,7 +37,14 @@ class GpsListener implements LocationListener {
 		if(location != null) {
 			locManager.removeUpdates(locListener);
 			Log.e("Lat",Double.toString(location.getLatitude()));
-			activity.gotLocation(location);
+			if(activity instanceof FindDriver) {
+				((FindDriver)activity).gotLocation(location);
+			}
+			else
+			{
+				((MapActivityCreateOrEditRoute)activity).gotLocation(location);
+			}
+			
 			try {
 				this.finalize();
 			} catch (Throwable e) {

@@ -20,14 +20,14 @@ public class ListTrips extends TabActivity
 		 
 
         TabSpec ownedSpec = tabHost.newTabSpec("Owned");
-        ownedSpec.setIndicator("Owned");
+        ownedSpec.setIndicator("Created by me");
         Intent ownedIntent = new Intent(this, ListJourneys.class);
         ownedIntent.putExtra("owned", true);
         ownedSpec.setContent(ownedIntent);
  
 
         TabSpec hitchedSpec = tabHost.newTabSpec("Hitched");
-        hitchedSpec.setIndicator("Hitched");
+        hitchedSpec.setIndicator("Hitched by me");
         Intent hitchedIntent = new Intent(this, ListJourneys.class);
         hitchedIntent.putExtra("owned", false);
         hitchedSpec.setContent(hitchedIntent);
