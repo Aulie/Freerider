@@ -31,6 +31,8 @@ import no.ntnu.idi.freerider.protocol.UserRequest;
 import no.ntnu.idi.freerider.protocol.UserResponse;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.facebook.FBConnectionActivity;
+import no.ntnu.idi.socialhitchhiking.journey.ScheduleDrive;
+import no.ntnu.idi.socialhitchhiking.map.MapActivityCreateOrEditRoute;
 import no.ntnu.idi.socialhitchhiking.utility.SettingsManager;
 
 import org.apache.http.client.ClientProtocolException;
@@ -49,6 +51,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -57,6 +60,7 @@ import android.widget.Toast;
 /**
  * 
  * @author Christian
+ * @author Jon-Robert
  * @extends FBConnectionActivity
  */
 public class Main extends FBConnectionActivity{ 
@@ -321,16 +325,30 @@ public class Main extends FBConnectionActivity{
 		startActivity(intent);
 	}
 	/**
-	 * Starts the Intent MapViewActivity
+	 * Creates AlertDialog with options on what to do
 	 */
 	private void startCreateJourney(){
-		//initActivity(no.ntnu.idi.socialhitchhiking.journey.CreateOrLoadRide.class);
-		Intent intent = new Intent(this,no.ntnu.idi.socialhitchhiking.journey.CreateOrLoadRide.class);
-		//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		//intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-		//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
-		
+		new AlertDialog.Builder(this)
+	    .setTitle("Create ride")
+	    .setMessage("What kind of ride do you want to create?")
+	    .setNeutralButton("Reuse old ride", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	        	Intent intent = new Intent(Main.this, ScheduleDrive.class);
+	    		startActivity(intent);
+	        }
+	     })
+	    .setNegativeButton("New ride", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	        	Intent intent = new Intent(Main.this, MapActivityCreateOrEditRoute.class);
+	    		startActivity(intent);
+	        }
+	     })
+	     .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // do nothing
+	        }
+	     })
+	     .show();
 	}
 	public void onMyTripsClicked(View view){
 		Intent intent = new Intent(this,no.ntnu.idi.socialhitchhiking.journey.ListTrips.class);

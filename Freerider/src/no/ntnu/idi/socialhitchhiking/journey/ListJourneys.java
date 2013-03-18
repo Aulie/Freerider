@@ -92,7 +92,9 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		setContentView(R.layout.my_rides);
 		listview = (ListView)findViewById(R.id.journey_view_list);
 
-		//this.journeys = journeys;
+		if(journeys.size()==0){
+			Toast.makeText(this, "You have no active rides", Toast.LENGTH_LONG).show();
+		}
 		
 		List<Journey> tempJourneys = new ArrayList<Journey>();
 		for(int i = 0; i < journeys.size(); i++) {

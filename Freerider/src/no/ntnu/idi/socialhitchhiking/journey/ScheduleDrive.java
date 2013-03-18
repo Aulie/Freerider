@@ -63,6 +63,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * This is the activity with a list of previous rides created by the user. The driver can reuse the old ride by selecting the ride form the list.
@@ -106,7 +107,7 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		listRoute = (ListView) findViewById(R.id.routeList);
 		
 		initRoutes();
-
+		
 		listRoute.setChoiceMode(ListView.CHOICE_MODE_SINGLE);  
 		listRoute.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
@@ -208,6 +209,9 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		if(routes != null){
 			routeAdap = new RouteAdapter(this, 0, getApp().getRoutes());
 			listRoute.setAdapter(routeAdap);
+		}
+		if(routeAdap.getCount()==0){
+			Toast.makeText(this, "You have no saved routes", Toast.LENGTH_LONG).show();
 		}
 	}
 
