@@ -37,6 +37,7 @@
                         android:hint="@string/mapViewBtnFrom"
                         android:imeOptions="actionNext"
                         android:paddingLeft="40dip"
+                        android:paddingRight="75dip"
                         android:layout_marginTop="5dip"
                         android:singleLine="true"
                         android:textSize="15sp" />
@@ -86,6 +87,7 @@
                         android:hint="@string/mapViewBtnTo"
                         android:imeOptions="actionDone"
                         android:paddingLeft="40dip"
+                        android:paddingRight="55dip"
                         android:layout_marginTop="5dip"
                         android:singleLine="true"
                         android:textSize="15sp" />
@@ -144,7 +146,16 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true" 
-                android:visibility="gone"/> 
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/clearMapIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:onClick="clearMapOnClick"
+                android:src="@drawable/speech_bubble_overlay_close" />
 
         </RelativeLayout>
 

@@ -186,6 +186,9 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		ImageView bClearFrom = ((ImageView)findViewById(R.id.etGoingFromClearIcon));
 		ImageView bClearTo = ((ImageView)findViewById(R.id.etGoingToClearIcon));
 		
+		if(selectedRoute.getMapPoints().size() != 0){
+			fillFieldsOnClick();
+		}
 		bClearFrom.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -565,7 +568,7 @@ public class InitDestFrame{
 			acAdd.setEms(10);
 			acAdd.setHint(R.string.mapViewAcField);
 			acAdd.setImeOptions(6);
-			acAdd.setPadding(dipToPx(40), 0, 0, 0);
+			acAdd.setPadding(dipToPx(40), 0, dipToPx(55), 0);
 			acAdd.setSingleLine();
 			acAdd.setTextSize(15);
 			acAdd.setId(id);
@@ -1232,32 +1235,81 @@ public class InitDestFrame{
 	}
 	
 	protected void fillFieldsOnClick(){
+		
+		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
 		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
+		acFrom.setText("");
+		acTo.setText("");
 		int aSize = selectedRoute.getMapPoints().size();
 		
 		//Adds the first point to the going from field
 		if(aSize == 1){
-			acFrom.setText(selectedRoute.getMapPoints().get(0).getShortAddress().toString());
-			Log.e("FillFields1", selectedRoute.getMapPoints().get(0).getShortAddress().toString());
+			acFrom.setText(selectedRoute.getMapPoints().get(0).getAddress().toString());
+			
 		}else if(aSize == 2){
-			acFrom.setText(selectedRoute.getMapPoints().get(0).getShortAddress().toString());
-			Log.e("FillFields2", selectedRoute.getMapPoints().get(0).getShortAddress().toString());
-			acTo.setText(selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getShortAddress().toString());
-			Log.e("FillFields2", selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getShortAddress().toString());
+			acFrom.setText(selectedRoute.getMapPoints().get(0).getAddress().toString());
+			
+			acTo.setText(selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getAddress().toString());
+			
 		}else if(aSize >= 3){
-			acFrom.setText(selectedRoute.getMapPoints().get(0).getShortAddress().toString());
-			Log.e("FillFields3", selectedRoute.getMapPoints().get(0).getShortAddress().toString());
-			acTo.setText(selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getShortAddress().toString());
-			Log.e("FillFields3", selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getShortAddress().toString());
+			acFrom.setText(selectedRoute.getMapPoints().get(0).getAddress().toString());
+			acTo.setText(selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getAddress().toString());
+			
+			//int counter = 0;
+			
+			while(acList.size()>=1){
+				int id = acList.get(0).getId();
+				removeFromAcList(id);
+				setLayoutParams();
+				//counter++;
+			}
+			
 			for(int i=1; i<selectedRoute.getMapPoints().size()-1; i++){
 				initDestFrameLayout();
-				acList.get(i-1).getAcField().setText(selectedRoute.getMapPoints().get(i).getShortAddress().toString());
-				Log.e("AcList", acList.size() + "");
+				acList.get(i-1).getAcField().setText(selectedRoute.getMapPoints().get(i).getAddress().toString());
+				
 				setLayoutParams();
-				Log.e("FillFields3", selectedRoute.getMapPoints().get(i).getShortAddress().toString());
+				
 			}
 		}
+		if(checkFields() && selectedRoute.getMapPoints().size()>1){
+			button.setEnabled(true);
+			button.setText("Next");
+			hasDrawn = true;
+		}else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
+			button.setEnabled(true);
+			button.setText("Show on map");
+		}else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
+			//fillFieldsOnClick();
+		}else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
+			button.setText("Show on map");
+			button.setEnabled(false);
+		}
+	}
+	
+	public void clearMapOnClick(View view){
+		mapView.getOverlays().clear();
+		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
+		mapView.invalidate();
+		MapRoute midRoute = new MapRoute();
+		selectedRoute = midRoute;
+		
+		
+		if(checkFields() && selectedRoute.getMapPoints().size()>1){
+			button.setEnabled(true);
+			button.setText("Next");
+			//hasDrawn = true;
+		}else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
+			button.setEnabled(true);
+			button.setText("Show on map");
+		}else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
+			//fillFieldsOnClick();
+		}else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
+			button.setText("Show on map");
+			button.setEnabled(false);
+		}
+		
 	}
 
 	/**
@@ -1278,6 +1330,13 @@ public class InitDestFrame{
 	@Override
 	public boolean onSingleTapUp(MotionEvent arg0) {
 		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		fillFieldsOnClick();
 		return false;
 	}
 	
