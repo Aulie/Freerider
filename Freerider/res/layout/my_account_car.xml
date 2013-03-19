@@ -17,31 +17,6 @@
 	    android:layout_height="445dp"
 	    android:orientation="horizontal" >
 
-            <EditText
-                android:id="@+id/editText1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/textView1"
-                android:layout_alignParentRight="true"
-                android:ems="13"
-                android:singleLine="true" >
-
-                <requestFocus />
-            </EditText>
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/cameraButton"
-                android:layout_marginTop="38dp"
-                android:layout_toLeftOf="@+id/editText1"
-                android:ellipsize="end"
-                android:lines="1"
-                android:maxLength="30"
-                android:text="Car:"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
             <ImageView
                 android:id="@+id/cameraView"
                 android:layout_width="126dp"
@@ -59,14 +34,58 @@
                 android:layout_below="@+id/cameraView"
                 android:layout_marginTop="16dp"
                 android:text="Take a Photo" />
+
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/car"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/ratingBar1"
+                android:layout_above="@+id/editText1"
                 android:layout_alignLeft="@+id/textView1"
-                android:layout_marginBottom="16dp"
-                android:text="Confort:"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLength="30"
+                android:text="Car:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/carName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cameraButton"
+                android:layout_marginTop="27dp"
+                android:layout_toRightOf="@+id/textView1"
+                android:ems="13"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/cameraButton"
+                android:layout_below="@+id/carName"
+                android:ems="2"
+                android:inputType="number" >
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/comfort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/ratingBar1"
+                android:layout_marginTop="16dp"
+                android:layout_toLeftOf="@+id/editText1"
+                android:text="Comfort:"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/editText1"
+                android:layout_alignLeft="@+id/comfort"
+                android:text="Seats:"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <RatingBar
@@ -74,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editText1"
-                android:layout_centerHorizontal="true"
+                android:layout_toRightOf="@+id/car"
                 android:numStars="5"
                 android:rating="3"
                 android:scaleX="0.5"
