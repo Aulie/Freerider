@@ -22,8 +22,8 @@
     <color name="dragAndDropItemFocused">#FFFFFF</color>
     <color name="dragAndDropItemPressed">#CCFF33</color>
     <color name="dragAndDropItemEnabled">#33FFCC</color>
-    <color name="dragAndDropItemActive">#3366FF</color>
-    <color name="dragAndDropItemColor">#FF33CC</color>
+    <color name="dragAndDropItemActive">#FE2E2E</color>
+    <color name="dragAndDropItemColor">#585858</color>
     
     <string name="dragAndDropHeader">Drag to choose order</string>
     <string name="dragAndDropOK">OK</string>
