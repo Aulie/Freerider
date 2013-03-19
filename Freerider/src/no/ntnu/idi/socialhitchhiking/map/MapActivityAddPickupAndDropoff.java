@@ -68,6 +68,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
@@ -87,22 +88,22 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	/**
 	 * When this field is true, the user should select a pickup point, by touching the map.
 	 */
-	//private boolean isSelectingPickupPoint = true;
+	private boolean isSelectingPickupPoint = false;
 	
 	/**
 	 * When this field is true, the user should select a dropoff point, by touching the map.
 	 */
-	//private boolean isSelectingDropoffPoint = false;
+	private boolean isSelectingDropoffPoint = false;
 	
 	/**
 	 * The button to be pressed when the user should select a pickup point. 
 	 */
-	//private Button btnSelectPickupPoint;
+	private Button btnSelectPickupPoint;
 	
 	/**
 	 * The button to be pressed when the user should select a dropoff point.
 	 */
-	//private Button btnSelectDropoffPoint;
+	private Button btnSelectDropoffPoint;
 	
 	/**
 	 * The button to press for sending a request.
@@ -142,10 +143,18 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 */
 	private Overlay overlayDropoffThumb = null;
 	
+	/**
+	 * The {@link ImageView} that is used to contain the profile picture of the driver.
+	 */
 	private ImageView picture;
 	
+	/**
+	 * The {@link AutoCompleteTextView} where the user can enter a pickup address
+	 */
 	private AutoCompleteTextView acPickup;
-
+	/**
+	 * The {@link AutoCompleteTextView} where the user can enter a dropoff address
+	 */
 	private AutoCompleteTextView acDropoff;
 	
 	
@@ -367,15 +376,20 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		});
 		
 		// Adding buttons where you choose between pickup point and dropoff point
-		//btnSelectPickupPoint = (Button)findViewById(R.id.mapViewPickupBtnPickup);
-		//btnSelectDropoffPoint = (Button)findViewById(R.id.mapViewPickupBtnDropoff);
-		/*
+		btnSelectPickupPoint = (Button)findViewById(R.id.mapViewPickupBtnPickup);
+		btnSelectDropoffPoint = (Button)findViewById(R.id.mapViewPickupBtnDropoff);
+		
 		// Setting the selected pickup point
-		setSelectingPickupPoint();
+		//setSelectingPickupPoint();
 		btnSelectPickupPoint.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				setSelectingPickupPoint();
+				isSelectingDropoffPoint = false;
+				isSelectingPickupPoint = true;
+				btnSelectPickupPoint.setBackgroundColor(selected); 
+				btnSelectDropoffPoint.setBackgroundColor(notSelected);
+				makeToast("Longpress on map to add pickup location");
+				
 			}
 		});
 		
@@ -383,10 +397,14 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		btnSelectDropoffPoint.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				setSelectingDropoffPoint();
+				isSelectingDropoffPoint = true;
+				isSelectingPickupPoint = false;
+				btnSelectPickupPoint.setBackgroundColor(notSelected); 
+				btnSelectDropoffPoint.setBackgroundColor(selected);
+				makeToast("Longpress on map to add dropoff location");
 			}
 		});
-		*/
+		
 		/*
 		Bundle extras = getIntent().getExtras();
 		if(extras != null){
@@ -465,6 +483,19 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		});
 	}
 	/**
+	 * Clearing the text in the pickup text field.
+	 */
+	public void clearPickupText(View v){
+		((EditText)findViewById(R.id.pickupText)).setText("");
+	}
+	/**
+	 * Clearing the text in the dropoff text field.
+	 */
+	public void clearDropoffText(View v){
+		((EditText)findViewById(R.id.dropoffText)).setText("");
+	}
+	
+	/**
 	 * Should be called when both a pickup point and a dropoff point has been selected.
 	 */
 	/*private void setDoneSelecting(){
@@ -529,7 +560,75 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 */
 	@Override
 	public void onLongPress(MotionEvent e) {
-		//Does nothing
+		if(!isSelectingDropoffPoint && !isSelectingPickupPoint){
+			return;
+		}
+		GeoPoint gp = mapView.getProjection().fromPixels(
+				(int) e.getX(),
+				(int) e.getY());
+		MapLocation mapLocation = (MapLocation) GeoHelper.getLocation(gp);
+		// If the user is selecting a pickup point
+		if(isSelectingPickupPoint){
+			Location temp = findClosestLocationOnRoute(mapLocation);
+			//Controls if the user has entered a NEW address
+			if(pickupPoint != temp){
+				// Removes old pickup point (thumb)
+				if(overlayPickupThumb != null){
+					mapView.getOverlays().remove(overlayPickupThumb);
+					overlayPickupThumb = null;
+				}
+				mapView.invalidate();
+				
+				// If no dropoff point is specified, we add the pickup point to the map.
+				if(dropoffPoint == null){
+					pickupPoint = temp;
+					overlayPickupThumb = drawThumb(pickupPoint, true);
+					//setSelectingDropoffPoint();
+				}else{ // If a dropoff point is specified:
+					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
+					// Checks to make sure the pickup point is before the dropoff point.
+					if(l.indexOf(temp) < l.indexOf(dropoffPoint)){
+						makeToast("The pickup point has to be before the dropoff point");
+					}else{
+						// Adds the pickup point to the map by drawing a thumb
+						pickupPoint = temp;
+						overlayPickupThumb = drawThumb(pickupPoint, true);
+						//setDoneSelecting();
+					}
+				}
+			}
+			// If the user is selecting a dropoff point
+		}else if(isSelectingDropoffPoint){
+			Location temp = findClosestLocationOnRoute(mapLocation);
+			// Controls if the user has entered a NEW address
+			if(dropoffPoint != temp){
+				// Removes old dropoff point (thumb)
+				if(overlayDropoffThumb != null){
+					mapView.getOverlays().remove(overlayDropoffThumb);
+					overlayDropoffThumb = null;
+					//pickupPoint = null;
+				}
+				mapView.invalidate();
+				
+				// If no pickup point is specified, we add the dropoff point to the map.
+				if(pickupPoint == null){
+					dropoffPoint = temp;
+					overlayDropoffThumb = drawThumb(dropoffPoint, false);
+					//setSelectingPickupPoint();
+				}else{ // If a pickup point is specified:
+					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
+					// Checks to make sure the dropoff point is after the pickup point.
+					if(l.indexOf(temp) > l.indexOf(pickupPoint)){
+						makeToast("The droppoff point has to be after the pickup point");
+					}else{
+						// Adds the dropoff point to the map by drawing a thumb
+						dropoffPoint = temp;
+						overlayDropoffThumb = drawThumb(dropoffPoint, false);
+						//setDoneSelecting();
+					}
+				}
+			}
+		}
 	} 
 	
 	/**
@@ -634,48 +733,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 */
 	@Override
 	public synchronized boolean onSingleTapUp(MotionEvent e) {
-		/*if(!isSelectingDropoffPoint && !isSelectingPickupPoint) return false;
-		GeoPoint gp = mapView.getProjection().fromPixels(
-				(int) e.getX(),
-				(int) e.getY());
-		MapLocation mapLocation = (MapLocation) GeoHelper.getLocation(gp);
 		
-		if(isSelectingPickupPoint){
-			Location temp = findClosestLocationOnRoute(mapLocation);
-			
-			if(dropoffPoint == null){
-				pickupPoint = temp;
-				overlayPickupCross = drawCross(pickupPoint, true);
-				setSelectingDropoffPoint();
-			}else{
-				List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
-				if(l.indexOf(temp) < l.indexOf(dropoffPoint)){
-					makeToast("The pickup point has to be before the dropoff point");
-				}else{
-					pickupPoint = temp;
-					overlayPickupCross = drawCross(pickupPoint, true);
-					setDoneSelecting();
-				}
-			}
-		}else if(isSelectingDropoffPoint){
-			Location temp = findClosestLocationOnRoute(mapLocation);
-			
-			if(pickupPoint == null){
-				dropoffPoint = temp;
-				overlayDropoffCross = drawCross(dropoffPoint, false);
-				setSelectingPickupPoint();
-			}else{
-				List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
-				if(l.indexOf(temp) > l.indexOf(pickupPoint)){
-					makeToast("The droppoff point has to be after the pickup point");
-				}else{
-					dropoffPoint = temp;
-					overlayDropoffCross = drawCross(dropoffPoint, false);
-					setDoneSelecting();
-				}
-			}
-		}*/
 		return true;
 	}
-	
 }

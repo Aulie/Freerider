@@ -10,8 +10,7 @@
     
     <string name="mapViewPickupEtComment">Comment to driver</string>
     <string name="mapViewPickupBtnSendRequest">Ask for a ride</string>
-    <string name="mapViewPickupBtnPickup">Pickup</string>
-    <string name="mapViewPickupBtnDropoff">Dropoff</string>
+    <string name="mapViewPickupBtnUseMap">Use map</string>
     
     <string name="mapViewJourneyAccept">Accept</string>
     <string name="mapViewJourneyReject">Reject</string>
