@@ -327,7 +327,7 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 			TextView stop = (TextView)row.findViewById(R.id.notification_item_stop);
 
 			status.setText(setStatus(current));
-			status.setTextColor(Color.WHITE);
+			status.setTextColor(Color.BLACK);
 			start.setText("Sender: "+current.getSenderName());
 			stop.setText("Comment: "+current.getComment());
 			startTime.setText("Time of request: "+current.getTimeSent().getTime().toLocaleString());
