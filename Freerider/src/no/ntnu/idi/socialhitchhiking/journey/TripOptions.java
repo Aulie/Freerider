@@ -57,8 +57,8 @@ public class TripOptions extends SocialHitchhikingActivity {
 	private Visibility privacyPreference;
 	private TripOptionAdapter adapter;
 	private List<TripOption> list_trip_options;
-	private Boolean dateChanged=false;
-	private Boolean timeChanged=true;
+//	private Boolean dateChanged=false;
+//	private Boolean timeChanged=true;
 	private Request req;
 	private PreferenceResponse res;
 	private String[] items = {"Music", "Animals", "Breaks", "Talking", "Smoking"};
@@ -68,7 +68,7 @@ public class TripOptions extends SocialHitchhikingActivity {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
 			if(event.getPropertyName() == DateChooser.DATE_CHANGED){
-				dateChanged=true;
+//				dateChanged=true;
 				dateAndTime = (Calendar) event.getNewValue();
 				
 				list_trip_options.set(0, new TripOption(R.drawable.trip_icon_calendar, "Date", formatDate(dateAndTime)));
@@ -77,7 +77,7 @@ public class TripOptions extends SocialHitchhikingActivity {
 				
 			}
 			if(event.getPropertyName() == DateChooser.TIME_CHANGED){
-				timeChanged=true;
+//				timeChanged=true;
 				newTime = (Calendar) event.getNewValue();
 				dateAndTime.set(Calendar.HOUR_OF_DAY,newTime.get(Calendar.HOUR_OF_DAY));
 				dateAndTime.set(Calendar.MINUTE,newTime.get(Calendar.MINUTE));
@@ -128,6 +128,7 @@ public class TripOptions extends SocialHitchhikingActivity {
     	
         selectedRoute=getApp().getSelectedRoute();
         dateAndTime=Calendar.getInstance();
+        
         list_trip_options = new ArrayList<TripOption>();
         
         //Initialization of default strings and position of default privacy option
@@ -199,11 +200,10 @@ public class TripOptions extends SocialHitchhikingActivity {
     
     void setTime(){
     	dc = new DateChooser(TripOptions.this, propLis);
-		dc.setTitleDate("Set Time of Trip");
+		dc.setTitleTime("Set Time of Trip");
 		dc.showTimePicker();
     }
     void setSeats(){	
-    	//Integer counter=1;	    
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	    builder.setTitle("Seats");	
 	    builder.setMessage("Select seats available");
@@ -218,11 +218,12 @@ public class TripOptions extends SocialHitchhikingActivity {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
                 String editTextFieldValue = editTextField.getText().toString();
-				tripPreferences.setSeatsAvailable(Integer.valueOf(editTextFieldValue));
-
+				if(editTextFieldValue.length()==0)
+                	editTextFieldValue = "1";
 				
+            	tripPreferences.setSeatsAvailable(Integer.valueOf(editTextFieldValue));
 				list_trip_options.set(2, new TripOption(R.drawable.trip_icon_seats, "Seats Availabe", editTextFieldValue));
-				adapter.notifyDataSetChanged();				
+				adapter.notifyDataSetChanged();
 			}
 	    });
 	    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -311,14 +312,14 @@ public class TripOptions extends SocialHitchhikingActivity {
     }
 
     public void onNextClick(View v){
-    	if(dateChanged && timeChanged){
+//    	if(dateChanged && timeChanged){
 	    	sendJourneyRequest();
 			Intent intent = new Intent(TripOptions.this, Main.class);
 			startActivity(intent);
-    	}
-    	else{
-			Toast.makeText(getApplicationContext(), "Date and time of the drive must be set", Toast.LENGTH_LONG).show();
-    	}
+//    	}
+//    	else{
+//			Toast.makeText(getApplicationContext(), "Date and time of the drive must be set", Toast.LENGTH_LONG).show();
+//    	}
 	}
     
     private void sendJourneyRequest(){
