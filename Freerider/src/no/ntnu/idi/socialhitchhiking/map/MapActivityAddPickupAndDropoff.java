@@ -71,6 +71,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TabHost;
 import android.widget.TextView;
 import no.ntnu.idi.socialhitchhiking.R;
@@ -227,33 +228,33 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		
 		// Setting the smoking preference
 		if(res.getPreferences().getSmoking()){
-			((TextView)findViewById(R.id.mapViewPickupTextViewSmoking)).setText("Smoking allowed: YES");
+			((ImageView)findViewById(R.id.mapViewPickupImageViewSmokingIcon)).setImageResource(R.drawable.green_check);
 		}else{
-			((TextView)findViewById(R.id.mapViewPickupTextViewSmoking)).setText("Smoking allowed: NO");
+			((ImageView)findViewById(R.id.mapViewPickupImageViewSmokingIcon)).setImageResource(R.drawable.red_cross);
 		}
 		// Setting the animals preference
 		if(res.getPreferences().getAnimals()){
-			((TextView)findViewById(R.id.mapViewPickupTextViewAnimals)).setText("Animals allowed: YES");
+			((ImageView)findViewById(R.id.mapViewPickupImageViewAnimalsIcon)).setImageResource(R.drawable.green_check);
 		}else{
-			((TextView)findViewById(R.id.mapViewPickupTextViewAnimals)).setText("Animals allowed: NO");
+			((ImageView)findViewById(R.id.mapViewPickupImageViewAnimalsIcon)).setImageResource(R.drawable.red_cross);
 		}
 		// Setting the breaks preference
 		if(res.getPreferences().getBreaks()){
-			((TextView)findViewById(R.id.mapViewPickupTextViewBreaks)).setText("Time for breaks: YES");
+			((ImageView)findViewById(R.id.mapViewPickupImageViewBreaksIcon)).setImageResource(R.drawable.green_check);
 		}else{
-			((TextView)findViewById(R.id.mapViewPickupTextViewBreaks)).setText("Time for breaks: NO");
+			((ImageView)findViewById(R.id.mapViewPickupImageViewBreaksIcon)).setImageResource(R.drawable.red_cross);
 		}
 		// Setting the music preference
 		if(res.getPreferences().getMusic()){
-			((TextView)findViewById(R.id.mapViewPickupTextViewMusic)).setText("OK to listen to music: YES");
+			((ImageView)findViewById(R.id.mapViewPickupImageViewMusicIcon)).setImageResource(R.drawable.green_check);
 		}else{
-			((TextView)findViewById(R.id.mapViewPickupTextViewMusic)).setText("OK to listen to music: NO");
+			((ImageView)findViewById(R.id.mapViewPickupImageViewMusicIcon)).setImageResource(R.drawable.red_cross);
 		}
 		// Setting the talking preference
 		if(res.getPreferences().getTalking()){
-			((TextView)findViewById(R.id.mapViewPickupTextViewTalking)).setText("OK to talk: YES");
+			((ImageView)findViewById(R.id.mapViewPickupImageViewTalkingIcon)).setImageResource(R.drawable.green_check);
 		}else{
-			((TextView)findViewById(R.id.mapViewPickupTextViewTalking)).setText("OK to talk: NO");
+			((ImageView)findViewById(R.id.mapViewPickupImageViewTalkingIcon)).setImageResource(R.drawable.red_cross);
 		}
 		
 		// Setting the number of available seats
@@ -262,8 +263,16 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		// Setting the age of the driver
 		//((TextView)findViewById(R.id.mapViewPickupTextViewAge)).setText("Age: " + driver.getAge());
 		
+		// Adding the gender of the driver
+		/*if(driver.getGender().equals("m")){
+			((ImageView)findViewById(R.id.mapViewPickupImageViewGender)).setImageResource(R.drawable.male);
+		}else if(driver.getGender().equals("f")){
+			((ImageView)findViewById(R.id.mapViewPickupImageViewGender)).setImageResource(R.drawable.female);
+		}*/
+		
 		// Setting the drivers mobile number
 		//((TextView)findViewById(R.id.mapViewPickupTextViewPhone)).setText("Mobile: " + driver.getMobileNumber());
+		
 		
 		// Getting the car image
 		Car car = new Car(driver.getCarId(),"Dummy",0.0); //"Dummy" and 0.0 are dummy vars. getApp() etc sends the current user's carid
@@ -286,6 +295,12 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		// Setting the car name
+		//((TextView)findViewById(R.id.mapViewPickupTextViewCarName)).setText("Car type: " + car.getCarName());
+
+		// Setting the comfort
+		//((RatingBar)findViewById(R.id.mapViewPickupAndDropoffComfortStars)).setRating((float) car.getComfort());
 		
 		// Adding the date of ride
 		Date d = journey.getStart().getTime();
@@ -388,7 +403,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				isSelectingPickupPoint = true;
 				btnSelectPickupPoint.setBackgroundColor(selected); 
 				btnSelectDropoffPoint.setBackgroundColor(notSelected);
-				makeToast("Longpress on map to add pickup location");
+				makeToast("Press the map to add pickup location");
 				
 			}
 		});
@@ -401,7 +416,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				isSelectingPickupPoint = false;
 				btnSelectPickupPoint.setBackgroundColor(notSelected); 
 				btnSelectDropoffPoint.setBackgroundColor(selected);
-				makeToast("Longpress on map to add dropoff location");
+				makeToast("Press the map to add dropoff location");
 			}
 		});
 		
@@ -560,75 +575,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 */
 	@Override
 	public void onLongPress(MotionEvent e) {
-		if(!isSelectingDropoffPoint && !isSelectingPickupPoint){
-			return;
-		}
-		GeoPoint gp = mapView.getProjection().fromPixels(
-				(int) e.getX(),
-				(int) e.getY());
-		MapLocation mapLocation = (MapLocation) GeoHelper.getLocation(gp);
-		// If the user is selecting a pickup point
-		if(isSelectingPickupPoint){
-			Location temp = findClosestLocationOnRoute(mapLocation);
-			//Controls if the user has entered a NEW address
-			if(pickupPoint != temp){
-				// Removes old pickup point (thumb)
-				if(overlayPickupThumb != null){
-					mapView.getOverlays().remove(overlayPickupThumb);
-					overlayPickupThumb = null;
-				}
-				mapView.invalidate();
-				
-				// If no dropoff point is specified, we add the pickup point to the map.
-				if(dropoffPoint == null){
-					pickupPoint = temp;
-					overlayPickupThumb = drawThumb(pickupPoint, true);
-					//setSelectingDropoffPoint();
-				}else{ // If a dropoff point is specified:
-					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
-					// Checks to make sure the pickup point is before the dropoff point.
-					if(l.indexOf(temp) < l.indexOf(dropoffPoint)){
-						makeToast("The pickup point has to be before the dropoff point");
-					}else{
-						// Adds the pickup point to the map by drawing a thumb
-						pickupPoint = temp;
-						overlayPickupThumb = drawThumb(pickupPoint, true);
-						//setDoneSelecting();
-					}
-				}
-			}
-			// If the user is selecting a dropoff point
-		}else if(isSelectingDropoffPoint){
-			Location temp = findClosestLocationOnRoute(mapLocation);
-			// Controls if the user has entered a NEW address
-			if(dropoffPoint != temp){
-				// Removes old dropoff point (thumb)
-				if(overlayDropoffThumb != null){
-					mapView.getOverlays().remove(overlayDropoffThumb);
-					overlayDropoffThumb = null;
-					//pickupPoint = null;
-				}
-				mapView.invalidate();
-				
-				// If no pickup point is specified, we add the dropoff point to the map.
-				if(pickupPoint == null){
-					dropoffPoint = temp;
-					overlayDropoffThumb = drawThumb(dropoffPoint, false);
-					//setSelectingPickupPoint();
-				}else{ // If a pickup point is specified:
-					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
-					// Checks to make sure the dropoff point is after the pickup point.
-					if(l.indexOf(temp) > l.indexOf(pickupPoint)){
-						makeToast("The droppoff point has to be after the pickup point");
-					}else{
-						// Adds the dropoff point to the map by drawing a thumb
-						dropoffPoint = temp;
-						overlayDropoffThumb = drawThumb(dropoffPoint, false);
-						//setDoneSelecting();
-					}
-				}
-			}
-		}
+		// Does nothing
 	} 
 	
 	/**
@@ -733,7 +680,75 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 */
 	@Override
 	public synchronized boolean onSingleTapUp(MotionEvent e) {
-		
+		if(!isSelectingDropoffPoint && !isSelectingPickupPoint){
+			return false;
+		}
+		GeoPoint gp = mapView.getProjection().fromPixels(
+				(int) e.getX(),
+				(int) e.getY());
+		MapLocation mapLocation = (MapLocation) GeoHelper.getLocation(gp);
+		// If the user is selecting a pickup point
+		if(isSelectingPickupPoint){
+			Location temp = findClosestLocationOnRoute(mapLocation);
+			//Controls if the user has entered a NEW address
+			if(pickupPoint != temp){
+				// Removes old pickup point (thumb)
+				if(overlayPickupThumb != null){
+					mapView.getOverlays().remove(overlayPickupThumb);
+					overlayPickupThumb = null;
+				}
+				mapView.invalidate();
+				
+				// If no dropoff point is specified, we add the pickup point to the map.
+				if(dropoffPoint == null){
+					pickupPoint = temp;
+					overlayPickupThumb = drawThumb(pickupPoint, true);
+					//setSelectingDropoffPoint();
+				}else{ // If a dropoff point is specified:
+					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
+					// Checks to make sure the pickup point is before the dropoff point.
+					if(l.indexOf(temp) < l.indexOf(dropoffPoint)){
+						makeToast("The pickup point has to be before the dropoff point");
+					}else{
+						// Adds the pickup point to the map by drawing a thumb
+						pickupPoint = temp;
+						overlayPickupThumb = drawThumb(pickupPoint, true);
+						//setDoneSelecting();
+					}
+				}
+			}
+			// If the user is selecting a dropoff point
+		}else if(isSelectingDropoffPoint){
+			Location temp = findClosestLocationOnRoute(mapLocation);
+			// Controls if the user has entered a NEW address
+			if(dropoffPoint != temp){
+				// Removes old dropoff point (thumb)
+				if(overlayDropoffThumb != null){
+					mapView.getOverlays().remove(overlayDropoffThumb);
+					overlayDropoffThumb = null;
+					//pickupPoint = null;
+				}
+				mapView.invalidate();
+				
+				// If no pickup point is specified, we add the dropoff point to the map.
+				if(pickupPoint == null){
+					dropoffPoint = temp;
+					overlayDropoffThumb = drawThumb(dropoffPoint, false);
+					//setSelectingPickupPoint();
+				}else{ // If a pickup point is specified:
+					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
+					// Checks to make sure the dropoff point is after the pickup point.
+					if(l.indexOf(temp) > l.indexOf(pickupPoint)){
+						makeToast("The droppoff point has to be after the pickup point");
+					}else{
+						// Adds the dropoff point to the map by drawing a thumb
+						dropoffPoint = temp;
+						overlayDropoffThumb = drawThumb(dropoffPoint, false);
+						//setDoneSelecting();
+					}
+				}
+			}
+		}
 		return true;
 	}
 }
