@@ -1,5 +1,9 @@
 package no.ntnu.idi.socialhitchhiking.journey;
 
+/**
+ * @author Jose Luis Trigo
+ */
+
 public class TripOption {
 	public int icon;
     public String title;

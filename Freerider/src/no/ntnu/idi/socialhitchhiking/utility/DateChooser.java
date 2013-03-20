@@ -28,7 +28,7 @@ import java.util.Calendar;
 
 import no.ntnu.idi.socialhitchhiking.findDriver.FindDriver;
 import android.app.Activity;
-import android.app.AlertDialog;
+//import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -47,6 +47,8 @@ import android.widget.TimePicker;
  */
 public class DateChooser {
 	public static final String DATE_CHANGED="date_changed_12632135675695q3ebvcdfggd";
+	public static final String TIME_CHANGED="time_changed_12632135675695q3ebvcdfggd";
+
 	private PropertyChangeSupport l;
 	private Activity act;
 	private DateListener d;
@@ -54,7 +56,7 @@ public class DateChooser {
 	private Calendar start;
 	private TimePickerDialog td;
 	private DatePickerDialog dd;
-	private AlertDialog.Builder correctbox;
+//	private AlertDialog.Builder correctbox;
 
 	public DateChooser(Activity act,PropertyChangeListener e){
 		l = new PropertyChangeSupport(this);
@@ -117,24 +119,28 @@ public class DateChooser {
 		PropertyChangeEvent e = new PropertyChangeEvent(this, DATE_CHANGED, start, dateAndTime);
 		l.firePropertyChange(e);
 	}
-	private void confirmDate(){
-		correctbox = new AlertDialog.Builder(act);
-		correctbox.setTitle("Correct date?");
-		correctbox.setMessage("Set date: "+dateAndTime.getTime().toString());
-		correctbox.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				fireEvent();
-			}
-		}); 
-		correctbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				showDatePicker();
-			}
-		});
-		correctbox.show();
+	private void fireEventTime(){
+		PropertyChangeEvent e = new PropertyChangeEvent(this, TIME_CHANGED, start, dateAndTime);
+		l.firePropertyChange(e);
 	}
+//	private void confirmDate(){
+//		correctbox = new AlertDialog.Builder(act);
+//		correctbox.setTitle("Correct date?");
+//		correctbox.setMessage("Set date: "+dateAndTime.getTime().toString());
+//		correctbox.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface arg0, int arg1) {
+//				fireEvent();
+//			}
+//		}); 
+//		correctbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface arg0, int arg1) {
+//				showDatePicker();
+//			}
+//		});
+//		correctbox.show();
+//	}
 
 
 	private class DateListener implements DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener{
@@ -145,7 +151,8 @@ public class DateChooser {
 			dateAndTime.set(Calendar.YEAR, year);
 			dateAndTime.set(Calendar.MONTH, monthOfYear);
 			dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-			showTimePicker();
+			//showTimePicker();
+			fireEvent();
 		}
 
 		@Override
@@ -153,8 +160,9 @@ public class DateChooser {
 			dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			dateAndTime.set(Calendar.MINUTE, minute);
 			dateAndTime.set(Calendar.SECOND, 0);
-			if(act.getClass() == FindDriver.class) fireEvent();
-			else confirmDate();
+			if(act.getClass() == FindDriver.class) 
+				fireEventTime();
+			//else confirmDate();
 		}
 
 	}
