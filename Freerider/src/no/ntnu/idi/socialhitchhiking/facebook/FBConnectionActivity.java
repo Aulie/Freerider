@@ -27,11 +27,18 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.User;
+import no.ntnu.idi.freerider.protocol.Request;
+import no.ntnu.idi.freerider.protocol.RequestType;
+import no.ntnu.idi.freerider.protocol.UserRequest;
+import no.ntnu.idi.freerider.protocol.UserResponse;
 import no.ntnu.idi.socialhitchhiking.Main;
+import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,7 +72,8 @@ import com.facebook.android.Util;
 public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 	public static final String TAG = "FACEBOOK";
 	private Facebook mFacebook;
-	private User user;					
+	private User user;	
+	private boolean newUserBoolean = false;
 	private static final int RELOGIN = 592824052;
 	public static final String APP_ID = "321654017885450";
 	private AsyncFacebookRunner mAsyncRunner;
@@ -162,6 +170,22 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 		catch(NullPointerException e){
 			mFacebook.authorize(this, PERMS, new LoginDialogListener());
 		}
+	}
+		
+	public boolean getIdBoolean(){
+		try{
+			if (isSession()) {
+				mAsyncRunner.request("me", new IDRequestListener());
+			} else {
+				// not logged in, so relogin
+				mFacebook.authorize(this, PERMS, new LoginDialogListener());
+				return true;
+			}
+		}
+		catch(NullPointerException e){
+			mFacebook.authorize(this, PERMS, new LoginDialogListener());
+		}
+		return false;
 
 
 	}
@@ -367,7 +391,7 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 	 */
 	private class IDRequestListener implements RequestListener {
 
-		public void onComplete(String response, Object state) {
+		public void onComplete(final String response, Object state) {
 			try {
 				JSONObject json = Util.parseJson(response);
 				final String id = json.getString("id");
@@ -376,11 +400,16 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 
 				FBConnectionActivity.this.runOnUiThread(fbc = new Runnable() {
 					public void run() {
+						
 						User login = new User(firstName,id);
 						login.setSurname(surName);
 						//username.setText("Welcome: " + name+"\n ID: "+id);
 						Message msg = new Message();
-
+						
+						if(newUser(login.getID())){
+							newUserBoolean = true;
+						}
+						
 						msg.obj = login;
 						handler.sendMessage(msg);
 					}
@@ -458,4 +487,39 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 		mFacebook.authorizeCallback(requestCode, resultCode, data);
 	}
 	
+	/*
+	 * Method for checking if user has previously logged in
+	 */
+	private boolean newUser(String id){
+		User user = new User("Dummy",id); //"Dummy" and 0.0 are dummy vars. getApp() etc sends the current user's carid
+		Request req = new UserRequest(RequestType.GET_USER, user);
+		try {
+			UserResponse res = (UserResponse) RequestTask.sendRequest(req,getApp());
+			if(res.getUser()==null){
+				Log.e("Ny bruker!", "HUZZAH");
+				return true;
+			}
+			else{
+				Log.e("Denne vil du bare se andre gang", "HUZZAH");
+			}
+			
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean isNewUser(){
+		return newUserBoolean;
+	}
 }

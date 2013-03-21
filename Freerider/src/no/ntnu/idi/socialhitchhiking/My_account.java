@@ -32,18 +32,21 @@ public class My_account extends TabActivity {
 	    mycarspec.setContent(mycarIntent);
 
 	    // Tab for Preferences
-	    TabSpec preferancesspec = tabHost.newTabSpec("Preferances");
-	    preferancesspec.setIndicator("PREFERANCES");
+	    TabSpec preferencesspec = tabHost.newTabSpec("Preferances");
+	    preferencesspec.setIndicator("PREFERENCES");
 	    Intent preferancesIntent = new Intent(this, MyAccountPreferences.class);
-	    preferancesspec.setContent(preferancesIntent);
+	    preferencesspec.setContent(preferancesIntent);
 
 	    // Adding all TabSpec to TabHost
-	    tabHost.addTab(preferancesspec); 
+	    tabHost.addTab(preferencesspec); 
 	    tabHost.addTab(mespec); 
 	    tabHost.addTab(mycarspec);
 	    
 	    //custom size to the preference tab
 	    tabHost.getTabWidget().getChildAt(0).getLayoutParams().width =45;
+	    /*if(getIntent().getBooleanExtra("fromDialog", false)){
+	    	tabHost.setCurrentTab(1);
+	    }*/
 	}
 
 }

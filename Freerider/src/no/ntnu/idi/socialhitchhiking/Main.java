@@ -68,12 +68,14 @@ public class Main extends FBConnectionActivity{
 	private Button sceduleDrive,hitchhike,notifications,myTrips,myAccount;
 	private TextView name;
 	private ImageView picture;
+	boolean isNewUser = false;
 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initLoadingScreen();
+		isNewUser = isNewUser();
 		new Thread() {
 			
 			public void run() {
@@ -90,9 +92,11 @@ public class Main extends FBConnectionActivity{
 						resetSession();
 					}
 				}
+				//showDialogNew();
 			}	
 			}.start();
 			}
+	
 
 	/**
 	 * Initializes GUI components.
@@ -109,10 +113,14 @@ public class Main extends FBConnectionActivity{
 			res2 = (UserResponse)RequestTask.sendRequest(req2, getApp());
 			User resUser = res2.getUser();
 			User tempUser = getApp().getUser();
-			tempUser.setCarId(resUser.getCarId());
-			tempUser.setAbout(resUser.getAbout());
-			tempUser.setGender(resUser.getGender());
-			tempUser.setRating(resUser.getRating());
+			//tempUser.setCarId(resUser.getCarId());
+			tempUser.setCarId(2);
+			//tempUser.setAbout(resUser.getAbout());
+			tempUser.setAbout("Benny");
+			//tempUser.setGender(resUser.getGender());
+			tempUser.setGender("m");
+			//tempUser.setRating(resUser.getRating());
+			tempUser.setRating(1);
 			getApp().setUser(tempUser);
 		} catch (ClientProtocolException e1)
 		{
@@ -135,6 +143,7 @@ public class Main extends FBConnectionActivity{
 
 			@Override
 			public void run() {
+				
 				setContentView(R.layout.main_layout);
 				sceduleDrive = (Button) findViewById(R.id.startScreenDrive);
 				notifications = (Button) findViewById(R.id.startScreenInbox);
@@ -190,7 +199,6 @@ public class Main extends FBConnectionActivity{
 		if(getApp().getSettings().isPullNotifications() && !getApp().isKey("alarmService"))
 			getApp().startService();
 		getApp().setKeyState("main",true);
-		
 	}
 	/**
 	 * Method to be called by the {@link FBConnectionActivity} when a user succesfully
@@ -201,12 +209,37 @@ public class Main extends FBConnectionActivity{
 				getApp().startService();
 				getApp().startJourneyReminder();
 				initMainScreen();
-		
 	}
+	/*
+	private void showDialogNew() {
+		if(isNewUser){
+	    	new AlertDialog.Builder(Main.this)
+		    .setTitle("Welcome!")
+		    .setMessage("You should provide some basic information about yourself. Do you want to do this now?")
+		    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		        	//if(!getApp().isKey("main"))createNewUser();
+		        	Intent intent = new Intent(Main.this, no.ntnu.idi.socialhitchhiking.My_account.class);
+		        	intent.putExtra("fromDialog", true);
+		    		Main.this.startActivity(intent);
+		        }
+		     })
+		     .setNegativeButton("No", new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		        	
+		        }
+		     })
+		     
+		     .show();
+		}
+	}
+	*/
+
 	@Override
 	public boolean isSession(){
 		return super.isSession();
 	}
+	
 	private Bitmap getFacebookPicture(User user){
 		Bitmap bm = BitmapFactory.decodeByteArray(user.getPicture(), 0, user.getPicture().length);
 		return bm;
@@ -399,6 +432,7 @@ public class Main extends FBConnectionActivity{
 		Request req = new UserRequest(RequestType.CREATE_USER, getApp().getUser());
 		try {
 			RequestTask.sendRequest(req,getApp());
+			
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -422,7 +456,6 @@ public class Main extends FBConnectionActivity{
 	 */
 	public void loginButtonClicked(){
 		pbLogin.setVisibility(View.VISIBLE);
-
 		getID();
 	}
 
