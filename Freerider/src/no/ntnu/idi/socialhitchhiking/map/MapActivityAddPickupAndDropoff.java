@@ -420,6 +420,9 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 			}
 		});
 		
+		// Adding message to the user
+		makeToast("Please set a pickup and dropoff location.");
+		
 		/*
 		Bundle extras = getIntent().getExtras();
 		if(extras != null){

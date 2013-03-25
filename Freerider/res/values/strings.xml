@@ -31,5 +31,6 @@
     <string name="minus">-</string>
     <string name="one">1</string>
     <string name="loadingText">Loading....</string>
+    <string name="pickupAndDropoffName">Freerider - Pickup and dropoff</string>
 
 </resources>

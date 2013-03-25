@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="mapViewBtnFrom">Driving from</string>
-    <string name="mapViewBtnTo">Driving to</string>
+    <string name="mapViewPickup">Pickup address</string>
+    <string name="mapViewDropoff">Dropoff address</string>
     <string name="mapViewBtnAdd">Add Destination</string>
     <string name="mapViewBtnDrawRoute">Draw route on map</string>
     <string name="mapViewAcField">Driving through</string>
@@ -34,6 +34,8 @@
     <string name="preferences">Preferences</string>
     <string name="car">Car information</string>
     <string name="comfort">Comfort</string>
+    <string name="mapViewBtnFrom">Driving from</string>
+    <string name="mapViewBtnTo">Driving to</string>
     
     
 </resources>
