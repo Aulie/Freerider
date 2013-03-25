@@ -18,7 +18,7 @@
       android:layout_width="fill_parent"
       android:layout_height="fill_parent">
       
-      <FrameLayout android:id="@+id/ride_tab"
+      <RelativeLayout android:id="@+id/ride_tab"
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent"
         >
@@ -201,15 +201,16 @@
        		</LinearLayout>
    		</LinearLayout>
      	
-      </FrameLayout>
+      </RelativeLayout>
       
       <!-- Driver tab layout -->
       <ScrollView 
+          	android:id="@+id/driver_tab"
        	    android:layout_width="fill_parent"
        	    android:layout_height="fill_parent">
 	      
 	      <LinearLayout 
-	        android:id="@+id/driver_tab"
+	        
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
 	        android:orientation="vertical"
