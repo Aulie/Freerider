@@ -99,15 +99,34 @@ import com.google.android.maps.MapView;
  */
 public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	
-	//adda
+	/**
+	 * The {@link FrameLayout} that contains the add destinationfield, clear/delete buttons
+	 */
 	private FrameLayout AddDestFrameLayout;
+	
+	/**
+	 * The {@link LinearLayout} containing everything in the scrollview
+	 */
 	private LinearLayout sclLayout;
+	
+	/**
+	 * ArrayList {@link ArrayList} of all the add destination fields
+	 */
 	private ArrayList<InitDestFrame> acList;
-	//private String[] acStringList;
+	
+	/**
+	 * Id for the add destination objects
+	 */
 	private int id = 0;
+	
+	/**
+	 * Variable to contain the resources {@link Resources}
+	 */
 	private Resources r;
 	
-	//Fra thomas
+	/**
+	 * The loading dialog {@link ProgressDialog} for the gps
+	 */
 	private ProgressDialog loadingDialog;
 	
 	/**
@@ -117,12 +136,12 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	private CheckBox chk_saveRoute;
 	
 	/**
-	 * The field where the users writes where the route should end.
+	 * The {@link AutoCompleteTextView} where the users writes where the route should end.
 	 */
 	private AutoCompleteTextView acTo;
 	
 	/**
-	 * The field where the users writes where the route should start.
+	 * The {@link AutoCompleteTextView} where the users writes where the route should start.
 	 */
 	private AutoCompleteTextView acFrom;
 	
@@ -137,34 +156,45 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	 */
 	private Route commonRouteSelected;
 	
-	//final Button button = ((Button)findViewById(R.id.btnChooseRoute));
-	
+	/**
+	 * Switch for checking if the map is up to date
+	 */
 	private boolean hasDrawn;
 
-	
+	/**
+	 * Constructor
+	 */
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
 		acList = new ArrayList<InitDestFrame>();
 		r = getResources();
+		
+		//Calls the initAutoComplete method, adding the autocomplete listeners to acTo and acFrom
 		initAutocomplete();
+		
+		//Calls the initAddDestButton method, adding the driving through button
 		initAddDestButton();
 		
+		//Sets hasDrawn to false
 		hasDrawn = false;
 		
 		Bundle extras = getIntent().getExtras();
+		
 		if(extras != null){
 			inEditMode = extras.getBoolean("editMode");
 			positionOfRoute = extras.getInt("routePosition");
 		}
 		
-		
+		//Hides the checkbox
 		chk_saveRoute = (CheckBox)findViewById(R.id.checkBoxSave);
 		chk_saveRoute.setVisibility(8);
+		
+		//Initialises the draw/next button
 		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
 		
-		
+		//Adjustments to the gui if in editmode
 		if(inEditMode){
 			chk_saveRoute.setVisibility(View.GONE);
 			button.setText("Update the route");
@@ -181,14 +211,21 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			button.setEnabled(false);
 		}
 		
+		//Initialises the textviews and the clear buttons
 		final AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		final AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
 		ImageView bClearFrom = ((ImageView)findViewById(R.id.etGoingFromClearIcon));
 		ImageView bClearTo = ((ImageView)findViewById(R.id.etGoingToClearIcon));
 		
+		//If map is drawn fill the textviews
 		if(selectedRoute.getMapPoints().size() != 0){
 			fillFieldsOnClick();
 		}
+		
+		/**
+		 * onClickListener on the clearButton on the acFrom field {@link OnClickListener()}
+		 */
+		//Adds onClickListener to the clearbutton on the acFrom field
 		bClearFrom.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -201,6 +238,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			
 		});
 		
+		/**
+		 * onClickListener on the clearButton on the acTo field {@link OnClickListener}
+		 */
+		//Adds onClickListener to the clearbutton on the acTo field
 		bClearTo.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -213,6 +254,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			
 		});
 		
+		/**
+		 * TextWatcher to the acFrom {@link autoCompleteTextView} autoCompleteTextView {@link TextWatcher()}
+		 */
+		//Adds a TextWatcher to the acFrom field, to update the draw/nextbutton, and its functionality
 		acFrom.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -261,6 +306,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 
 		});
 		
+		/**
+		 * TextWatcher to the acTo {@link autoCompleteTextView} autoCompleteTextView {@link TextWatcher()}
+		 */
+		//Adds a TextWatcher to the acFrom field, to update the draw/nextbutton, and its functionality
 		acTo.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -308,7 +357,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 
 		});
 		
-		
+		/**
+		 * onClickListener on the button(draw/next) {@link OnClickListener}
+		 */
+		//adds the onclickListener to the draw/next button
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -345,7 +397,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		
 	}
 		
-	
+	/** checkFields()
+	 * checks if all the fields are filled, and if the content of the fields correspond with the points on the map
+	 * @return Boolean
+	 */
 	protected boolean checkFields(){
 		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
@@ -363,6 +418,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		}
 	}
 	
+	/** checkAddFields()
+	 * helping method for the checkFields() method
+	 * checks the Driving Through fields
+	 * @return Boolean
+	 */
 	protected boolean checkAddFields(){
 		boolean check = true;
 		for(int i=0; i<acList.size(); i++){
@@ -373,6 +433,9 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		return check;
 	}
 	
+	/** fillFieldsInEdit()
+	 * fills the fields if inEditmode
+	 */
 	protected void fillFieldsInEdit(){
 		AutoCompleteTextView acFrom = (AutoCompleteTextView) findViewById(R.id.etGoingFrom);
 		AutoCompleteTextView acTo = (AutoCompleteTextView) findViewById(R.id.etGoingTo);
@@ -387,15 +450,26 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		}
 	}
 	
+	/** setLayoutParams()
+	 *  when a Driving Through field is removed/added, repaint the Driving Through button
+	 */
 	protected void setLayoutParams(){
 		sclLayout.removeView(AddDestFrameLayout);
 		initAddDestButton();
 	}
 	
+	/** addToAcList
+	 * when Driving Through is clicked, adds the generated field {@link dest} to acList arrayList {@link ArrayList}
+	 * @param dest
+	 */
 	private void addToAcList(InitDestFrame dest){
 		acList.add(dest);
 	}
 	
+	/** removeFromAcList(int number)
+	 * deletes a Driving Through field, both from layout {@link autoCompleteTextView} and acList {@link ArrayList}
+	 * @param number		the id of the field beeing deleted
+	 */
 	private void removeFromAcList(int number){
 		for(int i=0; i<acList.size();i++){
 			if(acList.get(i).getId()==number){
@@ -406,6 +480,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		}
 	}
 	
+	/** getStringList()
+	 * gets all the points from the fields and adds them to a String[] {@link String[]}
+	 * @return String[]
+	 */
 	private String[] getStringList(){
 		String[] acStringList;
 		
@@ -436,17 +514,28 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		return acStringList;
 	}
 	
+	/** getAcList()
+	 * getter for the acList {@link ArrayList}
+	 * @return
+	 */
 	//Get/return the acArray
 	public ArrayList<InitDestFrame> getAcList(){
 		return acList;
 	}
 	
+	/** dipToPx(int dip)
+	 * translates dip to px
+	 * @param dip
+	 * @return px
+	 */
 	public int dipToPx(int dip){
 		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, r.getDisplayMetrics());
 		return (int)px;
 	}
 	
-	
+	/** initAddDestButton()
+	 * adds the Driving Through button
+	 */
 	protected void initAddDestButton(){
 		
 		//Adds/enables the FrameLayout
@@ -492,7 +581,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				//Adds a new destination field
 				initDestFrameLayout();
 				
-				//Moves the botton to the buttom
+				//Moves the button to the bottom
 				setLayoutParams();
 				
 				if(checkFields() == false){
@@ -507,19 +596,19 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		});
 	}
 	
+	/** initDestFrameLayout()
+	 * adds a Driving Through field when the driving through button is clicked
+	 */
 	//Adds a new destination field
 	protected void initDestFrameLayout(){
 		addToAcList(new InitDestFrame(id));
 		id++;
 	}
 	
-	/*
-	public void deleteFrame(InitDestFrame view){
-		
-	}
-	*/
-	
-public class InitDestFrame{
+	/** InitDestFrame
+	 * object of the driving through field/buttons
+	 */
+	public class InitDestFrame{
 		
 		private FrameLayout destFrameLayout;
 		private AutoCompleteTextView acAdd;
@@ -527,7 +616,8 @@ public class InitDestFrame{
 		private final int id;
 		private ImageView extIcon;
 		private boolean checks;
-
+		
+		//Constructor
 		public InitDestFrame(final int id){
 			this.destFrameLayout = new FrameLayout(MapActivityCreateOrEditRoute.this);
 			this.acAdd = new AutoCompleteTextView(MapActivityCreateOrEditRoute.this);
@@ -561,7 +651,6 @@ public class InitDestFrame{
 			destIcon.setLayoutParams(lli2);
 			destIcon.setPadding(0, dipToPx(5), 0, 0);
 			destIcon.setImageResource(R.drawable.google_marker_thumb_mini_through);
-			//destIcon.setImageResource(R.drawable.google_marker_thumb_mini_through);
 			
 			//adds the imageicon to the frameLayout
 			destFrameLayout.addView(destIcon);
@@ -615,8 +704,6 @@ public class InitDestFrame{
 						
 						hasDrawn = true;
 						if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
-							//mapView.getOverlays().clear();
-							//createMap();
 							createOneTimeJourney();
 							button.setEnabled(true);
 							button.setText("Next");
@@ -649,7 +736,7 @@ public class InitDestFrame{
 				}
 			});
 			
-			
+			//Adds a TextWatcher to the textView, to update the draw/next button
 			acAdd.addTextChangedListener(new TextWatcher() {
 				
 				@Override
@@ -704,6 +791,10 @@ public class InitDestFrame{
 			});
 		}
 		
+		/*
+		 * Getters 
+		 */
+		
 		public AutoCompleteTextView getAcField(){
 			return acAdd;
 		}
@@ -717,32 +808,47 @@ public class InitDestFrame{
 		}
 	}
 	
+	/** createMap()
+	 * draws the map
+	 */
 	protected void createMap(){
 		hasDrawn = true;
 		drawPathOnMap(GeoHelper.getLocationList(getStringList()));
 		generateName();
 	}
 	
-
+	/** initContentView()
+	 * sets the contentView when the nextbutton is clicked
+	 */
 	@Override
 	protected void initContentView() {
 		setContentView(R.layout.mapactivity_create_route);
 	}
-
+	
+	/** initMapView()
+	 * initializes the map
+	 */
 	@Override
 	protected void initMapView(){
 		mapView = (MapView)findViewById(R.id.map_view);
 	}
 	
+	/** initProgressBar()
+	 *  initializes the progress bar
+	 */
 	@Override
 	protected void initProgressBar() {
 		setProgressBar((ProgressBar)findViewById(R.id.progressBar));
 	}
+	
 	@Override
 	public void onBackPressed() {
-		//getApp().getRoutes().set(positionOfRoute, getApp().getOldEditRoute());
 		super.onBackPressed();
 	}
+	
+	/** createOneTimeJourney()
+	 * when the nextbutton is clicked, and all the requirements are fullfilled, creates a oneTimeJourney
+	 */
 	private void createOneTimeJourney(){
 		final Response res = chooseRoute();
 		if(res.getStatus() == ResponseStatus.OK){
@@ -766,6 +872,10 @@ public class InitDestFrame{
 //		dc.show();
 		
 	}
+	
+	/** setTripOptions()
+	 * sets the TripOptions
+	 */
 	private void setTripOptions(){
 		Intent intent = new Intent(MapActivityCreateOrEditRoute.this, no.ntnu.idi.socialhitchhiking.journey.TripOptions.class);
 		startActivity(intent);
@@ -842,7 +952,6 @@ public class InitDestFrame{
 			action = "updated";
 		}
 		else if(saveRoute)req = new RouteRequest(RequestType.CREATE_ROUTE, getUser(), commonRouteSelected);
-		//else req = new RouteRequest(RequestType.CREATE_AD_HOC_ROUTE, getUser(), commonRouteSelected);
 		else {
 			commonRouteSelected.setName(generateName());
 			req = new RouteRequest(RequestType.CREATE_ROUTE, getUser(), commonRouteSelected);
@@ -901,6 +1010,10 @@ public class InitDestFrame{
 		return null;
 	}
 	
+	/** generateName()
+	 * generates a name for the route {@link Route} based on the points on the map
+	 * @return name
+	 */
 	private String generateName(){
 		
 		String name = "";
@@ -926,7 +1039,10 @@ public class InitDestFrame{
 		return name;
 	}
 	
-	//Fra thomas
+	/** onGpsClicked
+	 * activates the gps when gps button is clicked, and fills the acFrom field with the gps info
+	 * @param view
+	 */
 	public void onGpsClicked(View view) {
 		final GpsHandler gps = new GpsHandler(this);
 		gps.findLocation();
@@ -945,6 +1061,11 @@ public class InitDestFrame{
 
 	}
 	
+	/** gotLocation(andoid.location.Location location)
+	 * helping method for the gpsClicked method
+	 * fills the acFrom {@link AutoCompleteTextView} field with the gps information
+	 * @param location
+	 */
 	public void gotLocation(android.location.Location location) {
 		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 		try {
@@ -1178,6 +1299,9 @@ public class InitDestFrame{
 		}
 	}
 	
+	/** fillFieldsOnClick()
+	 * fills the fields if the map is already drawn, or an error occures with the corresponding fields
+	 */
 	protected void fillFieldsOnClick(){
 		
 		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
@@ -1230,8 +1354,13 @@ public class InitDestFrame{
 			button.setText("Show on map");
 			button.setEnabled(false);
 		}
+		mapView.invalidate();
 	}
 	
+	/** clearMapOnClick(View view)
+	 * removes all the points on the map, and updates the draw/next button
+	 * @param view
+	 */
 	public void clearMapOnClick(View view){
 		mapView.getOverlays().clear();
 		final Button button = ((Button)findViewById(R.id.btnChooseRoute));
@@ -1260,8 +1389,10 @@ public class InitDestFrame{
 	 * When the user long presses on the screen, a dialog should pop up
 	 * where he/she is asked to add the point/address to the route.
 	 */
+	
 	@Override
 	public void onLongPress(MotionEvent e) {
+		/*
 		GeoPoint gp = mapView.getProjection().fromPixels(
 				(int) e.getX(),
 				(int) e.getY());
@@ -1269,11 +1400,23 @@ public class InitDestFrame{
 
 		addPoint(mapLocation);
 		fillFieldsOnClick();
-	} 
-
+		*/
+	}
+	
+	
+	
+	/** onSingleTapUp(MotionEvent e)
+	 * updates the {@link AutoCompleteTextView} fields on map movement
+	 */
 	@Override
-	public boolean onSingleTapUp(MotionEvent arg0) {
-		// TODO Auto-generated method stub
+	public boolean onSingleTapUp(MotionEvent e) {
+		GeoPoint gp = mapView.getProjection().fromPixels(
+				(int) e.getX(),
+				(int) e.getY());
+		MapLocation mapLocation = (MapLocation) GeoHelper.getLocation(gp);
+
+		addPoint(mapLocation);
+		fillFieldsOnClick();
 		return false;
 	}
 	
