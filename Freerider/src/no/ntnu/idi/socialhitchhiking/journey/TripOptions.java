@@ -11,6 +11,8 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.http.client.ClientProtocolException;
 
+import com.facebook.android.Facebook;
+
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.TripPreferences;
@@ -25,6 +27,7 @@ import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.socialhitchhiking.Main;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
+import no.ntnu.idi.socialhitchhiking.facebook.FBConnectionActivity;
 import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
 import no.ntnu.idi.socialhitchhiking.utility.TripOptionAdapter;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
@@ -33,9 +36,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -46,7 +51,7 @@ import android.widget.Toast;
  */
 
 public class TripOptions extends SocialHitchhikingActivity {
-	
+//extends FBConnectionActivity {
     private ListView listView1;
     private Calendar dateAndTime;
     private Calendar newTime;
@@ -57,6 +62,7 @@ public class TripOptions extends SocialHitchhikingActivity {
 	private Visibility privacyPreference;
 	private TripOptionAdapter adapter;
 	private List<TripOption> list_trip_options;
+	private Integer seatValue;
 //	private Boolean dateChanged=false;
 //	private Boolean timeChanged=true;
 	private Request req;
@@ -203,7 +209,9 @@ public class TripOptions extends SocialHitchhikingActivity {
 		dc.setTitleTime("Set Time of Trip");
 		dc.showTimePicker();
     }
-    void setSeats(){	
+    void setSeats(){
+
+    	seatValue = 1;
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	    builder.setTitle("Seats");	
 	    builder.setMessage("Select seats available");
@@ -211,9 +219,28 @@ public class TripOptions extends SocialHitchhikingActivity {
 	    LayoutInflater inflater = this.getLayoutInflater();
 	    final View textEntryView = inflater.inflate(R.layout.number_picker, null);
 	    final EditText editTextField = (EditText) textEntryView.findViewById(R.id.numberofseats);
-	    //Button plus = (Button) textEntryView.findViewById(R.id.bAdd);
+	    Button plus = (Button) textEntryView.findViewById(R.id.bAdd);
+	    Button minus = (Button) textEntryView.findViewById(R.id.bSub);
 	    builder.setView(textEntryView);
-	    
+	
+		plus.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				seatValue++;
+				editTextField.setText(seatValue.toString());
+			}
+		});
+		minus.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(seatValue>1)
+					seatValue--;
+				editTextField.setText(seatValue.toString());
+			}
+		});
+		
 	    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
@@ -388,6 +415,8 @@ public class TripOptions extends SocialHitchhikingActivity {
 		String formatedTime = c.get(Calendar.HOUR_OF_DAY)+":"+minutes;
 		return formatedTime;
     }
+    
+
 }
 
 //AlertDialog.Builder b = new AlertDialog.Builder(this);
