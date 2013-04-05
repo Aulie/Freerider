@@ -122,6 +122,7 @@ public class TripOptions extends SocialHitchhikingActivity {
 			
         
         tripPreferences = res.getPreferences();
+        seatValue= tripPreferences.getSeatsAvailable();
         
     	String ex = "";
     	for(int i=0 ; i<tripPreferences.getExtras().length() ; i++){
@@ -211,7 +212,7 @@ public class TripOptions extends SocialHitchhikingActivity {
     }
     void setSeats(){
 
-    	seatValue = 1;
+//    	seatValue = 1;
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	    builder.setTitle("Seats");	
 	    builder.setMessage("Select seats available");
@@ -222,7 +223,7 @@ public class TripOptions extends SocialHitchhikingActivity {
 	    Button plus = (Button) textEntryView.findViewById(R.id.bAdd);
 	    Button minus = (Button) textEntryView.findViewById(R.id.bSub);
 	    builder.setView(textEntryView);
-	
+	    editTextField.setText(seatValue.toString());
 		plus.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -246,9 +247,11 @@ public class TripOptions extends SocialHitchhikingActivity {
 			public void onClick(DialogInterface dialog, int id) {
                 String editTextFieldValue = editTextField.getText().toString();
 				if(editTextFieldValue.length()==0)
-                	editTextFieldValue = "1";
-				
-            	tripPreferences.setSeatsAvailable(Integer.valueOf(editTextFieldValue));
+                	editTextFieldValue = seatValue.toString();
+				else{
+					tripPreferences.setSeatsAvailable(Integer.valueOf(editTextFieldValue));
+					seatValue = Integer.valueOf(editTextFieldValue);
+				}
 				list_trip_options.set(2, new TripOption(R.drawable.trip_icon_seats, "Seats Availabe", editTextFieldValue));
 				adapter.notifyDataSetChanged();
 			}
