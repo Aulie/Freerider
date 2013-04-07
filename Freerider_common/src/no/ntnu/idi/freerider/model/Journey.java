@@ -21,27 +21,30 @@
  */
 package no.ntnu.idi.freerider.model;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 /** A Journey using a specific Route at a specific time, with a specific hitchhiker.*/
 public class Journey {
 	private Route route;
 	private Calendar start;
-	private User hitchhiker;
+	private List<User> hitchhikers;
 	private final int serial;
 	private Visibility visibility;
 	private TripPreferences tripPreferences;
 	
 	public Journey(int serial){
 		this.serial = serial;
+		this.hitchhikers = new ArrayList<User>();
 	}
 	
-	public Journey(int serial, Route route, Calendar start, User hitchhiker, Visibility visibility){
+	public Journey(int serial, Route route, Calendar start, List<User> hitchhikers, Visibility visibility){
 		this.serial = serial;
 		this.route = route;
 		this.start = start;
-		this.hitchhiker = hitchhiker;
+		this.hitchhikers = hitchhikers;
 		this.visibility = visibility;
 	}
 	
@@ -68,8 +71,8 @@ public class Journey {
 		this.start = start;
 	}
 	
-	public User getHitchhiker() {
-		return hitchhiker;
+	public List<User> getHitchhikers() {
+		return hitchhikers;
 	}
 	
 	public User getDriver(){
@@ -77,8 +80,11 @@ public class Journey {
 		return route.getOwner();
 	}
 	
-	public void setHitchhiker(User user) {
-		this.hitchhiker = user;
+	public void setHitchhikers(List<User> users) {
+		this.hitchhikers = users;
+	}
+	public void addHitchhiker(User user){
+		this.hitchhikers.add(user);
 	}
 	public int getSerial() {
 		return serial;

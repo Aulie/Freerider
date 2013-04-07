@@ -35,6 +35,14 @@ public class User {
 	private String ID;
 	private InetAddress ip;
 	private byte[] picture;
+	private List<User> friends;
+	private String gender;
+	private int carId;
+	private String about;
+	private String phone;
+	private int age;
+	
+	
 	public int getCarId()
 	{
 		return carId;
@@ -43,12 +51,18 @@ public class User {
 	{
 		this.carId = carId;
 	}
-
-	private List<User> friends;
-	private String gender;
-	private int carId;
-	private String about;
-	
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
 	public String getAbout()
 	{
 		return about;

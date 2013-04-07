@@ -90,6 +90,11 @@ public class RequestProcessor {
 				db.addUser(newUser);
 			} catch (SQLException e) {
 				logger.error("Error creating new user.",e);
+				try {
+					db.updateUser(newUser);
+				} catch (SQLException e1) {
+					
+				}
 				return new UserResponse(type,ResponseStatus.FAILED,e.getMessage());
 			}
 			return new UserResponse(type, status,newUser);
@@ -221,6 +226,9 @@ public class RequestProcessor {
 		case GET_JOURNEYS:
 			try{
 				journeys = db.getJourneys(request.getUser());
+				ServerLogger.write("Before Journey Req");
+				//ServerLogger.write(journeys.get(0).getDriver().getFullName());
+				ServerLogger.write("After serverlogger");
 				return new JourneyResponse(type, ResponseStatus.OK,journeys);
 			}catch(SQLException e){
 				logger.error("Error finding user's journeys for user " + request.getUser().getID(), e);
@@ -357,11 +365,11 @@ public class RequestProcessor {
 			if(checkForRequest(notification)) throw new SQLException("Attempted to reject previously accepted request.");
 			break;
 		case HITCHHIKER_CANCEL:
-			if(!sender.getID().equals(db.getHitchhikerID(serial))) return;
-			db.removeHitchhiker(serial);
+			//if(!sender.getID().equals(db.getHitchhikerID(serial))) return;
+			db.removeHitchhiker(sender.getID(),serial);
 			break;
 		case HITCHHIKER_ACCEPTS_DRIVER_CANCEL:
-			if(!sender.getID().equals(db.getHitchhikerID(serial))) throw new SQLException("Unauthorized acceptance in journey " + serial + " from user " + sender.getID());
+			//if(!sender.getID().equals(db.getHitchhikerID(serial))) throw new SQLException("Unauthorized acceptance in journey " + serial + " from user " + sender.getID());
 			if(!checkForRequest(notification)) {
 				throw new SQLException("Attempt to accept nonexistent driver cancel.");
 			}

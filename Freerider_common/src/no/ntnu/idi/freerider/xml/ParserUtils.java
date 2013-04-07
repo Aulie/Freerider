@@ -114,6 +114,8 @@ class ParserUtils {
 		user.setGender(element.attributeValue(ProtocolConstants.USER_GENDER));
 		user.setAbout(element.attributeValue(ProtocolConstants.USER_ABOUT));
 		user.setCarId(Integer.parseInt(element.attributeValue(ProtocolConstants.USER_CARID)));
+		user.setAge(Integer.parseInt(element.attributeValue(ProtocolConstants.USER_AGE)));
+		user.setPhone(element.attributeValue(ProtocolConstants.USER_PHONE));
 		return user;
 	}
 
@@ -128,13 +130,17 @@ class ParserUtils {
 		}
 		ret.setStart(starttime);
 		ret.setVisibility(Visibility.valueOf(element.attributeValue(ProtocolConstants.JOURNEY_VISIBILITY)));
+		List<User> hitchhikers = new ArrayList<User>();
+		List<Element> journeyContents = element.elements();
+		for (Element element2 : journeyContents) {
+			if(element2.getName().equals(ProtocolConstants.USER_ELEMENT)){
+				hitchhikers.add(parseUser(element2));				
+			}
+		}
+		ret.setHitchhikers(hitchhikers);
 		Route route = parseRoute(element.element(ProtocolConstants.ROUTE));
 		ret.setRoute(route);
-		Element hiker = element.element(ProtocolConstants.USER_ELEMENT);
-		if(hiker != null){
-			User user = parseUser(hiker);
-			ret.setHitchhiker(user);
-		}
+
 		TripPreferences preference = parsePreference(element.element(ProtocolConstants.PREFERENCE));
 		ret.setTripPreferences(preference);
 		return ret;

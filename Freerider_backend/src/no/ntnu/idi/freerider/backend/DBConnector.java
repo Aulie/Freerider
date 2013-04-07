@@ -334,8 +334,21 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		ret.setRating(rs.getDouble("rating"));
 		ret.setGender(rs.getString("gender"));
 		ret.setAbout(rs.getString("about"));
+		ret.setAge(rs.getInt("age"));
+		ret.setPhone(rs.getString("phone"));
 		ret.setCarId(rs.getInt("carid"));
 		return ret;
+	}
+	
+	public void updateUser(User user) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("UPDATE users SET (rating,gender,phone,age,about) = (?,?,?,?,?)");
+		stmt.setDouble(1, user.getRating());
+		stmt.setString(2, user.getGender());
+		stmt.setString(3, user.getPhone());
+		stmt.setInt(4, user.getAge());
+		stmt.setString(5, user.getAbout());
+		stmt.executeUpdate();
+		
 	}
 
 	public void addUser(User newUser) throws SQLException {
@@ -383,7 +396,8 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 			User user = new User(rs.getString("Name"),rs.getString("id"));
 			user.setSurname(rs.getString("Surname"));
 			user.setRating(rs.getDouble("Rating"));
-			journey.setHitchhiker(user);
+			//journey.setHitchhiker(user);
+			journey.setHitchhikers(getHitchhikers(rs.getInt("journeyserial")));
 			List<Location> routeData = readRouteData(rs);
 			Route route = new Route(user, "", routeData, rs.getInt("routeserial"));
 			String[] addresses = rs.getString("addresses").split(Route.ADDRESS_STRING_DELIMITER);
@@ -445,7 +459,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	}
 
 	public Journey updateJourney(Journey journey) throws SQLException {
-		if(getHitchhikerID(journey.getSerial()) != null) throw new SQLException("Cannot alter Journey with assigned hitchhiker.");
+		//if(getHitchhikerID(journey.getSerial()) != null) throw new SQLException("Cannot alter Journey with assigned hitchhiker.");
 		PreparedStatement stmt = conn.prepareStatement("UPDATE journeys SET route_used=?, starttime=?, visibility=?::visibility WHERE serial=?");
 		stmt.setInt(1, journey.getRoute().getSerial());
 		stmt.setTimestamp(2, convertToTimestamp(journey.getStart()));
@@ -466,23 +480,25 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	}
 
 	public void deleteJourney(Journey journey) throws SQLException {
-		if(getHitchhikerID(journey.getSerial())!=null) throw new SQLException("Cannot delete journey with assigned hitchhiker. Send them a notification of cancellation instead.");
+		//if(getHitchhikerID(journey.getSerial())!=null) throw new SQLException("Cannot delete journey with assigned hitchhiker. Send them a notification of cancellation instead.");
 		deleteJourneyWithoutCheck(journey);
 	}
 
-	private final static String GETJOURNEYS_SQL = "SELECT" +
+	private final static String GETJOURNEYS_SQL = "SELECT DISTINCT ON (journeys.serial)" +
 			" route_used," +
 			" journeys.serial," +
 			" starttime," +
 			" hitchhiker," +
 			" preferenceid," +
+			" hitchhikers.journeyid," +
+			" hitchhikers.userid," +
 			" visibility " +
-			"FROM journeys, routes " +
+			"FROM journeys, routes, hitchhikers " +
 			"WHERE " +
 			" route_used=routes.serial" +
 			" AND (" +
 			"	routes.owner=?" +
-			" 	OR hitchhiker=? " +
+			" 	OR (journeys.serial=hitchhikers.journeyid AND hitchhikers.userid=?) " +
 			"	) " +
 			" AND NOT EXISTS ( " +
 			"	SELECT 1 " +
@@ -506,6 +522,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 			Journey journey = readShortformJourney(rs);
 			ret.add(journey);
 		}
+		
 		return ret;
 	}
 
@@ -529,33 +546,53 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		int serial = rs.getInt("serial");
 		Route route = getShortformRoute(rs.getInt("route_used"));
 		Calendar start = convertToCalendar(rs.getTimestamp("starttime"));
-		User hitchhiker = getUser(rs.getString("hitchhiker"));
+		//User hitchhiker = getUser(rs.getString("hitchhiker"));
 		Visibility visibility = Visibility.valueOf(rs.getString("visibility"));
-		Journey journey = new Journey(serial, route, start, hitchhiker, visibility);
+		List<User> hitchhikers = getHitchhikers(serial);
+		Journey journey = new Journey(serial, route, start, hitchhikers, visibility);
 		TripPreferences preference = getPreference(rs.getInt("preferenceid"));
 		journey.setTripPreferences(preference);
+		ServerLogger.write("Num hitch: " + hitchhikers.size());
 		return journey;
+	}
+	public List<User> getHitchhikers(int journeySerial) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("SELECT * FROM hitchhikers WHERE journeyid=?");
+		stmt.setInt(1, journeySerial);
+		ResultSet rs = stmt.executeQuery();
+		List<User> ret = new ArrayList<User>();
+		while(rs.next()){
+			ret.add(getUser(rs.getString("userid")));
+		}
+		return ret;
 	}
 
 	private Journey readJourney(ResultSet rs) throws SQLException {
 		int serial = rs.getInt("serial");
 		Route route = getRoute(rs.getInt("route_used"));
 		Calendar start = convertToCalendar(rs.getTimestamp("starttime"));
-		User hitchhiker = getUser(rs.getString("hitchhiker"));
+		//User hitchhiker = getUser(rs.getString("hitchhiker"));
 		Visibility visibility = Visibility.valueOf(rs.getString("visibility"));
-		Journey journey = new Journey(serial, route, start, hitchhiker, visibility);
+		List<User> hitchhikers = getHitchhikers(serial);
+		Journey journey = new Journey(serial, route, start, hitchhikers, visibility);
 		TripPreferences preference = getPreference(rs.getInt("preferenceid"));
 		journey.setTripPreferences(preference);
 		return journey;
 	}
-
+/*
 	public void addHitchhiker(String hikerID, int journeySerial) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE journeys SET hitchhiker=? WHERE serial=?");
 		stmt.setString(1, hikerID);
 		stmt.setInt(2, journeySerial);
 		if(stmt.executeUpdate() != 1) throw new SQLException("No such journey found.");
 	}
-
+*/
+	public void addHitchhiker(String hikerID, int journeySerial) throws SQLException{
+		PreparedStatement stmt = conn.prepareStatement("INSERT INTO hitchhikers(journeyid,userid) VALUES(?,?)");
+		stmt.setInt(1, journeySerial);
+		stmt.setString(2, hikerID);
+		stmt.executeUpdate();
+	}
+	/*
 	public void removeHitchhiker(int journeySerial) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE journeys SET hitchhiker=NULL WHERE serial=?");
 		stmt.setInt(1, journeySerial);
@@ -563,7 +600,13 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 			throw new SQLException("Failed to NULL hitchhiker of journey " + journeySerial);
 		}
 	}
-
+*/
+	public void removeHitchhiker(String hikerID, int journeySerial) throws SQLException{
+		PreparedStatement stmt = conn.prepareStatement("DELETE FROM hitchhiker WHERE journeyid=? AND userid=?");
+		stmt.setInt(1, journeySerial);
+		stmt.setString(2, hikerID);
+		stmt.executeUpdate();
+	}
 	public String getJourneyDriverID(int serial) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("SELECT routes.owner FROM journeys, routes WHERE journeys.route_used=routes.serial AND journeys.serial=?");
 		stmt.setInt(1, serial);
@@ -571,7 +614,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		if(!rs.next()) throw new SQLException("Attempted to find driver ID of a nonexistent Journey " + serial);
 		return rs.getString(1).trim();
 	}
-
+/*
 	public String getHitchhikerID(int journeySerial) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("SELECT hitchhiker FROM journeys WHERE journeys.serial=?");
 		stmt.setInt(1, journeySerial);
@@ -580,7 +623,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		String ret = rs.getString(1);
 		return (ret == null ? ret : ret.trim());
 	}
-
+*/
 
 	// ====================== Things to do with Notifications ======================= //
 

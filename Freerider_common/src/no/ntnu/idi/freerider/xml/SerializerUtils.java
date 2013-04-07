@@ -45,8 +45,11 @@ class SerializerUtils {
 		journeyElement.addAttribute(ProtocolConstants.JOURNEY_START, serializeCalendar(journey.getStart()));
 		journeyElement.addAttribute(ProtocolConstants.JOURNEY_VISIBILITY, journey.getVisibility().toString());
 		//journeyElement.addAttribute("Melvin", "Melvin");
-		if(journey.getHitchhiker() != null){
-			journeyElement.add(serializeUser(journey.getHitchhiker()));
+		if(journey.getHitchhikers() != null){
+			for(int i = 0; i< journey.getHitchhikers().size(); i++){
+				journeyElement.add(serializeUser(journey.getHitchhikers().get(i)));
+			}
+			
 		}
 		Element route = serializeRoute(journey.getRoute());
 		if(route==null){
@@ -142,6 +145,8 @@ class SerializerUtils {
 		ret.addAttribute(ProtocolConstants.USER_GENDER, user.getGender());
 		ret.addAttribute(ProtocolConstants.USER_ABOUT, user.getAbout());
 		ret.addAttribute(ProtocolConstants.USER_CARID, Integer.toString(user.getCarId()));
+		ret.addAttribute(ProtocolConstants.USER_AGE, Integer.toString(user.getAge()));
+		ret.addAttribute(ProtocolConstants.USER_PHONE, user.getPhone());
 		return ret;
 	}
 

@@ -81,26 +81,35 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		if(journeys.size()==0){
 			Toast.makeText(this, "You have no active rides", Toast.LENGTH_LONG).show();
 		}
-		
+		//I think there is a bug causing duplicates somewhere in this mangled mess
+		//I'll fix it later
+		//Thomas
 		List<Journey> tempJourneys = new ArrayList<Journey>();
 		for(int i = 0; i < journeys.size(); i++) {
-			if(journeys.get(i).getHitchhiker() != null){
-				if(journeys.get(i).getHitchhiker().getID().equals(getApp().getUser().getID())){
-					Log.e("Hitchhiker", Integer.toString(journeys.get(i).getSerial()));
-					if(!owned) {
-						tempJourneys.add(journeys.get(i));
-					}
-				}
-				else
+			Log.e("I","I");
+			Log.e("Size", " " + journeys.get(i).getHitchhikers().size());
+			if(journeys.get(i).getHitchhikers().size() > 0){
+				Log.e("Not null","not null");
+				for(int j = 0; j<journeys.get(i).getHitchhikers().size(); j++)
 				{
-					Log.e("Owner", Integer.toString(journeys.get(i).getSerial()));
-					if(owned){
-						tempJourneys.add(journeys.get(i));
+					Log.e("J","j");
+					if(journeys.get(i).getHitchhikers().get(j).getID().equals(getApp().getUser().getID())){
+						Log.e("Hitchhiker", Integer.toString(journeys.get(i).getSerial()));
+						if(!owned) {
+							tempJourneys.add(journeys.get(i));
+						}
+					}
+					else if(journeys.get(i).getDriver().getID().equals(getApp().getUser().getID())){
+						if(owned){
+							tempJourneys.add(journeys.get(i));
+						}
 					}
 				}
+				
 			}
 			else
 			{
+				Log.e("owner","owner");
 				Log.e("Owner", Integer.toString(journeys.get(i).getSerial()));
 				if(owned) {
 					tempJourneys.add(journeys.get(i));
@@ -358,7 +367,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 				}
 			}
 		}
-		
+		/*
 		if(j.getHitchhiker() != null){
 			List<Notification> notifHiker = getNotifications(j.getHitchhiker());
 			if(notifHiker != null){
@@ -377,7 +386,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 				}
 			}
 		}
-		
+		*/
 		Route sr = j.getRoute();
 		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.map.MapActivityJourney.class);
 		intent.putExtra("journey", true);
@@ -393,8 +402,8 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		startActivity(intent);
 	}
 	private void handleJourney(Journey j){
-		if(j.getHitchhiker() != null){
-			sendCancelJourney(j);
+		if(j.getHitchhikers() != null){
+			//sendCancelJourney(j);
 		}
 		else sendDeleteJourney(j);
 	}
@@ -403,6 +412,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		super.onResume();
 		adapter.updateDataSet();
 	}
+	/*
 	private void sendCancelJourney(Journey j) {
 		NotificationType type;
 		String id = getApp().getUser().getID();
@@ -421,6 +431,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 			createAlertDialog(this, succeded, "Journey", "cancelled", "");
 		}
 	}
+	*/
 	private boolean sendJourneyRequest(Request req){
 		Response res;
 		try {

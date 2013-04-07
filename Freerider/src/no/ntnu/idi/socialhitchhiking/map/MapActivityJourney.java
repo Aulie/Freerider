@@ -66,7 +66,7 @@ public class MapActivityJourney extends MapActivityAbstract{
 		boolean rej = getIntent().getBooleanExtra("journeyRejected", false);
 		
 		User driver = getApp().getSelectedJourney().getDriver();
-		User hiker 	= getApp().getSelectedJourney().getHitchhiker();
+		User hiker 	= getApp().getSelectedJourney().getHitchhikers().get(0);
 		
 		String text = "";
 		if(driver != null){

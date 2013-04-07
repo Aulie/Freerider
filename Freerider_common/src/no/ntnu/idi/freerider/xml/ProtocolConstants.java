@@ -117,6 +117,8 @@ interface ProtocolConstants {
 	static final String USER_GENDER = "user_gender";
 	static final String USER_ABOUT = "user_about";
 	static final String USER_CARID = "user_carid";
+	static final String USER_AGE = "user_age";
+	static final String USER_PHONE = "user_phone";
 	
 	static final String NOTIFICATION_ELEMENT = "Notification";
 	static final String NOTIFICATION_TYPE = "type";
