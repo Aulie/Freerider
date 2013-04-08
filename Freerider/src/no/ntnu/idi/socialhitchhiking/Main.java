@@ -232,7 +232,7 @@ public class Main extends FBConnectionActivity{
 		    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 		        public void onClick(DialogInterface dialog, int which) { 
 		        	if(!getApp().isKey("main"))createNewUser();
-		        	Intent intent = new Intent(Main.this, no.ntnu.idi.socialhitchhiking.My_account.class);
+		        	Intent intent = new Intent(Main.this, no.ntnu.idi.socialhitchhiking.MyAccount.class);
 		        	intent.putExtra("fromDialog", true);
 		    		Main.this.startActivity(intent);
 		        }
@@ -393,7 +393,7 @@ public class Main extends FBConnectionActivity{
 	}
 	
 	private void startMyAccount(){
-		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.My_account.class);
+		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.MyAccount.class);
 		startActivity(intent);
 	}
 
