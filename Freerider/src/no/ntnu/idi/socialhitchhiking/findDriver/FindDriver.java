@@ -27,8 +27,10 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -57,12 +59,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,6 +96,7 @@ import android.widget.Toast;
  * @author Pål
  * @author Christian Thurmann-Nielsen
  * @author Thomas Gjerde
+ * @author Kristoffer Aulie
  *
  */
 public class FindDriver extends SocialHitchhikingActivity implements PropertyChangeListener{
@@ -109,15 +114,24 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	private Calendar searchDate;
 	private Location goingFrom;
 	private Location goingTo;
-	private Spinner pickDate;
+	private Button btnUpcoming;
+	private boolean upcoming;
+	private Button btnSpecifyDate;
 	private OnDateSetListener odsl;
-	private ArrayList<SpinnerEntry> spinnerList;
-	private ArrayAdapter<SpinnerEntry> spinnerAdapter;
 	private ProgressDialog loadingDialog;
 	private ProgressDialog searchingDialog;
 	private ArrayList<PreviousSearch> previousSearch;
 	private ArrayAdapter<PreviousSearch> previousAdapter;
-
+	/**
+	 * The color that pickup and dropoff button should have when they have been selected. 
+	 * Only one of the buttons will have this at the same time.
+	 */
+	private int selected = Color.argb(200, 170, 170, 250);
+	
+	/**
+	 * The color that pickup and dropoff button should have when they are <i>not</i> selected.
+	 */
+	private int notSelected = Color.argb(200, 200, 200, 200);
 
 	/** Called when the activity is first created. */
 	@Override
@@ -163,14 +177,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		});
 		searchTo = (AutoCompleteTextView) findViewById (R.id.search2);
 		searchFrom = (AutoCompleteTextView) findViewById (R.id.searchText);
-		pickDate = (Spinner) findViewById(R.id.pickDate);
 
-		spinnerList = new ArrayList<SpinnerEntry>();
-		spinnerList.add(new SpinnerEntry("Upcoming"));
-		spinnerList.add(new SpinnerEntry("Specific date"));
-		spinnerAdapter = new ArrayAdapter<FindDriver.SpinnerEntry>(this, android.R.layout.simple_spinner_dropdown_item,spinnerList);
-		pickDate.setAdapter(spinnerAdapter);
-		spinnerAdapter.notifyDataSetChanged();
 		search = (Button) findViewById(R.id.searchButton);
 		driverList = (ListView) findViewById (R.id.list);
 		dc = new DateChooser(this, this);
@@ -207,57 +214,46 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 				imm.hideSoftInputFromWindow(searchTo.getWindowToken(), 0);
 			}
 		});
-		pickDate.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			@Override
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-				
-				if(position == 1) {
-					Calendar cal=Calendar.getInstance();
-				    DatePickerDialog datePickDiag=new DatePickerDialog(FindDriver.this,odsl,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
-				    datePickDiag.show();
-				    //Check if set
-				}
-				else if(position == 0) {
-				    if(spinnerList.size() == 3) {
-				    	spinnerList.remove(2);
-				    	spinnerAdapter.notifyDataSetChanged();
-				    }
-				}
-				
-				
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				//Log.e("Nothing","Selected");
-				
-			}
-			
-		});
 		odsl = new OnDateSetListener() {
 
 			@Override
 			public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
 				searchDate.set(arg0.getYear(), arg0.getMonth(), arg0.getDayOfMonth());
-
-			    if(spinnerList.size() == 3) {
-				    SpinnerEntry se = spinnerList.get(2);
-				    se.setDate(searchDate);
-			    }
-			    else if(spinnerList.size() == 2) {
-			    	spinnerList.add(new SpinnerEntry("Selected date",searchDate));
-			    }
-			    if(spinnerList.size() == 3) {
-			    	Spinner spinner = (Spinner) findViewById(R.id.pickDate);
-			    	spinner.setSelection(2);
-			    }
-			    spinnerAdapter.notifyDataSetChanged();
+				btnSpecifyDate.setText(arg0.getDayOfMonth()+"/"+arg0.getMonth()+"/"+arg0.getYear());
 			}
 			
 		};
+		
+		btnUpcoming = (Button)findViewById(R.id.btnUpcoming);
+		btnSpecifyDate = (Button)findViewById(R.id.btnPickDate);
+		btnUpcoming.setBackgroundColor(notSelected);
+		btnSpecifyDate.setBackgroundColor(notSelected);
 	}
-	
+	/**
+	 * Setting the Upcoming button as selected, and deselects the Specify Date button.
+	 * @param view
+	 */
+	public void btnUpcomingClicked(View view){
+		btnUpcoming.setBackgroundColor(selected);
+		btnSpecifyDate.setBackgroundColor(notSelected);
+		upcoming = true;
+		btnSpecifyDate.setText(R.string.specific_date);
+		
+	}
+	/**
+	 * Setting the Spesify Date button as selected, and deselects the Upcoming button.
+	 * @param view
+	 */
+	public void btnPickDateClicked(View view){
+		btnSpecifyDate.setBackgroundColor(selected);
+		btnUpcoming.setBackgroundColor(notSelected);
+		upcoming = false;
+		
+		Calendar cal=Calendar.getInstance();
+	    DatePickerDialog datePickDiag=new DatePickerDialog(FindDriver.this,odsl,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
+	    datePickDiag.show();
+	}
 	
 	
 	@Override
@@ -299,8 +295,11 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	private void doSearch(){
 		searchingDialog = ProgressDialog.show(this, "Searching", "Searching");
 		PreviousSearch tempPrev = new PreviousSearch(searchFrom.getText().toString(), searchTo.getText().toString());
-		previousSearch.add(tempPrev);
-		setPreviousSearch();
+		// Checking if the previous search already exists.
+		if(!previousSearch.contains(tempPrev)){
+			previousSearch.add(tempPrev);
+			setPreviousSearch();
+		}
 		new RideSearch().execute();
 	}
 
@@ -341,7 +340,8 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 
 		}
 		Calendar cal = Calendar.getInstance();
-		if(searchDate != null)cal = searchDate;
+		if(searchDate != null)
+			cal = searchDate;
 		Request req = new SearchRequest(getApp().getUser() , goingFrom, goingTo,cal);
 
 		try {
@@ -442,6 +442,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			doSearch();
 		}
 	}
+	
 	public void setPreviousSearch() {
 		SharedPreferences settings = getSharedPreferences("PreviousSearch", 0);
 		SharedPreferences.Editor editor = settings.edit();
@@ -504,7 +505,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			//Looper.prepare();
 			try {
 				//If date is set to 'Upcoming' then run search 7 times and increase date for each iteration
-				if(pickDate.getSelectedItemPosition() == 0) {
+				if(upcoming) {
 					//Log.e("Upcoming","Yes");
 					Calendar c = Calendar.getInstance();
 					journeys = new ArrayList<Journey>();
@@ -542,13 +543,46 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 					{
 						Journey current = this.getItem(position);
 						LayoutInflater inflater = getLayoutInflater();
-						row = inflater.inflate(R.layout.list_row, parent, false);
-						//sends the strings with ride info to list_row.xml 
-						TextView rideDescription =(TextView)row.findViewById(R.id.ride_description);
-						TextView name = (TextView)row.findViewById(R.id.ride_title);
-						rideDescription.setText("From: "+current.getRoute().getStartAddress()+"\n"+ "To: "+current.getRoute().getEndAddress());
-						name.setText(current.getDriver().getFullName());
+						//sends the strings with ride info to your_journey_list_item.xml 
+						row = inflater.inflate(R.layout.your_journey_list_item, parent, false);
+						TextView owner = (TextView)row.findViewById(R.id.your_journey_owner);
+						TextView visibility = (TextView)row.findViewById(R.id.your_journey_item_visibility);
+						TextView startTime = (TextView)row.findViewById(R.id.your_journey_item_starttime);
+						TextView start = (TextView)row.findViewById(R.id.your_journey_item_start);
+						TextView stop = (TextView)row.findViewById(R.id.your_journey_item_stop);
 						
+						int c=0;
+						switch (current.getVisibility()) {
+						case FRIENDS:
+							c = Color.GREEN;
+							break;
+						case FRIENDS_OF_FRIENDS:
+							c = Color.YELLOW;
+							break;
+						case PUBLIC:
+							c = Color.rgb(255, 128, 0);
+							break;
+						default:
+							break;
+						}
+						
+						String date = current.getStart().getTime().toString();
+						if(date.length()>0){
+							date = date.replaceAll("CET", "");
+							date = date.replaceAll("CEST", "");
+						}
+						else{
+							date = "no date";
+						}
+						
+						
+						owner.setText(current.getRoute().getOwner().getFullName());
+						visibility.setText(current.getVisibility().getDisplayName());
+						visibility.setTextColor(c);
+						startTime.setText(Html.fromHtml("<b>" + "Date: " +"</b>\t" + date));
+						start.setText(Html.fromHtml("<b>" + "From: "+"</b> " + current.getRoute().getStartAddress()));
+						stop.setText(Html.fromHtml("<b>" + "To: "+"</b>\t\t" + current.getRoute().getEndAddress()));
+
 					}
 					catch(NullPointerException e)
 					{
@@ -567,29 +601,4 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		}
 		
 	}
-	private class SpinnerEntry{
-		String name;
-		Calendar date;
-		public SpinnerEntry(String name) {
-			this.name = name;
-		}
-		public SpinnerEntry(String name, Calendar date) {
-			this.name = name;
-			this.date = date;
-		}
-		public void setDate(Calendar date) {
-			this.date = date;
-		}
-		public String toString() {
-			if(date != null) {
-				return name + " (" + date.get(Calendar.DAY_OF_MONTH) + "/" + (date.get(Calendar.MONTH)+1) + "/" + date.get(Calendar.YEAR) + ")";
-			}
-			else
-			{
-				return name;
-			}
-		}
-	}
 }
-
-

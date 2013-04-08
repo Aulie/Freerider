@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
     	android:textSize="30sp"
-    	android:text="Find ride"
+    	android:text="@string/find_ride"
     	android:layout_gravity="center_horizontal"
     	/>
     <LinearLayout 
@@ -93,24 +93,38 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="55dp"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" 
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp">
             <View
-        		    android:layout_width="0dp"
-        		    android:layout_height="0dp"
-        		    android:layout_weight="1" />
-			<!-- Dropdown list -->
-            <Spinner
-                android:id="@+id/pickDate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="8" />
+	   		    android:layout_width="0dp"
+	   		    android:layout_height="0dp"
+	   		    android:layout_weight="1" />
+            
+            <Button
+                	android:id="@+id/btnUpcoming"
+        		    android:layout_width="0dip"
+        		    android:layout_height="wrap_content"
+        		    android:text="@string/upcoming"
+        		    android:onClick="btnUpcomingClicked"
+        		    android:layout_weight="4"
+        		    android:layout_marginRight="2dp"
+        		    />
+			<Button
+			    	android:id="@+id/btnPickDate"
+        		    android:layout_width="0dip"
+        		    android:layout_height="wrap_content"
+        		    android:text="@string/specific_date"
+        		    android:onClick="btnPickDateClicked"
+        		    android:layout_weight="4"
+        		    android:layout_marginLeft="2dp"
+        		    />
 			<View
-        		    android:layout_width="0dp"
-        		    android:layout_height="0dp"
-        		    android:layout_weight="1" />
+	   		    android:layout_width="0dp"
+	   		    android:layout_height="0dp"
+	   		    android:layout_weight="1" />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp" 

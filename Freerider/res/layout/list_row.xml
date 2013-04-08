@@ -25,6 +25,16 @@
         android:layout_marginTop="1dip"
         android:textColor="#343434"
         android:textSize="10dip" />
+    
+    <!-- Ride date -->
+    <TextView 
+        android:id="@+id/ride_date"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ride_description"
+        android:layout_marginTop="1dip"
+        android:textColor="#343434"
+        android:textSize="10dip" />/>
 
     <!-- Rightend Arrow -->
     <ImageView
