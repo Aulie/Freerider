@@ -44,9 +44,9 @@ public class My_account extends TabActivity {
 	    
 	    //custom size to the preference tab
 	    tabHost.getTabWidget().getChildAt(0).getLayoutParams().width =45;
-	    /*if(getIntent().getBooleanExtra("fromDialog", false)){
+	    if(getIntent().getBooleanExtra("fromDialog", false)){
 	    	tabHost.setCurrentTab(1);
-	    }*/
+	    }
 	}
 
 }

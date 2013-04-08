@@ -39,6 +39,7 @@ import org.apache.http.client.ClientProtocolException;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -73,9 +74,8 @@ public class Main extends FBConnectionActivity{
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);	
 		initLoadingScreen();
-		isNewUser = isNewUser();
 		new Thread() {
 			
 			public void run() {
@@ -84,7 +84,6 @@ public class Main extends FBConnectionActivity{
 
 				if(user == null){
 					loginButtonClicked();
-
 				}
 				else{
 					initMainScreen();
@@ -92,10 +91,10 @@ public class Main extends FBConnectionActivity{
 						resetSession();
 					}
 				}
-				//showDialogNew();
 			}	
-			}.start();
-			}
+		}.start();
+		
+	}
 	
 
 	/**
@@ -209,16 +208,30 @@ public class Main extends FBConnectionActivity{
 				getApp().startService();
 				getApp().startJourneyReminder();
 				initMainScreen();
+				
+				isNewUser = checkNewUser();
+				Log.e("Statisk?", "statisk");
+				Log.e("Statisk?", Boolean.toString(isNewUser));
+				
+				Main.this.runOnUiThread(new Runnable() {
+				    public void run() {
+				    	showDialogNew();
+				    }
+				});
+				
 	}
-	/*
+
 	private void showDialogNew() {
+		
+
+		
 		if(isNewUser){
 	    	new AlertDialog.Builder(Main.this)
 		    .setTitle("Welcome!")
 		    .setMessage("You should provide some basic information about yourself. Do you want to do this now?")
 		    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 		        public void onClick(DialogInterface dialog, int which) { 
-		        	//if(!getApp().isKey("main"))createNewUser();
+		        	if(!getApp().isKey("main"))createNewUser();
 		        	Intent intent = new Intent(Main.this, no.ntnu.idi.socialhitchhiking.My_account.class);
 		        	intent.putExtra("fromDialog", true);
 		    		Main.this.startActivity(intent);
@@ -233,7 +246,6 @@ public class Main extends FBConnectionActivity{
 		     .show();
 		}
 	}
-	*/
 
 	@Override
 	public boolean isSession(){
@@ -334,7 +346,7 @@ public class Main extends FBConnectionActivity{
 	}
 
 	/**
-	 * Starts the Intent FindDriver
+	 * Starts the Intent Inbox
 	 */
 	private void startInbox(){
 		//initActivity(no.ntnu.idi.socialhitchhiking.inbox.Inbox.class);
