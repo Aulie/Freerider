@@ -408,6 +408,7 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 						
 						if(newUser(login.getID())){
 							newUserBoolean = true;
+							Log.e("I connection", Boolean.toString(newUserBoolean));
 						}
 						
 						msg.obj = login;
@@ -496,11 +497,9 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 		try {
 			UserResponse res = (UserResponse) RequestTask.sendRequest(req,getApp());
 			if(res.getUser()==null){
-				Log.e("Ny bruker!", "HUZZAH");
 				return true;
 			}
 			else{
-				Log.e("Denne vil du bare se andre gang", "HUZZAH");
 			}
 			
 		} catch (ClientProtocolException e) {
@@ -519,7 +518,7 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 		return false;
 	}
 	
-	public boolean isNewUser(){
+	public boolean checkNewUser(){
 		return newUserBoolean;
 	}
 }
