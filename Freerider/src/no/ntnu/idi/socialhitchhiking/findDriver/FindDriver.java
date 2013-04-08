@@ -126,7 +126,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	 * The color that pickup and dropoff button should have when they have been selected. 
 	 * Only one of the buttons will have this at the same time.
 	 */
-	private int selected = Color.argb(200, 170, 170, 250);
+	private int selected = Color.rgb(24, 215, 229);
 	
 	/**
 	 * The color that pickup and dropoff button should have when they are <i>not</i> selected.
@@ -227,8 +227,9 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		
 		btnUpcoming = (Button)findViewById(R.id.btnUpcoming);
 		btnSpecifyDate = (Button)findViewById(R.id.btnPickDate);
-		btnUpcoming.setBackgroundColor(notSelected);
+		btnUpcoming.setBackgroundColor(selected);
 		btnSpecifyDate.setBackgroundColor(notSelected);
+		upcoming = true;
 	}
 	/**
 	 * Setting the Upcoming button as selected, and deselects the Specify Date button.
@@ -296,7 +297,15 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		searchingDialog = ProgressDialog.show(this, "Searching", "Searching");
 		PreviousSearch tempPrev = new PreviousSearch(searchFrom.getText().toString(), searchTo.getText().toString());
 		// Checking if the previous search already exists.
-		if(!previousSearch.contains(tempPrev)){
+		boolean isEqual = false;
+		for (int i = 1; i < previousSearch.size(); i++) {
+			if(previousSearch.get(i).getFrom() != null){
+				if(previousSearch.get(i).getFrom().equals(tempPrev.getFrom()) || previousSearch.get(i).getTo().equals(tempPrev.getTo())){
+					isEqual = true;
+				}
+			}
+		}
+		if(!isEqual){
 			previousSearch.add(tempPrev);
 			setPreviousSearch();
 		}
