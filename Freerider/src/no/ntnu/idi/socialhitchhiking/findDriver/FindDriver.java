@@ -36,6 +36,7 @@ import java.util.concurrent.ExecutionException;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.Visibility;
 import no.ntnu.idi.freerider.protocol.JourneyResponse;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
@@ -63,6 +64,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -518,6 +520,19 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 					}
 				} else {
 					journeys = search();
+					
+					/*//adder av meg
+					List<Journey> journeysMid = journeys;
+					journeys.clear();
+					Visibility vis = getApp().getSettings().getFacebookPrivacy();
+					Log.e("FACEBOOK PRIVACY", vis + "");
+					for(int i = 0; i<journeysMid.size(); i++){
+						if(vis == journeysMid.get(i).getVisibility()){
+							journeys.add(journeysMid.get(i));
+						}
+					}
+					*/
+					
 				}
 				if(journeys.size() == 0) {
 					//Toast.makeText(FindDriver.this, "No rides matched your search", Toast.LENGTH_LONG);
@@ -528,6 +543,17 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 				//toast.show();
 				//Log.e("Error",e.getMessage());
 				e.printStackTrace();
+			}
+			
+			List<Journey> journeysMid = journeys;
+			journeys.clear();
+			Visibility vis = getApp().getSettings().getFacebookPrivacy();
+			Log.e("FACEBOOK PRIVACY", vis + "");
+			for(int i = 0; i<journeysMid.size(); i++){
+				if(vis == journeysMid.get(i).getVisibility()){
+					journeys.add(journeysMid.get(i));
+					Log.e("Journey", journeys.get(i).getStart().toString() + "");
+				}
 			}
 			return null;
 		}
