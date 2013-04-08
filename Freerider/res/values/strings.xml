@@ -32,5 +32,8 @@
     <string name="one">1</string>
     <string name="loadingText">Loading....</string>
     <string name="pickupAndDropoffName">Freerider - Pickup and dropoff</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="specific_date">Specify date</string>
+    <string name="find_ride">Find ride</string>
 
 </resources>
