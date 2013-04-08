@@ -27,8 +27,10 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -64,6 +66,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -235,7 +238,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		btnUpcoming.setBackgroundColor(selected);
 		btnSpecifyDate.setBackgroundColor(notSelected);
 		upcoming = true;
-		btnUpcoming.setText(R.string.specific_date);
+		btnSpecifyDate.setText(R.string.specific_date);
 		
 	}
 	/**
@@ -540,13 +543,46 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 					{
 						Journey current = this.getItem(position);
 						LayoutInflater inflater = getLayoutInflater();
-						row = inflater.inflate(R.layout.list_row, parent, false);
-						//sends the strings with ride info to list_row.xml 
-						TextView rideDescription =(TextView)row.findViewById(R.id.ride_description);
-						TextView name = (TextView)row.findViewById(R.id.ride_title);
-						rideDescription.setText("From: "+current.getRoute().getStartAddress()+"\n"+ "To: "+current.getRoute().getEndAddress());
-						name.setText(current.getDriver().getFullName());
+						//sends the strings with ride info to your_journey_list_item.xml 
+						row = inflater.inflate(R.layout.your_journey_list_item, parent, false);
+						TextView owner = (TextView)row.findViewById(R.id.your_journey_owner);
+						TextView visibility = (TextView)row.findViewById(R.id.your_journey_item_visibility);
+						TextView startTime = (TextView)row.findViewById(R.id.your_journey_item_starttime);
+						TextView start = (TextView)row.findViewById(R.id.your_journey_item_start);
+						TextView stop = (TextView)row.findViewById(R.id.your_journey_item_stop);
 						
+						int c=0;
+						switch (current.getVisibility()) {
+						case FRIENDS:
+							c = Color.GREEN;
+							break;
+						case FRIENDS_OF_FRIENDS:
+							c = Color.YELLOW;
+							break;
+						case PUBLIC:
+							c = Color.rgb(255, 128, 0);
+							break;
+						default:
+							break;
+						}
+						
+						String date = current.getStart().getTime().toString();
+						if(date.length()>0){
+							date = date.replaceAll("CET", "");
+							date = date.replaceAll("CEST", "");
+						}
+						else{
+							date = "no date";
+						}
+						
+						
+						owner.setText(current.getRoute().getOwner().getFullName());
+						visibility.setText(current.getVisibility().getDisplayName());
+						visibility.setTextColor(c);
+						startTime.setText(Html.fromHtml("<b>" + "Date: " +"</b>\t" + date));
+						start.setText(Html.fromHtml("<b>" + "From: "+"</b> " + current.getRoute().getStartAddress()));
+						stop.setText(Html.fromHtml("<b>" + "To: "+"</b>\t\t" + current.getRoute().getEndAddress()));
+
 					}
 					catch(NullPointerException e)
 					{
