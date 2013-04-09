@@ -75,24 +75,38 @@ public class Main extends FBConnectionActivity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
-		initLoadingScreen();
-		new Thread() {
-			
-			public void run() {
-				setConnection(Main.this);
-				user = getApp().getUser();
-
-				if(user == null){
-					loginButtonClicked();
-				}
-				else{
-					initMainScreen();
-					if(!isSession()){
-						resetSession();
+		try{
+			initLoadingScreen();
+			new Thread() {
+				
+				public void run() {
+					setConnection(Main.this);
+					user = getApp().getUser();
+	
+					if(user == null){
+						loginButtonClicked();
 					}
+					else{
+						initMainScreen();
+						if(!isSession()){
+							resetSession();
+						}
+					}
+				}	
+			}.start();
+		}catch(Exception e){
+			AlertDialog ad = new AlertDialog.Builder(Main.this).create();
+			ad.setTitle("Server error");
+			ad.setMessage("The server is not responding.. Please try again later or contact the system administrator.");
+			ad.setButton("Ok", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+					System.exit(0);
 				}
-			}	
-		}.start();
+			});
+		}
 		
 	}
 	
