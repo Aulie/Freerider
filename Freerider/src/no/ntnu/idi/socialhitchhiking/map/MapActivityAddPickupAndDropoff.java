@@ -125,7 +125,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	 * The color that pickup and dropoff button should have when they have been selected. 
 	 * Only one of the buttons will have this at the same time.
 	 */
-	private int selected = Color.argb(200, 170, 170, 250);
+	private int selected = Color.rgb(24, 215, 229);
 	
 	/**
 	 * The color that pickup and dropoff button should have when they are <i>not</i> selected.
@@ -276,14 +276,23 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		((TextView)findViewById(R.id.mapViewPickupTextViewPhone)).setText("Mobile: " + driver.getPhone());
 		
 		
-		// Getting the car image
-		Car car = new Car(driver.getCarId(),"Dummy",0.0); //"Dummy" and 0.0 are dummy vars. getApp() etc sends the current user's carid
-		Request carReq = new CarRequest(RequestType.GET_CAR, getApp().getUser(), car);
 		try {
+			// Getting the car image
+			Car dummyCar = new Car(driver.getCarId(),"Dummy",0.0); //"Dummy" and 0.0 are dummy vars. getApp() etc sends the current user's carid
+			Request carReq = new CarRequest(RequestType.GET_CAR, getApp().getUser(), dummyCar);
 			CarResponse carRes = (CarResponse) RequestTask.sendRequest(carReq,getApp());
-			Bitmap carImage = BitmapFactory.decodeByteArray(carRes.getCar().getPhoto(), 0, carRes.getCar().getPhoto().length);
+			Car car = carRes.getCar();
+			Bitmap carImage = BitmapFactory.decodeByteArray(car.getPhoto(), 0, car.getPhoto().length);
+			
 			// Setting the car image
 			((ImageView)findViewById(R.id.mapViewPickupImageViewCar)).setImageBitmap(carImage);
+			
+			// Setting the car name
+			((TextView)findViewById(R.id.mapViewPickupTextViewCarName)).setText("Car type: " + car.getCarName());
+
+			// Setting the comfort
+			((RatingBar)findViewById(R.id.mapViewPickupAndDropoffComfortStars)).setRating((float) car.getComfort());
+			
 		} catch (ClientProtocolException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -297,12 +306,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		// Setting the car name
-		((TextView)findViewById(R.id.mapViewPickupTextViewCarName)).setText("Car type: " + car.getCarName());
-
-		// Setting the comfort
-		((RatingBar)findViewById(R.id.mapViewPickupAndDropoffComfortStars)).setRating((float) car.getComfort());
 		
 		// Adding the date of ride
 		Date d = journey.getStart().getTime();
