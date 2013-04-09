@@ -29,6 +29,7 @@ import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.facebook.FBConnectionActivity;
 import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
+import no.ntnu.idi.socialhitchhiking.utility.ShareOnFacebook;
 import no.ntnu.idi.socialhitchhiking.utility.TripOptionAdapter;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 
@@ -36,6 +37,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +58,7 @@ public class TripOptions extends SocialHitchhikingActivity {
     private Calendar dateAndTime;
     private Calendar newTime;
 	private DateChooser dc;
+	private Journey journey;
 	private Route selectedRoute;
 	private TripPreferences tripPreferences;
 	private Integer selectedPrivacy = null;
@@ -264,6 +267,23 @@ public class TripOptions extends SocialHitchhikingActivity {
     }
     
     void setPrivacy(){
+//    	Facebook mFacebook = new Facebook("321654017885450");
+//            Log.d("Tests", "Testing graph API wall post");
+//             try {
+//            	 	String msg = "I've created a ride in FreeRider";
+//                    String response = mFacebook.request("me");
+//                    Bundle parameters = new Bundle();
+//                    parameters.putString("message", msg);
+//                    parameters.putString("description", "test test test");
+//                    response = mFacebook.request("me/feed", parameters, "POST");
+//                    Log.d("Tests", "got response: " + response);
+//                    if (response == null || response.equals("") || 
+//                            response.equals("false")) {
+//                       Log.v("Error", "Blank response");
+//                    }
+//             } catch(Exception e) {
+//                 e.printStackTrace();
+//             }
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Set Privacy");
     	builder.setSingleChoiceItems(R.array.privacy_setting, selectedPrivacy, new DialogInterface.OnClickListener() {
@@ -342,23 +362,22 @@ public class TripOptions extends SocialHitchhikingActivity {
     }
 
     public void onNextClick(View v){
-//    	if(dateChanged && timeChanged){
-	    	sendJourneyRequest();
-			Intent intent = new Intent(TripOptions.this, Main.class);
-			startActivity(intent);
-//    	}
-//    	else{
-//			Toast.makeText(getApplicationContext(), "Date and time of the drive must be set", Toast.LENGTH_LONG).show();
-//    	}
+    	journey = new Journey(-1);
+		journey.setRoute(selectedRoute);
+		journey.setStart(dateAndTime);
+//		journey.setSeatsAvailable(seatValue);
+		journey.setVisibility(privacyPreference);
+		journey.setTripPreferences(tripPreferences);
+		getApp().setSelectedJourney(journey);
+		Intent intent = new Intent(TripOptions.this, ShareOnFacebook.class);
+		startActivity(intent);
+		sendJourneyRequest();
+
 	}
     
     private void sendJourneyRequest(){
-    	Journey jour = new Journey(-1);
-		jour.setRoute(selectedRoute);
-		jour.setStart(dateAndTime);
-		jour.setVisibility(privacyPreference);
-		jour.setTripPreferences(tripPreferences);
-		JourneyRequest req = new JourneyRequest(RequestType.CREATE_JOURNEY, getApp().getUser(), jour);
+    	
+		JourneyRequest req = new JourneyRequest(RequestType.CREATE_JOURNEY, getApp().getUser(), journey);
 		
 		Response res = null;
 		try {
@@ -369,7 +388,7 @@ public class TripOptions extends SocialHitchhikingActivity {
 			}
 			else{
 				if(getApp().getJourneys() != null)
-					getApp().getJourneys().add(jour);
+					getApp().getJourneys().add(journey);
 				Toast.makeText(getApplicationContext(), "Trip created", Toast.LENGTH_SHORT).show();
 
 			}
