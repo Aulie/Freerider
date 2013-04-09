@@ -402,6 +402,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 			//journey.setHitchhiker(user);
 			journey.setHitchhikers(getHitchhikers(rs.getInt("journeyserial")));
 			List<Location> routeData = readRouteData(rs);
+			user = getUser(user.getID());
 			Route route = new Route(user, "", routeData, rs.getInt("routeserial"));
 			String[] addresses = rs.getString("addresses").split(Route.ADDRESS_STRING_DELIMITER);
 			List<MapLocation> mapPoints = readMapLocationData(rs, addresses);
@@ -577,6 +578,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		Visibility visibility = Visibility.valueOf(rs.getString("visibility"));
 		List<User> hitchhikers = getHitchhikers(serial);
 		Journey journey = new Journey(serial, route, start, hitchhikers, visibility);
+		
 		TripPreferences preference = getPreference(rs.getInt("preferenceid"));
 		journey.setTripPreferences(preference);
 		return journey;
