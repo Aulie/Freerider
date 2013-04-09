@@ -294,6 +294,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	 * Search for journeys on the server and updates the list of journeys accordingly.
 	 */
 	private void doSearch(){
+
 		searchingDialog = ProgressDialog.show(this, "Searching", "Searching");
 		PreviousSearch tempPrev = new PreviousSearch(searchFrom.getText().toString(), searchTo.getText().toString());
 		// Checking if the previous search already exists.
@@ -335,15 +336,12 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	 */
 	private List<Journey> search() {
 		JourneyResponse res = null;
-
 		try{
-			if(goingFrom == null){
+
 				goingFrom = GeoHelper.getLocation(searchFrom.getText().toString());
-			}
 			
-			if(goingTo == null){
 				goingTo = GeoHelper.getLocation(searchTo.getText().toString());
-			}
+
 		} 
 		catch(IndexOutOfBoundsException e){
 
@@ -512,6 +510,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		@Override
 		protected String doInBackground(Void... params) {
 			//Looper.prepare();
+			//journeys = null;
 			try {
 				//If date is set to 'Upcoming' then run search 7 times and increase date for each iteration
 				if(upcoming) {

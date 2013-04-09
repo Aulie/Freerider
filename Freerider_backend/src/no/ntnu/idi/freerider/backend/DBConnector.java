@@ -341,12 +341,13 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	}
 	
 	public void updateUser(User user) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("UPDATE users SET (rating,gender,phone,age,about) = (?,?,?,?,?)");
+		PreparedStatement stmt = conn.prepareStatement("UPDATE users SET (rating,gender,phone,age,about) = (?,?,?,?,?) WHERE id=?");
 		stmt.setDouble(1, user.getRating());
 		stmt.setString(2, user.getGender());
 		stmt.setString(3, user.getPhone());
 		stmt.setInt(4, user.getAge());
 		stmt.setString(5, user.getAbout());
+		stmt.setString(6, user.getID());
 		stmt.executeUpdate();
 		
 	}
@@ -385,6 +386,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	/** Search for Journeys matching given preferences.  */
 	public List<Journey> search(Location start, Location stop, Calendar time, User searcher) throws SQLException{
 		PreparedStatement stmt = conn.prepareStatement("SELECT * FROM search_for_journeys(?::geography,?::geography,?,?)");
+		ServerLogger.write("Search: " + "SELECT * FROM search_for_journeys(" + Double.toString(start.getLatitude()) + "::geography," + Double.toString(start.getLongitude()) + "::geography," + searcher.getID() + "," + convertToTimestamp(time) + ")");
 		stmt.setObject(1, new Point(start.getLatitude(),start.getLongitude()),Types.OTHER);
 		stmt.setObject(2, new Point(stop.getLatitude(),stop.getLongitude()),Types.OTHER);
 		stmt.setString(3, searcher.getID());
@@ -392,6 +394,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		ResultSet rs = stmt.executeQuery();
 		List<Journey> ret = new ArrayList<Journey>();
 		while(rs.next()){
+			ServerLogger.write("Got result");
 			Journey journey = new Journey(rs.getInt("journeyserial"));
 			User user = new User(rs.getString("Name"),rs.getString("id"));
 			user.setSurname(rs.getString("Surname"));
@@ -606,6 +609,15 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		stmt.setInt(1, journeySerial);
 		stmt.setString(2, hikerID);
 		stmt.executeUpdate();
+	}
+	public void incrementSeats(int journeySerial, int value) {
+		try {
+			Journey j = getJourney(journeySerial);
+			j.getTripPreferences().setSeatsAvailable(j.getTripPreferences().getSeatsAvailable() + value);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			ServerLogger.write("SQLError:" + e.getMessage());
+		}
 	}
 	public String getJourneyDriverID(int serial) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("SELECT routes.owner FROM journeys, routes WHERE journeys.route_used=routes.serial AND journeys.serial=?");

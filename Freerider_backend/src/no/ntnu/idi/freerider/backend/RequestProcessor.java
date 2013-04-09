@@ -90,11 +90,13 @@ public class RequestProcessor {
 				db.addUser(newUser);
 			} catch (SQLException e) {
 				logger.error("Error creating new user.",e);
+				/*
 				try {
 					db.updateUser(newUser);
 				} catch (SQLException e1) {
 					
 				}
+				*/
 				return new UserResponse(type,ResponseStatus.FAILED,e.getMessage());
 			}
 			return new UserResponse(type, status,newUser);
@@ -111,6 +113,7 @@ public class RequestProcessor {
 			try
 			{
 				User ret = db.getUser(request.getUser().getID());
+				ServerLogger.write("About:" + ret.getAbout());
 				return new UserResponse(type, status, ret);
 			} catch (SQLException e3)
 			{
@@ -360,6 +363,7 @@ public class RequestProcessor {
 				throw new SQLException("Attempt to accept nonexistent hitchhiker request or accept previously rejected request.");
 			}
 			db.addHitchhiker(notification.getRecipientID(),serial);
+			db.incrementSeats(serial, -1);
 			break;
 		case REQUEST_REJECT:
 			if(checkForRequest(notification)) throw new SQLException("Attempted to reject previously accepted request.");
@@ -367,6 +371,7 @@ public class RequestProcessor {
 		case HITCHHIKER_CANCEL:
 			//if(!sender.getID().equals(db.getHitchhikerID(serial))) return;
 			db.removeHitchhiker(sender.getID(),serial);
+			db.incrementSeats(serial, 1);
 			break;
 		case HITCHHIKER_ACCEPTS_DRIVER_CANCEL:
 			//if(!sender.getID().equals(db.getHitchhikerID(serial))) throw new SQLException("Unauthorized acceptance in journey " + serial + " from user " + sender.getID());
@@ -374,6 +379,8 @@ public class RequestProcessor {
 				throw new SQLException("Attempt to accept nonexistent driver cancel.");
 			}
 			db.deleteJourneyWithoutCheck(new Journey(serial));
+			break;
+		case MESSAGE:
 			break;
 		default:
 			return;
