@@ -397,7 +397,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		btnSelectDropoffPoint = (Button)findViewById(R.id.mapViewPickupBtnDropoff);
 		
 		// Setting the selected pickup point
-		//setSelectingPickupPoint();
 		btnSelectPickupPoint.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
