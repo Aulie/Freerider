@@ -138,8 +138,6 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="8"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
                 android:background="@drawable/list_selector"
                 android:onClick="search"
                 android:text="@string/search"/>
@@ -159,6 +157,8 @@
 		    <ListView
             android:id="@+id/list"
             android:layout_width="0dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_height="fill_parent"
             android:layout_weight="8" />
 		    <View
@@ -166,6 +166,4 @@
         		    android:layout_height="0dp"
         		    android:layout_weight="0" />
 		</LinearLayout>
-        
-
 </LinearLayout>

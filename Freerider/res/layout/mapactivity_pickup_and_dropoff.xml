@@ -174,30 +174,33 @@
            	    android:apiKey="@string/maps_api_key"
            	    android:clickable="true"
            	    android:enabled="true" 
-           	    android:layout_weight="1"/>
+           	    android:layout_weight="30"/>
 
            	<ProgressBar
                android:id="@+id/mapViewPickupProgressBar"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:visibility="gone"/> 
+               android:visibility="gone"
+               /> 
 
-	           <EditText 
-	               android:id="@+id/mapViewPickupEtComment"
-	               android:layout_width="fill_parent"
-	               android:layout_height="wrap_content"
-	               android:hint="@string/mapViewPickupEtComment" 
-	               android:singleLine="true"
-	               android:scrollbars="vertical"
-	               android:textSize="15sp"
-	               />
-	           <Button
-	               android:id="@+id/mapViewPickupBtnSendRequest"
-	               android:layout_width="fill_parent"
-	               android:layout_height="wrap_content"
-	               android:text="@string/mapViewPickupBtnSendRequest" 
-	               android:background="@drawable/list_selector"
-	               />
+           <EditText 
+               android:id="@+id/mapViewPickupEtComment"
+               android:layout_width="fill_parent"
+               android:layout_height="40dp"
+               android:hint="@string/mapViewPickupEtComment" 
+               android:singleLine="true"
+               android:scrollbars="vertical"
+               android:textSize="15sp"
+               android:layout_weight="1"
+               />
+           <Button
+               android:id="@+id/mapViewPickupBtnSendRequest"
+               android:layout_width="fill_parent"
+               android:layout_height="40dp"
+               android:text="@string/mapViewPickupBtnSendRequest" 
+               android:background="@drawable/list_selector"
+               android:layout_weight="1"
+               />
        		</LinearLayout>
    		</LinearLayout>
      	

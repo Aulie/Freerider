@@ -34,5 +34,7 @@ public enum NotificationType {
 	/** A driver cancels a planned Journey.*/
 	DRIVER_CANCEL,
 	/** A hitchhiker gives an acknowledgement of receiving the driver's cancellation.*/
-	HITCHHIKER_ACCEPTS_DRIVER_CANCEL;
+	HITCHHIKER_ACCEPTS_DRIVER_CANCEL,
+	/**Send message */
+	MESSAGE;
 }

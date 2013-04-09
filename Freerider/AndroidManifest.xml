@@ -180,7 +180,7 @@
             </intent-filter>
         </activity>
                 <activity
-            android:name="no.ntnu.idi.socialhitchhiking.My_account"
+            android:name="no.ntnu.idi.socialhitchhiking.MyAccount"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             

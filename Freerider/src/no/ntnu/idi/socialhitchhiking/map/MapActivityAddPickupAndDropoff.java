@@ -261,17 +261,19 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		((TextView)findViewById(R.id.mapViewPickupTextViewSeats)).setText(res.getPreferences().getSeatsAvailable() + " available seats");
 		
 		// Setting the age of the driver
-		//((TextView)findViewById(R.id.mapViewPickupTextViewAge)).setText("Age: " + driver.getAge());
+		((TextView)findViewById(R.id.mapViewPickupTextViewAge)).setText("Age: " + driver.getAge());
 		
 		// Adding the gender of the driver
-		/*if(driver.getGender().equals("m")){
-			((ImageView)findViewById(R.id.mapViewPickupImageViewGender)).setImageResource(R.drawable.male);
-		}else if(driver.getGender().equals("f")){
-			((ImageView)findViewById(R.id.mapViewPickupImageViewGender)).setImageResource(R.drawable.female);
-		}*/
+		if(driver.getGender() != null){
+			if(driver.getGender().equals("m")){
+				((ImageView)findViewById(R.id.mapViewPickupImageViewGender)).setImageResource(R.drawable.male);
+			}else if(driver.getGender().equals("f")){
+				((ImageView)findViewById(R.id.mapViewPickupImageViewGender)).setImageResource(R.drawable.female);
+			}
+		}
 		
 		// Setting the drivers mobile number
-		//((TextView)findViewById(R.id.mapViewPickupTextViewPhone)).setText("Mobile: " + driver.getMobileNumber());
+		((TextView)findViewById(R.id.mapViewPickupTextViewPhone)).setText("Mobile: " + driver.getPhone());
 		
 		
 		// Getting the car image
@@ -297,10 +299,10 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		}
 		
 		// Setting the car name
-		//((TextView)findViewById(R.id.mapViewPickupTextViewCarName)).setText("Car type: " + car.getCarName());
+		((TextView)findViewById(R.id.mapViewPickupTextViewCarName)).setText("Car type: " + car.getCarName());
 
 		// Setting the comfort
-		//((RatingBar)findViewById(R.id.mapViewPickupAndDropoffComfortStars)).setRating((float) car.getComfort());
+		((RatingBar)findViewById(R.id.mapViewPickupAndDropoffComfortStars)).setRating((float) car.getComfort());
 		
 		// Adding the date of ride
 		Date d = journey.getStart().getTime();
@@ -395,7 +397,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		btnSelectDropoffPoint = (Button)findViewById(R.id.mapViewPickupBtnDropoff);
 		
 		// Setting the selected pickup point
-		//setSelectingPickupPoint();
 		btnSelectPickupPoint.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
