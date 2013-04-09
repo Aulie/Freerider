@@ -106,6 +106,7 @@ public class Main extends FBConnectionActivity{
 					System.exit(0);
 				}
 			});
+			ad.show();
 		}
 		
 	}
