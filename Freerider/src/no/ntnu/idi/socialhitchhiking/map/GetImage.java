@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import no.ntnu.idi.socialhitchhiking.*;
+
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 /**
  * Class that fetches images from URLs. Used here to get profile pictures from Facebook.
@@ -18,13 +22,15 @@ import android.widget.ImageView;
 public class GetImage extends AsyncTask<String, Void, Bitmap> {
     
 	private ImageView imageView;
-	
+	private Activity activity;
+	private MyAccountMeActivity myAcc;
     /**
      * Constructor takes the ImageView used to display the image.
      * @param iv 
      */
-    public GetImage(ImageView iv){
+    public GetImage(ImageView iv, Activity activity){
 		this.imageView = iv;
+		this.activity = activity;
 	}
 	@Override
     protected Bitmap doInBackground(String... urls) {
@@ -38,7 +44,12 @@ public class GetImage extends AsyncTask<String, Void, Bitmap> {
     // Sets the Bitmap returned by doInBackground
     @Override
     protected void onPostExecute(Bitmap result) {
-        imageView.setImageBitmap(result);
+    	if(activity.getClass().getSimpleName().equals("MyAccountMeActivity")){
+    		myAcc = (MyAccountMeActivity) activity;
+    		myAcc.showProfile(result);
+    	}else{
+    		imageView.setImageBitmap(result);
+    	}
     }
 
     // Creates Bitmap from InputStream and returns it
