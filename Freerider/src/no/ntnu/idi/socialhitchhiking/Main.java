@@ -127,14 +127,14 @@ public class Main extends FBConnectionActivity{
 			res2 = (UserResponse)RequestTask.sendRequest(req2, getApp());
 			User resUser = res2.getUser();
 			User tempUser = getApp().getUser();
-			//tempUser.setCarId(resUser.getCarId());
-			tempUser.setCarId(2);
-			//tempUser.setAbout(resUser.getAbout());
-			tempUser.setAbout("Benny");
-			//tempUser.setGender(resUser.getGender());
-			tempUser.setGender("m");
-			//tempUser.setRating(resUser.getRating());
-			tempUser.setRating(1);
+			tempUser.setCarId(resUser.getCarId());
+			//tempUser.setCarId(2);
+			tempUser.setAbout(resUser.getAbout());
+			//tempUser.setAbout("Benny");
+			tempUser.setGender(resUser.getGender());
+			//tempUser.setGender("m");
+			tempUser.setRating(resUser.getRating());
+			//tempUser.setRating(1);
 			getApp().setUser(tempUser);
 		} catch (ClientProtocolException e1)
 		{
