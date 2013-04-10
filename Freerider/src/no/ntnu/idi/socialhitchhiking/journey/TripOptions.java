@@ -160,7 +160,7 @@ public class TripOptions extends SocialHitchhikingActivity {
       //Initialization of default TripOptions string values
         list_trip_options.add(new TripOption(R.drawable.trip_icon_calendar, "Date", formatDate(dateAndTime)));
         list_trip_options.add(new TripOption(R.drawable.trip_icon_clock, "Time",formatTime(dateAndTime)));
-        list_trip_options.add(new TripOption(R.drawable.trip_icon_seats, "Seats Available", tripPreferences.getSeatsAvailable().toString()));
+        list_trip_options.add(new TripOption(R.drawable.trip_icon_seats, "Seats Available", Integer.toString(tripPreferences.getSeatsAvailable())));
         list_trip_options.add(new TripOption(R.drawable.trip_icon_fb, "Privacy", privacyString));
         list_trip_options.add(new TripOption(R.drawable.trip_icon_plus, "Extras", ex));
         
