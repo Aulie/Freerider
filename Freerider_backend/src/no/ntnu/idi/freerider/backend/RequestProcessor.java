@@ -375,9 +375,9 @@ public class RequestProcessor {
 			break;
 		case HITCHHIKER_ACCEPTS_DRIVER_CANCEL:
 			//if(!sender.getID().equals(db.getHitchhikerID(serial))) throw new SQLException("Unauthorized acceptance in journey " + serial + " from user " + sender.getID());
-			if(!checkForRequest(notification)) {
-				throw new SQLException("Attempt to accept nonexistent driver cancel.");
-			}
+			//if(!checkForRequest(notification)) {
+				//throw new SQLException("Attempt to accept nonexistent driver cancel.");
+			//}
 			db.deleteJourneyWithoutCheck(new Journey(serial));
 			break;
 		case MESSAGE:

@@ -531,7 +531,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	}
 
 	public Journey getJourney(int serial) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("SELECT serial, route_used,starttime,hitchhiker,visibility FROM journeys WHERE serial=?");
+		PreparedStatement stmt = conn.prepareStatement("SELECT serial, route_used,starttime,hitchhiker,visibility,preferenceid FROM journeys WHERE serial=?");
 		stmt.setInt(1, serial);
 		ResultSet rs = stmt.executeQuery();
 		rs.next();
@@ -607,7 +607,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	}
 */
 	public void removeHitchhiker(String hikerID, int journeySerial) throws SQLException{
-		PreparedStatement stmt = conn.prepareStatement("DELETE FROM hitchhiker WHERE journeyid=? AND userid=?");
+		PreparedStatement stmt = conn.prepareStatement("DELETE FROM hitchhikers WHERE journeyid=? AND userid=?");
 		stmt.setInt(1, journeySerial);
 		stmt.setString(2, hikerID);
 		stmt.executeUpdate();
@@ -616,6 +616,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		try {
 			Journey j = getJourney(journeySerial);
 			j.getTripPreferences().setSeatsAvailable(j.getTripPreferences().getSeatsAvailable() + value);
+			updatePreference(j.getTripPreferences());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			ServerLogger.write("SQLError:" + e.getMessage());
@@ -737,6 +738,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		stmt.setBoolean(6, preference.getTalking());
 		stmt.setInt(7, preference.getPrefId());
 		stmt.executeUpdate();
+		ServerLogger.write("\n\n\n\n\n\n\n\n\n\nBLARGH: \nSeats: " + Integer.toString(preference.getSeatsAvailable()) + "\nID: " + preference.getPrefId().toString() + "\n\n\n\n");
 	}
 	public Car getCar(int carId) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("SELECT * FROM car WHERE id=?");
