@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    android:title="Settings">	
-    <PreferenceCategory
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Settings">	    <PreferenceCategory
         android:key="polling_category"
         android:title="Polling" >
         <CheckBoxPreference
@@ -26,7 +25,7 @@
         android:defaultValue="public"
         android:entries="@array/privacy_setting"
         android:key="privacy"
-        android:summary="Set the default privacy setting for the journeys you create"
+        android:summary="Set the default privacy setting for the rides you create"
         android:title="Set Facebook privacy" android:entryValues="@array/privacy_values" android:positiveButtonText="OK"/>
 	</PreferenceCategory>
 	
