@@ -149,7 +149,7 @@ public class TripOptions extends SocialHitchhikingActivity {
     		selectedPrivacy=2;
     	}
        
-      //Initialization of default TripOptions string values
+        //Initialization of default TripOptions string values
         list_trip_options.add(new TripOption(R.drawable.trip_icon_calendar, "Date", formatDate(dateAndTime)));
         list_trip_options.add(new TripOption(R.drawable.trip_icon_clock, "Time",formatTime(dateAndTime)));
         list_trip_options.add(new TripOption(R.drawable.trip_icon_seats, "Seats Available", Integer.toString(tripPreferences.getSeatsAvailable())));
@@ -302,8 +302,8 @@ public class TripOptions extends SocialHitchhikingActivity {
     
     void setExtras(){
     	
-    	final BitSet sExtras = new BitSet(5);
-
+    	final BitSet sExtras = tripPreferences.getExtras();
+    	
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Edit preferences");
     	

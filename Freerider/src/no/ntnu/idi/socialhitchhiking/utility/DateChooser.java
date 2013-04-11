@@ -27,6 +27,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.Calendar;
 
 import no.ntnu.idi.socialhitchhiking.findDriver.FindDriver;
+import no.ntnu.idi.socialhitchhiking.journey.TripOptions;
 import android.app.Activity;
 //import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -160,8 +161,8 @@ public class DateChooser {
 			dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			dateAndTime.set(Calendar.MINUTE, minute);
 			dateAndTime.set(Calendar.SECOND, 0);
-			if(act.getClass() == FindDriver.class) 
-				fireEventTime();
+			//if(act.getClass() == FindDriver.class || act.getClass() == TripOptions.class) 
+			fireEventTime();
 			//else confirmDate();
 		}
 
