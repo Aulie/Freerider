@@ -300,7 +300,7 @@ public class Main extends FBConnectionActivity{
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add("Login as different user").setIcon(R.drawable.fb_icon)
+		menu.add("Login as a different user").setIcon(R.drawable.fb_icon)
 		.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
