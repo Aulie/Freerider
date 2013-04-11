@@ -185,7 +185,6 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		aboutMe.setText(aboutMeString);
 		
 		//Adding Gender to the driver
-		System.out.println("KJONNET ER: " + user.getGender());
 	    if(user.getGender().equals("m")){
 	    	Drawable male = getResources().getDrawable(R.drawable.male);
 	    	gender.setImageDrawable(male);

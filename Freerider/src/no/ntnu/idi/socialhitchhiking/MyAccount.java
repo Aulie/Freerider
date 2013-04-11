@@ -56,8 +56,8 @@ public class MyAccount extends TabActivity {
 	    preferencesspec.setContent(preferancesIntent);
 
 	    // Adding all TabSpec to TabHost
-	    tabHost.addTab(preferencesspec); 
 	    tabHost.addTab(mespec); 
+	    tabHost.addTab(preferencesspec); 
 	    tabHost.addTab(mycarspec);
 	    
 	    //custom size to the preference tab
