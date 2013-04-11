@@ -1,6 +1,7 @@
 package no.ntnu.idi.socialhitchhiking;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
@@ -23,8 +24,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore.Images.Media;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -191,7 +194,21 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	            Bitmap photo = (Bitmap) data.getExtras().get("data"); 
 	            imageView.setImageBitmap(photo);
 	            imageView.invalidate();
-	        }  
+	        }else if(requestCode == 1 && resultCode == RESULT_OK){
+	        	Uri chosenImageUri = data.getData();
+	            Bitmap mBitmap = null;
+	            try {
+					mBitmap = Media.getBitmap(this.getContentResolver(), chosenImageUri);
+					imageView.setImageBitmap(mBitmap);
+		            imageView.invalidate();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
 	    }
 		/**
 		 * Displaying the car info in the layout
@@ -261,6 +278,18 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	                startActivityForResult(cameraIntent, 1337); 
 	            }
 	        });
+	        // Setting the button for getting a car picture from the phone
+ 			Button getimageButton = (Button) this.findViewById(R.id.getimageButton);
+ 			getimageButton.setOnClickListener(new View.OnClickListener()
+ 	        {
+ 	            @Override
+ 	            public void onClick(View v) {
+ 	            	carChanged = true;
+ 	            	Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+ 	            	photoPickerIntent.setType("image/*");
+ 	            	startActivityForResult(photoPickerIntent, 1);
+ 	            }
+ 	        });
 		} 
 	}
 
