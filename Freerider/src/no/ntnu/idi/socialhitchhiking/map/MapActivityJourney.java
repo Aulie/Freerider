@@ -39,6 +39,7 @@ import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,6 +50,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.maps.MapView;
 
@@ -188,6 +190,12 @@ public class MapActivityJourney extends MapActivityAbstract{
 					sendMessage(mid, input);
 				}
 				customDialog.dismiss();
+				//Toast.makeText(context, resId, duration);
+				//Toast.makeText(context, text, duration);
+				
+				Toast toast = Toast.makeText(MapActivityJourney.this, "Message sent", Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
+				toast.show();
 			}
 			
 		});

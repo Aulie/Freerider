@@ -128,11 +128,8 @@ public class Main extends FBConnectionActivity{
 			User resUser = res2.getUser();
 			User tempUser = getApp().getUser();
 			tempUser.setCarId(resUser.getCarId());
-			//tempUser.setCarId(2);
 			tempUser.setAbout(resUser.getAbout());
-			//tempUser.setAbout("Benny");
-			tempUser.setGender(resUser.getGender());
-			//tempUser.setGender("m");
+			//Gender is already set
 			tempUser.setRating(resUser.getRating());
 			//tempUser.setRating(1);
 			getApp().setUser(tempUser);
@@ -219,11 +216,12 @@ public class Main extends FBConnectionActivity{
 	 * logs in via Facebook.
 	 */
 	public void onResult(){
-				if(!getApp().isKey("main"))createNewUser();
+				if(!getApp().isKey("main")){
+					createNewUser();
+				}
 				getApp().startService();
 				getApp().startJourneyReminder();
 				initMainScreen();
-				
 				isNewUser = checkNewUser();
 				Log.e("Statisk?", "statisk");
 				Log.e("Statisk?", Boolean.toString(isNewUser));
@@ -233,20 +231,17 @@ public class Main extends FBConnectionActivity{
 				    	showDialogNew();
 				    }
 				});
-				
 	}
 
 	private void showDialogNew() {
-		
-
-		
 		if(isNewUser){
 	    	new AlertDialog.Builder(Main.this)
 		    .setTitle("Welcome!")
 		    .setMessage("You should provide some basic information about yourself. Do you want to do this now?")
 		    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 		        public void onClick(DialogInterface dialog, int which) { 
-		        	if(!getApp().isKey("main"))createNewUser();
+		        	if(!getApp().isKey("main"))
+		        		createNewUser();
 		        	Intent intent = new Intent(Main.this, no.ntnu.idi.socialhitchhiking.MyAccount.class);
 		        	intent.putExtra("fromDialog", true);
 		    		Main.this.startActivity(intent);
@@ -257,7 +252,6 @@ public class Main extends FBConnectionActivity{
 		        	
 		        }
 		     })
-		     
 		     .show();
 		}
 	}
