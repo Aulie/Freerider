@@ -43,7 +43,7 @@ public class SendNotification{
 
 	public static void create(Context con,int id,String title, String msg,String ticker){
 		nm = (NotificationManager) con.getSystemService(Context.NOTIFICATION_SERVICE);
-		int icon = R.drawable.car_icon;
+		int icon = R.drawable.ic_launcher;
 		CharSequence tickerText = ticker;
 		long when = System.currentTimeMillis();
 		Notification notification = new Notification( icon, tickerText, when);
@@ -70,7 +70,9 @@ public class SendNotification{
 
 		long[] vib = {0,100,200,300};
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
-		notification.sound = Uri.parse("android.resource://no.ntnu.idi.socialhitchhiking/" + R.raw.notif_sound_1);
+		//notification.sound = Uri.parse("android.resource://no.ntnu.idi.socialhitchhiking/" + R.raw.notif_sound_1);
+		//notification.sound = Uri.parse("android.resource://no.ntnu.idi.socialhitchhiking/" + R.raw.notif);
+		notification.defaults |= Notification.DEFAULT_SOUND;
 		notification.vibrate = vib;
 		notification.setLatestEventInfo(context,contentTitle,contentText,contentIntent);
 

@@ -21,13 +21,36 @@
  */
 package no.ntnu.idi.socialhitchhiking.map;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import org.apache.http.client.ClientProtocolException;
+
 import no.ntnu.idi.freerider.model.Location;
+import no.ntnu.idi.freerider.model.Notification;
+import no.ntnu.idi.freerider.model.NotificationType;
 import no.ntnu.idi.freerider.model.User;
+import no.ntnu.idi.freerider.protocol.NotificationRequest;
+import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.socialhitchhiking.R;
+import no.ntnu.idi.socialhitchhiking.client.RequestTask;
+import android.app.Dialog;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.maps.MapView;
 
@@ -46,6 +69,10 @@ public class MapActivityJourney extends MapActivityAbstract{
 	 * The dropoff point.
 	 */
 	private Location dropoffPoint;
+	
+	private FrameLayout btn;
+	
+	private String[] array_spinner;
 	
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -76,7 +103,9 @@ public class MapActivityJourney extends MapActivityAbstract{
 		}
 		
 		if(hiker != null){
-			text += "Hitchhiker: "+hiker.getFullName() +"\n";
+			for(int c=0; c<getApp().getSelectedJourney().getHitchhikers().size(); c++){
+				text += "Hitchhiker: "+getApp().getSelectedJourney().getHitchhikers().get(c).getFullName() +"\n";
+			}
 		}else{
 			text += "No hitchhiker\n";
 		}
@@ -91,8 +120,114 @@ public class MapActivityJourney extends MapActivityAbstract{
 		
 		((TextView)findViewById(R.id.mapViewJourneyTextView)).setText(text);
 		
+		btn = (FrameLayout)findViewById(R.id.mapViewJourneyBtn);
+		btn.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				sendMessageToDriver();
+			}
+			
+		});
+	
 	}
 	
+	private void sendMessageToDriver(){
+		
+		final Dialog customDialog = new Dialog(this);
+		customDialog.setContentView(R.layout.custom_dialog_layout);
+		customDialog.setTitle("Message");
+		
+		final List<String> spinnerArray =  new ArrayList<String>();
+		spinnerArray.add("Everyone");
+		if(!getApp().getSelectedJourney().getDriver().equals(getApp().getUser())){
+			spinnerArray.add(getApp().getSelectedJourney().getDriver().getFullName());
+		}
+		
+		for(int i=0; i<getApp().getSelectedJourney().getHitchhikers().size(); i++){
+			if(!getApp().getSelectedJourney().getHitchhikers().get(i).equals(getApp().getUser())){
+				spinnerArray.add(getApp().getSelectedJourney().getHitchhikers().get(i).getFullName());
+			}
+	    }
+		
+		final Spinner spinner = (Spinner)customDialog.findViewById(R.id.spinner);
+	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(MapActivityJourney.this, android.R.layout.simple_spinner_item, spinnerArray);
+	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    spinner.setAdapter(adapter);
+	    
+	    Button sendBtn = (Button)customDialog.findViewById(R.id.sendBtn);
+	    Button cancelBtn = (Button)customDialog.findViewById(R.id.cancelBtn);
+	    final EditText input = (EditText)customDialog.findViewById(R.id.input);
+	    
+	    sendBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				User mid = getApp().getUser();
+				if(spinner.getSelectedItem().toString().equals("Everyone")){
+					List<User> userList = new ArrayList<User>();
+					userList.add(getApp().getSelectedJourney().getDriver());
+					for(int k=0; k<getApp().getSelectedJourney().getHitchhikers().size(); k++){
+						userList.add(getApp().getSelectedJourney().getHitchhikers().get(k));
+					}
+					userList.remove(getApp().getUser());
+					
+					for(int k=0; k<userList.size(); k++){
+						sendMessage(userList.get(k), input);
+					}
+				} else{
+				
+					for(int j=0; j<spinnerArray.size(); j++){
+						if(spinner.getSelectedItem().toString().equals(getApp().getSelectedJourney().getHitchhikers().get(j).getFullName())){
+							mid = getApp().getSelectedJourney().getHitchhikers().get(j);
+						}
+					}
+				
+					if(spinner.getSelectedItem().toString().equals(getApp().getSelectedJourney().getDriver().getFullName())){
+						mid = getApp().getSelectedJourney().getDriver();
+					}
+				
+					sendMessage(mid, input);
+				}
+				customDialog.dismiss();
+				//Toast.makeText(context, resId, duration);
+				//Toast.makeText(context, text, duration);
+				
+				Toast toast = Toast.makeText(MapActivityJourney.this, "Message sent", Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
+				toast.show();
+			}
+			
+		});
+	    
+	    cancelBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				customDialog.dismiss();
+			}
+		});
+	    
+		customDialog.show();
+		
+	}
+	
+	private void sendMessage(User mid, EditText input){
+		Notification not = new Notification(getApp().getUser().getID(), mid.getID(), getApp().getUser().getFullName(), input.getText().toString(), getApp().getSelectedJourney().getSerial(), NotificationType.MESSAGE, getApp().getSelectedMapRoute().getStartLocation(), getApp().getSelectedMapRoute().getEndLocation(), Calendar.getInstance());
+    	NotificationRequest req = new NotificationRequest(getApp().getUser(), not);
+    	
+    	try {
+			Response res = RequestTask.sendRequest(req, getApp());
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
 
 	
 	@Override

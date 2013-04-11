@@ -1,105 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
- 
-    
+
   <!-- Screen Design for Car -->
 
-	 <ScrollView
+	 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-	<RelativeLayout
+	<LinearLayout
 	    android:layout_width="fill_parent"
-	    android:layout_height="445dp"
-	    android:orientation="horizontal" >
+	    android:layout_height="wrap_content"
+	    android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+       	android:paddingRight="20dp"
+	    android:layout_gravity="center_horizontal"
+	    android:orientation="vertical" >
 
             <ImageView
                 android:id="@+id/cameraView"
                 android:layout_width="126dp"
                 android:layout_height="126dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="24dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
                 android:src="@drawable/car_icon" />
 
             <Button
                 android:id="@+id/cameraButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/cameraView"
-                android:layout_below="@+id/cameraView"
+                android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:text="Take a Photo" />
-
-            <TextView
-                android:id="@+id/car"
-                android:layout_width="wrap_content"
+			
+            <LinearLayout 
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/editText1"
-                android:layout_alignLeft="@+id/textView1"
-                android:ellipsize="end"
-                android:lines="1"
-                android:maxLength="30"
-                android:text="Car:"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <EditText
-                android:id="@+id/carName"
-                android:layout_width="wrap_content"
+                android:orientation="horizontal" >
+	            <TextView
+	                android:id="@+id/car"
+	                android:layout_width="60dp"
+	                android:layout_height="wrap_content"
+	                android:text="Car:"
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
+	            <EditText
+	                android:id="@+id/carName"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:singleLine="true" 
+	                android:inputType="text"/>
+			</LinearLayout>
+			<LinearLayout 
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/cameraButton"
-                android:layout_marginTop="27dp"
-                android:layout_toRightOf="@+id/textView1"
-                android:ems="13"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/editText1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/cameraButton"
-                android:layout_below="@+id/carName"
-                android:ems="2"
-                android:inputType="number" >
-
-                <requestFocus />
-            </EditText>
-
+                android:orientation="horizontal" >
+		        <TextView
+	                android:layout_width="60dp"
+	                android:layout_height="wrap_content"
+	                android:text="Seats:"
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
+	            <EditText
+	                android:id="@+id/myAccountCarSeats"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:singleLine="true"
+	                android:inputType="number" />
+			</LinearLayout>
             <TextView
                 android:id="@+id/comfort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/ratingBar1"
-                android:layout_marginTop="16dp"
-                android:layout_toLeftOf="@+id/editText1"
-                android:text="Comfort:"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="10dp"
+                android:text="Comfort"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/editText1"
-                android:layout_alignLeft="@+id/comfort"
-                android:text="Seats:"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
+			
             <RatingBar
                 android:id="@+id/ratingBar1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editText1"
-                android:layout_toRightOf="@+id/car"
+                android:layout_gravity="center_horizontal"
                 android:numStars="5"
                 android:rating="3"
                 android:scaleX="0.5"
                 android:scaleY="0.5" />
-
-    </RelativeLayout>
+    </LinearLayout>
 </ScrollView>
-
-</LinearLayout>

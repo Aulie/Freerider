@@ -124,7 +124,6 @@ public class TripOptions extends SocialHitchhikingActivity {
     	for(int i=0 ; i<tripPreferences.getExtras().length() ; i++){
     		if(tripPreferences.getExtras().get(i)){
     			ex=ex+items[i]+" ";
-    			
     			checkedExtrasFromUserPreferences[i]=tripPreferences.getExtras().get(i);
     		}
     	}
@@ -153,9 +152,9 @@ public class TripOptions extends SocialHitchhikingActivity {
       //Initialization of default TripOptions string values
         list_trip_options.add(new TripOption(R.drawable.trip_icon_calendar, "Date", formatDate(dateAndTime)));
         list_trip_options.add(new TripOption(R.drawable.trip_icon_clock, "Time",formatTime(dateAndTime)));
-        list_trip_options.add(new TripOption(R.drawable.trip_icon_seats, "Seats Available", tripPreferences.getSeatsAvailable().toString()));
+        list_trip_options.add(new TripOption(R.drawable.trip_icon_seats, "Seats Available", Integer.toString(tripPreferences.getSeatsAvailable())));
         list_trip_options.add(new TripOption(R.drawable.trip_icon_fb, "Privacy", privacyString));
-        list_trip_options.add(new TripOption(R.drawable.trip_icon_plus, "Extras", ex));
+        list_trip_options.add(new TripOption(R.drawable.trip_icon_plus, "Preferences", ex));
         
         adapter = new TripOptionAdapter(this, R.layout.list_row_trip_options, list_trip_options);       
         listView1 = (ListView)findViewById(R.id.list);
@@ -306,9 +305,9 @@ public class TripOptions extends SocialHitchhikingActivity {
     	final BitSet sExtras = new BitSet(5);
 
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Pick extras");
+    	builder.setTitle("Edit preferences");
     	
-    	builder.setMultiChoiceItems(R.array.preferences_array, null, new DialogInterface.OnMultiChoiceClickListener() {
+    	builder.setMultiChoiceItems(R.array.preferences_array, checkedExtrasFromUserPreferences, new DialogInterface.OnMultiChoiceClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -324,7 +323,7 @@ public class TripOptions extends SocialHitchhikingActivity {
             		}
             	}
             	tripPreferences.setExtras(sExtras);
-            	list_trip_options.set(4, new TripOption(R.drawable.trip_icon_plus, "Extras", ex));
+            	list_trip_options.set(4, new TripOption(R.drawable.trip_icon_plus, "Preferences", ex));
 				adapter.notifyDataSetChanged();
             }
         });

@@ -198,7 +198,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		picture = (ImageView) findViewById(R.id.mapViewPickupImage);
 		
 		// Create an object for subclass of AsyncTask
-        GetImage task = new GetImage(picture);
+        GetImage task = new GetImage(picture, this);
         // Execute the task: Get image from url and add it to the ImageView
         task.execute(driver.getPictureURL());
 		

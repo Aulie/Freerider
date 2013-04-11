@@ -63,7 +63,6 @@ public class MyAccountPreferences extends SocialHitchhikingActivity {
 				e.printStackTrace();
 			}
 
-		
 		/**Preferences fetched from the strigs.xml*/
 		String[] preferences = getResources().getStringArray(R.array.preferences_array);
 		prefAdap = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, preferences);
@@ -100,10 +99,8 @@ public class MyAccountPreferences extends SocialHitchhikingActivity {
                 		}
 	                	break;
 	            }
-	           
 	    }
 	    prefAdap.notifyDataSetChanged();
-
 	}
 	/**invoke getCheckedItemPositions() on list view object which returns the set of checked items (as SparseBooleanArray) in the list*/
 	public void onClick(View v) {
@@ -117,7 +114,7 @@ public class MyAccountPreferences extends SocialHitchhikingActivity {
 	 } 
 	/** Save the preferences on the database*/
 	@Override
-	public void onBackPressed() {
+	public void onStop() {
 
         for (int i = 0; i < checked.size(); i++) {
             // Item position in adapter
@@ -135,7 +132,6 @@ public class MyAccountPreferences extends SocialHitchhikingActivity {
 	                case 4: pref2.setSmoking(checked.valueAt(i));
 	                		break;
 	            }
-
         }
         Request req3 = new PreferenceRequest(RequestType.UPDATE_PREFERENCE,getApp().getUser(),pref2);
         try {
@@ -153,14 +149,9 @@ public class MyAccountPreferences extends SocialHitchhikingActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		// TODO Auto-generated method stub
-		super.onBackPressed();
-		
-		
+		super.onStop();
 	}
-	 
-	 
 }
 
 

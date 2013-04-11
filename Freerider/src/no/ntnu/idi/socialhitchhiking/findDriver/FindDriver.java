@@ -120,6 +120,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	private OnDateSetListener odsl;
 	private ProgressDialog loadingDialog;
 	private ProgressDialog searchingDialog;
+	private ProgressDialog searchingDialog2;
 	private ArrayList<PreviousSearch> previousSearch;
 	private ArrayAdapter<PreviousSearch> previousAdapter;
 	/**
@@ -200,6 +201,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 				getApp().setSelectedMapRoute(mr);
 				getApp().setSelectedJourney(selectedJourney);
 				startActivity(intent);
+				showLoad();
 			}
 
 		});
@@ -231,6 +233,23 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		btnSpecifyDate.setBackgroundColor(notSelected);
 		upcoming = true;
 	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		try{
+			searchingDialog2.dismiss();
+		}catch (Exception e){
+			
+		}
+		
+	}
+
+	public void showLoad(){
+		searchingDialog2 = ProgressDialog.show(this, "Displaying route", "Please wait...");
+	}
+	
 	/**
 	 * Setting the Upcoming button as selected, and deselects the Specify Date button.
 	 * @param view

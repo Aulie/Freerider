@@ -90,6 +90,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 			Log.e("Size", " " + journeys.get(i).getHitchhikers().size());
 			if(journeys.get(i).getHitchhikers().size() > 0){
 				Log.e("Not null","not null");
+				boolean added = false;
 				for(int j = 0; j<journeys.get(i).getHitchhikers().size(); j++)
 				{
 					Log.e("J","j");
@@ -100,8 +101,9 @@ public class ListJourneys extends SocialHitchhikingActivity{
 						}
 					}
 					else if(journeys.get(i).getDriver().getID().equals(getApp().getUser().getID())){
-						if(owned){
+						if(owned && !added){
 							tempJourneys.add(journeys.get(i));
+							added = true;
 						}
 					}
 				}
@@ -403,7 +405,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 	}
 	private void handleJourney(Journey j){
 		if(j.getHitchhikers() != null){
-			//sendCancelJourney(j);
+			sendCancelJourney(j);
 		}
 		else sendDeleteJourney(j);
 	}
@@ -412,17 +414,17 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		super.onResume();
 		adapter.updateDataSet();
 	}
-	/*
+	
 	private void sendCancelJourney(Journey j) {
 		NotificationType type;
 		String id = getApp().getUser().getID();
 		Notification notif;
-		if(j.getHitchhiker().getID().equals(id) ){
+		if(!j.getDriver().getID().equals(id) ){
 			type = NotificationType.HITCHHIKER_CANCEL;
 			notif = new Notification(id, j.getRoute().getOwner().getID(),"", "", j.getSerial(), type);
 		}else{ 
-			type = NotificationType.DRIVER_CANCEL;
-			notif = new Notification(id, j.getHitchhiker().getID(), "","", j.getSerial(), type);
+			type = NotificationType.HITCHHIKER_ACCEPTS_DRIVER_CANCEL;
+			notif = new Notification(id, id, "","", j.getSerial(), type);
 		}
 		NotificationRequest req = new NotificationRequest(getApp().getUser(), notif);
 		boolean succeded = sendJourneyRequest(req);
@@ -431,7 +433,6 @@ public class ListJourneys extends SocialHitchhikingActivity{
 			createAlertDialog(this, succeded, "Journey", "cancelled", "");
 		}
 	}
-	*/
 	private boolean sendJourneyRequest(Request req){
 		Response res;
 		try {
@@ -446,6 +447,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Log.e("ExecutionMelvin", e.getMessage());
 		}
 		return false;
 	}

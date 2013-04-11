@@ -55,6 +55,7 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
@@ -96,6 +97,7 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			if(msg.obj instanceof User){
+				User u = (User) msg.obj;
 				final Message temp = msg;
 				Thread t = new Thread() {
 					public void run() {
@@ -397,12 +399,19 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 				final String id = json.getString("id");
 				final String firstName = json.getString("first_name");
 				final String surName = json.getString("last_name");
+				final String gender = json.getString("gender");
 
 				FBConnectionActivity.this.runOnUiThread(fbc = new Runnable() {
 					public void run() {
-						
 						User login = new User(firstName,id);
 						login.setSurname(surName);
+						// Setting gender
+						if(gender.equals("male")){
+							login.setGender("m");
+						}
+						else if(gender.equals("female")){
+							login.setGender("f");
+						}
 						//username.setText("Welcome: " + name+"\n ID: "+id);
 						Message msg = new Message();
 						
