@@ -90,6 +90,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 			Log.e("Size", " " + journeys.get(i).getHitchhikers().size());
 			if(journeys.get(i).getHitchhikers().size() > 0){
 				Log.e("Not null","not null");
+				boolean added = false;
 				for(int j = 0; j<journeys.get(i).getHitchhikers().size(); j++)
 				{
 					Log.e("J","j");
@@ -100,8 +101,9 @@ public class ListJourneys extends SocialHitchhikingActivity{
 						}
 					}
 					else if(journeys.get(i).getDriver().getID().equals(getApp().getUser().getID())){
-						if(owned){
+						if(owned && !added){
 							tempJourneys.add(journeys.get(i));
+							added = true;
 						}
 					}
 				}
