@@ -58,7 +58,7 @@ public class RequestSerializer {
 		}
 		else if(request instanceof SearchRequest){
 			SearchRequest req = (SearchRequest) request;
-			data.add(SerializerUtils.serializeSearch(req.getStartPoint(), req.getEndPoint(), req.getStartTime()));
+			data.add(SerializerUtils.serializeSearch(req.getStartPoint(), req.getEndPoint(), req.getStartTime(),req.getNumDays()));
 		}else if(request instanceof UserRequest){
 			data.add(SerializerUtils.serializeUser(request.getUser()));
 		}else if(request instanceof JourneyRequest){

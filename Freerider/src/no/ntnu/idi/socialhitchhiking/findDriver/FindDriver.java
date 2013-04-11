@@ -123,6 +123,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	private ProgressDialog searchingDialog2;
 	private ArrayList<PreviousSearch> previousSearch;
 	private ArrayAdapter<PreviousSearch> previousAdapter;
+	int numDays = 1; //Number of days in the future to search for, 1 being today
 	/**
 	 * The color that pickup and dropoff button should have when they have been selected. 
 	 * Only one of the buttons will have this at the same time.
@@ -222,7 +223,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			@Override
 			public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
 				searchDate.set(arg0.getYear(), arg0.getMonth(), arg0.getDayOfMonth());
-				btnSpecifyDate.setText(arg0.getDayOfMonth()+"/"+arg0.getMonth()+"/"+arg0.getYear());
+				btnSpecifyDate.setText(arg0.getDayOfMonth()+"/"+(arg0.getMonth()+1)+"/"+arg0.getYear());
 			}
 			
 		};
@@ -368,7 +369,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		Calendar cal = Calendar.getInstance();
 		if(searchDate != null)
 			cal = searchDate;
-		Request req = new SearchRequest(getApp().getUser() , goingFrom, goingTo,cal);
+		Request req = new SearchRequest(getApp().getUser() , goingFrom, goingTo,cal, numDays);
 
 		try {
 			res = (JourneyResponse) RequestTask.sendRequest(req,getApp());
@@ -531,9 +532,13 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			//Looper.prepare();
 			//journeys = null;
 			try {
-				//If date is set to 'Upcoming' then run search 7 times and increase date for each iteration
 				if(upcoming) {
+					numDays = 7;
+					Calendar c = Calendar.getInstance();
+					searchDate.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+					journeys = search();
 					//Log.e("Upcoming","Yes");
+					/*
 					Calendar c = Calendar.getInstance();
 					journeys = new ArrayList<Journey>();
 					for(int i = 0; i < 7; i++) {
@@ -544,7 +549,9 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 						}
 						c.add(Calendar.DAY_OF_MONTH, 2); //2?
 					}
+					*/
 				} else {
+					numDays = 1;
 					journeys = search();
 				}
 				if(journeys.size() == 0) {

@@ -109,7 +109,7 @@ public class RequestParser {
 			}
 			Location startPoint = ParserUtils.parseLocation(searchElement.element(ProtocolConstants.START_LOCATION));
 			Location endPoint = ParserUtils.parseLocation(searchElement.element(ProtocolConstants.END_LOCATION));
-			return new SearchRequest(user, startPoint, endPoint, starttime);
+			return new SearchRequest(user, startPoint, endPoint, starttime,Integer.parseInt(searchElement.attributeValue(ProtocolConstants.NUMBER_OF_DAYS)));
 		}else if(type.getRequestClass() == NotificationRequest.class.asSubclass(Request.class)){
 			Notification note = ParserUtils.parseNotification(Data.element(ProtocolConstants.NOTIFICATION_ELEMENT));
 			return new NotificationRequest( type,user, note);

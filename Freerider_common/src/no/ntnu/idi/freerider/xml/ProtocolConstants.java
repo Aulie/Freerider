@@ -107,6 +107,7 @@ interface ProtocolConstants {
 	static final String END_LOCATION = "Endlocation";
 	static final String STARTTIME = "Starttime";
 	static final String XML_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+	static final String NUMBER_OF_DAYS = "NumDays";
 	
 	static final String USER = "user_top";
 	static final String USER_ELEMENT = "User";

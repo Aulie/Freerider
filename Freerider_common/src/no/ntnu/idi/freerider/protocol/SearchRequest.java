@@ -32,14 +32,16 @@ import no.ntnu.idi.freerider.model.User;
 public class SearchRequest extends Request{
 	private final Location startPoint, endPoint;
 	private final Calendar startTime;
+	private final int numDays;
 
-	public SearchRequest(User user, Location startPoint, Location endPoint, Calendar startTime) {
+	public SearchRequest(User user, Location startPoint, Location endPoint, Calendar startTime, int numDays) {
 		super(RequestType.SEARCH, user);
 		this.startPoint = startPoint;
 		this.endPoint = endPoint;
 		this.startTime = startTime;
+		this.numDays = numDays;
 	}
-
+ 
 	public Location getStartPoint() {
 		return startPoint;
 	}
@@ -52,6 +54,11 @@ public class SearchRequest extends Request{
 
 	public Calendar getStartTime() {
 		return startTime;
+	}
+
+	public int getNumDays()
+	{
+		return numDays;
 	}
 	
 }

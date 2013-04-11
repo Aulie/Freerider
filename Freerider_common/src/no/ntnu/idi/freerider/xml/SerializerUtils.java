@@ -105,9 +105,10 @@ class SerializerUtils {
 		return locationElement;
 	}
 
-	static Element serializeSearch(Location start,Location stop,Calendar cal){
+	static Element serializeSearch(Location start,Location stop,Calendar cal,int numDays){
 		Element search = new DefaultElement(ProtocolConstants.SEARCH);
 		search.addAttribute(ProtocolConstants.STARTTIME, serializeCalendar(cal));
+		search.addAttribute(ProtocolConstants.NUMBER_OF_DAYS, Integer.toString(numDays));
 		Element startEl = search.addElement(ProtocolConstants.START_LOCATION);
 		startEl.addAttribute(ProtocolConstants.LATITUDE, Double.toString(start.getLatitude()));
 		startEl.addAttribute(ProtocolConstants.LONGITUDE, Double.toString(start.getLongitude()));
@@ -115,6 +116,7 @@ class SerializerUtils {
 		Element stopEl = search.addElement(ProtocolConstants.END_LOCATION);
 		stopEl.addAttribute(ProtocolConstants.LATITUDE, Double.toString(start.getLatitude()));
 		stopEl.addAttribute(ProtocolConstants.LONGITUDE, Double.toString(start.getLongitude()));
+		
 		return search;
 	}
 	static Element serializePreference(TripPreferences preference) {

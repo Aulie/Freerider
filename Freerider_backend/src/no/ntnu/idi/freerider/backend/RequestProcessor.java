@@ -23,6 +23,7 @@ package no.ntnu.idi.freerider.backend;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -227,6 +228,15 @@ public class RequestProcessor {
 			try {
 				SearchRequest req = (SearchRequest) request;
 				journeys = db.search(req.getStartPoint(), req.getEndPoint(), req.getStartTime(),req.getUser());
+				Calendar c = Calendar.getInstance();
+				for(int i = 1; i < req.getNumDays(); i++) {
+					
+					c.add(Calendar.DAY_OF_MONTH, 2); //1 or 2?
+					List<Journey> tempJourneys = db.search(req.getStartPoint(), req.getEndPoint(), c, req.getUser());
+					for(int j = 0; j < tempJourneys.size(); j++) {
+						journeys.add(tempJourneys.get(j));
+					}
+				}
 				String accessToken = db.getAccessToken(req.getUser().getID());
 				filterService.filterSearch(journeys, req.getUser().getID(),accessToken);
 			} catch (SQLException e) {
