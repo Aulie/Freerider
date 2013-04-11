@@ -62,7 +62,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		new GetImage(picture, this).execute(user.getPictureURL());
 	}
 	@Override
-	public void onBackPressed(){
+	public void onStop(){
 		ageChanged = false;
 		aboutMeChanged = false;
 		phoneChanged = false;
@@ -155,7 +155,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		super.onBackPressed();
+		super.onStop();
 	}
 	public void initUser(UserResponse res){
 		this.user = res.getUser();

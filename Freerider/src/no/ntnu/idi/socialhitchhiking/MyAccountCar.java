@@ -75,7 +75,7 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	    }
 
 	    @Override
-		public void onBackPressed() {
+		public void onStop() {
 	    	seatsChanged = false;
 	    	carChanged = false;
 	    	boolean isEmpty = false;
@@ -183,7 +183,7 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 					e.printStackTrace();
 				}
 	    	}
-	    	super.onBackPressed();
+	    	super.onStop();
 	    }
 	    
 		protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
