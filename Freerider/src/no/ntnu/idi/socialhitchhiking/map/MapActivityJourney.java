@@ -101,7 +101,9 @@ public class MapActivityJourney extends MapActivityAbstract{
 		}
 		
 		if(hiker != null){
-			text += "Hitchhiker: "+hiker.getFullName() +"\n";
+			for(int c=0; c<getApp().getSelectedJourney().getHitchhikers().size(); c++){
+				text += "Hitchhiker: "+getApp().getSelectedJourney().getHitchhikers().get(c).getFullName() +"\n";
+			}
 		}else{
 			text += "No hitchhiker\n";
 		}
