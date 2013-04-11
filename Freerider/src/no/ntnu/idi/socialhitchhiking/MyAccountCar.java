@@ -78,6 +78,7 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 		public void onBackPressed() {
 	    	seatsChanged = false;
 	    	carChanged = false;
+	    	boolean isEmpty = false;
 	    	// Checks to see what is changed
 	    	if(!seatsAvailable.toString().equals(seatsText.getText().toString())){
 	    		seatsChanged = true;
@@ -95,11 +96,17 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 		    		Toast.makeText(this, "Please enter an integer value in Available seats", Toast.LENGTH_SHORT).show();
 		    		return;
 		    	}
+	    	}else{
+	    		seatsAvailable = 0;
 	    	}
     		// Getting car ID
     		id = user.getCarId();
 			// Setting new car name
-    		carNameString = carName.getText().toString();
+    		if(carName.getText().toString().length() > 0){
+    			carNameString = carName.getText().toString();
+    		}else{
+    			carNameString = "";
+    		}
     		// Setting new comfort
     		comfort = bar.getRating();
     		
@@ -201,7 +208,11 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	        // Setting the number of seats available
 	        prefRes = prefResInit;
 	        seatsAvailable = prefRes.getPreferences().getSeatsAvailable(); 
-	        seatsText.setText(seatsAvailable.toString());
+	        if(seatsAvailable > 0){
+	        	seatsText.setText(seatsAvailable.toString());
+	        }else{
+	        	seatsText.setText("");
+	        }
 	        
 	        
 	        // If the user does have a car registered

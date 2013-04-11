@@ -32,7 +32,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 	private TextView name;
 	private User user;
 	
-	private int ageNumber;
+	private String ageString;
 	private String aboutMeString;
 	private String phoneString;
 	
@@ -66,7 +66,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		}
 		
 		// Checking if a new age is set
-		if(!Integer.toString(ageNumber).equals(age.getText().toString())){
+		if(ageString.equals(age.getText().toString())){
 			ageChanged = true;
 		}
 		// Checking if a new phone number is set
@@ -78,26 +78,42 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 			aboutMeChanged = true;
 		}
 		// Setting the age
+		boolean isValidAge = true;
+		boolean isEmpty = false;
 		try{
-			ageNumber = Integer.parseInt(age.getText().toString());
-		}catch(Exception e){
+			Integer.parseInt(age.getText().toString());
+		}catch(NumberFormatException e){
 			if(age.getText().toString().length() > 0){
-				Toast.makeText(this, "Please enter numbers only in age.", Toast.LENGTH_LONG).show();
+				isValidAge = false;
+				Toast.makeText(this, "Age have to be a number!", Toast.LENGTH_LONG).show();
 				return;
+			}else{
+				isEmpty = true;
 			}
+		}
+		if(isEmpty){
+			ageString = "";
+		}else if(isValidAge){
+			ageString = age.getText().toString();
 		}
 		// Setting the phone number
 		boolean isValidNumber = true;
+		isEmpty = false;
 		try{
 			Integer.parseInt(phone.getText().toString());
 		}catch(NumberFormatException e){
-			isValidNumber = false;
 			if(phone.getText().toString().length() > 0){
+				isValidNumber = false;
 				Toast.makeText(this, "Phone number can only consist of numbers! Use 00 extensions instead of +.", Toast.LENGTH_LONG).show();
 				return;
+			}else{
+				isEmpty = true;
 			}
 		}
-		if(isValidNumber){
+		if(isEmpty){
+			phoneString = "";
+		}
+		else if(isValidNumber){
 			phoneString = phone.getText().toString();
 		}
 		// Setting the About me
@@ -105,7 +121,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		
 		// Make changes in the user object
 		if(ageChanged){
-			user.setAge(ageNumber);
+			user.setAge(Integer.parseInt(ageString));
 		}
 		if(phoneChanged){
 			user.setPhone(phoneString);
@@ -153,8 +169,12 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		name.setText(user.getFullName());
 		
 		// Adding the age of the user
-		ageNumber = user.getAge();
-		age.setText(Integer.toString(ageNumber));
+		if(user.getAge() == 0){
+			ageString = "";
+		}else{
+			ageString = Integer.toString(user.getAge());
+		}
+		age.setText(ageString);
 		
 		// Adding the phone number of the user
 		phoneString = user.getPhone();
