@@ -70,7 +70,8 @@ public class SendNotification{
 
 		long[] vib = {0,100,200,300};
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
-		notification.sound = Uri.parse("android.resource://no.ntnu.idi.socialhitchhiking/" + R.raw.notif_sound_1);
+		//notification.sound = Uri.parse("android.resource://no.ntnu.idi.socialhitchhiking/" + R.raw.notif_sound_1);
+		notification.sound = Uri.parse("android.resource://no.ntnu.idi.socialhitchhiking/" + R.raw.notif);
 		notification.vibrate = vib;
 		notification.setLatestEventInfo(context,contentTitle,contentText,contentIntent);
 
