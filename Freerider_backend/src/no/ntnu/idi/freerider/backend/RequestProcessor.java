@@ -101,6 +101,14 @@ public class RequestProcessor {
 			}
 			return new UserResponse(type, status,newUser);
 
+		case UPDATE_USER:
+			User tempUser = request.getUser();
+			try {
+				db.updateUser(tempUser);
+			} catch (SQLException e) {
+				return new UserResponse(type, ResponseStatus.FAILED,e.getMessage());
+			}
+			return new UserResponse(type,status,tempUser);
 		case LOGIN:
 			try {
 				db.setAccessToken(request.getUser().getID(), ((LoginRequest) request).getAccessToken());
@@ -362,8 +370,11 @@ public class RequestProcessor {
 			if(!checkForRequest(notification)) {
 				throw new SQLException("Attempt to accept nonexistent hitchhiker request or accept previously rejected request.");
 			}
+			ServerLogger.write("Before addHitchhiker");
 			db.addHitchhiker(notification.getRecipientID(),serial);
+			ServerLogger.write("Before incrementSeats");
 			db.incrementSeats(serial, -1);
+			ServerLogger.write("After incrementSeats");
 			break;
 		case REQUEST_REJECT:
 			if(checkForRequest(notification)) throw new SQLException("Attempted to reject previously accepted request.");
