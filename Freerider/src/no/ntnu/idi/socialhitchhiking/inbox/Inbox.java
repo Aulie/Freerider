@@ -54,6 +54,7 @@ import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -166,7 +167,7 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				changeNotificationList(item);
+				//changeNotificationList(item);
 				return true;
 			}
 		});
@@ -216,19 +217,19 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		last10Days = Calendar.getInstance();
 		last10Days.add(Calendar.DATE,-10);
 	}
-	private void changeNotificationList(MenuItem item){
+	private void changeNotificationList(){
 		System.out.println("History: "+history);
 		if(getApp().getUser() != null){
-			if(history){
+			if(!history){
 				notifications.setAdapter(active);
-				history = false;
-				item.setTitle("Show Notification History");
+				//history = false;
+				//item.setTitle("Show Notification History");
 				header.setText("Active Notifications");
 			}
 			else {
 				notifications.setAdapter(historyAdap);
-				history = true;
-				item.setTitle("Show Active Notifications");
+				//history = true;
+				//item.setTitle("Show Active Notifications");
 				header.setText("Notification History");
 			}
 		}
@@ -419,9 +420,13 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		Log.e("hit?", "KAKE ER JÆÆÆÆVLIG GODT");
 		
 		setContentView(R.layout.inbox);
-		history = false;
+		Intent intent = getIntent();
+		
+		history = intent.getBooleanExtra("history", false);
+		
 		header = (CheckedTextView) findViewById(R.id.inbox_header);
 		header.setText("Active Notifications");
+		header.setVisibility(View.GONE);
 		sorted = new ArrayList<Notification>();
 		notifHistory = new ArrayList<Notification>();
 		notifications = (ListView) findViewById(R.id.notification_list);
@@ -452,11 +457,11 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		initCalendars();
 		pullNotifications();
 		if(!getApp().isKey("inbox") && getApp().getSettings().isCheckSettings()){
-			Toast toast = Toast.makeText(getApp(), "Notification history available in menu", Toast.LENGTH_LONG);
-			toast.show();
+			//Toast toast = Toast.makeText(getApp(), "Notification history available in menu", Toast.LENGTH_LONG);
+			//toast.show();
 			getApp().setKeyState("inbox", true);
 		}
-		
+		changeNotificationList();
 	}
 }
 

@@ -359,7 +359,7 @@ public class Main extends FBConnectionActivity{
 	 */
 	private void startInbox(){
 		//initActivity(no.ntnu.idi.socialhitchhiking.inbox.Inbox.class);
-		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.inbox.Inbox.class);
+		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.inbox.ListNotifications.class);
 		startActivity(intent);
 	}
 	/**
