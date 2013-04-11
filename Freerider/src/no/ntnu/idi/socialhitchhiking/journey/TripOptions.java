@@ -11,7 +11,6 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.http.client.ClientProtocolException;
 
-import com.facebook.android.Facebook;
 
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Route;
@@ -24,10 +23,8 @@ import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
-import no.ntnu.idi.socialhitchhiking.Main;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
-import no.ntnu.idi.socialhitchhiking.facebook.FBConnectionActivity;
 import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
 import no.ntnu.idi.socialhitchhiking.utility.ShareOnFacebook;
 import no.ntnu.idi.socialhitchhiking.utility.TripOptionAdapter;
@@ -37,8 +34,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,7 +49,6 @@ import android.widget.Toast;
  */
 
 public class TripOptions extends SocialHitchhikingActivity {
-//extends FBConnectionActivity {
     private ListView listView1;
     private Calendar dateAndTime;
     private Calendar newTime;
@@ -66,8 +61,6 @@ public class TripOptions extends SocialHitchhikingActivity {
 	private TripOptionAdapter adapter;
 	private List<TripOption> list_trip_options;
 	private Integer seatValue;
-//	private Boolean dateChanged=false;
-//	private Boolean timeChanged=true;
 	private Request req;
 	private PreferenceResponse res;
 	private String[] items = {"Music", "Animals", "Breaks", "Talking", "Smoking"};
@@ -267,23 +260,7 @@ public class TripOptions extends SocialHitchhikingActivity {
     }
     
     void setPrivacy(){
-//    	Facebook mFacebook = new Facebook("321654017885450");
-//            Log.d("Tests", "Testing graph API wall post");
-//             try {
-//            	 	String msg = "I've created a ride in FreeRider";
-//                    String response = mFacebook.request("me");
-//                    Bundle parameters = new Bundle();
-//                    parameters.putString("message", msg);
-//                    parameters.putString("description", "test test test");
-//                    response = mFacebook.request("me/feed", parameters, "POST");
-//                    Log.d("Tests", "got response: " + response);
-//                    if (response == null || response.equals("") || 
-//                            response.equals("false")) {
-//                       Log.v("Error", "Blank response");
-//                    }
-//             } catch(Exception e) {
-//                 e.printStackTrace();
-//             }
+
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setTitle("Set Privacy");
     	builder.setSingleChoiceItems(R.array.privacy_setting, selectedPrivacy, new DialogInterface.OnClickListener() {
@@ -340,7 +317,6 @@ public class TripOptions extends SocialHitchhikingActivity {
     	});
     	builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-               //TODO Check which check boxes are marked and update the tripPreferences
             	String ex = "";
             	for(int i=0 ; i<sExtras.length() ; i++){
             		if(sExtras.get(i)){
@@ -365,10 +341,10 @@ public class TripOptions extends SocialHitchhikingActivity {
     	journey = new Journey(-1);
 		journey.setRoute(selectedRoute);
 		journey.setStart(dateAndTime);
-//		journey.setSeatsAvailable(seatValue);
 		journey.setVisibility(privacyPreference);
 		journey.setTripPreferences(tripPreferences);
 		getApp().setSelectedJourney(journey);
+		
 		Intent intent = new Intent(TripOptions.this, ShareOnFacebook.class);
 		startActivity(intent);
 		sendJourneyRequest();
@@ -422,11 +398,13 @@ public class TripOptions extends SocialHitchhikingActivity {
 			e.printStackTrace();
 		}
 	}
+    
     public String formatDate(Calendar c){
     	String formatedDate = c.get(Calendar.DAY_OF_MONTH)
 				+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR);
     	return formatedDate;
     }
+    
     public String formatTime(Calendar c){
 		//This formats Calendar.MINUTE so minutes below 10 show a 0 before
     	Integer min = c.get(Calendar.MINUTE);
@@ -437,51 +415,4 @@ public class TripOptions extends SocialHitchhikingActivity {
 		String formatedTime = c.get(Calendar.HOUR_OF_DAY)+":"+minutes;
 		return formatedTime;
     }
-    
-
 }
-
-//AlertDialog.Builder b = new AlertDialog.Builder(this);
-//b.setTitle("Share");
-//b.setMessage("Post ride to facebook?");
-//b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//	@Override
-//	public void onClick(DialogInterface dialog, int which) {
-//		fb.dialog(StartingPlace.this, "feed", new Fa)
-//	}
-//});
-//b.setNegativeButton("No", null);
-//b.show();
-
-//@SuppressWarnings("deprecation")
-//public void postOnWall(String msg) {
-//  Log.d("Tests", "Testing graph API wall post");
-//   try {
-//          String response = fb.request("me");
-//          Bundle parameters = new Bundle();
-//          parameters.putString("message", msg);
-//          parameters.putString("description", "test test test");
-//          response = fb.request("me/feed", parameters,"POST");
-//          Log.d("Tests", "got response: " + response);
-//          if (response == null || response.equals("") || 
-//                  response.equals("false")) {
-//             Log.v("Error", "Blank response");
-//          }
-//   } catch(Exception e) {
-//       e.printStackTrace();
-//   }
-//}
-
-//AlertDialog.Builder b = new AlertDialog.Builder(this);
-//b.setTitle("Set Date");
-//b.setMessage("Do you want to set the date of the Trip?");
-//b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//	@Override
-//	public void onClick(DialogInterface dialog, int which) {
-//		dc = new DateChooser(TripOptions.this, propLis);
-//		dc.setTitleDate("Set Date of Trip");
-//		dc.showDatePicker();
-//	}
-//});
-//b.setNegativeButton("Cancel", null);
-//b.show();

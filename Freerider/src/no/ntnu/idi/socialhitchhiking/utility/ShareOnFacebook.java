@@ -1,31 +1,21 @@
 package no.ntnu.idi.socialhitchhiking.utility;
 
-import java.io.ByteArrayOutputStream;
 import java.util.BitSet;
 import java.util.Calendar;
 
-import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Route;
-import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.socialhitchhiking.Main;
 import no.ntnu.idi.socialhitchhiking.R;
-import no.ntnu.idi.socialhitchhiking.journey.TripOptions;
 
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.Session;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,7 +33,11 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 
 	private Facebook facebook;
 	private String messageToPost;
+	
+	private String date,time,seats,extras;
+	private Route currentRoute;
 
+	@SuppressWarnings("deprecation")
 	public boolean saveCredentials(Facebook facebook) {
         	Editor editor = getApplicationContext().getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();
         	editor.putString(TOKEN, facebook.getAccessToken());
@@ -51,78 +45,87 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
         	return editor.commit();
     	}
 
-    	public boolean restoreCredentials(Facebook facebook) {
+    	@SuppressWarnings("deprecation")
+		public boolean restoreCredentials(Facebook facebook) {
         	SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(KEY, Context.MODE_PRIVATE);
         	facebook.setAccessToken(sharedPreferences.getString(TOKEN, null));
         	facebook.setAccessExpires(sharedPreferences.getLong(EXPIRES, 0));
         	return facebook.isSessionValid();
     	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Route route = getApp().getSelectedRoute();
+		currentRoute = getApp().getSelectedRoute();
 		facebook = new Facebook(APP_ID);
 		restoreCredentials(facebook);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.facebook_dialog);
+		
+		//Intitialize TripOption string values
+		date = "Date: "+ getApp().getSelectedJourney().getStart().get(Calendar.DAY_OF_MONTH)+
+				"/"+getApp().getSelectedJourney().getStart().get(Calendar.MONTH)+
+				"/"+getApp().getSelectedJourney().getStart().get(Calendar.YEAR);
+		time = "Start time: "+ getApp().getSelectedJourney().getStart().get(Calendar.HOUR)+":"+getApp().getSelectedJourney().getStart().get(Calendar.MINUTE);
+		seats = "Seats available: "+ getApp().getSelectedJourney().getTripPreferences().getSeatsAvailable();
+//		String extras = "Extras: "+ getApp().getSelectedJourney().getTripPreferences().toString();
+		BitSet sExtras = getApp().getSelectedJourney().getTripPreferences().getExtras();
+		extras = "Extras: ";
+		String[] items = {"Music", "Animals", "Breaks", "Talking", "Smoking"};
+    	for(int i=0 ; i<sExtras.length() ; i++){
+    		if(sExtras.get(i)){
+    			if(i==sExtras.length()-1)
+    				extras=extras+items[i]+".";
+    			extras=extras+items[i]+",";
+    		}
+    	}
 
 		String facebookMessage = getIntent().getStringExtra("facebookMessage");
 		if (facebookMessage == null){
-			facebookMessage = "I have created a new ride on FreeRider";
+			facebookMessage = "I have created a new ride on FreeRider\n"+date+"\n"+time+"\n"+seats+"\n"+extras;
 		}
 		messageToPost = facebookMessage;
 	}
 
 	public void doNotShare(View button){
+		Intent intent = new Intent(ShareOnFacebook.this, Main.class);
+		startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		finish();
 	}
+	@SuppressWarnings("deprecation")
 	public void share(View button){
 		if (! facebook.isSessionValid()) {
 			loginAndPostToWall();
 		}
 		else {
 			postToWall(messageToPost);
+			Intent intent = new Intent(ShareOnFacebook.this, Main.class);
+			startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void loginAndPostToWall(){
 		 facebook.authorize(this, PERMISSIONS, Facebook.FORCE_DIALOG_AUTH, new LoginDialogListener());
 	}
 
+	@SuppressWarnings("deprecation")
 	public void postToWall(String message){
 	    
 		Bundle postParams = new Bundle();
-//				parameters.putString("caption", "FreeRider!" + "\n\n"+ "https://www.facebook.com");
-//				parameters.putString("picture", "http://www.veryicon.com/icon/png/Business/Business/Cars.png");
-//                parameters.putString("message", message);
-//                parameters.putString("description", "topic share");
-//                parameters.putString("link","www.google.com");
-////                Intent inte = getIntent();
-//                parameters.putString("privacy", "EVERYONE");
+
 		postParams.putString("message", message);
-		postParams.putString("caption", "https://maps.google.com/maps?saddr="+getApp().getSelectedRoute().getStartAddress()+"&daddr="+getApp().getSelectedRoute().getEndAddress());
-		String date = "Date: "+ getApp().getSelectedJourney().getStart().get(Calendar.DAY_OF_MONTH)+
-				"/"+getApp().getSelectedJourney().getStart().get(Calendar.MONTH)+
-				"/"+getApp().getSelectedJourney().getStart().get(Calendar.YEAR);
-		String time = "Start time: "+ getApp().getSelectedJourney().getStart().get(Calendar.HOUR)+":"+getApp().getSelectedJourney().getStart().get(Calendar.MINUTE);
-		String seats = "Seats available: "+ getApp().getSelectedJourney().getTripPreferences().getSeatsAvailable();
-//		String extras = "Extras: "+ getApp().getSelectedJourney().getTripPreferences().toString();
-		BitSet sExtras = getApp().getSelectedJourney().getTripPreferences().getExtras();
-		String extras = "Extras: ";
-		String[] items = {"Music", "Animals", "Breaks", "Talking", "Smoking"};
-    	for(int i=0 ; i<sExtras.length() ; i++){
-    		if(sExtras.get(i)){
-    			extras=extras+items[i]+" ";
-    		}
-    	}
-		
-		postParams.putString("description", date+"\n"+time+"\n"+seats+"\n"+extras);
+		postParams.putString("caption", "https://maps.google.com/maps?saddr="+currentRoute.getStartAddress()
+				+"&daddr="+currentRoute.getEndAddress());
+		postParams.putString("description", "Click to see the route");
+//		postParams.putString("privacy", "EVERYONE");
 //		postParams.putString("actions", "[{'name':'Test a simple Graph API call!','link':'https://developers.facebook.com/tools/explorer?method=GET&path=me'}]");
 		postParams.putString("type", "photo");
-		postParams.putString("link", "https://maps.google.com/maps?saddr="+getApp().getSelectedRoute().getStartAddress()+"&daddr="+getApp().getSelectedRoute().getEndAddress());
+		postParams.putString("link", "https://maps.google.com/maps?saddr="+currentRoute.getStartAddress()
+				+"&daddr="+currentRoute.getEndAddress());
 		postParams.putString("picture", "http://www.veryicon.com/icon/png/Business/Business/Cars.png");
 
                 try {
@@ -131,14 +134,11 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 		
 //		Request request = new Request(Session.getActiveSession(), "me/feed", postParams, HttpMethod.POST);
 			Log.d("Tests", "got response: " + response);
-			if (response == null || response.equals("") ||
-			        response.equals("false")) {
+			if (response == null || response.equals("") || response.equals("false")) {
 				showToast("Blank response.");
 			}
 			else {
 				showToast("Trip posted to your facebook wall!");
-				Intent intent = new Intent(ShareOnFacebook.this, Main.class);
-				startActivity(intent);
 			}
 			finish();
 		} catch (Exception e) {
