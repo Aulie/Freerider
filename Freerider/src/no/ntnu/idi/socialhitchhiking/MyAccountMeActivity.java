@@ -5,10 +5,17 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.http.client.ClientProtocolException;
 
+import no.ntnu.idi.freerider.model.Car;
+import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
+import no.ntnu.idi.freerider.protocol.CarRequest;
+import no.ntnu.idi.freerider.protocol.CarResponse;
+import no.ntnu.idi.freerider.protocol.PreferenceRequest;
+import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.UserRequest;
+import no.ntnu.idi.freerider.protocol.UserResponse;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.map.GetImage;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
@@ -16,6 +23,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,11 +51,12 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Getting the user
-		user = getApp().getUser();
 		// Setting the loading layout
 		setContentView(R.layout.main_loading);
 		
+		// Getting the user from the database
+		user = getApp().getUser();
+		new UserLoader(this).execute();
 		// Adding image of the driver
 		// Execute the Asynctask: Get image from url and add it to the ImageView
 		new GetImage(picture, this).execute(user.getPictureURL());
@@ -66,7 +75,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		}
 		
 		// Checking if a new age is set
-		if(ageString.equals(age.getText().toString())){
+		if(!ageString.equals(age.getText().toString())){
 			ageChanged = true;
 		}
 		// Checking if a new phone number is set
@@ -92,7 +101,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 			}
 		}
 		if(isEmpty){
-			ageString = "";
+			ageString = "0";
 		}else if(isValidAge){
 			ageString = age.getText().toString();
 		}
@@ -148,6 +157,9 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		}
 		super.onBackPressed();
 	}
+	public void initUser(UserResponse res){
+		this.user = res.getUser();
+	}
 	/**
 	 * Displays the user info in the layout.
 	 * @param result
@@ -194,5 +206,40 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 	    	gender.setImageDrawable(female);
 	    }
 	}
+}
+class UserLoader extends AsyncTask<Void, User, UserResponse>{
+	MyAccountMeActivity activity;
 	
+	public UserLoader(Activity activity){
+		this.activity = (MyAccountMeActivity) activity;
+	}
+	/**
+	 * Getting the car info from the database
+	 * @param params
+	 * @return
+	 */
+	protected UserResponse doInBackground(Void... params) {
+		UserResponse res = null;
+    	try {
+			Request req = new UserRequest(RequestType.GET_USER, activity.getApp().getUser());
+			res = (UserResponse) RequestTask.sendRequest(req,activity.getApp());
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return res;
+	}
+
+	@Override
+	protected void onPostExecute(UserResponse result) {
+		activity.initUser(result);
+	}
 }
