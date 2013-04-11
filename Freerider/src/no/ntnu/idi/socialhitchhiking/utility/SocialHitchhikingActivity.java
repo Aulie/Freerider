@@ -88,17 +88,10 @@ public abstract class SocialHitchhikingActivity extends Activity{
 			startSettingsActvity();
 			return true;
 		}
-		else if(item.getItemId() == R.id.menu_journeys){
-			startJourneyActvity();
-			return true;
-		}
 		else {
 			return super.onOptionsItemSelected(item);
 		}
 
-	}
-	private void startJourneyActvity() {
-		initActivity(no.ntnu.idi.socialhitchhiking.journey.ListJourneys.class);
 	}
 	private void startSettingsActvity() {
 		initActivity(no.ntnu.idi.socialhitchhiking.utility.SettingsActivity.class);

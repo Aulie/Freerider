@@ -1148,7 +1148,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	}
 	@Override
 	/**
-	 * Creates a menu from the xml_menu.xml file.
+	 * Creates a menu from the xml_mapmenu.xml file.
 	 * 
 	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
