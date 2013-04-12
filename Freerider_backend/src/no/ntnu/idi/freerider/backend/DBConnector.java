@@ -34,6 +34,8 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -412,7 +414,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 			journey.setStart(convertToCalendar(rs.getTimestamp("starttime")));
 			journey.setVisibility(Visibility.valueOf(rs.getString("visibility")));
 			TripPreferences pref = new TripPreferences(7, true, true, true, true, true);
-			pref.setPrefId(2);
+			pref.setPrefId(2); //Hardkoda bullshit
 			journey.setTripPreferences(pref);
 			ret.add(journey);
 		}

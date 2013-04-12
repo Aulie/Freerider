@@ -24,6 +24,8 @@ package no.ntnu.idi.freerider.backend;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -237,6 +239,16 @@ public class RequestProcessor {
 						journeys.add(tempJourneys.get(j));
 					}
 				}
+				Collections.sort(journeys, new Comparator<Journey>(){
+
+					@Override
+					public int compare(Journey arg0, Journey arg1) {
+						if (arg0.getStart() == null || arg1.getStart() == null)
+					        return 0;
+					      return arg0.getStart().compareTo(arg1.getStart());
+					}
+					
+				});
 				String accessToken = db.getAccessToken(req.getUser().getID());
 				filterService.filterSearch(journeys, req.getUser().getID(),accessToken);
 			} catch (SQLException e) {
