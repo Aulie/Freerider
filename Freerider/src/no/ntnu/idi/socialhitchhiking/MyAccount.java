@@ -65,7 +65,7 @@ public class MyAccount extends TabActivity {
 	    
 	    // If from newUser dialog, go to the Me-tab
 	    if(getIntent().getBooleanExtra("fromDialog", false)){
-	    	tabHost.setCurrentTab(1);
+	    	tabHost.setCurrentTab(0);
 	    }
 	    
 	    if(tabHost.getCurrentTab()==2){
