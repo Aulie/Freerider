@@ -1,8 +1,12 @@
 package no.ntnu.idi.socialhitchhiking;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Car;
@@ -20,7 +24,10 @@ import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 import org.apache.http.client.ClientProtocolException;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -29,6 +36,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore.Images.Media;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -66,6 +74,8 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	        carName = (EditText) this.findViewById(R.id.carName);
 	        bar = (RatingBar) this.findViewById(R.id.ratingBar1);
 	        seatsText = (EditText)this.findViewById(R.id.myAccountCarSeats);
+	        seatsChanged = false;
+	        carChanged = false;
 	        
 	        // Getting the user
 	        user = getApp().getUser();
@@ -79,9 +89,6 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 
 	    @Override
 		public void onStop() {
-	    	seatsChanged = false;
-	    	carChanged = false;
-	    	boolean isEmpty = false;
 	    	// Checks to see what is changed
 	    	if(!seatsAvailable.toString().equals(seatsText.getText().toString())){
 	    		seatsChanged = true;
@@ -114,13 +121,20 @@ public class MyAccountCar extends SocialHitchhikingActivity {
     		comfort = bar.getRating();
     		
     		/*Fetch car picture and convert it to byte array*/
-    		btm = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+    		//btm = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
     		
     		// Adds the picture of the car if a picture exists
-    		if(btm != null){
-    			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    			btm.compress(Bitmap.CompressFormat.PNG, 100, stream);
-    			byteArray = stream.toByteArray();
+    		if(btm != null && carChanged){
+    			try {
+    				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    				btm.compress(Bitmap.CompressFormat.PNG, 100, stream);
+    				byteArray = stream.toByteArray();
+					stream.close();
+					stream = null;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
     		}
     		
     		// Update seats in the database if it is changed
@@ -188,14 +202,89 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	    	}
 	    	super.onStop();
 	    }
-	    
+	    /*private Bitmap decodeFile(File f){
+	        try {
+	            //Decode image size
+	            BitmapFactory.Options o = new BitmapFactory.Options();
+	            o.inJustDecodeBounds = true;
+	            BitmapFactory.decodeStream(new FileInputStream(f),null,o);
+	            //The new size we want to scale to
+	            final int REQUIRED_SIZE=70;
+
+	            //Find the correct scale value. It should be the power of 2.
+	            int scale=1;
+	            while(o.outWidth/scale/2>=REQUIRED_SIZE && o.outHeight/scale/2>=REQUIRED_SIZE)
+	                scale*=2;
+
+	            //Decode with inSampleSize
+	            BitmapFactory.Options o2 = new BitmapFactory.Options();
+	            o2.inSampleSize=scale;
+	            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+	        } catch (FileNotFoundException e) {}
+	        return null;
+	    }*/
+	    private int convertDpToPixel(float dp,Context context){
+	        Resources resources = context.getResources();
+	        DisplayMetrics metrics = resources.getDisplayMetrics();
+	        int px = (int) (dp * (metrics.densityDpi/160f));
+	        return px;
+	    }
+	    private Bitmap getBitmap(Uri uri, int width, int height) {
+	        InputStream in = null;
+	        try {
+	            int IMAGE_MAX_SIZE = Math.max(width, height);
+	            in = getContentResolver().openInputStream(uri);
+
+	            //Decode image size
+	            BitmapFactory.Options o = new BitmapFactory.Options();
+	            o.inJustDecodeBounds = true;
+
+	            BitmapFactory.decodeStream(in, null, o);
+	            in.close();
+
+	            int scale = 1;
+	            if (o.outHeight > IMAGE_MAX_SIZE || o.outWidth > IMAGE_MAX_SIZE) {
+	                scale = (int)Math.pow(2, (int) Math.round(Math.log(IMAGE_MAX_SIZE / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
+	            }
+
+	            //adjust sample size such that the image is bigger than the result
+	            scale -= 1;
+
+	            BitmapFactory.Options o2 = new BitmapFactory.Options();
+	            o2.inSampleSize = scale;
+	            in = getContentResolver().openInputStream(uri);
+	            Bitmap b = BitmapFactory.decodeStream(in, null, o2);
+	            in.close();
+
+	            //scale bitmap to desired size
+	            Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, width, height, false);
+
+	            //free memory
+	            b.recycle();
+
+	            return scaledBitmap;
+
+	        } catch (FileNotFoundException e) {
+	        } catch (IOException e) {
+	        }
+	        return null;
+	    }
+	    @Override
 		protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
-	        if (requestCode == 1337 && resultCode == RESULT_OK) {  
-	            Bitmap photo = (Bitmap) data.getExtras().get("data"); 
-	            imageView.setImageBitmap(photo);
+			super.onActivityResult(requestCode, resultCode, data);
+			int px = convertDpToPixel(160, getApp());
+			if (requestCode == 1337 && resultCode == RESULT_OK) { 
+	        	btm = getBitmap(data.getData(), px, px);
+	            //btm = (Bitmap) data.getExtras().get("data"); 
+	            imageView.setImageBitmap(btm);
 	            imageView.invalidate();
+	            carChanged = true;
 	        }else if(requestCode == 1 && resultCode == RESULT_OK){
-	        	Uri chosenImageUri = data.getData();
+	        	btm = getBitmap(data.getData(), px, px);
+	            imageView.setImageBitmap(btm);
+	            imageView.invalidate();
+	            carChanged = true;
+	        	/*Uri chosenImageUri = data.getData();
 	            Bitmap mBitmap = null;
 	            try {
 					mBitmap = Media.getBitmap(this.getContentResolver(), chosenImageUri);
@@ -207,7 +296,7 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				}*/
 	        }
 	    }
 		/**
@@ -240,7 +329,7 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 		        id = res.getCar().getCarId();
 		        // Setting the comfort
 		        comfort = (float)res.getCar().getComfort();
-		        // Setting the car image
+		        // Getting the car image
 		        byteArray = res.getCar().getPhoto();
 		        
 				/*Values of the car from database*/
@@ -254,7 +343,8 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 		        byteArrayx =  empty.getBytes();
 		        // If a new image is set, display it
 		    	if(!(res.getCar().getPhotoAsBase64().equals(Base64.encode(byteArrayx, Base64.URL_SAFE)))){
-		    		imageView.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+		    		btm = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+		    		imageView.setImageBitmap(btm);
 		    	}
 	        }
 	        //if user does not yet have a car registated

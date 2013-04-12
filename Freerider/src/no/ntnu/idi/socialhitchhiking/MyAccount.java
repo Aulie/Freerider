@@ -61,7 +61,7 @@ public class MyAccount extends TabActivity {
 	    tabHost.addTab(mycarspec);
 	    
 	    //custom size to the preference tab
-	    tabHost.getTabWidget().getChildAt(0).getLayoutParams().width =45;
+	    tabHost.getTabWidget().getChildAt(1).getLayoutParams().width =45;
 	    
 	    // If from newUser dialog, go to the Me-tab
 	    if(getIntent().getBooleanExtra("fromDialog", false)){
