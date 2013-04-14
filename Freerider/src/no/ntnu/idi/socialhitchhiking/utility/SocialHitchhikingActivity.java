@@ -126,7 +126,8 @@ public abstract class SocialHitchhikingActivity extends Activity{
 		try {
 			Log.d("FACEBOOK", "sendLoginRequest()");
 			res = RequestTask.sendRequest(req,getApp());
-			if(res.getStatus() == ResponseStatus.OK) return true;
+			if(res.getStatus() == ResponseStatus.OK) 
+				return true;
 		} catch (ClientProtocolException e) {
 			createAlertDialog(this, false, "Login", "accepted", "Server is probably down, or you're not connected to the internet.\nExiting");
 			e.printStackTrace();

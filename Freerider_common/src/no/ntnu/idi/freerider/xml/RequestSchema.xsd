@@ -37,6 +37,7 @@
 			<enumeration value="SEARCH"></enumeration>
 			<enumeration value="CREATE_USER"></enumeration>
 			<enumeration value="UPDATE_USER"></enumeration>
+			<enumeration value="LOGIN_USER"></enumeration>
 			<enumeration value="LOGIN"></enumeration>
 			<enumeration value="START_JOURNEY"></enumeration>
 			<enumeration value="RATE_JOURNEY"></enumeration>

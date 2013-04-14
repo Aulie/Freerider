@@ -44,6 +44,8 @@ public enum RequestType {
 	CREATE_USER,
 	/** Edit a User record in the database. */
 	UPDATE_USER,
+	/** Log in a user with updated Facebook information. */
+	LOGIN_USER,
 	
 	LOGIN,
 	START_JOURNEY,

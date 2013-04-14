@@ -35,7 +35,8 @@ public abstract class Request {
 	}
 
 	protected Request(RequestType type, User user){
-		if(type == null) throw new IllegalArgumentException("Request must have a non-null type.");
+		if(type == null) 
+			throw new IllegalArgumentException("Request must have a non-null type.");
 		if(type.getRequestClass() != this.getClass()){
 			throw new IllegalArgumentException("Attempted to create " + this.getClass() + "of type " + type + " but appropriate class is " + type.getRequestClass());
 		}else{

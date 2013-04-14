@@ -129,7 +129,6 @@ public class Main extends FBConnectionActivity{
 			User tempUser = getApp().getUser();
 			tempUser.setCarId(resUser.getCarId());
 			tempUser.setAbout(resUser.getAbout());
-			//Gender is already set
 			tempUser.setRating(resUser.getRating());
 			//tempUser.setRating(1);
 			getApp().setUser(tempUser);
@@ -147,8 +146,9 @@ public class Main extends FBConnectionActivity{
 			Log.e("Error",e1.getMessage());
 		}
 		user = getApp().getUser();
-		
-		if(!getApp().isKey("main"))sendLoginRequest();
+		if(!getApp().isKey("main")){
+			sendLoginRequest();
+		}
 		
 		runOnUiThread(new Runnable(){
 
@@ -216,21 +216,25 @@ public class Main extends FBConnectionActivity{
 	 * logs in via Facebook.
 	 */
 	public void onResult(){
-				if(!getApp().isKey("main")){
-					createNewUser();
-				}
-				getApp().startService();
-				getApp().startJourneyReminder();
-				initMainScreen();
-				isNewUser = checkNewUser();
-				Log.e("Statisk?", "statisk");
-				Log.e("Statisk?", Boolean.toString(isNewUser));
-				
-				Main.this.runOnUiThread(new Runnable() {
-				    public void run() {
-				    	showDialogNew();
-				    }
-				});
+		isNewUser = checkNewUser();
+		if(!getApp().isKey("main")){
+			if(isNewUser){
+				createNewUser();
+			}else{
+				loginUser();
+			}
+		}
+		getApp().startService();
+		getApp().startJourneyReminder();
+		initMainScreen();
+		Log.e("Statisk?", "statisk");
+		Log.e("Statisk?", Boolean.toString(isNewUser));
+		
+		Main.this.runOnUiThread(new Runnable() {
+		    public void run() {
+		    	showDialogNew();
+		    }
+		});
 	}
 
 	private void showDialogNew() {
@@ -240,8 +244,6 @@ public class Main extends FBConnectionActivity{
 		    .setMessage("You should provide some basic information about yourself. Do you want to do this now?")
 		    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 		        public void onClick(DialogInterface dialog, int which) { 
-		        	if(!getApp().isKey("main"))
-		        		createNewUser();
 		        	Intent intent = new Intent(Main.this, no.ntnu.idi.socialhitchhiking.MyAccount.class);
 		        	intent.putExtra("fromDialog", true);
 		    		Main.this.startActivity(intent);
@@ -453,7 +455,6 @@ public class Main extends FBConnectionActivity{
 		Request req = new UserRequest(RequestType.CREATE_USER, getApp().getUser());
 		try {
 			RequestTask.sendRequest(req,getApp());
-			
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -462,11 +463,32 @@ public class Main extends FBConnectionActivity{
 			e.printStackTrace();
 		}
 		//System.out.println(res.toString()+", caused by: "+res.getErrorMessage());
- catch (InterruptedException e) {
+		catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private void loginUser(){
+		Request req = new UserRequest(RequestType.LOGIN_USER, getApp().getUser());
+		try {
+			UserResponse res = (UserResponse) RequestTask.sendRequest(req,getApp());
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//System.out.println(res.toString()+", caused by: "+res.getErrorMessage());
+		catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Det var ExecutionException");
 			e.printStackTrace();
 		}
 	}

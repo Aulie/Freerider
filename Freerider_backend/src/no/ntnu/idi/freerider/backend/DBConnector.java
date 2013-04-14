@@ -353,12 +353,20 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		stmt.executeUpdate();
 		
 	}
-
+	public void loginUser(User user) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("UPDATE users SET (name, surname, gender) = (?,?,?) WHERE id=?");
+		stmt.setString(1, user.getFirstName());
+		stmt.setString(2, user.getSurname());
+		stmt.setString(3, user.getGender());
+		stmt.setString(4, user.getID());
+		stmt.executeUpdate();
+	}
 	public void addUser(User newUser) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(name, surname, id, rating) VALUES (?,?,?,0)");
+		PreparedStatement stmt = conn.prepareStatement("INSERT INTO users(name, surname, id, rating, gender) VALUES (?,?,?,0,?)");
 		stmt.setString(1, newUser.getFirstName());
 		stmt.setString(2, newUser.getSurname());
 		stmt.setString(3, newUser.getID());
+		stmt.setString(4, newUser.getGender());
 		stmt.executeUpdate();
 	}
 

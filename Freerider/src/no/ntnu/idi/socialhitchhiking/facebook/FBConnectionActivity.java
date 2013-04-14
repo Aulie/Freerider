@@ -97,7 +97,6 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			if(msg.obj instanceof User){
-				User u = (User) msg.obj;
 				final Message temp = msg;
 				Thread t = new Thread() {
 					public void run() {
@@ -419,7 +418,6 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 							newUserBoolean = true;
 							Log.e("I connection", Boolean.toString(newUserBoolean));
 						}
-						
 						msg.obj = login;
 						handler.sendMessage(msg);
 					}
@@ -508,9 +506,6 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 			if(res.getUser()==null){
 				return true;
 			}
-			else{
-			}
-			
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

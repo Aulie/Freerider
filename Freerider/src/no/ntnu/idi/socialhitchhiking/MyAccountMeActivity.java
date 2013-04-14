@@ -56,6 +56,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		
 		// Getting the user from the database
 		user = getApp().getUser();
+		System.out.println("Før: " + user.getGender());
 		new UserLoader(this).execute();
 		// Adding image of the driver
 		// Execute the Asynctask: Get image from url and add it to the ImageView
@@ -159,6 +160,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 	}
 	public void initUser(UserResponse res){
 		this.user = res.getUser();
+		System.out.println("Etter: " + user.getGender());
 	}
 	/**
 	 * Displays the user info in the layout.
@@ -195,7 +197,6 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		// Adding the About Me of the user
 		aboutMeString = user.getAbout();
 		aboutMe.setText(aboutMeString);
-		
 		//Adding Gender to the driver
 	    if(user.getGender().equals("m")){
 	    	Drawable male = getResources().getDrawable(R.drawable.male);

@@ -93,17 +93,17 @@ public class RequestProcessor {
 				db.addUser(newUser);
 			} catch (SQLException e) {
 				logger.error("Error creating new user.",e);
-				/*
-				try {
-					db.updateUser(newUser);
-				} catch (SQLException e1) {
-					
-				}
-				*/
 				return new UserResponse(type,ResponseStatus.FAILED,e.getMessage());
 			}
 			return new UserResponse(type, status,newUser);
-
+		case LOGIN_USER:
+			User loginUser = request.getUser();
+			try {
+				db.loginUser(loginUser);
+			} catch (SQLException e) {
+				return new UserResponse(type, ResponseStatus.FAILED,e.getMessage());
+			}
+			return new UserResponse(type,status,loginUser);
 		case UPDATE_USER:
 			User tempUser = request.getUser();
 			try {
