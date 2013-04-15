@@ -632,6 +632,18 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 			ServerLogger.write("SQLError:" + e.getMessage());
 		}
 	}
+	public boolean hasAvailableSeats(int journeySerial) {
+		try {
+			Journey j = getJourney(journeySerial);
+			if(j.getTripPreferences().getSeatsAvailable() > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch(SQLException e){
+			return false;
+		}
+	}
 	public String getJourneyDriverID(int serial) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("SELECT routes.owner FROM journeys, routes WHERE journeys.route_used=routes.serial AND journeys.serial=?");
 		stmt.setInt(1, serial);

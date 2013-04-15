@@ -392,6 +392,9 @@ public class RequestProcessor {
 			if(!checkForRequest(notification)) {
 				throw new SQLException("Attempt to accept nonexistent hitchhiker request or accept previously rejected request.");
 			}
+			if(!db.hasAvailableSeats(serial)) {
+				throw new SQLException("No available seats");
+			}
 			ServerLogger.write("Before addHitchhiker");
 			db.addHitchhiker(notification.getRecipientID(),serial);
 			ServerLogger.write("Before incrementSeats");
