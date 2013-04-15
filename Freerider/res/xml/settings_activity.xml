@@ -29,14 +29,6 @@
         android:title="Set Facebook privacy" android:entryValues="@array/privacy_values" android:positiveButtonText="OK"/>
 	</PreferenceCategory>
 	
-    <PreferenceCategory
-        android:key="toast_category"
-        android:title="Start notifications" >
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="connection"
-        android:summary="Should the application show info about connection settings?" android:entryValues="@array/privacy_values" android:positiveButtonText="OK"
-        android:title="Enable start notifiations"/>
-	</PreferenceCategory>
+    
 
 </PreferenceScreen>
