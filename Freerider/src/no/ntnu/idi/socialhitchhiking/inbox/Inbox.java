@@ -221,12 +221,18 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		System.out.println("History: "+history);
 		if(getApp().getUser() != null){
 			if(!history){
+				if(active.isEmpty()) {
+					Toast.makeText(this, "You have no unread notifications", Toast.LENGTH_SHORT).show();
+				}
 				notifications.setAdapter(active);
 				//history = false;
 				//item.setTitle("Show Notification History");
 				header.setText("Active Notifications");
 			}
 			else {
+				if(historyAdap.isEmpty()){
+					Toast.makeText(this, "You have no read notifications", Toast.LENGTH_SHORT).show();
+				}
 				notifications.setAdapter(historyAdap);
 				//history = true;
 				//item.setTitle("Show Active Notifications");
@@ -349,6 +355,8 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 				return "Request accepted";
 			case REQUEST_REJECT:
 				return "Request rejected";
+			case MESSAGE:
+				return "Message";
 			default:
 				return "Status unknown";
 			}
@@ -445,7 +453,7 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 			notif = (NotificationResponse) response;
 			getApp().setNotifications(notif.getNotifications());
 			Log.e("hit?", "KAKE ER GODT");
-			notifHistory = getApp().getNotifications();			
+			notifHistory = getApp().getNotifications();
 			sorted = sortNotifications(notifHistory);
 			System.out.println("JoYo Inbox" + notifHistory.size());
 			initAdapter(active,sorted);
