@@ -44,6 +44,7 @@ import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
+import no.ntnu.idi.freerider.protocol.SingleJourneyRequest;
 import no.ntnu.idi.freerider.protocol.UserRequest;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
@@ -214,6 +215,24 @@ public class NotificationHandler{
 		show();
 	}
 	
+	public static void sendMessage(User mid, EditText input){
+		Notification nots = new Notification(app.getUser().getID(), mid.getID(), app.getUser().getFullName(), input.getText().toString(), not.getJourneySerial(), NotificationType.MESSAGE, Calendar.getInstance());
+    	NotificationRequest req = new NotificationRequest(app.getUser(), nots);
+    	
+    	try {
+			Response res = RequestTask.sendRequest(req, app);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public static void createChatDialog(final Notification not){
 		
@@ -235,7 +254,41 @@ public class NotificationHandler{
 		replayBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				final Dialog replayDialog = new Dialog(in);
+				replayDialog.setContentView(R.layout.replay_layout);
+				replayDialog.setTitle("Replay");
 				
+				Button sendBtn = (Button)replayDialog.findViewById(R.id.sendBtn);
+				Button cancelBtn2 = (Button)replayDialog.findViewById(R.id.cancelBtn2);
+				
+				TextView sendTxt = (TextView)replayDialog.findViewById(R.id.sendTxt);
+				TextView messageFromTxt = (TextView)replayDialog.findViewById(R.id.messageFromTxt);
+				TextView messageContent = (TextView)replayDialog.findViewById(R.id.messageContent);
+				
+				final EditText inputField = (EditText)replayDialog.findViewById(R.id.input);
+				
+				sendTxt.setText(not.getSenderName());
+				messageFromTxt.setText("Message from: " + not.getSenderName());
+				messageContent.setText(not.getComment());
+				
+				cancelBtn2.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						replayDialog.dismiss();
+					}
+				});
+				
+				sendBtn.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						User midUser = new User();
+						midUser.setID(not.getSenderID());
+						sendMessage(midUser, inputField);
+						
+						replayDialog.dismiss();
+					}
+				});
+				replayDialog.show();
 			}
 		});
 		
@@ -249,99 +302,12 @@ public class NotificationHandler{
 		showRideBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Journey journey = new Journey(999);
 				
-				try {
-					in.showInMap(not);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				/*
-				Location drop = null;
-				Location pick = null;
-				List<Location> routeData = new ArrayList<Location>();
-				Location midLoc = new Location(23.2333, 23.556);
-				Location midLoc1 = new Location(24.2333, 23.556);
-				Location midLoc2 = new Location(25.2333, 23.556);
-				Location midLoc3 = new Location(26.2333, 23.556);
-				Location midLoc4 = new Location(27.2333, 23.556);
-				Location midLoc5 = new Location(28.2333, 23.556);
-				Location midLoc6 = new Location(29.2333, 23.556);
-				Location midLoc7 = new Location(20.2333, 23.556);
-				Location midLoc8 = new Location(19.2333, 23.556);
-				Location midLoc9 = new Location(18.2333, 23.556);
-				routeData.add(midLoc);
-				routeData.add(midLoc1);
-				routeData.add(midLoc2);
-				routeData.add(midLoc3);
-				routeData.add(midLoc4);
-				routeData.add(midLoc5);
-				routeData.add(midLoc6);
-				routeData.add(midLoc7);
-				routeData.add(midLoc8);
-				routeData.add(midLoc9);
-				
-				List<MapLocation> mapPoints = new ArrayList<MapLocation>();
-				MapLocation midMap = new MapLocation(23.2333, 23.556);
-				MapLocation midMap1 = new MapLocation(24.2333, 23.556);
-				MapLocation midMap2 = new MapLocation(25.2333, 23.556);
-				MapLocation midMap3 = new MapLocation(26.2333, 23.556);
-				MapLocation midMap4 = new MapLocation(27.2333, 23.556);
-				MapLocation midMap5 = new MapLocation(28.2333, 23.556);
-				MapLocation midMap6 = new MapLocation(29.2333, 23.556);
-				MapLocation midMap7 = new MapLocation(20.2333, 23.556);
-				MapLocation midMap8 = new MapLocation(19.2333, 23.556);
-				MapLocation midMap9 = new MapLocation(18.2333, 23.556);
-				mapPoints.add(midMap);
-				mapPoints.add(midMap1);
-				mapPoints.add(midMap2);
-				mapPoints.add(midMap3);
-				mapPoints.add(midMap4);
-				mapPoints.add(midMap5);
-				mapPoints.add(midMap6);
-				mapPoints.add(midMap7);
-				mapPoints.add(midMap8);
-				mapPoints.add(midMap9);
-				
-				Route rute = new Route(app.getUser(), "midRute", routeData, not.getJourneySerial());
-				rute.setFrequency(15);
-				rute.setMapPoints(mapPoints);
-				
-				Log.e("Serial", not.getJourneySerial() + "");
-				Log.e("Calendar", Calendar.getInstance().toString());
-				Log.e("Visibility", Visibility.PUBLIC.toString());
-				
-				Journey journey = new Journey(not.getJourneySerial(), rute, Calendar.getInstance(), null, Visibility.PUBLIC);
-				TripPreferences trip = new TripPreferences(2, false,false,false,false, false);
-				trip.setPrefId(2);
-				journey.setTripPreferences(trip);
-				*/
-				/*
-				Journey journey = null;
-				int serial = not.getJourneySerial();
-				if(app.getJourneys() == null)
-					try {
-						app.sendJourneysRequest();
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ExecutionException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				Log.d("FACEBOOK", "");
-				for (Journey j : app.getJourneys()) {
-					if(j.getSerial() == serial)journey = j;
-				}
-				
-				Log.e("User", app.getUser().getFullName());
-				Request r = new JourneyRequest(RequestType.GET_JOURNEY, app.getUser(), journey);
-
 				try{
-					JourneyResponse response = (JourneyResponse)RequestTask.sendRequest(r,app);
+					SingleJourneyRequest r = new SingleJourneyRequest(RequestType.GET_JOURNEY, app.getUser(), not.getJourneySerial());
+					JourneyResponse response = (JourneyResponse)RequestTask.sendRequest(r, app);
+					
 					Log.e("JourneyResponse", response.toString());
 					if(response.getStatus() == ResponseStatus.OK){
 						if(response.getJourneys().size() > 0){
@@ -382,22 +348,6 @@ public class NotificationHandler{
 				app.setSelectedNotification(not);
 				
 				app.startActivity(intent);
-				/*
-				Route sr = n.getRoute();
-				//Route sr = app.get
-				Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.map.MapActivityJourney.class);
-				intent.putExtra("journey", true);
-				//intent.putExtra("journeyAccepted", accepted);
-				//intent.putExtra("journeyRejected", rejected);
-				MapRoute mr = new MapRoute(sr.getOwner(), sr.getName(), sr.getSerial(), sr.getMapPoints());
-				
-				app.setSelectedMapRoute(mr);
-				app.setSelectedJourney(j);
-				app.setJourneyDropoffPoint(drop);
-				app.setJourneyPickupPoint(pick);
-				
-				startActivity(intent);
-				*/
 			}
 		});
 		
@@ -411,84 +361,7 @@ public class NotificationHandler{
 		
 		messageDialog.show();
 		
-		/*
-		private void sendMessageToDriver(){
 		
-		final Dialog customDialog = new Dialog(this);
-		customDialog.setContentView(R.layout.custom_dialog_layout);
-		customDialog.setTitle("Message");
-		
-		final List<String> spinnerArray =  new ArrayList<String>();
-		spinnerArray.add("Everyone");
-		if(!getApp().getSelectedJourney().getDriver().equals(getApp().getUser())){
-			spinnerArray.add(getApp().getSelectedJourney().getDriver().getFullName());
-		}
-		
-		for(int i=0; i<getApp().getSelectedJourney().getHitchhikers().size(); i++){
-			if(!getApp().getSelectedJourney().getHitchhikers().get(i).equals(getApp().getUser())){
-				spinnerArray.add(getApp().getSelectedJourney().getHitchhikers().get(i).getFullName());
-			}
-	    }
-		
-		final Spinner spinner = (Spinner)customDialog.findViewById(R.id.spinner);
-	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(MapActivityJourney.this, android.R.layout.simple_spinner_item, spinnerArray);
-	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    spinner.setAdapter(adapter);
-	    
-	    Button sendBtn = (Button)customDialog.findViewById(R.id.sendBtn);
-	    Button cancelBtn = (Button)customDialog.findViewById(R.id.cancelBtn);
-	    final EditText input = (EditText)customDialog.findViewById(R.id.input);
-	    
-	    sendBtn.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				User mid = getApp().getUser();
-				if(spinner.getSelectedItem().toString().equals("Everyone")){
-					List<User> userList = new ArrayList<User>();
-					userList.add(getApp().getSelectedJourney().getDriver());
-					for(int k=0; k<getApp().getSelectedJourney().getHitchhikers().size(); k++){
-						userList.add(getApp().getSelectedJourney().getHitchhikers().get(k));
-					}
-					userList.remove(getApp().getUser());
-					
-					for(int k=0; k<userList.size(); k++){
-						sendMessage(userList.get(k), input);
-					}
-				} else{
-				
-					for(int j=0; j<spinnerArray.size(); j++){
-						if(spinner.getSelectedItem().toString().equals(getApp().getSelectedJourney().getHitchhikers().get(j).getFullName())){
-							mid = getApp().getSelectedJourney().getHitchhikers().get(j);
-						}
-					}
-				
-					if(spinner.getSelectedItem().toString().equals(getApp().getSelectedJourney().getDriver().getFullName())){
-						mid = getApp().getSelectedJourney().getDriver();
-					}
-				
-					sendMessage(mid, input);
-				}
-				customDialog.dismiss();
-				
-				Toast toast = Toast.makeText(MapActivityJourney.this, "Message sent", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
-				toast.show();
-			}
-			
-		});
-	    
-	    cancelBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				customDialog.dismiss();
-			}
-		});
-	    
-		customDialog.show();
-		
-	}
-		 */
 	}
 	/**
 	 * Creates a simple dialog to show a message when a Notification is clicked.
