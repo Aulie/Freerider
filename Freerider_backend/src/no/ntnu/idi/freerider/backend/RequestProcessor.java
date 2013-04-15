@@ -54,6 +54,7 @@ import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.freerider.protocol.RouteRequest;
 import no.ntnu.idi.freerider.protocol.RouteResponse;
 import no.ntnu.idi.freerider.protocol.SearchRequest;
+import no.ntnu.idi.freerider.protocol.SingleJourneyRequest;
 import no.ntnu.idi.freerider.protocol.UserResponse;
 import no.ntnu.idi.freerider.protocol.LoginRequest;
 
@@ -270,7 +271,7 @@ public class RequestProcessor {
 		case GET_JOURNEY:
 			try {
 				journeys = new ArrayList<Journey>();
-				journeys.add(db.getJourney(((JourneyRequest) request).getJourney().getSerial()));
+				journeys.add(db.getJourney(((SingleJourneyRequest) request).getJourneySerial()));
 				return new JourneyResponse(type,ResponseStatus.OK,journeys);
 			} catch (SQLException e1) {
 				logger.error("Error retrieving journey.",e1);

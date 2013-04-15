@@ -152,5 +152,7 @@ interface ProtocolConstants {
 	static final String CAR_COMFORT = "car_comfort";
 	static final String CAR_PHOTO = "car_photo";
 	
+	static final String SINGLE_JOURNEY_ID = "single_journey_id";
+	
 
 }

@@ -47,6 +47,7 @@ import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.RouteRequest;
 import no.ntnu.idi.freerider.protocol.SearchRequest;
+import no.ntnu.idi.freerider.protocol.SingleJourneyRequest;
 import no.ntnu.idi.freerider.protocol.UserRequest;
 
 import org.dom4j.Document;
@@ -97,6 +98,8 @@ public class RequestParser {
 		}else if(type.getRequestClass() == JourneyRequest.class.asSubclass(Request.class)){
 			Journey journey = ParserUtils.parseJourney(Data.element(ProtocolConstants.JOURNEY));
 			return new JourneyRequest(type, user, journey);
+		}else if(type.getRequestClass() == SingleJourneyRequest.class.asSubclass(Request.class)){
+			return new SingleJourneyRequest(type,user,Integer.parseInt(Data.attributeValue(ProtocolConstants.SINGLE_JOURNEY_ID)));
 		}else if(type.getRequestClass() == SearchRequest.class.asSubclass(Request.class)){
 			Element searchElement = Data.element(ProtocolConstants.SEARCH);
 			Calendar starttime = null;

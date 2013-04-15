@@ -29,6 +29,7 @@ import no.ntnu.idi.freerider.protocol.PreferenceRequest;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RouteRequest;
 import no.ntnu.idi.freerider.protocol.SearchRequest;
+import no.ntnu.idi.freerider.protocol.SingleJourneyRequest;
 import no.ntnu.idi.freerider.protocol.UserRequest;
 
 import org.dom4j.Document;
@@ -73,6 +74,8 @@ public class RequestSerializer {
 			data.add(SerializerUtils.serializePreference(((PreferenceRequest)request).getPreference()));
 		}else if(request instanceof CarRequest) {
 			data.add(SerializerUtils.serializeCar(((CarRequest)request).getCar()));
+		}else if(request instanceof SingleJourneyRequest) {
+			data.addAttribute(ProtocolConstants.SINGLE_JOURNEY_ID, Integer.toString(((SingleJourneyRequest)request).getJourneySerial()));
 		}
 		
 		
