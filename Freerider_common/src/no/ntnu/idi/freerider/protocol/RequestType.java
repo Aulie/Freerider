@@ -89,7 +89,7 @@ public enum RequestType {
 		switch(this){
 		case CREATE_ROUTE: case UPDATE_ROUTE: case DELETE_ROUTE: case GET_ROUTE: case CREATE_AD_HOC_ROUTE:
 			return (Class<Request>) RouteRequest.class.asSubclass(Request.class);
-		case CREATE_JOURNEY: case UPDATE_JOURNEY: case DELETE_JOURNEY: case GET_JOURNEY:
+		case CREATE_JOURNEY: case UPDATE_JOURNEY: case DELETE_JOURNEY:
 			return (Class<Request>) JourneyRequest.class.asSubclass(Request.class);
 		case SEARCH:
 			return (Class<Request>) SearchRequest.class.asSubclass(Request.class);
@@ -109,6 +109,8 @@ public enum RequestType {
 			return (Class<Request>) CarRequest.class.asSubclass(Request.class);
 		case GET_CAR:
 			return (Class<Request>) CarRequest.class.asSubclass(Request.class);
+		case GET_JOURNEY:
+			return (Class<Request>) SingleJourneyRequest.class.asSubclass(Request.class);
 		default: 
 			return (Class<Request>) UserRequest.class.asSubclass(Request.class);
 		}
