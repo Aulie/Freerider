@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        	<TextView 
+        		android:id="@+id/targetTxt"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:text="From: " 
+        		android:layout_marginLeft="5dip"   
+        	/>
+        	
+        	<TextView 
+        	    android:id="@+id/nameTxt"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        	    />
+    </LinearLayout>
+    
+    <TextView 
+        android:id="@+id/contentTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Content:"
+        android:layout_marginLeft="5dip"
+        android:layout_marginTop="10dip"
+        />
+    
+    <TextView 
+        android:id="@+id/contentViewField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        />
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <Button 
+            android:id="@+id/replayBtn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Replay"
+            android:layout_gravity="left"
+            android:layout_weight="1"
+            />
+        
+        <Button 
+            android:id="@+id/showJourneyBtn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Show ride"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            />
+        
+        <Button 
+            android:id="@+id/markAsReadBtn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Mark as read"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            />
+        
+        <Button 
+            android:id="@+id/cancelBtn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+</LinearLayout>
