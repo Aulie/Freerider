@@ -44,40 +44,40 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         
-        <Button 
-            android:id="@+id/replayBtn"
-            android:layout_width="fill_parent"
+        <ImageView 
+            android:id="@+id/replyBtn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Replay"
-            android:layout_gravity="left"
-            android:layout_weight="1"
+            android:src="@drawable/mail_replay"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
             />
         
-        <Button 
+        <ImageView 
             android:id="@+id/showJourneyBtn"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Show ride"
-            android:layout_gravity="right"
-            android:layout_weight="1"
+            android:src="@drawable/maps"
+            android:scaleX="0.45"
+            android:scaleY="0.45"
             />
         
-        <Button 
+        <ImageView
             android:id="@+id/markAsReadBtn"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mark as read"
-            android:layout_gravity="right"
-            android:layout_weight="1"
+            android:src="@drawable/btn_check_buttonless_on"
+            android:scaleX="1.05"
+            android:scaleY="1.05"
             />
         
-        <Button 
+        <ImageView
             android:id="@+id/cancelBtn"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:layout_gravity="right"
-            android:layout_weight="1"
+            android:src="@drawable/speech_bubble_overlay_close"
+            android:scaleX="1.35"
+            android:scaleY="1.35"
             />
     </LinearLayout>
 </LinearLayout>

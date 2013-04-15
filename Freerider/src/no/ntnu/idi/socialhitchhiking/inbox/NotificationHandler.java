@@ -69,6 +69,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -243,29 +244,29 @@ public class NotificationHandler{
 		TextView nameTxt = (TextView)messageDialog.findViewById(R.id.nameTxt);
 		TextView contentTxt = (TextView)messageDialog.findViewById(R.id.contentViewField);
 		
-		Button replayBtn = (Button)messageDialog.findViewById(R.id.replayBtn);
-		Button cancelBtn = (Button)messageDialog.findViewById(R.id.cancelBtn);
-		Button showRideBtn = (Button)messageDialog.findViewById(R.id.showJourneyBtn);
-		Button markAsReadBtn = (Button)messageDialog.findViewById(R.id.markAsReadBtn);
+		ImageView replyBtn = (ImageView)messageDialog.findViewById(R.id.replyBtn);
+		ImageView cancelBtn = (ImageView)messageDialog.findViewById(R.id.cancelBtn);
+		ImageView showRideBtn = (ImageView)messageDialog.findViewById(R.id.showJourneyBtn);
+		ImageView markAsReadBtn = (ImageView)messageDialog.findViewById(R.id.markAsReadBtn);
 		
 		nameTxt.setText(not.getSenderName());
 		contentTxt.setText(not.getComment());
 		
-		replayBtn.setOnClickListener(new View.OnClickListener() {
+		replyBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				final Dialog replayDialog = new Dialog(in);
-				replayDialog.setContentView(R.layout.replay_layout);
-				replayDialog.setTitle("Replay");
+				final Dialog replyDialog = new Dialog(in);
+				replyDialog.setContentView(R.layout.replay_layout);
+				replyDialog.setTitle("Replay");
 				
-				Button sendBtn = (Button)replayDialog.findViewById(R.id.sendBtn);
-				Button cancelBtn2 = (Button)replayDialog.findViewById(R.id.cancelBtn2);
+				Button sendBtn = (Button)replyDialog.findViewById(R.id.sendBtn);
+				Button cancelBtn2 = (Button)replyDialog.findViewById(R.id.cancelBtn2);
 				
-				TextView sendTxt = (TextView)replayDialog.findViewById(R.id.sendTxt);
-				TextView messageFromTxt = (TextView)replayDialog.findViewById(R.id.messageFromTxt);
-				TextView messageContent = (TextView)replayDialog.findViewById(R.id.messageContent);
+				TextView sendTxt = (TextView)replyDialog.findViewById(R.id.sendTxt);
+				TextView messageFromTxt = (TextView)replyDialog.findViewById(R.id.messageFromTxt);
+				TextView messageContent = (TextView)replyDialog.findViewById(R.id.messageContent);
 				
-				final EditText inputField = (EditText)replayDialog.findViewById(R.id.input);
+				final EditText inputField = (EditText)replyDialog.findViewById(R.id.input);
 				
 				sendTxt.setText(not.getSenderName());
 				messageFromTxt.setText("Message from: " + not.getSenderName());
@@ -274,7 +275,7 @@ public class NotificationHandler{
 				cancelBtn2.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						replayDialog.dismiss();
+						replyDialog.dismiss();
 					}
 				});
 				
@@ -285,10 +286,10 @@ public class NotificationHandler{
 						midUser.setID(not.getSenderID());
 						sendMessage(midUser, inputField);
 						
-						replayDialog.dismiss();
+						replyDialog.dismiss();
 					}
 				});
-				replayDialog.show();
+				replyDialog.show();
 			}
 		});
 		
@@ -341,6 +342,7 @@ public class NotificationHandler{
 				intent.putExtra("Journey", true);
 				intent.putExtra("journeyAccepted", true);
 				intent.putExtra("journeyRejected", false);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				app.setSelectedMapRoute(mr);
 				app.setSelectedJourney(journey);
 				app.setJourneyPickupPoint(not.getStartPoint());
