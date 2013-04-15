@@ -51,6 +51,9 @@
             android:src="@drawable/mail_replay"
             android:scaleX="0.9"
             android:scaleY="0.9"
+            android:layout_gravity="left"
+            android:layout_weight="1"
+            android:paddingTop="16dip"
             />
         
         <ImageView 
@@ -58,8 +61,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/maps"
-            android:scaleX="0.45"
-            android:scaleY="0.45"
+            android:scaleX="1.05"
+            android:scaleY="1.05"
+            android:layout_gravity="left"
+            android:layout_weight="1"
+            android:paddingTop="13dip"
+            
             />
         
         <ImageView
@@ -69,6 +76,8 @@
             android:src="@drawable/btn_check_buttonless_on"
             android:scaleX="1.05"
             android:scaleY="1.05"
+            android:layout_gravity="right"
+            android:layout_weight="1"
             />
         
         <ImageView
@@ -78,6 +87,9 @@
             android:src="@drawable/speech_bubble_overlay_close"
             android:scaleX="1.35"
             android:scaleY="1.35"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:paddingTop="20dip"
             />
     </LinearLayout>
 </LinearLayout>
