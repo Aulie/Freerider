@@ -39,6 +39,7 @@ import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,6 +48,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -155,8 +157,8 @@ public class MapActivityJourney extends MapActivityAbstract{
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    spinner.setAdapter(adapter);
 	    
-	    Button sendBtn = (Button)customDialog.findViewById(R.id.sendBtn);
-	    Button cancelBtn = (Button)customDialog.findViewById(R.id.cancelBtn);
+	    ImageView sendBtn = (ImageView)customDialog.findViewById(R.id.sendBtn);
+	    ImageView cancelBtn = (ImageView)customDialog.findViewById(R.id.cancelBtn);
 	    final EditText input = (EditText)customDialog.findViewById(R.id.input);
 	    
 	    sendBtn.setOnClickListener(new OnClickListener() {
@@ -165,19 +167,31 @@ public class MapActivityJourney extends MapActivityAbstract{
 			public void onClick(View v) {
 				User mid = getApp().getUser();
 				if(spinner.getSelectedItem().toString().equals("Everyone")){
-					List<User> userList = new ArrayList<User>();
-					userList.add(getApp().getSelectedJourney().getDriver());
-					for(int k=0; k<getApp().getSelectedJourney().getHitchhikers().size(); k++){
-						userList.add(getApp().getSelectedJourney().getHitchhikers().get(k));
-					}
-					userList.remove(getApp().getUser());
-					
-					for(int k=0; k<userList.size(); k++){
-						sendMessage(userList.get(k), input);
+					if(input.getText().toString().equals("")){
+						input.setHint("Please fill in your message");
+						Toast toast = Toast.makeText(MapActivityJourney.this, "Please fill in your message", Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
+						toast.show();
+					}else{
+						List<User> userList = new ArrayList<User>();
+						userList.add(getApp().getSelectedJourney().getDriver());
+						for(int k=0; k<getApp().getSelectedJourney().getHitchhikers().size(); k++){
+							userList.add(getApp().getSelectedJourney().getHitchhikers().get(k));
+						}
+						userList.remove(getApp().getUser());
+						
+						for(int k=0; k<userList.size(); k++){
+							sendMessage(userList.get(k), input);
+						}
+						
+						Toast toast = Toast.makeText(MapActivityJourney.this, "Message sent", Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
+						toast.show();
+						customDialog.dismiss();
 					}
 				} else{
 				
-					for(int j=0; j<spinnerArray.size(); j++){
+					for(int j=0; j<getApp().getSelectedJourney().getHitchhikers().size(); j++){
 						if(spinner.getSelectedItem().toString().equals(getApp().getSelectedJourney().getHitchhikers().get(j).getFullName())){
 							mid = getApp().getSelectedJourney().getHitchhikers().get(j);
 						}
@@ -186,16 +200,21 @@ public class MapActivityJourney extends MapActivityAbstract{
 					if(spinner.getSelectedItem().toString().equals(getApp().getSelectedJourney().getDriver().getFullName())){
 						mid = getApp().getSelectedJourney().getDriver();
 					}
-				
-					sendMessage(mid, input);
+					if(input.getText().toString().equals("")){
+						input.setHint("Please fill in your message");
+						Toast toast = Toast.makeText(MapActivityJourney.this, "Please fill in your message", Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
+						toast.show();
+					}else{
+						sendMessage(mid, input);
+						Toast toast = Toast.makeText(MapActivityJourney.this, "Message sent", Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
+						toast.show();
+						customDialog.dismiss();
+					}
+					
 				}
-				customDialog.dismiss();
-				//Toast.makeText(context, resId, duration);
-				//Toast.makeText(context, text, duration);
 				
-				Toast toast = Toast.makeText(MapActivityJourney.this, "Message sent", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
-				toast.show();
 			}
 			
 		});
@@ -212,6 +231,7 @@ public class MapActivityJourney extends MapActivityAbstract{
 	}
 	
 	private void sendMessage(User mid, EditText input){
+		Log.e("SendMessage", "Message to: " + mid.getFullName() + ", content: " + input.getText().toString());
 		Notification not = new Notification(getApp().getUser().getID(), mid.getID(), getApp().getUser().getFullName(), input.getText().toString(), getApp().getSelectedJourney().getSerial(), NotificationType.MESSAGE, getApp().getSelectedMapRoute().getStartLocation(), getApp().getSelectedMapRoute().getEndLocation(), Calendar.getInstance());
     	NotificationRequest req = new NotificationRequest(getApp().getUser(), not);
     	
