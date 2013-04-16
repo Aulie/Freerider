@@ -211,10 +211,18 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			@Override
 			public void onClick(View v) {
 				//Log.e("Clicked","Search");
-				checkAccess();
-				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(searchFrom.getWindowToken(), 0);
-				imm.hideSoftInputFromWindow(searchTo.getWindowToken(), 0);
+				if(searchFrom.getText().toString().equals("") && searchTo.getText().toString().equals("")){
+					Toast.makeText(FindDriver.this, "Please enter origin and destination", Toast.LENGTH_SHORT).show();
+				}
+				else
+				{
+
+					checkAccess();
+					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(searchFrom.getWindowToken(), 0);
+					imm.hideSoftInputFromWindow(searchTo.getWindowToken(), 0);
+				}
+
 			}
 		});
 
@@ -569,6 +577,9 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 
 		@Override
 		protected void onPostExecute(String result) {
+			if(journeys.size() == 0){
+				Toast.makeText(FindDriver.this, "No rides found", Toast.LENGTH_SHORT).show();
+			}
 			driverList.setAdapter(new JourneyAdapter(FindDriver.this, 0, journeys){
 
 				public View getView(int position, View convertView, ViewGroup parent) {
