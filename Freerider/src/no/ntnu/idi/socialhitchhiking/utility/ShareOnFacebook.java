@@ -3,7 +3,11 @@ package no.ntnu.idi.socialhitchhiking.utility;
 import java.util.BitSet;
 import java.util.Calendar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import no.ntnu.idi.freerider.model.Route;
+import no.ntnu.idi.freerider.model.Visibility;
 import no.ntnu.idi.socialhitchhiking.Main;
 import no.ntnu.idi.socialhitchhiking.R;
 
@@ -17,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -26,9 +31,9 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 
 	private static final String APP_ID = "321654017885450";
 	private static final String[] PERMISSIONS = new String[] {"read_stream","publish_stream"};
-
+//,"publish_actions"
 	private static final String TOKEN = "access_token";
-        private static final String EXPIRES = "expires_in";
+        private static final String EXPIRES = "access_expires";
         private static final String KEY = "facebook-credentials";
 
 	private Facebook facebook;
@@ -47,7 +52,7 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 
     	@SuppressWarnings("deprecation")
 		public boolean restoreCredentials(Facebook facebook) {
-        	SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(KEY, Context.MODE_PRIVATE);
+        	SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApp());
         	facebook.setAccessToken(sharedPreferences.getString(TOKEN, null));
         	facebook.setAccessExpires(sharedPreferences.getLong(EXPIRES, 0));
         	return facebook.isSessionValid();
@@ -66,10 +71,11 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 		setContentView(R.layout.facebook_dialog);
 		
 		//Intitialize TripOption string values
-		date = "Date: "+ getApp().getSelectedJourney().getStart().get(Calendar.DAY_OF_MONTH)+
-				"/"+getApp().getSelectedJourney().getStart().get(Calendar.MONTH)+
-				"/"+getApp().getSelectedJourney().getStart().get(Calendar.YEAR);
-		time = "Start time: "+ getApp().getSelectedJourney().getStart().get(Calendar.HOUR)+":"+getApp().getSelectedJourney().getStart().get(Calendar.MINUTE);
+		String formatedDate = formatDate(getApp().getSelectedJourney().getStart());
+		String formatedTime = formatTime(getApp().getSelectedJourney().getStart());
+		
+		date = "Date: "+ formatedDate;
+		time = "Start time: "+ formatedTime;
 		seats = "Seats available: "+ getApp().getSelectedJourney().getTripPreferences().getSeatsAvailable();
 //		String extras = "Extras: "+ getApp().getSelectedJourney().getTripPreferences().toString();
 		BitSet sExtras = getApp().getSelectedJourney().getTripPreferences().getExtras();
@@ -79,10 +85,15 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
     		if(sExtras.get(i)){
     			if(i==sExtras.length()-1)
     				extras=extras+items[i]+".";
-    			extras=extras+items[i]+",";
+    			else{
+    				if(i==sExtras.length()-2)
+    					extras=extras+items[i]+" and ";
+    				else
+        				extras=extras+items[i]+", ";
+    			}
     		}
     	}
-
+    	
 		String facebookMessage = getIntent().getStringExtra("facebookMessage");
 		if (facebookMessage == null){
 			facebookMessage = "I have created a new ride on FreeRider\n"+date+"\n"+time+"\n"+seats+"\n"+extras;
@@ -97,19 +108,20 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 	}
 	@SuppressWarnings("deprecation")
 	public void share(View button){
-		if (! facebook.isSessionValid()) {
-			loginAndPostToWall();
-		}
-		else {
+//		if (! facebook.isSessionValid()) {
+//			loginAndPostToWall();
+//			postToWall(messageToPost);
+//		}
+//		else {
 			postToWall(messageToPost);
 			Intent intent = new Intent(ShareOnFacebook.this, Main.class);
 			startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-		}
+//		}
 	}
 
 	@SuppressWarnings("deprecation")
 	public void loginAndPostToWall(){
-		 facebook.authorize(this, PERMISSIONS, Facebook.FORCE_DIALOG_AUTH, new LoginDialogListener());
+		 facebook.authorize(this, PERMISSIONS, new LoginDialogListener());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -121,6 +133,24 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 		postParams.putString("caption", "https://maps.google.com/maps?saddr="+currentRoute.getStartAddress()
 				+"&daddr="+currentRoute.getEndAddress());
 		postParams.putString("description", "Click to see the route");
+		
+		JSONObject jsonObject = new JSONObject();
+		try {
+			if(getApp().getSelectedJourney().getVisibility().equals(Visibility.PUBLIC)){
+				jsonObject.put("value", "EVERYONE");
+			}
+			else{
+				if(getApp().getSelectedJourney().getVisibility().equals(Visibility.FRIENDS_OF_FRIENDS))
+					jsonObject.put("value", "FRIENDS_OF_FRIENDS");
+				else
+					jsonObject.put("value", "FRIENDS");
+			}
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		postParams.putString("privacy", jsonObject.toString());
 //		postParams.putString("privacy", "EVERYONE");
 //		postParams.putString("actions", "[{'name':'Test a simple Graph API call!','link':'https://developers.facebook.com/tools/explorer?method=GET&path=me'}]");
 		postParams.putString("type", "photo");
@@ -166,12 +196,26 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 	    public void onCancel() {
 	    	showToast("Authentication with Facebook cancelled!");
 	        finish();
-	        Intent intent = new Intent(ShareOnFacebook.this, Main.class);
-			startActivity(intent);
 	    }
 	}
 
 	private void showToast(String message){
 		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 	}
+	 public String formatDate(Calendar c){
+	    	String formatedDate = c.get(Calendar.DAY_OF_MONTH)
+					+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR);
+	    	return formatedDate;
+	    }
+	    
+	    public String formatTime(Calendar c){
+			//This formats Calendar.MINUTE so minutes below 10 show a 0 before
+	    	Integer min = c.get(Calendar.MINUTE);
+			String minutes=min.toString();
+			if(min<10)
+				minutes="0"+minutes;
+			
+			String formatedTime = c.get(Calendar.HOUR_OF_DAY)+":"+minutes;
+			return formatedTime;
+	    }
 }

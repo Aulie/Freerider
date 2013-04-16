@@ -78,7 +78,7 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 	private static final int RELOGIN = 592824052;
 	public static final String APP_ID = "321654017885450";
 	private AsyncFacebookRunner mAsyncRunner;
-	private static final String[] PERMS = new String[] { "read_stream" };
+	private static final String[] PERMS = new String[] { "read_stream" , "publish_stream"};
 	private SharedPreferences sharedPrefs;
 	private Context mContext;
 	protected Runnable fbc;
