@@ -63,6 +63,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -176,6 +177,15 @@ public class ListJourneys extends SocialHitchhikingActivity{
 				cancelJourney(j);
 				return false;
 			}
+		});
+		listview.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parentView, View childView, final int pos, long id) {
+				Journey j = (Journey) adapter.getItem(pos);
+				cancelJourney(j);
+			}
+			
 		});
 		listview.setAdapter(adapter);
 	}
