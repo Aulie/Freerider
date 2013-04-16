@@ -103,13 +103,21 @@ public class MapActivityJourney extends MapActivityAbstract{
 		}else{
 			text += "There's no driver, call 112! (or the system admin)\n";
 		}
-		
+		/*
 		if(hiker != null){
 			for(int c=0; c<getApp().getSelectedJourney().getHitchhikers().size(); c++){
 				text += "Hitchhiker: "+getApp().getSelectedJourney().getHitchhikers().get(c).getFullName() +"\n";
 			}
 		}else{
 			text += "No hitchhiker\n";
+		}
+		*/
+		if(getApp().getSelectedJourney().getHitchhikers().size() != 0){
+			for(int c=0; c<getApp().getSelectedJourney().getHitchhikers().size(); c++){
+				text += "Hitchhiker: "+getApp().getSelectedJourney().getHitchhikers().get(c).getFullName() +"\n";
+			}
+		}else{
+			text += "No hitchhikers\n";
 		}
 		
 		if(acc){
