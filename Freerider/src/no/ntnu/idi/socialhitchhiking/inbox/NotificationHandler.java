@@ -259,8 +259,8 @@ public class NotificationHandler{
 				replyDialog.setContentView(R.layout.replay_layout);
 				replyDialog.setTitle("Replay");
 				
-				Button sendBtn = (Button)replyDialog.findViewById(R.id.sendBtn);
-				Button cancelBtn2 = (Button)replyDialog.findViewById(R.id.cancelBtn2);
+				ImageView sendBtn = (ImageView)replyDialog.findViewById(R.id.sendBtn);
+				ImageView cancelBtn2 = (ImageView)replyDialog.findViewById(R.id.cancelBtn2);
 				
 				TextView sendTxt = (TextView)replyDialog.findViewById(R.id.sendTxt);
 				TextView messageFromTxt = (TextView)replyDialog.findViewById(R.id.messageFromTxt);
@@ -284,9 +284,20 @@ public class NotificationHandler{
 					public void onClick(View v) {
 						User midUser = new User();
 						midUser.setID(not.getSenderID());
-						sendMessage(midUser, inputField);
+						//sendMessage(midUser, inputField);
 						
-						replyDialog.dismiss();
+						if(inputField.getText().toString().equals("")){
+							inputField.setHint("Please fill in your message");
+							Toast toast = Toast.makeText(in, "Please fill in your message", Toast.LENGTH_SHORT);
+							toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
+							toast.show();
+						}else{
+							sendMessage(midUser, inputField);
+							Toast toast = Toast.makeText(in, "Message sent", Toast.LENGTH_SHORT);
+							toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
+							toast.show();
+							replyDialog.dismiss();
+						}
 					}
 				});
 				replyDialog.show();

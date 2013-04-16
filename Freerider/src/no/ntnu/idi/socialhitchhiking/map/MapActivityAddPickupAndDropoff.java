@@ -205,60 +205,42 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		// Adding the name of the driver
 		((TextView)findViewById(R.id.mapViewPickupTextViewName)).setText(driver.getFullName());
 		
-		// Getting the drivers preferences
-		TripPreferences pref = new TripPreferences(777, true, true, true, true, true);
-		pref.setPrefId(1); //Dummy data
-		Request req = new PreferenceRequest(RequestType.GET_PREFERENCE, driver, pref);
-		PreferenceResponse res = null;
-		try {
-			res = (PreferenceResponse) RequestTask.sendRequest(req,getApp());
-		} catch (ClientProtocolException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (ExecutionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		// Getting the drivers preferences for this ride
+		TripPreferences pref = journey.getTripPreferences();
 		
 		// Setting the smoking preference
-		if(res.getPreferences().getSmoking()){
+		if(pref.getSmoking()){
 			((ImageView)findViewById(R.id.mapViewPickupImageViewSmokingIcon)).setImageResource(R.drawable.green_check);
 		}else{
 			((ImageView)findViewById(R.id.mapViewPickupImageViewSmokingIcon)).setImageResource(R.drawable.red_cross);
 		}
 		// Setting the animals preference
-		if(res.getPreferences().getAnimals()){
+		if(pref.getAnimals()){
 			((ImageView)findViewById(R.id.mapViewPickupImageViewAnimalsIcon)).setImageResource(R.drawable.green_check);
 		}else{
 			((ImageView)findViewById(R.id.mapViewPickupImageViewAnimalsIcon)).setImageResource(R.drawable.red_cross);
 		}
 		// Setting the breaks preference
-		if(res.getPreferences().getBreaks()){
+		if(pref.getBreaks()){
 			((ImageView)findViewById(R.id.mapViewPickupImageViewBreaksIcon)).setImageResource(R.drawable.green_check);
 		}else{
 			((ImageView)findViewById(R.id.mapViewPickupImageViewBreaksIcon)).setImageResource(R.drawable.red_cross);
 		}
 		// Setting the music preference
-		if(res.getPreferences().getMusic()){
+		if(pref.getMusic()){
 			((ImageView)findViewById(R.id.mapViewPickupImageViewMusicIcon)).setImageResource(R.drawable.green_check);
 		}else{
 			((ImageView)findViewById(R.id.mapViewPickupImageViewMusicIcon)).setImageResource(R.drawable.red_cross);
 		}
 		// Setting the talking preference
-		if(res.getPreferences().getTalking()){
+		if(pref.getTalking()){
 			((ImageView)findViewById(R.id.mapViewPickupImageViewTalkingIcon)).setImageResource(R.drawable.green_check);
 		}else{
 			((ImageView)findViewById(R.id.mapViewPickupImageViewTalkingIcon)).setImageResource(R.drawable.red_cross);
 		}
 		
 		// Setting the number of available seats
-		((TextView)findViewById(R.id.mapViewPickupTextViewSeats)).setText(res.getPreferences().getSeatsAvailable() + " available seats");
+		((TextView)findViewById(R.id.mapViewPickupTextViewSeats)).setText(pref.getSeatsAvailable() + " available seats");
 		
 		// Setting the age of the driver
 		((TextView)findViewById(R.id.mapViewPickupTextViewAge)).setText("Age: " + driver.getAge());
