@@ -359,19 +359,19 @@ public class TripOptions extends SocialHitchhikingActivity {
 			res = RequestTask.sendRequest(req,getApp());
 			if(res.getStatus() != ResponseStatus.OK){
 //				createAlertDialog(this, false,  "Journey","created","");
-				Toast.makeText(getApplicationContext(), "Trip created", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(getApplicationContext(), "Trip created", Toast.LENGTH_SHORT).show();
 			}
 			else{
 				if(getApp().getJourneys() != null)
 					getApp().getJourneys().add(journey);
-				Toast.makeText(getApplicationContext(), "Trip created", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(getApplicationContext(), "Trip created", Toast.LENGTH_SHORT).show();
 
 			}
 		} catch (ClientProtocolException e) {
-			Toast.makeText(getApplicationContext(), "Trip created", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(getApplicationContext(), "Trip created", Toast.LENGTH_SHORT).show();
 
 		} catch (IOException e) {
-			Toast.makeText(getApplicationContext(), "Trip created", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(getApplicationContext(), "Trip created", Toast.LENGTH_SHORT).show();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {

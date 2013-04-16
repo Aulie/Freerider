@@ -104,6 +104,7 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 	public void doNotShare(View button){
 		Intent intent = new Intent(ShareOnFacebook.this, Main.class);
 		startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		showToast("Trip created");
 		finish();
 	}
 	@SuppressWarnings("deprecation")
@@ -168,7 +169,7 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 				showToast("Blank response.");
 			}
 			else {
-				showToast("Trip posted to your facebook wall!");
+				showToast("Trip created and posted to your facebook wall!");
 			}
 			finish();
 		} catch (Exception e) {
