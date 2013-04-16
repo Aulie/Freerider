@@ -69,7 +69,7 @@ public class AlarmService extends BroadcastReceiver{
 				int notifs = app.getNewNotif();
 				if(notifs > 0 && app.isThereNewNotifications()){
 					SendNotification.create(app, SendNotification.INBOX, "New Notifications", 
-							"You have "+ notifs +" unread notifications in your inbox!", "Inbox");
+							"You have "+ notifs +" unread notification(s) in your inbox", "Inbox");
 					app.setIsThereNewNotifications(false);
 				}
 			}
