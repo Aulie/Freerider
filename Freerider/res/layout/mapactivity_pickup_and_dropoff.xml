@@ -231,6 +231,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:src="@drawable/facebook_logo"
+	            android:layout_gravity="center_vertical"
 	            android:layout_margin="10dp"
 	            android:scaleType="centerCrop"
 	            />
@@ -276,8 +277,9 @@
 			      android:id="@+id/mapViewPickupTextViewPhone"
 			      android:layout_width="wrap_content"
 			      android:layout_height="wrap_content"
-			      android:text="Phone number"
 			      android:textSize="20sp"
+	        	  android:textStyle="bold" 
+			      android:text="Phone number"
 	              android:layout_marginLeft="10dip" />
 	        <TextView 
 	        	    android:layout_width="wrap_content"
@@ -408,6 +410,7 @@
 		      android:layout_height="wrap_content"
 	          android:layout_marginLeft="10dip" 
 		      android:text="@string/comfort"
+	       	  android:textStyle="bold" 
 		      android:textSize="20sp" />
 		  	<RatingBar
 			      android:id="@+id/mapViewPickupAndDropoffComfortStars"
