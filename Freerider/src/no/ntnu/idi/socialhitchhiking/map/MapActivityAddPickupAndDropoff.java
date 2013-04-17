@@ -355,6 +355,9 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 							if(res.getErrorMessage().contains("no_duplicate_notifications")){
 								makeToast("You have already sent a request on this journey");
 							}
+							else if(res.getErrorMessage().equals("No available seats")){
+								makeToast("There are no available seats on this ride");
+							}
 							else{
 								makeToast("Could not send request");
 							}

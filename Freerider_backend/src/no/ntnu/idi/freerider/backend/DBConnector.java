@@ -565,6 +565,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		Journey journey = new Journey(serial, route, start, hitchhikers, visibility);
 		TripPreferences preference = getPreference(rs.getInt("preferenceid"));
 		journey.setTripPreferences(preference);
+		ServerLogger.write("JSerial: " + serial);
 		ServerLogger.write("Num hitch: " + hitchhikers.size());
 		return journey;
 	}

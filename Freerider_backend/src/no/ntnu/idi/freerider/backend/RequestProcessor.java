@@ -282,6 +282,11 @@ public class RequestProcessor {
 			try{
 				handleNotification(request.getUser(),note);
 				if(note.getType() != NotificationType.HITCHHIKER_ACCEPTS_DRIVER_CANCEL){
+					if(note.getType() == NotificationType.HITCHHIKER_REQUEST){
+						if(!db.hasAvailableSeats(note.getJourneySerial())){
+							return new UserResponse(type, ResponseStatus.FAILED,"No available seats");
+						}
+					}
 					db.addNotification(note);
 				}
 				return new UserResponse(type, ResponseStatus.OK);

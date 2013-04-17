@@ -272,6 +272,7 @@ public class SocialHitchhikingApplication extends Application{
 			journeys = res.getJourneys();
 			if(journeys != null && journeys.size() != 0){
 				Calendar now = Calendar.getInstance();
+				now.add(Calendar.DAY_OF_MONTH, -1);
 				List<Journey> temp = new ArrayList<Journey>();
 				for (Journey j : journeys) {
 					if(j.getStart().before(now))temp.add(j);
