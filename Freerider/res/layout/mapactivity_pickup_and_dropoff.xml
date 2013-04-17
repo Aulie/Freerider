@@ -222,7 +222,7 @@
 	     	<LinearLayout
 	        android:id="@+id/mapViewPickupDriverLayoutTop"
 	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="150dp"
 	        android:orientation="horizontal"
 	        >
 				
