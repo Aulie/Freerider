@@ -202,27 +202,7 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	    	}
 	    	super.onStop();
 	    }
-	    /*private Bitmap decodeFile(File f){
-	        try {
-	            //Decode image size
-	            BitmapFactory.Options o = new BitmapFactory.Options();
-	            o.inJustDecodeBounds = true;
-	            BitmapFactory.decodeStream(new FileInputStream(f),null,o);
-	            //The new size we want to scale to
-	            final int REQUIRED_SIZE=70;
-
-	            //Find the correct scale value. It should be the power of 2.
-	            int scale=1;
-	            while(o.outWidth/scale/2>=REQUIRED_SIZE && o.outHeight/scale/2>=REQUIRED_SIZE)
-	                scale*=2;
-
-	            //Decode with inSampleSize
-	            BitmapFactory.Options o2 = new BitmapFactory.Options();
-	            o2.inSampleSize=scale;
-	            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-	        } catch (FileNotFoundException e) {}
-	        return null;
-	    }*/
+	    
 	    private int convertDpToPixel(float dp,Context context){
 	        Resources resources = context.getResources();
 	        DisplayMetrics metrics = resources.getDisplayMetrics();

@@ -379,8 +379,9 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		
 		// Adding buttons where you choose between pickup point and dropoff point
 		btnSelectPickupPoint = (Button)findViewById(R.id.mapViewPickupBtnPickup);
+		btnSelectPickupPoint.setBackgroundColor(notSelected);
 		btnSelectDropoffPoint = (Button)findViewById(R.id.mapViewPickupBtnDropoff);
-		
+		btnSelectDropoffPoint.setBackgroundColor(notSelected);		
 		// Setting the selected pickup point
 		btnSelectPickupPoint.setOnClickListener(new OnClickListener() {
 			@Override

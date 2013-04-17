@@ -14,8 +14,8 @@
             android:entries="@array/polling_intervals"
             android:key="updates_interval"
             android:dependency="perform_polling"
-            android:summary="Define how often updates will be performed"
-            android:title="Updates interval" android:entryValues="@array/updateIntervalValues"/>
+            android:summary="Define how often the application should fetch data."
+            android:title="Polling interval" android:entryValues="@array/updateIntervalValues"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -25,7 +25,7 @@
         android:defaultValue="public"
         android:entries="@array/privacy_setting"
         android:key="privacy"
-        android:summary="Set the default privacy setting for the rides you create"
+        android:summary="Set the default privacy settings for sharing the rides you create."
         android:title="Set Facebook privacy" android:entryValues="@array/privacy_values" android:positiveButtonText="OK"/>
 	</PreferenceCategory>
 	

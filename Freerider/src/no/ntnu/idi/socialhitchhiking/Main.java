@@ -379,15 +379,15 @@ public class Main extends FBConnectionActivity{
 	 */
 	private void startCreateJourney(){
 		new AlertDialog.Builder(this)
-	    .setTitle("Create ride")
-	    .setMessage("What kind of ride do you want to create?")
-	    .setNeutralButton("Reuse old ride", new DialogInterface.OnClickListener() {
+	    .setTitle("Schedule a drive")
+	    .setMessage("What kind of drive do you want to schedule?")
+	    .setNeutralButton("Reuse old drive", new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	        	Intent intent = new Intent(Main.this, ScheduleDrive.class);
 	    		startActivity(intent);
 	        }
 	     })
-	    .setNegativeButton("New ride", new DialogInterface.OnClickListener() {
+	    .setNegativeButton("New drive", new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) { 
 	        	Intent intent = new Intent(Main.this, MapActivityCreateOrEditRoute.class);
 	    		startActivity(intent);
