@@ -288,7 +288,6 @@ public class MapActivityJourney extends MapActivityAbstract{
 			FrameLayout.LayoutParams lli2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
 			lli2.setMargins(4, 0, 0, 0);
 			icon.setLayoutParams(lli2);
-			//icon.setPadding(0, dipToPx(5), 0, 0);
 			icon.setImageResource(R.drawable.ic_menu_cc);
 			
 			frame.addView(icon);
@@ -297,14 +296,10 @@ public class MapActivityJourney extends MapActivityAbstract{
 			lliDest.setMargins(56, 6, 0, 0);
 			hitchTxt.setLayoutParams(lliDest);
 			hitchTxt.setGravity(Gravity.RIGHT);
-			//hitchTxt.setPadding(dipToPx(40), dipToPx(6), 0, 0);
-			//hitchTxt.setTextSize(15);
 			hitchTxt.setText(hiker.getFullName());
 			
 			frame.addView(hitchTxt);
 			linear.addView(frame);
-			//relative.setVisibility(8);
-			
 			
 		}
 	}
