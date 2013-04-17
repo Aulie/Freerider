@@ -1091,40 +1091,6 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		commonRouteSelected.setMapPoints(selectedRoute.getMapPoints());
 		
 	}
-	
-	private void sendJourneyRequest(Calendar cal){
-		Journey jour = new Journey(-1);
-		jour.setRoute(oneTimeRoute);
-		jour.setStart(cal);
-		jour.setVisibility(Visibility.PUBLIC);
-		TripPreferences pref = new TripPreferences(7,true,true,true,true,true);
-		pref.setPrefId(1);
-		jour.setTripPreferences(pref);
-		JourneyRequest req = new JourneyRequest(RequestType.CREATE_JOURNEY, getApp().getUser(), jour);
-
-		Response res = null;
-		try {
-			res = RequestTask.sendRequest(req,getApp());
-			if(res.getStatus() != ResponseStatus.OK){
-			}
-			else{
-				if(getApp().getJourneys() != null)
-					getApp().getJourneys().add(jour);
-				createConfirmDialog(true, "Journey", "created","");
-			}
-		} catch (ClientProtocolException e) {
-			createConfirmDialog(false, "Journey","created","");
-			e.printStackTrace();
-		} catch (IOException e) {
-			createConfirmDialog(false, "Journey","created","");
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			Log.e("Error",e.getMessage());
-		}
-	}
 
 	private void createConfirmDialog(boolean flag,String type,String action,String error){ 
 		if(flag){

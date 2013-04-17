@@ -378,7 +378,8 @@ public class TripOptions extends SocialHitchhikingActivity {
 			e.printStackTrace();
 		}
 		
-		Request req2 = new PreferenceRequest(RequestType.CREATE_PREFERENCE,getApp().getUser(),tripPreferences);
+		/*Request req2 = new PreferenceRequest(RequestType.CREATE_PREFERENCE,getApp().getUser(),tripPreferences);
+		// Don't need this because CREATE_JOURNEY also creates preferences
 		try {
 			PreferenceResponse res2 = (PreferenceResponse) RequestTask.sendRequest(req2,getApp());
 			if(res2.getStatus() != ResponseStatus.OK){
@@ -395,7 +396,7 @@ public class TripOptions extends SocialHitchhikingActivity {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
     
     public String formatDate(Calendar c){
