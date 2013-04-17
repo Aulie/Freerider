@@ -36,10 +36,13 @@ import no.ntnu.idi.freerider.model.User;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.socialhitchhiking.R;
+import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import android.app.Dialog;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,7 +52,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,45 +87,29 @@ public class MapActivityJourney extends MapActivityAbstract{
 		
 		pickupPoint = getApp().getJourneyPickupPoint();
 		dropoffPoint = getApp().getJourneyDropoffPoint();
-
+		
+		TextView driverView = (TextView)findViewById(R.id.mapViewJourneyDriver);
 		
 		if(pickupPoint != null) {
 			drawCross(pickupPoint, true);
 		}
 		if(dropoffPoint != null){
 			drawCross(dropoffPoint, false);
-		}
+		}	
+		driverView.setText(getApp().getSelectedJourney().getDriver().getFullName());
 		
-		boolean acc = getIntent().getBooleanExtra("journeyAccepted", false);
-		boolean rej = getIntent().getBooleanExtra("journeyRejected", false);
-		
-		User driver = getApp().getSelectedJourney().getDriver();
-		User hiker = null;// 	= getApp().getSelectedJourney().getHitchhikers().get(0);
-		
-		String text = "";
-		if(driver != null){
-			text += "Driver: "+driver.getFullName() +"\n";
-		}else{
-			text += "There's no driver, call 112! (or the system admin)\n";
-		}
 		
 		if(getApp().getSelectedJourney().getHitchhikers().size() != 0){
 			for(int c=0; c<getApp().getSelectedJourney().getHitchhikers().size(); c++){
-				text += "Hitchhiker: "+getApp().getSelectedJourney().getHitchhikers().get(c).getFullName() +"\n";
+				HitchList hitch = new HitchList(getApp().getSelectedJourney().getHitchhikers().get(c));
 			}
 		}else{
-			text += "No hitchhikers\n";
+			User dummyUser = new User();
+			dummyUser.setFirstName("No ");
+			dummyUser.setSurname("Hitchhikers");
+			HitchList hitch = new HitchList(dummyUser);
 		}
 		
-		if(acc){
-			text += "The request has been accepted";
-		}else if(rej){
-			text += "The request has been rejected";
-		}else{
-			text += "The request has not been accepted or rejected yet";
-		}
-		
-		((TextView)findViewById(R.id.mapViewJourneyTextView)).setText(text);
 		
 		btn = (FrameLayout)findViewById(R.id.mapViewJourneyBtn);
 		btn.setOnClickListener(new OnClickListener(){
@@ -277,5 +266,46 @@ public class MapActivityJourney extends MapActivityAbstract{
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
 		return false;
+	}
+	
+	public class HitchList{
+		private User hiker;
+		private ImageView icon;
+		private TextView hitchTxt;
+		private FrameLayout frame;
+		private LinearLayout linear;
+		private RelativeLayout relative;
+		
+		public HitchList(User hitchHiker){
+			hiker = hitchHiker;
+			this.icon = new ImageView(MapActivityJourney.this);
+			this.hitchTxt = new TextView(MapActivityJourney.this);
+			this.frame = new FrameLayout(MapActivityJourney.this);
+			linear = (LinearLayout)findViewById(R.id.linLayout);
+			relative = (RelativeLayout)findViewById(R.id.relLayout);
+			frame.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+			
+			FrameLayout.LayoutParams lli2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+			lli2.setMargins(4, 0, 0, 0);
+			icon.setLayoutParams(lli2);
+			//icon.setPadding(0, dipToPx(5), 0, 0);
+			icon.setImageResource(R.drawable.ic_menu_cc);
+			
+			frame.addView(icon);
+			
+			FrameLayout.LayoutParams lliDest = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+			lliDest.setMargins(56, 6, 0, 0);
+			hitchTxt.setLayoutParams(lliDest);
+			hitchTxt.setGravity(Gravity.RIGHT);
+			//hitchTxt.setPadding(dipToPx(40), dipToPx(6), 0, 0);
+			//hitchTxt.setTextSize(15);
+			hitchTxt.setText(hiker.getFullName());
+			
+			frame.addView(hitchTxt);
+			linear.addView(frame);
+			//relative.setVisibility(8);
+			
+			
+		}
 	}
 }
