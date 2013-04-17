@@ -74,19 +74,21 @@ public class Main extends FBConnectionActivity{
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		System.out.println("Oncreate starter");
 		super.onCreate(savedInstanceState);	
 		try{
 			initLoadingScreen();
 			new Thread() {
-				
 				public void run() {
+					System.out.println("Main starter");
 					setConnection(Main.this);
 					user = getApp().getUser();
-	
 					if(user == null){
+						System.out.println("Er null!");
 						loginButtonClicked();
 					}
 					else{
+						System.out.println("Er ikke null!");
 						initMainScreen();
 						if(!isSession()){
 							resetSession();
@@ -166,12 +168,12 @@ public class Main extends FBConnectionActivity{
 				name.setText(user.getFullName());
 				picture.setImageBitmap(getFacebookPicture(user));
 
-				picture.setOnClickListener(new View.OnClickListener() {
+				/*picture.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						loginAsNewClicked(true);
 					}
-				}); 
+				}); */
 				sceduleDrive.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -474,7 +476,7 @@ public class Main extends FBConnectionActivity{
 	private void loginUser(){
 		Request req = new UserRequest(RequestType.LOGIN_USER, getApp().getUser());
 		try {
-			UserResponse res = (UserResponse) RequestTask.sendRequest(req,getApp());
+			RequestTask.sendRequest(req,getApp());
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

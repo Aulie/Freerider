@@ -52,6 +52,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.webkit.CookieSyncManager;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -138,7 +139,7 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 	 * Log out of Facebook
 	 */
 	public void logOut(Main m){
-		setConnection(m);
+		//setConnection(m);
 		mAsyncRunner.logout(mContext, new LogoutRequestListener());
 	}
 
@@ -165,7 +166,7 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 				mAsyncRunner.request("me", new IDRequestListener());
 			} else {
 				// not logged in, so relogin
-				mFacebook.authorize(this, PERMS, new LoginDialogListener());
+				mFacebook.authorize(this, PERMS, new NewLoginDialogListener());
 			}
 		}
 		catch(NullPointerException e){
@@ -179,12 +180,12 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 				mAsyncRunner.request("me", new IDRequestListener());
 			} else {
 				// not logged in, so relogin
-				mFacebook.authorize(this, PERMS, new LoginDialogListener());
+				mFacebook.authorize(this, PERMS, new NewLoginDialogListener());
 				return true;
 			}
 		}
 		catch(NullPointerException e){
-			mFacebook.authorize(this, PERMS, new LoginDialogListener());
+			mFacebook.authorize(this, PERMS, new NewLoginDialogListener());
 		}
 		return false;
 
@@ -207,14 +208,24 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 		user = (User)msg.obj;
 		user.setPicture(getPictureByteArray(user.getID()));
 		getApp().setUser(user);
+		//CookieSyncManager syncManager = 
+		CookieSyncManager.createInstance(this);
+        //syncManager.sync();
 		main.onResult();
 	}
 	private void deleteSession(){
 		sharedPrefs.edit().remove("access_token").commit();
 		sharedPrefs.edit().remove("access_expires").commit();
-		android.webkit.CookieManager.getInstance().removeSessionCookie();
+		try{
+			android.webkit.CookieManager.getInstance().removeSessionCookie();
+		}catch(Exception e){
+			
+		}
 		mFacebook.setAccessToken(null);
 		mFacebook.setAccessExpires(-1);
+		/*Intent intent = new Intent(mContext, no.ntnu.idi.socialhitchhiking.Main.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		mContext.startActivity(intent);*/
 		mFacebook.authorize(this, PERMS, Facebook.FORCE_DIALOG_AUTH, new NewLoginDialogListener());
 	}
 	protected void resetSession(){
@@ -307,7 +318,7 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 
 
 		public void onComplete(Bundle values) {
-
+			System.out.println("LoginDialog starter");
 			String token = mFacebook.getAccessToken();
 
 			long token_expires = mFacebook.getAccessExpires();
@@ -339,13 +350,13 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 
 
 		public void onComplete(Bundle values) {
+			System.out.println("NewLoginDIalog starter");
 			String token = mFacebook.getAccessToken();
 			long token_expires = mFacebook.getAccessExpires();
 			sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 			sharedPrefs.edit().putLong("access_expires", token_expires).commit();
 			sharedPrefs.edit().putString("access_token", token).commit();
 			mAsyncRunner.request("me", (RequestListener) new IDRequestListener());
-
 		}
 		public void onFacebookError(FacebookError e) {
 			main.createLoginFailedDialog(false,"Login failed","Retry");
