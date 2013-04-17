@@ -421,9 +421,8 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 			journey.setRoute(route);
 			journey.setStart(convertToCalendar(rs.getTimestamp("starttime")));
 			journey.setVisibility(Visibility.valueOf(rs.getString("visibility")));
-			TripPreferences pref = new TripPreferences(7, true, true, true, true, true);
-			pref.setPrefId(2); //Hardkoda bullshit
-			journey.setTripPreferences(pref);
+			journey = getJourney(rs.getInt("journeyserial"));
+			//journey.setTripPreferences(pref);
 			ret.add(journey);
 		}
 		return ret;
