@@ -240,7 +240,9 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		List<Journey> temp = new ArrayList<Journey>(list);
 		Collections.copy(temp, list);
 		List<Journey> result = new ArrayList<Journey>();
-
+		result = getOngoing(temp);
+		if(result.size() != 0)adp.addSection("Ongoing", new JourneyAdapter(this, 0, result));
+		
 		result = getNext24(temp);
 		if(result.size() != 0)adp.addSection("Next 24 hours", new JourneyAdapter(this, 0, result));
 
@@ -282,6 +284,16 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		}
 		list.removeAll(no);
 
+		return no;
+	}
+	private List<Journey> getOngoing(List<Journey> list){
+		List<Journey> no = new ArrayList<Journey>();
+		for(Journey j : list){
+			if(j.getStart().before(now)){
+				no.add(j);
+			}
+		}
+		list.removeAll(no);
 		return no;
 	}
 	private List<Journey> getNext14Days(List<Journey> list){

@@ -162,7 +162,7 @@
             android:drawablePadding="-50dp"
             android:paddingLeft="10dp"
             android:layout_weight="16"
-            android:text="Notifications" />
+            android:text="Inbox" />
 		<View 
 		    android:layout_width="0dp"
 		    android:layout_height="0dp"
@@ -188,7 +188,7 @@
             android:paddingLeft="10dp"
             android:layout_weight="16"
             android:onClick="onMyTripsClicked"
-            android:text="My Trips" />
+            android:text="My rides" />
 		<View 
 		    android:layout_width="0dp"
 		    android:layout_height="0dp"

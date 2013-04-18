@@ -68,15 +68,9 @@ public abstract class SocialHitchhikingActivity extends Activity{
 	 * 
 	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if(app.getUser() == null){
-			return false;
-		}
-		else{
-			MenuInflater inflater = getMenuInflater();
-			inflater.inflate(R.menu.xml_menu, menu);
-			return super.onCreateOptionsMenu(menu);
-		}
-		
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.xml_menu, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 	@Override
 	/**
