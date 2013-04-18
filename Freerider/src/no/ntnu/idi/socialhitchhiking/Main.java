@@ -59,7 +59,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * 
+ * Main application activity.
  * @author Christian
  * @author Jon-Robert
  * @extends FBConnectionActivity
@@ -238,7 +238,9 @@ public class Main extends FBConnectionActivity{
 		    }
 		});
 	}
-
+	/**
+	 * Displays a dialog for new users.
+	 */
 	private void showDialogNew() {
 		if(isNewUser){
 	    	new AlertDialog.Builder(Main.this)
@@ -264,7 +266,11 @@ public class Main extends FBConnectionActivity{
 	public boolean isSession(){
 		return super.isSession();
 	}
-	
+	/**
+	 * Gets the Facebook profile pucture of the given {@link User}.
+	 * @param user
+	 * @return
+	 */
 	private Bitmap getFacebookPicture(User user){
 		Bitmap bm = BitmapFactory.decodeByteArray(user.getPicture(), 0, user.getPicture().length);
 		return bm;
@@ -400,11 +406,17 @@ public class Main extends FBConnectionActivity{
 	     })
 	     .show();
 	}
+	/**
+	 * Starts the {@link ListTrips} activity when "My trips" is clicked.
+	 * @param view
+	 */
 	public void onMyTripsClicked(View view){
 		Intent intent = new Intent(this,no.ntnu.idi.socialhitchhiking.journey.ListTrips.class);
 		startActivity(intent);
 	}
-	
+	/**
+	 * Starts the {@link MyAccount} activity when "My account" is clicked.
+	 */
 	private void startMyAccount(){
 		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.MyAccount.class);
 		startActivity(intent);
@@ -447,12 +459,18 @@ public class Main extends FBConnectionActivity{
 		}
 		super.onResume();
 	}
+	
+	/**
+	 * Initializes a loading screen.
+	 */
 	private void initLoadingScreen(){
 		setContentView(R.layout.main_loading);
 		pbLogin = (ProgressBar)findViewById(R.id.loading_progbar);
 		pbLogin.setVisibility(View.VISIBLE);
 	}
-
+	/**
+	 * Creates a new user from this applications {@link User}.
+	 */
 	private void createNewUser(){
 		Request req = new UserRequest(RequestType.CREATE_USER, getApp().getUser());
 		try {
@@ -473,6 +491,9 @@ public class Main extends FBConnectionActivity{
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Logs in a user and updates the users Facebook name, picture and gender.
+	 */
 	private void loginUser(){
 		Request req = new UserRequest(RequestType.LOGIN_USER, getApp().getUser());
 		try {
@@ -496,7 +517,7 @@ public class Main extends FBConnectionActivity{
 	}
 	/**
 	 * 
-	 * 
+	 * Shows login dialog when "Login as a different user" is selected from the menu.
 	 * @param m - Main, pointer to be used in FBConnectionActivity
 	 */
 	public void loginButtonClicked(){
