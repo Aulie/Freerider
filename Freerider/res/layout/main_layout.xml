@@ -188,7 +188,7 @@
             android:paddingLeft="10dp"
             android:layout_weight="16"
             android:onClick="onMyTripsClicked"
-            android:text="My rides" />
+            android:text="My Rides" />
 		<View 
 		    android:layout_width="0dp"
 		    android:layout_height="0dp"

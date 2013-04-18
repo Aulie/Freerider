@@ -217,7 +217,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 				}
 				else
 				{
-
+					doSearch();
 					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(searchFrom.getWindowToken(), 0);
 					imm.hideSoftInputFromWindow(searchTo.getWindowToken(), 0);
@@ -561,6 +561,14 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 					numDays = 1;
 					journeys = search();
 				}
+				Calendar now = Calendar.getInstance();
+				List<Journey> tempJ = new ArrayList<Journey>();
+				for(Journey j : journeys){
+					if(j.getStart().before(now)){
+						tempJ.add(j);
+					}
+				}
+				journeys.removeAll(tempJ);
 				if(journeys.size() == 0) {
 					//Toast.makeText(FindDriver.this, "No rides matched your search", Toast.LENGTH_LONG);
 				}
