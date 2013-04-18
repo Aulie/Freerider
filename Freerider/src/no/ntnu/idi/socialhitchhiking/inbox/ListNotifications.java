@@ -19,7 +19,7 @@ public class ListNotifications extends TabActivity
 		TabHost tabHost = getTabHost();
 		
 		TabSpec unReadSpec = tabHost.newTabSpec("Unread");
-		unReadSpec.setIndicator("Unread");
+		unReadSpec.setIndicator("Messages");
         Intent unReadIntent = new Intent(this, Inbox.class);
         unReadIntent.putExtra("history", false);
         unReadSpec.setContent(unReadIntent);
@@ -31,6 +31,13 @@ public class ListNotifications extends TabActivity
         readIntent.putExtra("history", true);
         readSpec.setContent(readIntent);
  
+        TabSpec requestSpec = tabHost.newTabSpec("Requests");
+        requestSpec.setIndicator("Requests");
+        Intent requestIntent = new Intent(this,Inbox.class);
+        requestIntent.putExtra("request", true);
+        requestSpec.setContent(requestIntent);
+        
+        tabHost.addTab(requestSpec);
         tabHost.addTab(unReadSpec);
         tabHost.addTab(readSpec);
 	}

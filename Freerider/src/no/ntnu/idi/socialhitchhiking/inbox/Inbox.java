@@ -35,6 +35,7 @@ import org.apache.http.client.ClientProtocolException;
 
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Notification;
+import no.ntnu.idi.freerider.model.NotificationType;
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.JourneyResponse;
@@ -82,10 +83,27 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 	private ListView notifications;
 	private CheckedTextView header;
 	private Notification sel;
-	private List<Notification> sorted,notifHistory;
+	private List<Notification> sorted,notifHistory,requestList;
 	private boolean history;
+	private boolean request;
 	private Calendar today,yesterday, last4Days, last10Days;
 	private SectionedListViewAdapter active = new SectionedListViewAdapter() {
+		protected View getHeaderView(String caption, int index,View convertView, ViewGroup parent) {
+			TextView result = (TextView) convertView;
+
+			if (convertView == null) {
+				result = (TextView) getLayoutInflater().inflate(
+						R.layout.listview_sectioned, null);
+			}
+
+			result.setText(caption);
+			result.setTextColor(Color.BLACK);
+			result.setBackgroundColor(Color.rgb(170, 170, 170));
+
+			return (result);
+		}
+	};
+	private SectionedListViewAdapter requestAdapter = new SectionedListViewAdapter() {
 		protected View getHeaderView(String caption, int index,View convertView, ViewGroup parent) {
 			TextView result = (TextView) convertView;
 
@@ -221,12 +239,17 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		System.out.println("History: "+history);
 		if(getApp().getUser() != null){
 			if(!history){
-				if(active.isEmpty()) {
-					Toast.makeText(this, "You have no unread notifications", Toast.LENGTH_SHORT).show();
+				if(request){
+					notifications.setAdapter(requestAdapter);
 				}
-				notifications.setAdapter(active);
-				//history = false;
-				//item.setTitle("Show Notification History");
+				else
+				{
+					if(active.isEmpty()) {
+						Toast.makeText(this, "You have no unread notifications", Toast.LENGTH_SHORT).show();
+					}
+					notifications.setAdapter(active);
+				}
+
 				header.setText("Active Notifications");
 			}
 			else {
@@ -431,6 +454,7 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		Intent intent = getIntent();
 		
 		history = intent.getBooleanExtra("history", false);
+		request = intent.getBooleanExtra("request", false);
 		
 		header = (CheckedTextView) findViewById(R.id.inbox_header);
 		header.setText("Active Notifications");
@@ -455,7 +479,14 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 			Log.e("hit?", "KAKE ER GODT");
 			notifHistory = getApp().getNotifications();
 			sorted = sortNotifications(notifHistory);
+			requestList = new ArrayList<Notification>();
+			for(int i = 0; i < sorted.size(); i++){
+				if(sorted.get(i).getType() == NotificationType.HITCHHIKER_REQUEST){
+					requestList.add(sorted.get(i));
+				}
+			}
 			System.out.println("JoYo Inbox" + notifHistory.size());
+			initAdapter(requestAdapter, requestList);
 			initAdapter(active,sorted);
 			initAdapter(historyAdap,notifHistory);
 			notifications.setAdapter(active);
