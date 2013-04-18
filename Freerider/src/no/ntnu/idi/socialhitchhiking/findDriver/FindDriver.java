@@ -222,7 +222,15 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 					imm.hideSoftInputFromWindow(searchFrom.getWindowToken(), 0);
 					imm.hideSoftInputFromWindow(searchTo.getWindowToken(), 0);
 				}
-
+				previousSearch = getPreviousSearch();
+				previousAdapter.clear();
+				
+				previousAdapter.add(new PreviousSearch("[Select previous search]", ""));
+				for(int i = 0; i < previousSearch.size(); i++) {
+					if(previousSearch.get(i).getFrom() != null) {
+						previousAdapter.add(previousSearch.get(i));
+					}
+				}
 			}
 		});
 
