@@ -644,6 +644,19 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 			return false;
 		}
 	}
+	public boolean isNotInJourney(int journeySerial, String userId){
+		try{
+			Journey j = getJourney(journeySerial);
+			for(int i = 0; i < j.getHitchhikers().size(); i++){
+				if(j.getHitchhikers().get(i).getID().equals(userId)){
+					return false;
+				}
+			}
+		} catch(SQLException e){
+			return false;
+		}
+		return true;
+	}
 	public String getJourneyDriverID(int serial) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("SELECT routes.owner FROM journeys, routes WHERE journeys.route_used=routes.serial AND journeys.serial=?");
 		stmt.setInt(1, serial);

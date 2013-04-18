@@ -285,6 +285,8 @@ public class RequestProcessor {
 					if(note.getType() == NotificationType.HITCHHIKER_REQUEST){
 						if(!db.hasAvailableSeats(note.getJourneySerial())){
 							return new UserResponse(type, ResponseStatus.FAILED,"No available seats");
+						}else if(!db.isNotInJourney(note.getJourneySerial(), note.getSenderID())){
+							return new UserResponse(type, ResponseStatus.FAILED,"User already in journey");
 						}
 					}
 					db.addNotification(note);
