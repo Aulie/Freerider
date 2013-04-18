@@ -364,6 +364,9 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+	            
 				if(checkFields() && selectedRoute.getMapPoints().size()>1 && hasDrawn == true){
 					button.setText("Next");
 					createOneTimeJourney();
