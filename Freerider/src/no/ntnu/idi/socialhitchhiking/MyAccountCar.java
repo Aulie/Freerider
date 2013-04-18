@@ -44,7 +44,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Toast;
-
+/**
+ * Class that contains the functionality for the "My Car" tab in "My Account".
+ * @author Kristoffer Aulie
+ *
+ */
 public class MyAccountCar extends SocialHitchhikingActivity {
 
     private static final int CAMERA_REQUEST = 1337; 
@@ -280,7 +284,7 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	        }
 	    }
 		/**
-		 * Displaying the car info in the layout
+		 * Displaying the car information in the layout.
 		 * @param res
 		 */
 		public void showMain(CarResponse res, PreferenceResponse prefResInit) {
@@ -363,17 +367,27 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 		} 
 	}
 
+/**
+ * Class that loads the car information from the server in the background.
+ * @author Kristoffer Aulie
+ *
+ */
 class CarLoader extends AsyncTask<Void, User, CarResponse>{
 	Car car;
 	MyAccountCar activity;
 	PreferenceResponse prefRes;
 	
+	/**
+	 * Constructor. Creates a new {@link CarLoader} instance.
+	 * @param activity
+	 * @param carIn
+	 */
 	public CarLoader(Activity activity, Car carIn){
 		this.activity = (MyAccountCar) activity;
 		car = carIn;
 	}
 	/**
-	 * Getting the car info from the database
+	 * Getting the car info from the database.
 	 * @param params
 	 * @return
 	 */

@@ -29,7 +29,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+/**
+ * Class that contains functionality for the "Me" tab in "My Account".
+ * @author Kristoffer Aulie
+ *
+ */
 public class MyAccountMeActivity extends SocialHitchhikingActivity {
 
 	private ImageView picture;
@@ -51,16 +55,19 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Setting the loading layout
-		setContentView(R.layout.main_loading);
-		
-		// Getting the user from the database
-		user = getApp().getUser();
-		System.out.println("Før: " + user.getGender());
-		new UserLoader(this).execute();
-		// Adding image of the driver
-		// Execute the Asynctask: Get image from url and add it to the ImageView
-		new GetImage(picture, this).execute(user.getPictureURL());
+		try{
+			// Setting the loading layout
+			setContentView(R.layout.main_loading);
+			// Getting the user from the database
+			user = getApp().getUser();
+			System.out.println("Før: " + user.getGender());
+			new UserLoader(this).execute();
+			// Adding image of the driver
+			// Execute the Asynctask: Get image from url and add it to the ImageView
+			new GetImage(picture, this).execute(user.getPictureURL());
+		}catch(NullPointerException e){
+			Toast.makeText(this, "A server error occured.", Toast.LENGTH_LONG).show();
+		}
 	}
 	@Override
 	public void onStop(){
@@ -158,9 +165,12 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		}
 		super.onStop();
 	}
+	/**
+	 * Initializing the user from a {@link UserResponse}
+	 * @param res
+	 */
 	public void initUser(UserResponse res){
 		this.user = res.getUser();
-		System.out.println("Etter: " + user.getGender());
 	}
 	/**
 	 * Displays the user info in the layout.
@@ -208,6 +218,11 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 	    }
 	}
 }
+/**
+ * Class that loads the user information from the server in the background.
+ * @author Kristoffer Aulie
+ *
+ */
 class UserLoader extends AsyncTask<Void, User, UserResponse>{
 	MyAccountMeActivity activity;
 	
@@ -215,7 +230,7 @@ class UserLoader extends AsyncTask<Void, User, UserResponse>{
 		this.activity = (MyAccountMeActivity) activity;
 	}
 	/**
-	 * Getting the car info from the database
+	 * Getting the user information from the database.
 	 * @param params
 	 * @return
 	 */

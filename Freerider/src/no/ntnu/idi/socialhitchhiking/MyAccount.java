@@ -25,7 +25,7 @@ import android.widget.TabHost.TabSpec;
 
 /**
  * This class makes the tab view for my account and adds three tabs on it.
- * @author Made ziius
+ * @author Made Ziius
  *
  */
 @SuppressWarnings("deprecation")
@@ -67,15 +67,5 @@ public class MyAccount extends TabActivity {
 	    if(getIntent().getBooleanExtra("fromDialog", false)){
 	    	tabHost.setCurrentTab(0);
 	    }
-	    
-	    if(tabHost.getCurrentTab()==2){
-	    	loadCar();
-	    }
-	    
-	}
-
-	private void loadCar() {
-		// TODO Auto-generated method stub
-		
 	}
 }

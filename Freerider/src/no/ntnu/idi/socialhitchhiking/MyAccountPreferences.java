@@ -21,7 +21,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 /**
- * This class creates the preferences checkbox list on MyAccount and on MyAccountPreferences activity.
+ * Class that contains functionality for the "Preferences" tab in "My Account".
  * @author Made Ziius
  *
  */
