@@ -166,6 +166,9 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 					PreviousSearch ps = (PreviousSearch)arg0.getItemAtPosition(arg2);
 					searchFrom.setText(ps.getFrom());
 					searchTo.setText(ps.getTo());
+					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(searchFrom.getWindowToken(), 0);
+					imm.hideSoftInputFromWindow(searchTo.getWindowToken(), 0);
 				}
 				
 			}
