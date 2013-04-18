@@ -99,6 +99,21 @@ public class SettingsManager {
 		else return Visibility.PUBLIC;
 		
 	}
+	public void setFacebookPrivacy(Visibility v){
+		SharedPreferences.Editor editor = pref.edit();
+		if(v==Visibility.FRIENDS){
+			editor.putString("privacy", "friends"); // value to store
+			editor.commit();
+        }
+		else if(v==Visibility.FRIENDS_OF_FRIENDS){
+        	editor.putString("privacy", "friends_of_friends"); // value to store
+			editor.commit();
+    	}
+		else if(v==Visibility.PUBLIC){
+        	editor.putString("privacy", "public"); // value to store
+			editor.commit();
+    	}
+	}
 	public String getAccessToken(){
 		return pref.getString("access_token", "");
 	}

@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Preferences tab in the MyAccount activity  -->
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
- 
-  <!--  Screen Design for Preferences -->
-    <ListView
-        android:id="@+id/listPreferences"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:divider="#b5b5b5"
-        android:dividerHeight="1dp"
-        android:listSelector="@drawable/list_selector"/>
-
-  
-</LinearLayout>
+<ScrollView 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent">
+    
+	<LinearLayout
+	  android:orientation="vertical"
+	  android:layout_width="260dp"
+	  android:layout_height="match_parent"
+	  android:paddingTop="10dp"
+	  android:layout_gravity="center_horizontal">
+	 
+	  <!--  Screen Design for Preferences -->
+	    <ListView
+	        android:id="@+id/listPreferences"
+	        android:layout_width="fill_parent"
+	        android:layout_height="350dp"
+	        android:divider="#b5b5b5"
+	        android:dividerHeight="1dp"
+	        android:listSelector="@drawable/list_selector"/>
+		<Button
+		    android:id="@+id/preferencesFacebookButton"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:gravity="left|center_vertical"
+		    android:drawableLeft="@drawable/trip_icon_fb"
+		    android:drawablePadding="10dp"
+		    android:onClick="btnFacebookClicked"
+		    />	
+	  
+	</LinearLayout>
+</ScrollView>

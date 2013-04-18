@@ -60,7 +60,6 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 			setContentView(R.layout.main_loading);
 			// Getting the user from the database
 			user = getApp().getUser();
-			System.out.println("Før: " + user.getGender());
 			new UserLoader(this).execute();
 			// Adding image of the driver
 			// Execute the Asynctask: Get image from url and add it to the ImageView
