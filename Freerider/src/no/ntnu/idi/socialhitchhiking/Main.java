@@ -1,8 +1,9 @@
 /**
  * @contributor(s): Freerider Team (Group 4, IT2901 Fall 2012, NTNU)
+ * @contributor(s): Freerider Team (Group 3, IT2901 Spring 2013, NTNU)
  * @version: 		1.0
  *
- * Copyright (C) 2012 Freerider Team.
+ * Copyright (C) 2013 Freerider Team.
  *
  * Licensed under the Apache License, Version 2.0.
  * You may not use this file except in compliance with the License.

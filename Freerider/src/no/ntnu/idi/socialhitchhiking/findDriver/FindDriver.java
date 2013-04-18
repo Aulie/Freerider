@@ -1,5 +1,6 @@
 /**
  * @contributor(s): Freerider Team (Group 4, IT2901 Fall 2012, NTNU)
+ * @contributor(s): Freerider Team (Group 3, IT2901 Spring 2012, NTNU)
  * @version: 		1.0
  *
  * Copyright (C) 2012 Freerider Team.
@@ -217,7 +218,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 				else
 				{
 
-					checkAccess();
 					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(searchFrom.getWindowToken(), 0);
 					imm.hideSoftInputFromWindow(searchTo.getWindowToken(), 0);
@@ -262,7 +262,9 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		}
 		
 	}
-
+	/**
+	 * Displays loading dialog.
+	 */
 	public void showLoad(){
 		searchingDialog2 = ProgressDialog.show(this, "Displaying route", "Please wait...");
 	}
@@ -316,18 +318,9 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			search.performClick();
 		}
 	}
+
 	/**
-	 * Method called by the PropertyChangeListener when the application gets a
-	 * new access token from facebook.
-	 * @deprecated
-	 */
-	private void relogin(){
-		if(sendLoginRequest()){
-			//chooseDate();
-		}
-	}
-	/**
-	 * Search for journeys on the server and updates the list of journeys accordingly.
+	 * Search for rides on the server and updates the list of rides accordingly.
 	 */
 	private void doSearch(){
 
@@ -347,21 +340,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			setPreviousSearch();
 		}
 		new RideSearch().execute();
-	}
-
-	/**
-	 * Checks whether the current access token from Facebook is still valid.
-	 * Tries to acquire a new access token if it's not valid, else, a search is made.
-	 */
-	private void checkAccess(){
-
-		if(!getApp().getMain().isSession()){
-			getApp().getMain().getAccess();
-		}
-		else {
-			doSearch();
-		}
-		getApp().getMain();
 	}
 
 	/**
@@ -477,15 +455,14 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent ev) {
-		if(ev.getPropertyName() == SocialHitchhikingApplication.ACCESS_TOKEN){
-			relogin();
-		}
 		if(ev.getPropertyName() == DateChooser.DATE_CHANGED){
 			if(ev.getNewValue() != null)searchDate = (Calendar) ev.getNewValue();
 			doSearch();
 		}
 	}
-	
+	/**
+	 * Adding the previous seach list to the shared preferences.
+	 */
 	public void setPreviousSearch() {
 		SharedPreferences settings = getSharedPreferences("PreviousSearch", 0);
 		SharedPreferences.Editor editor = settings.edit();
@@ -495,6 +472,10 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		}
 		editor.commit();
 	}
+	/**
+	 * Gets the previous searches from the shared preferences.
+	 * @return
+	 */
 	public ArrayList<PreviousSearch> getPreviousSearch(){
 		SharedPreferences settings = getSharedPreferences("PreviousSearch", 0);
 		ArrayList<PreviousSearch> ret = new ArrayList<FindDriver.PreviousSearch>();
@@ -506,6 +487,11 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		}
 		return ret;
 	}
+	/**
+	 * Instances of this class represents previous searches.
+	 * @author Thomas Gjerde
+	 *
+	 */
 	private class PreviousSearch {
 		private String from;
 		private String to;
@@ -541,6 +527,11 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		}
 		
 	}
+	/**
+	 * CLass that searches for matching rides in the background.
+	 * @author Thomas Gjerde
+	 *
+	 */
 	private class RideSearch extends AsyncTask<Void, Integer, String> {
 
 		@Override

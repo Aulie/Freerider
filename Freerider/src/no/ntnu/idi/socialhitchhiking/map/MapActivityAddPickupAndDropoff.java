@@ -412,19 +412,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		
 		// Adding message to the user
 		makeToast("Please set a pickup and dropoff location.");
-		
-		/*
-		Bundle extras = getIntent().getExtras();
-		if(extras != null){
-			Serializable ser1 = extras.getSerializable("searchFrom");
-			Serializable ser2 = extras.getSerializable("searchTo");
-			if(ser1 != null && ser1 instanceof Location){
-				drawThumb((Location)ser1, true);
-			}
-			if(ser2 != null && ser2 instanceof Location){
-				drawThumb((Location)ser2, false);
-			}
-		}*/
 	}
 	
 	/**
@@ -502,16 +489,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 	public void clearDropoffText(View v){
 		((EditText)findViewById(R.id.dropoffText)).setText("");
 	}
-	
-	/**
-	 * Should be called when both a pickup point and a dropoff point has been selected.
-	 */
-	/*private void setDoneSelecting(){
-		isSelectingPickupPoint = false;
-		isSelectingDropoffPoint = false;
-		btnSelectPickupPoint.setBackgroundColor(notSelected); 
-		btnSelectDropoffPoint.setBackgroundColor(notSelected);
-	}*/
 
 	@Override
 	protected void initContentView() {
