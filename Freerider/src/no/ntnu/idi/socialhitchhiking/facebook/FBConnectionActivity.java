@@ -242,12 +242,13 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 		String access_token = sharedPrefs.getString("access_token", null);
 		Long expires = sharedPrefs.getLong("access_expires", -1);
-
+		System.out.println("Sesjonsvariabel hentes!");
 		if (access_token != null && expires != -1) {
+			System.out.println("Sesjonsvariabel opprettes!");
 			mFacebook.setAccessToken(access_token);
 			mFacebook.setAccessExpires(expires);
-
 		}
+		System.out.println("Sesjonsvariabel valid: " + mFacebook.isSessionValid());
 		return mFacebook.isSessionValid();
 
 	}
@@ -426,6 +427,8 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 						Message msg = new Message();
 						
 						if(newUser(login.getID())){
+							System.out.println("Brukeren er NY!");
+							//new UserRequest(RequestType.CREATE_USER, login);
 							newUserBoolean = true;
 							Log.e("I connection", Boolean.toString(newUserBoolean));
 						}
@@ -512,11 +515,10 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 	private boolean newUser(String id){
 		User user = new User("Dummy",id); //"Dummy" and 0.0 are dummy vars. getApp() etc sends the current user's carid
 		Request req = new UserRequest(RequestType.GET_USER, user);
+		UserResponse res = null;
 		try {
-			UserResponse res = (UserResponse) RequestTask.sendRequest(req,getApp());
-			if(res.getUser()==null){
-				return true;
-			}
+			res = (UserResponse) RequestTask.sendRequest(req,getApp());
+			System.out.println("Error melding: " + res.getErrorMessage());
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -528,9 +530,13 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
+			System.out.println("Excecution feil: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return false;
+		if(res==null){
+			return true;
+		}else
+			return false;
 	}
 	
 	public boolean checkNewUser(){

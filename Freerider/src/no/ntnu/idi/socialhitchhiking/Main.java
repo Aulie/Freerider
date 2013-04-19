@@ -220,12 +220,11 @@ public class Main extends FBConnectionActivity{
 	 */
 	public void onResult(){
 		isNewUser = checkNewUser();
-		if(!getApp().isKey("main")){
-			if(isNewUser){
-				createNewUser();
-			}else{
-				loginUser();
-			}
+		System.out.println("OnResult skjer! " + isNewUser);
+		if(isNewUser){
+			createNewUser();
+		}else{
+			loginUser();
 		}
 		getApp().startService();
 		getApp().startJourneyReminder();
