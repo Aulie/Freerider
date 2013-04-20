@@ -23,7 +23,7 @@
 		<Button
 		    android:id="@+id/preferencesFacebookButton"
 		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
+		    android:layout_height="70dp"
 		    android:gravity="left|center_vertical"
 		    android:drawableLeft="@drawable/trip_icon_fb"
 		    android:drawablePadding="10dp"
