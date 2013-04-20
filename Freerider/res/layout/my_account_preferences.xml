@@ -29,6 +29,6 @@
 		    android:drawablePadding="10dp"
 		    android:onClick="btnFacebookClicked"
 		    />	
-	  
+	  Retry
 	</LinearLayout>
 </ScrollView>
