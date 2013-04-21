@@ -113,6 +113,7 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		listRoute.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parentView, View childView, final int position, long id) {
+				Log.e("Freq","" + ((Route)listRoute.getItemAtPosition(position)).getFrequency());
 				AlertDialog.Builder alertbox = new AlertDialog.Builder(ScheduleDrive.this);
 				alertbox.setTitle("Edit route");
 				alertbox.setMessage("Do you want to change the route?");
@@ -195,18 +196,14 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 	
 	private void initRoutes() {
 		List<Route> routes = null;
-		if(getApp().getRoutes() == null){
 			try {
 				routes = getRoutes();
 				getApp().setRoutes(routes);
 			} catch (ClientProtocolException e) {
-				e.printStackTrace();
+				routes = getApp().getRoutes();
 			}catch(NullPointerException e){
+				routes = getApp().getRoutes();
 			}
-		}
-		else{
-			routes = getApp().getRoutes();
-		}
 		if(routes != null){
 			routeAdap = new RouteAdapter(this, 0, getApp().getRoutes());
 			listRoute.setAdapter(routeAdap);

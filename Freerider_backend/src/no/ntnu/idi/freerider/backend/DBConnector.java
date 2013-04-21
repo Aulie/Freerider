@@ -217,7 +217,7 @@ public class DBConnector {
 		ServerLogger.write("getRoutes TOP");
 		List<Route> ret = new ArrayList<Route>();
 		//Changed
-		PreparedStatement stmt = conn.prepareStatement("SELECT name, route::geometry, owner, serial, maplocations::geometry,addresses,frequency FROM routes WHERE owner=? AND ad_hoc=false ORDER BY frequency");
+		PreparedStatement stmt = conn.prepareStatement("SELECT name, route::geometry, owner, serial, maplocations::geometry,addresses,frequency FROM routes WHERE owner=? AND ad_hoc=false ORDER BY frequency DESC");
 		stmt.setString(1,ownerID);
 		ResultSet rs = stmt.executeQuery();
 		ServerLogger.write("Before while");
