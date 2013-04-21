@@ -58,6 +58,7 @@ import android.graphics.Color;
 import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -358,9 +359,9 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 
 			status.setText(setStatus(current));
 			status.setTextColor(Color.BLACK);
-			start.setText("Sender: "+current.getSenderName());
-			stop.setText("Comment: "+current.getComment());
-			startTime.setText("Time of request: "+current.getTimeSent().getTime().toLocaleString());
+			start.setText(Html.fromHtml("<b>Sender: </b>\t\t"+current.getSenderName()));
+			stop.setText(Html.fromHtml("<b>Message: </b>\t"+current.getComment()));
+			startTime.setText(Html.fromHtml("<b>Time sent: </b>\t"+current.getTimeSent().getTime().toLocaleString()));
 
 			return row;
 		}

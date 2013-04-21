@@ -452,7 +452,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		boolean succeded = sendJourneyRequest(req);
 		if(succeded){
 			deleteJourneyFromList(j);
-			createAlertDialog(this, succeded, "Journey", "cancelled", "");
+			createAlertDialog(this, succeded, "Ride", "cancelled", "");
 		}
 	}
 	private boolean sendJourneyRequest(Request req){
@@ -483,7 +483,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		boolean succeded = sendJourneyRequest(req);
 		if(succeded){
 			deleteJourneyFromList(j);
-			createAlertDialog(this, succeded, "Journey", "cancelled", "");
+			createAlertDialog(this, succeded, "Ride", "cancelled", "");
 		}
 	}
 	
