@@ -57,6 +57,8 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -456,14 +458,24 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	 * @param view
 	 */
 	public void onGpsClicked(View view) {
-		 final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-
-		    if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-		        Toast.makeText(this, "GPS is not activated", Toast.LENGTH_LONG);
-		    }
 		final GpsHandler gps = new GpsHandler(this);
+	    if (!gps.gpsEnabled()) {
+	        Toast.makeText(this, "GPS is not activated", Toast.LENGTH_LONG).show();
+	        return;
+	    }
 		gps.findLocation();
 		loadingDialog = ProgressDialog.show(this, "Locating", "Finding your location");
+		loadingDialog.setCancelable(true);
+		loadingDialog.setOnCancelListener(new OnCancelListener()
+		{
+			
+			@Override
+			public void onCancel(DialogInterface dialog)
+			{
+				gps.abortGPS();
+				loadingDialog.dismiss();
+			}
+		});
 		new Thread() {
 			public void run() {
 				try {

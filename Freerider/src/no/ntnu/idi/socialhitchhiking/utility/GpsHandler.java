@@ -30,6 +30,14 @@ public class GpsHandler<T> {
 	public void abortGPS() {
 		locManager.removeUpdates(locListener);
 	}
+	public boolean gpsEnabled(){
+		if (locManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 class GpsListener implements LocationListener {
 	@Override

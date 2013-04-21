@@ -56,6 +56,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -1048,8 +1049,24 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	 */
 	public void onGpsClicked(View view) {
 		final GpsHandler gps = new GpsHandler(this);
+	    if (!gps.gpsEnabled()) {
+	        Toast.makeText(this, "GPS is not activated", Toast.LENGTH_LONG).show();
+	        return;
+	    }
 		gps.findLocation();
 		loadingDialog = ProgressDialog.show(this, "Locating", "Finding your location");
+		loadingDialog.setCancelable(true);
+		loadingDialog.setOnCancelListener(new OnCancelListener()
+		{
+			
+			@Override
+			public void onCancel(DialogInterface dialog)
+			{
+				gps.abortGPS();
+				loadingDialog.dismiss();
+			}
+		});
+		
 		new Thread() {
 			public void run() {
 				try {
