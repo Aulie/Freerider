@@ -404,10 +404,34 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		searchFrom.setAdapter(adapter2);
 		searchFrom.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter2, searchFrom));
 		searchFrom.setThreshold(1);
+		searchFrom.setOnItemClickListener(new OnItemClickListener()
+		{
 
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3)
+			{
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(searchFrom.getWindowToken(), 0);
+				imm.hideSoftInputFromWindow(searchTo.getWindowToken(), 0);
+			}
+		});
+		
 		searchTo = (AutoCompleteTextView) findViewById(R.id.search2);  
 		searchTo.setAdapter(adapter2);
 		searchTo.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter2, searchTo));
+		searchTo.setOnItemClickListener(new OnItemClickListener()
+		{
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3)
+			{
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(searchFrom.getWindowToken(), 0);
+				imm.hideSoftInputFromWindow(searchTo.getWindowToken(), 0);
+			}
+		});
 
 	}
 	/**
