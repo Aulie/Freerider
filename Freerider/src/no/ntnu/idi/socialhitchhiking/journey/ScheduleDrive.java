@@ -172,9 +172,10 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 				}
 				if(res.getStatus() == ResponseStatus.FAILED){
 					System.out.println(res.getErrorMessage());
-					if(res.getErrorMessage().toLowerCase().contains("key is still referenced")){
+					if(res.getErrorMessage().toLowerCase().contains("is still referenced")){
 						createAlertDialog(this, false, "Route", "deleted", "Route is used in an active journey!");
 					}else{
+						Log.e("Routeklikk",res.getErrorMessage());
 						createAlertDialog(this, false, "Route", "deleted", "Could not delete the route.");
 					}
 				}
