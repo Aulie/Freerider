@@ -158,9 +158,9 @@
             android:id="@+id/startScreenInbox"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:drawableLeft="@android:drawable/ic_menu_info_details"
+            android:drawableLeft="@drawable/inbox1"
             android:drawablePadding="-50dp"
-            android:paddingLeft="10dp"
+            android:paddingLeft="13dp"
             android:layout_weight="16"
             android:text="Inbox" />
 		<View 
