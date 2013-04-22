@@ -326,10 +326,12 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 		    	String empty = "No car type set";
 		        byteArrayx =  empty.getBytes();
 		        // If a new image is set, display it
-		    	if(!(res.getCar().getPhotoAsBase64().equals(Base64.encode(byteArrayx, Base64.URL_SAFE)))){
-		    		btm = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-		    		imageView.setImageBitmap(btm);
-		    	}
+		        if(byteArray.length > 15){
+			    	if(!(res.getCar().getPhotoAsBase64().equals(Base64.encode(byteArrayx, Base64.URL_SAFE)))){
+			    		btm = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+			    		imageView.setImageBitmap(btm);
+			    	}
+		        }
 	        }
 	        //if user does not yet have a car registated
 	        else{

@@ -37,7 +37,7 @@ import android.widget.ListView;
 /**
  * Class that contains functionality for the "Preferences" tab in "My Account".
  * @author Made Ziius
- *
+ * @author Kristoffer Aulie
  */
 public class MyAccountPreferences extends SocialHitchhikingActivity {
 
@@ -77,12 +77,8 @@ public class MyAccountPreferences extends SocialHitchhikingActivity {
     		facebookPrivacy = "Public";
     	}
         
-        // Setting the Facebook privacy button
-        btnFacebook = (Button)findViewById(R.id.preferencesFacebookButton);
-        btnFacebook.setText(Html.fromHtml("<b><big>" + "Set Facebook privacy" + "</big></b>" +  "<br />" + 
-                "<small>" + facebookPrivacy + "</small>" + "<br />"));
-        
 		listPreferences = (ListView) findViewById(R.id.listPreferences);
+		btnFacebook = (Button)findViewById(R.id.preferencesFacebookButton);
 
 		/**Preferences fetched from the strigs.xml*/
 		String[] preferences = getResources().getStringArray(R.array.preferences_array);
@@ -122,6 +118,11 @@ public class MyAccountPreferences extends SocialHitchhikingActivity {
 	            }
 	    }
 	    prefAdap.notifyDataSetChanged();
+	    
+	    listPreferences.addFooterView(btnFacebook);
+	    // Setting the Facebook privacy button
+        btnFacebook.setText(Html.fromHtml("<b>" + "Set Facebook privacy" + "</b>" +  "<br />" + 
+                "<small>" + facebookPrivacy + "</small>" + "<br />"));
 	}
 	/**
 	 * Called when the button "Set Facebook privacy" is clicked. Opens an AlertDialog where the user selects a privacy setting.
