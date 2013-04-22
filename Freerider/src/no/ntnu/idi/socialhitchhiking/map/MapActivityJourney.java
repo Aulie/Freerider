@@ -157,8 +157,6 @@ public class MapActivityJourney extends MapActivityAbstract{
 						@Override
 						public void onClick(View v) {
 							handleJourney(getApp().getSelectedJourney());
-							Intent intent = new Intent(MapActivityJourney.this, no.ntnu.idi.socialhitchhiking.journey.ListTrips.class);
-							startActivity(intent);
 						}
 					});
 					

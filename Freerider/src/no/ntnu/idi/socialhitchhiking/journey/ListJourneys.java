@@ -45,6 +45,7 @@ import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.freerider.protocol.UserRequest;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
+import no.ntnu.idi.socialhitchhiking.map.MapActivityJourney;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 import no.ntnu.idi.socialhitchhiking.utility.JourneyAdapter;
 import no.ntnu.idi.socialhitchhiking.utility.SectionedListViewAdapter;
@@ -53,6 +54,7 @@ import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 import org.apache.http.client.ClientProtocolException;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -65,6 +67,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -324,6 +327,72 @@ public class ListJourneys extends SocialHitchhikingActivity{
 	}
 
 	private void cancelJourney(final Journey j){
+		final Dialog optionsDialog = new Dialog(ListJourneys.this);
+		optionsDialog.setTitle("Ride");
+		
+		optionsDialog.setContentView(R.layout.options_layout);
+		
+		ImageView leaveBtn = (ImageView)optionsDialog.findViewById(R.id.leaveBtn);
+		ImageView cancelBtn = (ImageView)optionsDialog.findViewById(R.id.cancelBtn);
+		ImageView showInMapBtn = (ImageView)optionsDialog.findViewById(R.id.showBtn);
+		
+		leaveBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				final Dialog confirmDialog = new Dialog(ListJourneys.this);
+				confirmDialog.setContentView(R.layout.cancel_ride_layout);
+				
+				ImageView okBtn = (ImageView)confirmDialog.findViewById(R.id.okBtn);
+				ImageView cancelBtn = (ImageView)confirmDialog.findViewById(R.id.cBtn);
+				TextView contentTxt = (TextView)confirmDialog.findViewById(R.id.questionField);
+				confirmDialog.setTitle("Confirm");
+				
+				if(getApp().getUser().getFullName().equals(j.getDriver().getFullName())){
+					contentTxt.setText("Do you want to cancel this ride?");
+				} else{
+					contentTxt.setText("Do you want to leave this ride?");
+				}
+				
+				
+				okBtn.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						handleJourney(j);
+						confirmDialog.dismiss();
+						optionsDialog.dismiss();
+						
+					}
+				});
+				
+				cancelBtn.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						confirmDialog.dismiss();
+					}
+				});
+				
+				confirmDialog.show();
+			}
+		});
+		
+		cancelBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				optionsDialog.dismiss();
+			}
+		});
+		
+		showInMapBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showInMap(j);
+			}
+		});
+		
+		optionsDialog.show();
+	}
+	/*
+	private void cancelJourney(final Journey j){
 		AlertDialog.Builder b = new AlertDialog.Builder(this);
 		b.setTitle("Journey");
 		b.setMessage("What do you want to do with this journey?");
@@ -344,6 +413,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		});
 		b.show();
 	}
+	*/
 	
 	private List<Notification> getNotifications(User user){
 		List<Notification> notifications = null;
