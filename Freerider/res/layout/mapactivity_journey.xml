@@ -1,76 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout 
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" 
+    android:layout_height="fill_parent"
     android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
     
     <ScrollView 
         android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="110dp">
     	
-    	<LinearLayout 
-        	android:layout_width="fill_parent"
+        <LinearLayout 
+            android:layout_width="fill_parent"
     		android:layout_height="wrap_content"
-    		android:id="@+id/linLayout" 
-    		android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
-        
-        	<LinearLayout 
+    		android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:id="@+id/linLayout"
+    		>
+    		
+            <LinearLayout 
             	android:layout_width="fill_parent"
     			android:layout_height="wrap_content"
-    			android:orientation="horizontal" xmlns:android="http://schemas.android.com/apk/res/android">
-            
-            	<FrameLayout 
-    				android:layout_width="wrap_content"
- 	   				android:layout_height="wrap_content"
- 	   				android:layout_gravity="left"
-   		 			android:layout_marginLeft="5dip"
-    				android:layout_weight="1">
+    			android:orientation="horizontal" xmlns:android="http://schemas.android.com/apk/res/android"
+    		>
+           	
+           		<FrameLayout 
+    				android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="left"
+					android:layout_weight="1"
+					android:paddingTop="5dip"
+					android:paddingBottom="10dip"
+					>
                 
-    				<ImageView
-    	    			android:id="@+id/hitchIcon" 
-    	    			android:src="@drawable/ic_menu_login"
-    	    			android:layout_width="wrap_content"
-        				android:layout_height="wrap_content"
-        				android:layout_gravity="left"
-        				android:layout_marginTop="5dip"
-    				/>
+   					<ImageView
+ 						android:id="@+id/hitchIcon"
+						android:src="@drawable/ic_menu_login"
+ 						android:layout_width="wrap_content"
+ 						android:layout_height="wrap_content"
+ 						android:layout_gravity="left"
+ 					/>
     	
     				<TextView
         				android:id="@+id/mapViewJourneyDriver"
         				android:layout_width="wrap_content"
         				android:layout_height="wrap_content"
-        				android:layout_marginLeft="32dip"
-        				android:layout_marginTop="11dip"
-    				/>
+        				android:layout_marginLeft="35dip"
+        				android:layout_marginTop="4dip"
+       				/>
     			</FrameLayout>
     	
     			<FrameLayout
-	    			android:id="@+id/mapViewJourneyBtn"
-    				android:layout_width="wrap_content"
- 	   				android:layout_height="wrap_content"
- 	   				android:layout_gravity="right"
-   		 			android:layout_marginRight="5dip"
-   		 			android:layout_marginLeft="30dip"
-    				android:layout_weight="1" >
+  					android:id="@+id/mapViewJourneyBtn"
+  					android:layout_width="fill_parent"
+ 					android:layout_height="wrap_content"
+ 					android:layout_gravity="right"
+ 					android:layout_weight="1"
+ 				>
 
 					<ImageView
-		    			android:id="@+id/mapViewJourneyBtnIcon"
-		    			android:layout_width="wrap_content"
+   						android:id="@+id/mapViewJourneyBtnIcon"
+   						android:layout_width="wrap_content"
 						android:layout_height="wrap_content" 
-				    	android:scaleX="0.9"
-				    	android:scaleY="0.9"
-				    	android:src="@drawable/mail"
-				    	android:layout_gravity="left" />
+	    				android:src="@drawable/mail"
+	    				android:scaleX="0.9"
+		  		 		android:scaleY="0.9"
+	    				android:layout_gravity="left" 
+	    			/>
 
 					<TextView 
 						android:id="@+id/mapViewJourneyBtnText"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content" 
 						android:text="Send message"
-						android:layout_marginLeft="40dp"
-						android:layout_marginTop="11dp"
-						android:layout_gravity="right"/>  
+						android:layout_marginLeft="50dip"
+						android:layout_marginTop="9dip"
+						/>  
+				</FrameLayout>
+			</LinearLayout>
+			
+            <LinearLayout 
+            	android:layout_width="fill_parent"
+    			android:layout_height="wrap_content"
+    			android:orientation="horizontal" xmlns:android="http://schemas.android.com/apk/res/android"
+    		>
+    			
+		    	<FrameLayout 
+			        android:id="@+id/firstHiker"
+ 					android:layout_width="fill_parent"
+ 	   				android:layout_height="wrap_content"
+ 	   				android:layout_gravity="left"
+ 	   				android:layout_weight="1"
+ 	   				android:paddingTop="8dip"
+ 	   			>
+					
+		    	    <ImageView
+   						android:id="@+id/mapViewHikerIcon"
+   						android:layout_width="wrap_content"
+						android:layout_height="wrap_content" 
+	    				android:src="@drawable/ic_menu_cc"
+	    				android:layout_gravity="left" 
+	    			/>
+		    	    
+		    	    <TextView 
+						android:id="@+id/firstHikerTxt"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginLeft="35dip"
+						android:layout_marginTop="4dip"
+					/>  
+			    
+			    </FrameLayout>
+
+				<FrameLayout
+					android:id="@+id/leaveRide"
+ 					android:layout_width="fill_parent"
+ 	   				android:layout_height="wrap_content"
+ 	   				android:layout_gravity="right"
+ 	   				android:layout_weight="1"
+ 	   			>
+
+					<ImageView
+		  				android:id="@+id/leaveRideIcon"
+		  		 		android:layout_width="wrap_content"
+						android:layout_height="wrap_content" 
+		  		 		android:src="@drawable/car_icon_ext2"
+		  		 		android:scaleX="0.8"
+		  		 		android:scaleY="0.8"
+		  		 		android:layout_gravity="left"
+		  	 		/>
+
+					<TextView 
+						android:id="@+id/leaveRideText"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content" 
+						android:text="Leave ride"
+						android:layout_marginLeft="50dip"
+						android:layout_marginTop="11dip"
+					/>  
 				</FrameLayout>
 			</LinearLayout>
 		</LinearLayout>
