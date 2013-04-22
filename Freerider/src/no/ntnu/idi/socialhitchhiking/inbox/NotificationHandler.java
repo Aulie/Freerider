@@ -159,6 +159,48 @@ public class NotificationHandler{
 	 * the Hitchhiker. Creates an accept notification or a reject notification
 	 * depending on the answer.
 	 */
+	
+	private static void createNotificationDialog(){
+		final Dialog notifDialog = new Dialog(in);
+		notifDialog.setTitle("Hitchhiker request");
+		
+		notifDialog.setContentView(R.layout.notif_layout);
+		
+		ImageView okBtn = (ImageView)notifDialog.findViewById(R.id.okBtn);
+		ImageView cancelBtn = (ImageView)notifDialog.findViewById(R.id.cBtn);
+		ImageView showBtn = (ImageView)notifDialog.findViewById(R.id.showBtn);
+		TextView contentTxt = (TextView)notifDialog.findViewById(R.id.questionField);
+		
+		contentTxt.setText("Do you want to pick up " +not.getSenderName());
+		
+		okBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				createCommentForRequest(NotificationType.REQUEST_ACCEPT);
+				notifDialog.dismiss();
+			}
+		});
+		
+		cancelBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				createCommentForRequest(NotificationType.REQUEST_REJECT);
+				notifDialog.dismiss();
+			}
+		});
+		
+		showBtn.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				showBtn();
+			}
+		});
+		
+		notifDialog.show();
+		
+	}
+	/*
 	private static void createNotificationDialog(){
 		new AlertDialog.Builder(in).
 		setTitle("Accept hitchhiker?").
@@ -192,6 +234,7 @@ public class NotificationHandler{
 		}).
 		show();
 	}
+	*/
 	/**
 	 * Creates a simple dialog to show a message when a Notification is clicked.
 	 * 
@@ -233,6 +276,57 @@ public class NotificationHandler{
 			e.printStackTrace();
 		}
 	}
+	
+	public static void showBtn(){
+		Journey journey = new Journey(999);
+		
+		try{
+			SingleJourneyRequest r = new SingleJourneyRequest(RequestType.GET_JOURNEY, app.getUser(), not.getJourneySerial());
+			JourneyResponse response = (JourneyResponse)RequestTask.sendRequest(r, app);
+			
+			Log.e("JourneyResponse", response.toString());
+			if(response.getStatus() == ResponseStatus.OK){
+				if(response.getJourneys().size() > 0){
+					journey = response.getJourneys().get(0);
+				}
+			}
+			else if(response.getStatus() == ResponseStatus.FAILED){
+				Log.e("FAILED", "ResponseStatus == FAILED");
+			}
+		}catch (MalformedURLException e) {
+			e.printStackTrace();
+			Log.e("1", e.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+			Log.e("2", e.toString());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("3", e.toString());
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("4", e.toString());
+		}
+		
+		Intent intent = new Intent(in, no.ntnu.idi.socialhitchhiking.map.MapActivityJourney.class);
+		Log.e("Owner", journey.getRoute().getOwner().getFullName());
+		Log.e("JourneyName", journey.getRoute().getName());
+		Log.e("Serial", journey.getRoute().getSerial() + "");
+		MapRoute mr = new MapRoute(journey.getRoute().getOwner(), journey.getRoute().getName(), journey.getRoute().getSerial(), journey.getRoute().getMapPoints());
+		intent.putExtra("Journey", true);
+		intent.putExtra("journeyAccepted", true);
+		intent.putExtra("journeyRejected", false);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		app.setSelectedMapRoute(mr);
+		app.setSelectedJourney(journey);
+		app.setJourneyPickupPoint(not.getStartPoint());
+		app.setJourneyDropoffPoint(not.getStopPoint());
+		app.setSelectedNotification(not);
+		
+		app.startActivity(intent);
+	}
+
 	
 	
 	public static void createChatDialog(final Notification not){
@@ -314,6 +408,8 @@ public class NotificationHandler{
 		showRideBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				showBtn();
+				/*
 				Journey journey = new Journey(999);
 				
 				try{
@@ -361,6 +457,7 @@ public class NotificationHandler{
 				app.setSelectedNotification(not);
 				
 				app.startActivity(intent);
+				*/
 			}
 		});
 		
