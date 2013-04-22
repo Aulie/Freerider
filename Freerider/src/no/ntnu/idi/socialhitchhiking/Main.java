@@ -75,21 +75,17 @@ public class Main extends FBConnectionActivity{
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		System.out.println("Oncreate starter");
 		super.onCreate(savedInstanceState);	
 		try{
 			initLoadingScreen();
 			new Thread() {
 				public void run() {
-					System.out.println("Main starter");
 					setConnection(Main.this);
 					user = getApp().getUser();
 					if(user == null){
-						System.out.println("Er null!");
 						loginButtonClicked();
 					}
 					else{
-						System.out.println("Er ikke null!");
 						initMainScreen();
 						if(!isSession()){
 							resetSession();
@@ -397,11 +393,6 @@ public class Main extends FBConnectionActivity{
 	        public void onClick(DialogInterface dialog, int which) { 
 	        	Intent intent = new Intent(Main.this, MapActivityCreateOrEditRoute.class);
 	    		startActivity(intent);
-	        }
-	     })
-	     .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // do nothing
 	        }
 	     })
 	     .show();
