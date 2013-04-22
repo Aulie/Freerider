@@ -283,6 +283,13 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 			historyAdap.reset();
 			initAdapter(historyAdap, notifHistory);
 		}
+		else if(requestList.contains(n)){
+			requestList.remove(n);
+			notifHistory.add(n);
+			requestAdapter.removeObject(n);
+			historyAdap.reset();
+			initAdapter(historyAdap, notifHistory);
+		}
 	}
 	private List<Notification> getToday(List<Notification> list){
 		List<Notification> no = new ArrayList<Notification>();
