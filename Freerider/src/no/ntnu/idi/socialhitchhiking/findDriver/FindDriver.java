@@ -645,13 +645,13 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 						int c=0;
 						switch (current.getVisibility()) {
 						case FRIENDS:
-							c = Color.GREEN;
+							c = Color.rgb(0,191,255); //blue
 							break;
 						case FRIENDS_OF_FRIENDS:
-							c = Color.YELLOW;
+							c = Color.rgb(255,140,0); //orange
 							break;
 						case PUBLIC:
-							c = Color.rgb(255, 128, 0);
+							c = Color.rgb(50,205,50); //green
 							break;
 						default:
 							break;
