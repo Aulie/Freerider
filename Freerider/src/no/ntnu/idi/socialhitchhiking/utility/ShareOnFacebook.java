@@ -1,15 +1,26 @@
 package no.ntnu.idi.socialhitchhiking.utility;
 
+import java.io.IOException;
 import java.util.BitSet;
 import java.util.Calendar;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.Visibility;
+import no.ntnu.idi.freerider.protocol.Response;
+import no.ntnu.idi.freerider.xml.RequestSerializer;
+import no.ntnu.idi.freerider.xml.ResponseParser;
 import no.ntnu.idi.socialhitchhiking.Main;
 import no.ntnu.idi.socialhitchhiking.R;
+import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
@@ -79,7 +90,7 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 		seats = "Seats available: "+ getApp().getSelectedJourney().getTripPreferences().getSeatsAvailable();
 //		String extras = "Extras: "+ getApp().getSelectedJourney().getTripPreferences().toString();
 		BitSet sExtras = getApp().getSelectedJourney().getTripPreferences().getExtras();
-		extras = "Extras: ";
+		extras = "Preferences: ";
 		String[] items = {"Music", "Animals", "Breaks", "Talking", "Smoking"};
     	for(int i=0 ; i<sExtras.length() ; i++){
     		if(sExtras.get(i)){
@@ -128,7 +139,7 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 	@SuppressWarnings("deprecation")
 	public void postToWall(String message){
 	    
-		Bundle postParams = new Bundle();
+		final Bundle postParams = new Bundle();
 
 		postParams.putString("message", message);
 		postParams.putString("caption", "https://maps.google.com/maps?saddr="+currentRoute.getStartAddress()
@@ -158,25 +169,50 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 		postParams.putString("link", "https://maps.google.com/maps?saddr="+currentRoute.getStartAddress()
 				+"&daddr="+currentRoute.getEndAddress());
 		postParams.putString("picture", "http://www.veryicon.com/icon/png/Business/Business/Cars.png");
-
-                try {
+		//Fix
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		
+	    Callable<Boolean> callable = new Callable<Boolean>() {
+	        @Override
+	        public Boolean call() throws ClientProtocolException, IOException {
+	        	try {
         	        facebook.request("me");
 			String response = facebook.request("me/feed", postParams, "POST");
-		
-//		Request request = new Request(Session.getActiveSession(), "me/feed", postParams, HttpMethod.POST);
 			Log.d("Tests", "got response: " + response);
 			if (response == null || response.equals("") || response.equals("false")) {
-				showToast("Blank response.");
+				//showToast("Blank response.");
 			}
 			else {
-				showToast("Trip created and posted to your facebook wall!");
+				//showToast("Trip created and posted to your facebook wall!");
 			}
 			finish();
 		} catch (Exception e) {
-			showToast("Failed to post to wall!");
+			//showToast("Failed to post to wall!");
+			
 			e.printStackTrace();
-			finish();
+			return false;
+			//finish();
 		}
+	    		return true;
+	        }
+	    };
+	    Future<Boolean> future = executor.submit(callable);
+	    try {
+			Boolean ret = future.get();
+			if(ret){
+				showToast("Trip created and posted to your facebook wall!");
+			}else {
+				showToast("Failed to post to wall!");
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    executor.shutdown();
+                
 	}
 
 	class LoginDialogListener implements DialogListener {
