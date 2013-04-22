@@ -117,7 +117,7 @@ public class NotificationHandler{
 		else{
 			switch (not.getType()) {
 			case DRIVER_CANCEL:
-				createMessageDialog(false,"Driver cancelled Journey", not.getSenderName()+" cancelled the Journey");
+				createAorRDialog();
 				break;
 			case HITCHHIKER_ACCEPTS_DRIVER_CANCEL:
 				createMessageDialog(true,"Hitchhiker acknowledged", not.getSenderName()+" accepts cancel");
@@ -129,7 +129,6 @@ public class NotificationHandler{
 				createNotificationDialog();
 				break;
 			case REQUEST_ACCEPT:
-				//createMessageDialog(false,"Request accepted by driver", "Your request was accepted by "+not.getSenderName());
 				createAorRDialog();
 				break;
 			case REQUEST_REJECT:
@@ -148,8 +147,9 @@ public class NotificationHandler{
 	
 	public static void createAorRDialog(){
 		final Dialog aorRDialog = new Dialog(in);
-		aorRDialog.setTitle("Request accepted by driver");
-		((TextView)aorRDialog.findViewById(android.R.id.title)).setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+		
+		//aorRDialog.setTitle("Request accepted by driver");
+		
 		
 		aorRDialog.setContentView(R.layout.message_layout);
 		
@@ -162,8 +162,14 @@ public class NotificationHandler{
 		TextView targetTxt = (TextView)aorRDialog.findViewById(R.id.targetTxt);
 		TextView content = (TextView)aorRDialog.findViewById(R.id.contentTxt);
 		
-		contentTxt.setText("Your request was accepted by " +not.getSenderName());
-		
+		if(not.getType() == NotificationType.DRIVER_CANCEL){
+			aorRDialog.setTitle("Driver cancelled ride");
+			contentTxt.setText("The ride has been cancelled by " + not.getSenderName());
+		}else{
+			aorRDialog.setTitle("Request accepted by driver");
+			contentTxt.setText("Your request was accepted by " +not.getSenderName());
+		}
+		((TextView)aorRDialog.findViewById(android.R.id.title)).setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 		targetTxt.setVisibility(View.GONE);
 		content.setVisibility(View.GONE);
 		okBtn.setVisibility(View.GONE);
