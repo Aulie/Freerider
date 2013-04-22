@@ -486,6 +486,7 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 					requestList.add(sorted.get(i));
 				}
 			}
+			sorted.removeAll(requestList);
 			System.out.println("JoYo Inbox" + notifHistory.size());
 			initAdapter(requestAdapter, requestList);
 			initAdapter(active,sorted);
