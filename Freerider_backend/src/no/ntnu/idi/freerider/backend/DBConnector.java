@@ -353,6 +353,19 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		stmt.executeUpdate();
 		
 	}
+	public void updateUserPreference(String userId, int prefId) throws SQLException{
+		PreparedStatement stmt = conn.prepareStatement("UPDATE users SET (preferenceid) = (?) WHERE id=?");
+		stmt.setInt(1, prefId);
+		stmt.setString(2, userId);
+		stmt.executeUpdate();
+	}
+	public void incrementUserRating(String userId) throws SQLException{
+		User user = getUser(userId);
+		PreparedStatement stmt = conn.prepareStatement("UPDATE users SET (rating) = (?) WHERE id=?");
+		stmt.setDouble(1, (user.getRating() + 1));
+		stmt.setString(2, userId);
+		stmt.executeUpdate();
+	}
 	public void loginUser(User user) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE users SET (name, surname, gender) = (?,?,?) WHERE id=?");
 		stmt.setString(1, user.getFirstName());

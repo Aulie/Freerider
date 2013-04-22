@@ -46,6 +46,8 @@ public enum RequestType {
 	UPDATE_USER,
 	/** Log in a user with updated Facebook information. */
 	LOGIN_USER,
+	/** Increment rating */
+	THUMBS_UP,
 	
 	LOGIN,
 	START_JOURNEY,

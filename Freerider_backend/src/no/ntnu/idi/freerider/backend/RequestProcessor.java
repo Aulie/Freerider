@@ -92,6 +92,9 @@ public class RequestProcessor {
 			User newUser = request.getUser();
 			try {
 				db.addUser(newUser);
+				TripPreferences newPref = new TripPreferences(0, false, false, false, false, false);
+				int prefId = db.createPreference(newPref);
+				db.updateUserPreference(newUser.getID(), prefId);
 			} catch (SQLException e) {
 				logger.error("Error creating new user.",e);
 				return new UserResponse(type,ResponseStatus.FAILED,e.getMessage());
@@ -105,6 +108,14 @@ public class RequestProcessor {
 				return new UserResponse(type, ResponseStatus.FAILED,e.getMessage());
 			}
 			return new UserResponse(type,status,loginUser);
+		case THUMBS_UP:
+			ServerLogger.write("Thumbs up");
+			try{
+				db.incrementUserRating(request.getUser().getID());
+			} catch(SQLException e){
+				return new UserResponse(type, ResponseStatus.FAILED, e.getMessage());
+			}
+			return new UserResponse(type, status,request.getUser());
 		case UPDATE_USER:
 			User tempUser = request.getUser();
 			try {

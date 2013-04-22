@@ -45,6 +45,7 @@
 			<enumeration value="GET_PREFERENCE"></enumeration>
 			<enumeration value="CREATE_PREFERENCE"></enumeration>
 			<enumeration value="UPDATE_PREFERENCE"></enumeration>
+			<enumeration value="THUMBS_UP"></enumeration>
 		</restriction>
 	</simpleType>
 
