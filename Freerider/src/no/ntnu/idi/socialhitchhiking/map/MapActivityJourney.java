@@ -29,16 +29,24 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.http.client.ClientProtocolException;
 
+import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.NotificationType;
 import no.ntnu.idi.freerider.model.User;
+import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
+import no.ntnu.idi.freerider.protocol.Request;
+import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
+import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,6 +64,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +88,7 @@ public class MapActivityJourney extends MapActivityAbstract{
 	private Location dropoffPoint;
 	
 	private FrameLayout btn;
+	private FrameLayout leaveRide;
 	
 	private String[] array_spinner;
 	
@@ -100,16 +111,68 @@ public class MapActivityJourney extends MapActivityAbstract{
 		
 		
 		if(getApp().getSelectedJourney().getHitchhikers().size() != 0){
-			for(int c=0; c<getApp().getSelectedJourney().getHitchhikers().size(); c++){
-				HitchList hitch = new HitchList(getApp().getSelectedJourney().getHitchhikers().get(c));
+			
+			Log.e("Du har kommet hit", "1");
+			TextView firstHitchTxt = (TextView)findViewById(R.id.firstHikerTxt);
+				
+			firstHitchTxt.setText(getApp().getSelectedJourney().getHitchhikers().get(0).getFullName());
+			
+			
+			if(getApp().getSelectedJourney().getHitchhikers().size() > 1){
+				Log.e("Du har kommet hit", "2");
+				for(int c=1; c<getApp().getSelectedJourney().getHitchhikers().size(); c++){
+					HitchList hitch = new HitchList(getApp().getSelectedJourney().getHitchhikers().get(c));
+				}
 			}
+			
+			
 		}else{
-			User dummyUser = new User();
-			dummyUser.setFirstName("No ");
-			dummyUser.setSurname("Hitchhikers");
-			HitchList hitch = new HitchList(dummyUser);
+			Log.e("Du har kommet hit", "3");
+			TextView firstHitchTxt = (TextView)findViewById(R.id.firstHikerTxt);
+			firstHitchTxt.setText("No hitchhikers");
 		}
 		
+		leaveRide = (FrameLayout)findViewById(R.id.leaveRide);
+		leaveRide.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				
+					final Dialog confirmDialog = new Dialog(MapActivityJourney.this);
+					confirmDialog.setContentView(R.layout.cancel_ride_layout);
+					
+					ImageView okBtn = (ImageView)confirmDialog.findViewById(R.id.okBtn);
+					ImageView cancelBtn = (ImageView)confirmDialog.findViewById(R.id.cBtn);
+					TextView contentTxt = (TextView)confirmDialog.findViewById(R.id.questionField);
+					confirmDialog.setTitle("Confirm");
+					
+					if(getApp().getUser().getFullName().equals(getApp().getSelectedJourney().getDriver().getFullName())){
+						contentTxt.setText("Do you want to cancel this ride?");
+					} else{
+						contentTxt.setText("Do you want to leave this ride?");
+					}
+					
+					
+					okBtn.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							handleJourney(getApp().getSelectedJourney());
+							Intent intent = new Intent(MapActivityJourney.this, no.ntnu.idi.socialhitchhiking.journey.ListTrips.class);
+							startActivity(intent);
+						}
+					});
+					
+					cancelBtn.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							confirmDialog.dismiss();
+						}
+					});
+					
+					confirmDialog.show();
+			}
+			
+		});
 		
 		btn = (FrameLayout)findViewById(R.id.mapViewJourneyBtn);
 		btn.setOnClickListener(new OnClickListener(){
@@ -123,6 +186,85 @@ public class MapActivityJourney extends MapActivityAbstract{
 	
 	}
 	
+	private void handleJourney(Journey j){
+		if(j.getHitchhikers() != null){
+			sendCancelJourney(j);
+		}
+		else sendDeleteJourney(j);
+	}
+	
+	private void sendCancelJourney(Journey j) {
+		NotificationType type;
+		String id = getApp().getUser().getID();
+		Notification notif;
+		if(!j.getDriver().getID().equals(id) ){
+			type = NotificationType.HITCHHIKER_CANCEL;
+			notif = new Notification(id, j.getRoute().getOwner().getID(),"", "", j.getSerial(), type);
+		}else{ 
+			type = NotificationType.HITCHHIKER_ACCEPTS_DRIVER_CANCEL;
+			notif = new Notification(id, id, "","", j.getSerial(), type);
+		}
+		NotificationRequest req = new NotificationRequest(getApp().getUser(), notif);
+		boolean succeded = sendJourneyRequest(req);
+		if(succeded){
+			deleteJourneyFromList(j);
+		}
+	}
+	
+	private boolean sendJourneyRequest(Request req){
+		Response res;
+		try {
+			res = RequestTask.sendRequest(req,getApp());
+			boolean succeded = res.getStatus() == ResponseStatus.OK;
+			return succeded;
+		} catch (ClientProtocolException e) {
+		} catch (IOException e) {
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("ExecutionMelvin", e.getMessage());
+		}
+		return false;
+	}
+	
+	private void deleteJourneyFromList(Journey j){
+		getApp().getJourneys().remove(j);
+	}
+	
+	private void sendDeleteJourney(Journey j){
+		JourneyRequest req = new JourneyRequest(RequestType.DELETE_JOURNEY, getApp().getUser(), j);
+
+		boolean succeded = sendJourneyRequest(req);
+		if(succeded){
+			deleteJourneyFromList(j);
+		}
+	}
+	/*
+	private void cancelJourney(final Journey j){
+		AlertDialog.Builder b = new AlertDialog.Builder(this);
+		b.setTitle("Journey");
+		b.setMessage("What do you want to do with this journey?");
+		b.setPositiveButton("Cancel it", new OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				handleJourney(j);
+			}
+		});
+		b.setNegativeButton("Show in map", new OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				showInMap(j);
+			}
+		});
+		b.setNeutralButton("Nothing", new OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				
+			}
+		});
+		b.show();
+	}
+	*/
 	private void sendMessageToDriver(){
 		
 		final Dialog customDialog = new Dialog(this);
@@ -273,34 +415,43 @@ public class MapActivityJourney extends MapActivityAbstract{
 		private ImageView icon;
 		private TextView hitchTxt;
 		private FrameLayout frame;
-		private LinearLayout linear;
-		private RelativeLayout relative;
+		private Resources r;
 		
 		public HitchList(User hitchHiker){
+			r = getApp().getResources();
 			hiker = hitchHiker;
 			this.icon = new ImageView(MapActivityJourney.this);
 			this.hitchTxt = new TextView(MapActivityJourney.this);
 			this.frame = new FrameLayout(MapActivityJourney.this);
-			linear = (LinearLayout)findViewById(R.id.linLayout);
-			relative = (RelativeLayout)findViewById(R.id.relLayout);
-			frame.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+			LinearLayout linear = (LinearLayout)findViewById(R.id.linLayout);
 			
+			frame.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+			//frame.setPadding(left, top, right, bottom)
+			frame.setPadding(0, dipToPx(8), 0, 0);
+			//frame.setPadding(0, 8, 0, 0);
 			FrameLayout.LayoutParams lli2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-			lli2.setMargins(4, 0, 0, 0);
+			lli2.setMargins(0, 0, 0, 0);
 			icon.setLayoutParams(lli2);
 			icon.setImageResource(R.drawable.ic_menu_cc);
 			
 			frame.addView(icon);
 			
 			FrameLayout.LayoutParams lliDest = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-			lliDest.setMargins(56, 6, 0, 0);
+			lliDest.setMargins(dipToPx(35), dipToPx(4), 0, 0);
+			//lliDest.setMargins(35, 4, 0, 0);
+			//lliDest.setMargins(left, top, right, bottom)
 			hitchTxt.setLayoutParams(lliDest);
-			hitchTxt.setGravity(Gravity.RIGHT);
 			hitchTxt.setText(hiker.getFullName());
 			
 			frame.addView(hitchTxt);
 			linear.addView(frame);
 			
 		}
+		
+		public int dipToPx(int dip){
+			float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, r.getDisplayMetrics());
+			return (int)px;
+		}
+		
 	}
 }
