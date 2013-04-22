@@ -100,6 +100,13 @@ public class MapActivityJourney extends MapActivityAbstract{
 		dropoffPoint = getApp().getJourneyDropoffPoint();
 		
 		TextView driverView = (TextView)findViewById(R.id.mapViewJourneyDriver);
+		TextView leaveTxt = (TextView)findViewById(R.id.leaveRideText);
+		
+		if(getApp().getUser().getFullName().equals(getApp().getSelectedJourney().getDriver().getFullName())){
+			leaveTxt.setText("Cancel ride");
+		}else{
+			leaveTxt.setText("Leave ride");
+		}
 		
 		if(pickupPoint != null) {
 			drawCross(pickupPoint, true);

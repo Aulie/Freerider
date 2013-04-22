@@ -16,7 +16,7 @@
             android:src="@drawable/maps"
             android:layout_gravity="left"
             android:layout_weight="1"
-            android:paddingTop="3dip"
+            android:paddingTop="5dip"
             />
         
         <ImageView 
