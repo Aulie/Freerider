@@ -705,8 +705,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				public boolean onEditorAction(TextView v, int actionId,
 						KeyEvent event) {
 					if(actionId == EditorInfo.IME_ACTION_DONE){
-						
-						hasDrawn = true;
+						//
+						InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+						//
+			            hasDrawn = true;
 						if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
 							createOneTimeJourney();
 							button.setEnabled(true);
@@ -906,17 +909,35 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			@Override
 			public boolean onEditorAction(TextView v, int actionId,
 					KeyEvent event) {
+				
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+				final Button button = ((Button)findViewById(R.id.btnChooseRoute));
 				if(actionId == EditorInfo.IME_ACTION_DONE){
+					if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
+						button.setEnabled(true);
+						button.setText("Next");
+						return true;
+					}else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
+						mapView.getOverlays().clear();
+						createMap();
+						button.setEnabled(true);
+						button.setText("Next");
+						return true;
+					}else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
+						button.setText("Show on map");
+						button.setEnabled(false);
+						return false;
+					}else{
+						button.setText("Show on map");
+						button.setEnabled(false);
+						return false;
+					}
 					
-					//findAndDrawPath(v);
-					mapView.getOverlays().clear();
-					createMap();
-					return true;
 				}
-				else{
-					return false;
-				}
+				return false;
 			}
+				
 		});
 		
 
