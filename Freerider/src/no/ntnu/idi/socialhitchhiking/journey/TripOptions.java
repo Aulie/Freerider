@@ -84,7 +84,7 @@ public class TripOptions extends SocialHitchhikingActivity {
 				dateAndTime.set(Calendar.HOUR_OF_DAY,newTime.get(Calendar.HOUR_OF_DAY));
 				dateAndTime.set(Calendar.MINUTE,newTime.get(Calendar.MINUTE));
 				
-				list_trip_options.set(1, new TripOption(R.drawable.trip_icon_clock, "Time", formatTime(dateAndTime)));
+				list_trip_options.set(1, new TripOption(R.drawable.time, "Time", formatTime(dateAndTime)));
 				adapter.notifyDataSetChanged();
 			}
 		}
@@ -151,9 +151,9 @@ public class TripOptions extends SocialHitchhikingActivity {
        
         //Initialization of default TripOptions string values
         list_trip_options.add(new TripOption(R.drawable.trip_icon_calendar, "Date", formatDate(dateAndTime)));
-        list_trip_options.add(new TripOption(R.drawable.trip_icon_clock, "Time",formatTime(dateAndTime)));
-        list_trip_options.add(new TripOption(R.drawable.trip_icon_seats, "Seats Available", Integer.toString(tripPreferences.getSeatsAvailable())));
-        list_trip_options.add(new TripOption(R.drawable.trip_icon_fb, "Privacy", privacyString));
+        list_trip_options.add(new TripOption(R.drawable.time, "Time",formatTime(dateAndTime)));
+        list_trip_options.add(new TripOption(R.drawable.seats, "Seats Available", Integer.toString(tripPreferences.getSeatsAvailable())));
+        list_trip_options.add(new TripOption(R.drawable.fb_icon3, "Privacy", privacyString));
         list_trip_options.add(new TripOption(R.drawable.trip_icon_plus, "Preferences", ex));
         
         adapter = new TripOptionAdapter(this, R.layout.list_row_trip_options, list_trip_options);       
