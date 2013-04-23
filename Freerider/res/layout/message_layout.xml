@@ -59,7 +59,7 @@
             android:id="@+id/shareOnFaceBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/trip_icon_fb"
+            android:src="@drawable/fb_icon3"
             android:scaleX="1.15"
             android:scaleY="1.15"
             android:layout_gravity="left"
