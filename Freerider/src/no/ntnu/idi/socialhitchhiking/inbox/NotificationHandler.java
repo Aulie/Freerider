@@ -139,6 +139,9 @@ public class NotificationHandler{
 			case MESSAGE:
 				createChatDialog(not);
 				break;
+			case RATING:
+				createMessageDialogRating("Driver rating request", "Would you recommend "+ not.getSenderName()+"?");
+				break;
 			default:
 				createMessageDialog(false,"Unknown", "Status unknown");
 				break;
@@ -295,6 +298,45 @@ public class NotificationHandler{
 		setNegativeButton("Cancel", null).
 		
 		show();
+	}
+	
+	private static void createMessageDialogRating(String title,String msg){
+		new AlertDialog.Builder(in).
+		setTitle(title).
+		setMessage(msg).
+		setPositiveButton("Yes", new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				User u = new User(not.getSenderName(), not.getSenderID());
+				sendRating(u);
+				createMarkedAsReadRequest();
+			}
+		}).
+		setNegativeButton("No", new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+//				not.setRead(true);
+				createMarkedAsReadRequest();
+			}
+		}).
+		show();
+	}
+	public static void sendRating(User user){
+    	UserRequest req = new UserRequest(RequestType.THUMBS_UP, user);
+    	
+    	try {
+			Response res = RequestTask.sendRequest(req, app);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void sendMessage(User mid, EditText input){

@@ -388,6 +388,8 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 				return "Request rejected";
 			case MESSAGE:
 				return "Message";
+			case RATING:
+				return "Rating request";
 			default:
 				return "Status unknown";
 			}
