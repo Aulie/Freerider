@@ -49,9 +49,11 @@ import no.ntnu.idi.freerider.protocol.UserRequest;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
+import no.ntnu.idi.socialhitchhiking.journey.TripOptions;
 import no.ntnu.idi.socialhitchhiking.map.MapActivityAbstract;
 import no.ntnu.idi.socialhitchhiking.map.MapActivityJourney;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
+import no.ntnu.idi.socialhitchhiking.utility.ShareOnFacebook;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 
 import org.apache.http.client.ClientProtocolException;
@@ -157,6 +159,7 @@ public class NotificationHandler{
 		ImageView cancelBtn = (ImageView)aorRDialog.findViewById(R.id.cancelBtn);
 		ImageView showBtn = (ImageView)aorRDialog.findViewById(R.id.showJourneyBtn);
 		ImageView markAsReadBtn = (ImageView)aorRDialog.findViewById(R.id.markAsReadBtn);
+		ImageView facebookBtn = (ImageView)aorRDialog.findViewById(R.id.shareOnFaceBtn);
 		
 		TextView contentTxt = (TextView)aorRDialog.findViewById(R.id.contentViewField);
 		TextView targetTxt = (TextView)aorRDialog.findViewById(R.id.targetTxt);
@@ -165,6 +168,7 @@ public class NotificationHandler{
 		if(not.getType() == NotificationType.DRIVER_CANCEL){
 			aorRDialog.setTitle("Driver cancelled ride");
 			contentTxt.setText("The ride has been cancelled by " + not.getSenderName());
+			facebookBtn.setVisibility(View.GONE);
 		}else{
 			aorRDialog.setTitle("Request accepted by driver");
 			contentTxt.setText("Your request was accepted by " +not.getSenderName());
@@ -173,6 +177,14 @@ public class NotificationHandler{
 		targetTxt.setVisibility(View.GONE);
 		content.setVisibility(View.GONE);
 		okBtn.setVisibility(View.GONE);
+		
+		facebookBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showFacebookDialog();
+				aorRDialog.dismiss();
+			}
+		});
 		
 		markAsReadBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -303,6 +315,49 @@ public class NotificationHandler{
 		}
 	}
 	
+	private static void showFacebookDialog(){
+		Journey journey = new Journey(999);
+		try{
+			SingleJourneyRequest r = new SingleJourneyRequest(RequestType.GET_JOURNEY, app.getUser(), not.getJourneySerial());
+			JourneyResponse response = (JourneyResponse)RequestTask.sendRequest(r, app);
+			
+			Log.e("JourneyResponse", response.toString());
+			if(response.getStatus() == ResponseStatus.OK){
+				if(response.getJourneys().size() > 0){
+					journey = response.getJourneys().get(0);
+				}
+			}
+			else if(response.getStatus() == ResponseStatus.FAILED){
+				Log.e("FAILED", "ResponseStatus == FAILED");
+			}
+		}catch (MalformedURLException e) {
+			e.printStackTrace();
+			Log.e("1", e.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+			Log.e("2", e.toString());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("3", e.toString());
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.e("4", e.toString());
+		}
+		Route route = new Route(journey.getRoute().getOwner(), journey.getRoute().getName(), journey.getRoute().getRouteData(), journey.getRoute().getSerial());
+		route.setMapPoints(journey.getRoute().getMapPoints());
+		Intent intent = new Intent(in, no.ntnu.idi.socialhitchhiking.utility.ShareOnFacebook.class);
+		intent.putExtra("isDriver", false);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		app.setJourneyPickupPoint(not.getStartPoint());
+		app.setJourneyDropoffPoint(not.getStopPoint());
+		app.setSelectedNotification(not);
+		app.setSelectedRoute(route);
+		app.setSelectedJourney(journey);
+		app.startActivity(intent);
+	}
+	
 	public static void showBtn(){
 		Journey journey = new Journey(999);
 		
@@ -368,7 +423,9 @@ public class NotificationHandler{
 		ImageView cancelBtn = (ImageView)messageDialog.findViewById(R.id.cancelBtn);
 		ImageView showRideBtn = (ImageView)messageDialog.findViewById(R.id.showJourneyBtn);
 		ImageView markAsReadBtn = (ImageView)messageDialog.findViewById(R.id.markAsReadBtn);
+		ImageView facebookBtn = (ImageView)messageDialog.findViewById(R.id.shareOnFaceBtn);
 		
+		facebookBtn.setVisibility(View.GONE);
 		nameTxt.setText(not.getSenderName());
 		contentTxt.setText(not.getComment());
 		

@@ -55,6 +55,18 @@
             android:layout_weight="1"
             android:paddingTop="16dip"
             />
+        <ImageView 
+            android:id="@+id/shareOnFaceBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/trip_icon_fb"
+            android:scaleX="1.15"
+            android:scaleY="1.15"
+            android:layout_gravity="left"
+            android:layout_weight="1"
+            android:paddingTop="16dip"
+            
+            />
         
         <ImageView 
             android:id="@+id/showJourneyBtn"

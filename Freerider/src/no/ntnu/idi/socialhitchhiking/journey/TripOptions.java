@@ -345,6 +345,7 @@ public class TripOptions extends SocialHitchhikingActivity {
 		getApp().setSelectedJourney(journey);
 		
 		Intent intent = new Intent(TripOptions.this, ShareOnFacebook.class);
+		intent.putExtra("isDriver", true);
 		startActivity(intent);
 		sendJourneyRequest();
 

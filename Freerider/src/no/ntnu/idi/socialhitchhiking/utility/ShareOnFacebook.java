@@ -49,7 +49,7 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 
 	private Facebook facebook;
 	private String messageToPost;
-	
+	private boolean isDriver;
 	private String date,time,seats,extras;
 	private Route currentRoute;
 
@@ -104,10 +104,12 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
     			}
     		}
     	}
-    	
-		String facebookMessage = getIntent().getStringExtra("facebookMessage");
-		if (facebookMessage == null){
-			facebookMessage = "I have created a new ride on FreeRider\n"+date+"\n"+time+"\n"+seats+"\n"+extras;
+    	String facebookMessage = "";
+		isDriver = getIntent().getExtras().getBoolean("isDriver");
+		if (isDriver){
+			facebookMessage = "I have created a new drive on FreeRider\n"+date+"\n"+time+"\n"+seats+"\n"+extras;
+		}else{
+			facebookMessage = "I am hitchhiking on a new ride on FreeRider\n"+date+"\n"+time+"\n"+seats+"\n"+extras;;
 		}
 		messageToPost = facebookMessage;
 	}
@@ -200,7 +202,11 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 	    try {
 			Boolean ret = future.get();
 			if(ret){
-				showToast("Trip created and posted to your facebook wall!");
+				if(isDriver){
+					showToast("Trip created and posted to Facebook!");
+				}else{
+					showToast("Posted to Facebook!");
+				}
 			}else {
 				showToast("Failed to post to wall!");
 			}
