@@ -498,6 +498,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 
 
 	public void deleteJourneyWithoutCheck(Journey journey) throws SQLException {
+		ServerLogger.write("Journey for deletion: " + journey.getSerial());
 		PreparedStatement stmt = conn.prepareStatement("DELETE FROM journeys WHERE serial=?");
 		stmt.setInt(1, journey.getSerial());
 		if(stmt.executeUpdate() !=1){
@@ -851,12 +852,24 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	}
 
 	public void setNotificationRead(Notification note) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("UPDATE notifications SET is_read=true WHERE recipient=? AND sender=? AND concerning_journey=? AND type=?::notification_type");
-		stmt.setString(1, note.getRecipientID());
-		stmt.setString(2,note.getSenderID());
-		stmt.setInt(3, note.getJourneySerial());
-		stmt.setString(4, note.getType().toString());
-		stmt.executeUpdate();
+		ServerLogger.write("Start Read note");
+		ServerLogger.write("JourneySerial: " + note.getJourneySerial());
+		if(note.getJourneySerial() == 0){
+			PreparedStatement stmt = conn.prepareStatement("UPDATE notifications SET is_read=true WHERE recipient=? AND sender=? AND type=?::notification_type");
+			stmt.setString(1, note.getRecipientID());
+			stmt.setString(2,note.getSenderID());
+			stmt.setString(3, note.getType().toString());
+			stmt.executeUpdate();
+		}
+		else
+		{
+			PreparedStatement stmt = conn.prepareStatement("UPDATE notifications SET is_read=true WHERE recipient=? AND sender=? AND concerning_journey=? AND type=?::notification_type");
+			stmt.setString(1, note.getRecipientID());
+			stmt.setString(2,note.getSenderID());
+			stmt.setInt(3, note.getJourneySerial());
+			stmt.setString(4, note.getType().toString());
+			stmt.executeUpdate();
+		}
 	}
 	private void setDateModified(Route route) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("UPDATE routes SET date_modified=? WHERE serial=?");

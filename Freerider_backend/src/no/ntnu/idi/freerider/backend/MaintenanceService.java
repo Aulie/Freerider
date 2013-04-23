@@ -54,8 +54,7 @@ public class MaintenanceService implements Runnable {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ServerLogger.write("Error: " + e.getMessage());
 		}
 		
 	}
