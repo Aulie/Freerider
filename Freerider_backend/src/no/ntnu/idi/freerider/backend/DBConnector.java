@@ -507,6 +507,10 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 
 	public void deleteJourney(Journey journey) throws SQLException {
 		//if(getHitchhikerID(journey.getSerial())!=null) throw new SQLException("Cannot delete journey with assigned hitchhiker. Send them a notification of cancellation instead.");
+		for(int i = 0; i < journey.getHitchhikers().size(); i++){
+			Notification note = new Notification(journey.getDriver().getID(), journey.getHitchhikers().get(i).getID(), journey.getDriver().getFullName(), "", journey.getSerial(), NotificationType.DRIVER_CANCEL);
+			addNotification(note);
+		}
 		deleteJourneyWithoutCheck(journey);
 	}
 
@@ -592,7 +596,29 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		}
 		return ret;
 	}
-
+	public List<Journey> getAllJourneys() throws SQLException{
+		PreparedStatement stmt = conn.prepareStatement("SELECT * FROM journeys");
+		ResultSet rs = stmt.executeQuery();
+		List<Journey> ret = new ArrayList<Journey>();
+		while(rs.next()){
+			ret.add(readJourney(rs));
+		}
+		return ret;
+	}
+	public void sendRating(Journey journey){
+		ServerLogger.write("SendRating trigger");
+		ServerLogger.write("Hitchhikers:" + journey.getHitchhikers().size());
+		for(int i = 0; i < journey.getHitchhikers().size(); i++){
+			ServerLogger.write(journey.getHitchhikers().get(i).getFullName());
+			Notification note = new Notification(journey.getDriver().getID(), journey.getHitchhikers().get(i).getID(), journey.getHitchhikers().get(i).getFullName(), "", journey.getSerial(), NotificationType.RATING);
+			try {
+				addNotification(note);
+			} catch (SQLException e) {
+				ServerLogger.write(e.getMessage());
+			}
+		}
+		
+	}
 	private Journey readJourney(ResultSet rs) throws SQLException {
 		int serial = rs.getInt("serial");
 		Route route = getRoute(rs.getInt("route_used"));

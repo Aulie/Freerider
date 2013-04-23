@@ -36,5 +36,7 @@ public enum NotificationType {
 	/** A hitchhiker gives an acknowledgement of receiving the driver's cancellation.*/
 	HITCHHIKER_ACCEPTS_DRIVER_CANCEL,
 	/**Send message */
-	MESSAGE;
+	MESSAGE,
+	/** Ask the user for a rating*/
+	RATING;
 }

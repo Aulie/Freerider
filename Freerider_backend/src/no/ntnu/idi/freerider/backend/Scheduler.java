@@ -21,7 +21,7 @@ public class Scheduler implements ServletContextListener{
 
 	public void contextInitialized(ServletContextEvent arg0) {
 		scheduler = Executors.newSingleThreadScheduledExecutor();
-		scheduler.scheduleAtFixedRate(new MaintenanceService(), 0, 1, TimeUnit.DAYS);
+		scheduler.scheduleAtFixedRate(new MaintenanceService(), 1, 1, TimeUnit.MINUTES);
 		
 	}
 	

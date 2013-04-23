@@ -1,8 +1,11 @@
 package no.ntnu.idi.freerider.backend;
 
 
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
+
+import no.ntnu.idi.freerider.model.Journey;
 
 /**
  * Deletes old routes each time it is triggered
@@ -11,6 +14,7 @@ import java.util.List;
  */
 public class MaintenanceService implements Runnable {
 	public void run() {
+		//Routes
 		ServerLogger.write("Run service routine");
 		DBConnector db = new DBConnector();
 		try {
@@ -36,5 +40,23 @@ public class MaintenanceService implements Runnable {
 		} catch (Exception e) {//Change to more specific exception
 			ServerLogger.write("Error: " + e.getMessage());
 		}
+		
+		//Journeys
+		try {
+			List<Journey> journeys = db.getAllJourneys();
+			Calendar cal = Calendar.getInstance();  
+			cal.add(Calendar.DAY_OF_MONTH, -1);
+			for(int i = 0; i < journeys.size(); i++){
+				if(journeys.get(i).getStart().before(cal)){
+					db.sendRating(journeys.get(i));
+					
+					db.deleteJourneyWithoutCheck(journeys.get(i));
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }
