@@ -95,42 +95,27 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 			aboutMeChanged = true;
 		}
 		// Setting the age
-		boolean isValidAge = true;
 		boolean isEmpty = false;
-		try{
-			Integer.parseInt(age.getText().toString());
-		}catch(NumberFormatException e){
-			if(age.getText().toString().length() > 0){
-				isValidAge = false;
-				Toast.makeText(this, "Age have to be a number!", Toast.LENGTH_LONG).show();
-				return;
-			}else{
-				isEmpty = true;
-			}
+		if(age.getText().toString().length() < 1){
+			isEmpty = true;
 		}
+		
 		if(isEmpty){
 			ageString = "0";
-		}else if(isValidAge){
+		}else{
 			ageString = age.getText().toString();
 		}
 		// Setting the phone number
-		boolean isValidNumber = true;
 		isEmpty = false;
-		try{
-			Integer.parseInt(phone.getText().toString());
-		}catch(NumberFormatException e){
-			if(phone.getText().toString().length() > 0){
-				isValidNumber = false;
-				Toast.makeText(this, "Phone number can only consist of numbers! Use 00 extensions instead of +.", Toast.LENGTH_LONG).show();
-				return;
-			}else{
-				isEmpty = true;
-			}
+		
+		if(phone.getText().toString().length() < 1){
+			isEmpty = true;
 		}
+		
 		if(isEmpty){
 			phoneString = "";
 		}
-		else if(isValidNumber){
+		else{
 			phoneString = phone.getText().toString();
 		}
 		// Setting the About me
