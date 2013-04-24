@@ -176,13 +176,12 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 				if(getApp().getSelectedJourney().getVisibility().equals(Visibility.FRIENDS_OF_FRIENDS))
 					jsonObject.put("value", "FRIENDS_OF_FRIENDS");
 				else
-					jsonObject.put("value", "FRIENDS");
+					jsonObject.put("value", "ALL_FRIENDS");
 			}
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		postParams.putString("privacy", jsonObject.toString());
 //		postParams.putString("privacy", "EVERYONE");
 //		postParams.putString("actions", "[{'name':'Test a simple Graph API call!','link':'https://developers.facebook.com/tools/explorer?method=GET&path=me'}]");
