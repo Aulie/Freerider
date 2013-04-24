@@ -709,22 +709,24 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 						InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 			            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 						//
-			            hasDrawn = true;
+			            //hasDrawn = true;
 						if(checkFields() && selectedRoute.getMapPoints().size()>2 && hasDrawn == true){
 							createOneTimeJourney();
 							button.setEnabled(true);
 							button.setText("Next");
+							return true;
 						}
 						else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
 							mapView.getOverlays().clear();
 							createMap();
 							button.setEnabled(true);
-							button.setText("Show on map");
-							
+							button.setText("Next");
+							return true;
 						}
 						else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
 							button.setText("Show on map");
 							button.setEnabled(false);
+							return false;
 						}
 						else if(inEditMode){
 							
@@ -732,10 +734,14 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 						else{
 							button.setText("Show on map");
 							button.setEnabled(false);
+							return false;
 						}
+						/*
 						mapView.getOverlays().clear();
 						createMap();
 						return true;
+						*/
+						return false;
 					}
 					else{
 						return false;
