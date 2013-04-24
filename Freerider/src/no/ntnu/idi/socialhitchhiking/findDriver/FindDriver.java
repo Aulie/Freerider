@@ -71,10 +71,12 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.text.Html;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -87,6 +89,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 /**
@@ -184,6 +187,35 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			
 		});
 		searchTo = (AutoCompleteTextView) findViewById (R.id.search2);
+		searchTo.setOnEditorActionListener(new OnEditorActionListener() {
+			
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if(actionId == EditorInfo.IME_ACTION_DONE){
+					if(searchFrom.getText().toString().equals("") && searchTo.getText().toString().equals("")){
+						Toast.makeText(FindDriver.this, "Please enter origin and destination", Toast.LENGTH_SHORT).show();
+					}
+					else
+					{
+						doSearch();
+						InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+						imm.hideSoftInputFromWindow(searchFrom.getWindowToken(), 0);
+						imm.hideSoftInputFromWindow(searchTo.getWindowToken(), 0);
+					}
+					previousSearch = getPreviousSearch();
+					previousAdapter.clear();
+					
+					previousAdapter.add(new PreviousSearch("[Select previous search]", ""));
+					for(int i = 0; i < previousSearch.size(); i++) {
+						if(previousSearch.get(i).getFrom() != null) {
+							previousAdapter.add(previousSearch.get(i));
+						}
+					}
+
+				}
+				return false;
+			}
+		});
 		searchFrom = (AutoCompleteTextView) findViewById (R.id.searchText);
 
 		search = (Button) findViewById(R.id.searchButton);
