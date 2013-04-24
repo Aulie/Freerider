@@ -42,6 +42,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 	private EditText phone;
 	private EditText aboutMe;
 	private TextView name;
+	private TextView recommendations;
 	private User user;
 	
 	private String ageString;
@@ -184,6 +185,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		age = (EditText)findViewById(R.id.meAge);
 		phone = (EditText)findViewById(R.id.mePhone);
 		aboutMe = (EditText)findViewById(R.id.meAboutMe);
+		recommendations = (TextView)findViewById(R.id.recommendations);
 		
 		// Adding the picture of the user
 		picture.setImageBitmap(result);
@@ -206,7 +208,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 		// Adding the About Me of the user
 		aboutMeString = user.getAbout();
 		aboutMe.setText(aboutMeString);
-		//Adding Gender to the driver
+		// Adding Gender to the user
 	    if(user.getGender().equals("m")){
 	    	Drawable male = getResources().getDrawable(R.drawable.male);
 	    	gender.setImageDrawable(male);
@@ -215,6 +217,8 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 	    	Drawable female = getResources().getDrawable(R.drawable.female);
 	    	gender.setImageDrawable(female);
 	    }
+	    // Adding recommendations to the user
+	    recommendations.setText("Recommendations: " + (int)user.getRating());
 	}
 }
 /**

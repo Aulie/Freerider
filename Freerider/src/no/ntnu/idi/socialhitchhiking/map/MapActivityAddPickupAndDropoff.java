@@ -254,6 +254,9 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 			}
 		}
 		
+		// Addring the rating og the driver
+		((TextView)findViewById(R.id.recommendations)).setText("Recommendations: " + (int)driver.getRating());
+		
 		// Setting the drivers mobile number
 		((TextView)findViewById(R.id.mapViewPickupTextViewPhone)).setText("Mobile: " + driver.getPhone());
 		

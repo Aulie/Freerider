@@ -40,7 +40,14 @@
 		    android:layout_width="wrap_content"
 		    android:layout_gravity="center_horizontal"
 		    />
-		   
+		<TextView 
+		    android:id="@+id/recommendations"
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"
+		    android:layout_gravity="center_horizontal"
+		    android:textSize="20sp"
+		    android:textStyle="bold"
+		    android:layout_margin="10dp"/>
 		<TextView 
 	    android:layout_height="wrap_content"
 	    android:layout_width="60dp"
