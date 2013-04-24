@@ -456,10 +456,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 		
 		acDropoff = (AutoCompleteTextView) findViewById(R.id.dropoffText);
 		acDropoff.setAdapter(adapter);
-		//acTo.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acTo));
-		
-		//adds the adapter for the textChangedListener
-		//acAdd.setAdapter(adapter);
 		acDropoff.addTextChangedListener(new AutoCompleteTextWatcher(this, adapter, acDropoff));
 		
 		//sets the next button on the keyboard
@@ -468,8 +464,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 			public boolean onEditorAction(TextView v, int actionId,
 					KeyEvent event) {
 				if(actionId == EditorInfo.IME_ACTION_NEXT){
-					// Removes old pickup point
-					//setSelectingPickupPoint();
 					// Sets the pickup location
 					setPickupLocation();
 					// Sets focus to dropoff
@@ -488,8 +482,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 			public boolean onEditorAction(TextView v, int actionId,
 					KeyEvent event) {
 				if(actionId == EditorInfo.IME_ACTION_DONE){
-					// Removes old pickup point
-					//setSelectingDropoffPoint();
 					// Sets the dropoff location
 					setDropOffLocation();
 					// Sets focus to "Comment to driver"
@@ -601,7 +593,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				if(dropoffPoint == null){
 					pickupPoint = temp;
 					overlayPickupThumb = drawThumb(pickupPoint, true);
-					//setSelectingDropoffPoint();
 				}else{ // If a dropoff point is specified:
 					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
 					// Checks to make sure the pickup point is before the dropoff point.
@@ -611,7 +602,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 						// Adds the pickup point to the map by drawing a cross
 						pickupPoint = temp;
 						overlayPickupThumb = drawThumb(pickupPoint, true);
-						//setDoneSelecting();
 					}
 				}
 			}
@@ -641,7 +631,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				if(overlayDropoffThumb != null){
 					mapView.getOverlays().remove(overlayDropoffThumb);
 					overlayDropoffThumb = null;
-					//pickupPoint = null;
 				}
 				mapView.invalidate();
 				
@@ -649,7 +638,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				if(pickupPoint == null){
 					dropoffPoint = temp;
 					overlayDropoffThumb = drawThumb(dropoffPoint, false);
-					//setSelectingPickupPoint();
 				}else{ // If a pickup point is specified:
 					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
 					// Checks to make sure the dropoff point is after the pickup point.
@@ -659,7 +647,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 						// Adds the dropoff point to the map by drawing a cross
 						dropoffPoint = temp;
 						overlayDropoffThumb = drawThumb(dropoffPoint, false);
-						//setDoneSelecting();
 					}
 				}
 			}
@@ -698,7 +685,8 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				if(dropoffPoint == null){
 					pickupPoint = temp;
 					overlayPickupThumb = drawThumb(pickupPoint, true);
-					//setSelectingDropoffPoint();
+					// Set pickup TextView to the new address
+					acPickup.setText(GeoHelper.getAddressAtPointString(GeoHelper.getGeoPoint(pickupPoint)).replace(",","\n"));
 				}else{ // If a dropoff point is specified:
 					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
 					// Checks to make sure the pickup point is before the dropoff point.
@@ -708,7 +696,8 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 						// Adds the pickup point to the map by drawing a thumb
 						pickupPoint = temp;
 						overlayPickupThumb = drawThumb(pickupPoint, true);
-						//setDoneSelecting();
+						// Set pickup TextView to the new address
+						acPickup.setText(GeoHelper.getAddressAtPointString(GeoHelper.getGeoPoint(pickupPoint)).replace(",","\n"));
 					}
 				}
 			}
@@ -721,7 +710,6 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				if(overlayDropoffThumb != null){
 					mapView.getOverlays().remove(overlayDropoffThumb);
 					overlayDropoffThumb = null;
-					//pickupPoint = null;
 				}
 				mapView.invalidate();
 				
@@ -729,7 +717,8 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				if(pickupPoint == null){
 					dropoffPoint = temp;
 					overlayDropoffThumb = drawThumb(dropoffPoint, false);
-					//setSelectingPickupPoint();
+					// Set dropoff TextView to the new address
+					acDropoff.setText(GeoHelper.getAddressAtPointString(GeoHelper.getGeoPoint(dropoffPoint)).replace(",","\n"));
 				}else{ // If a pickup point is specified:
 					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
 					// Checks to make sure the dropoff point is after the pickup point.
@@ -739,7 +728,8 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 						// Adds the dropoff point to the map by drawing a thumb
 						dropoffPoint = temp;
 						overlayDropoffThumb = drawThumb(dropoffPoint, false);
-						//setDoneSelecting();
+						// Set dropoff TextView to the new address
+						acDropoff.setText(GeoHelper.getAddressAtPointString(GeoHelper.getGeoPoint(dropoffPoint)).replace(",","\n"));
 					}
 				}
 			}
