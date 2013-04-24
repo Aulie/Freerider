@@ -327,11 +327,11 @@ public class TripOptions extends SocialHitchhikingActivity {
 				adapter.notifyDataSetChanged();
             }
         });
-    	 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+    	 /*builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
              public void onClick(DialogInterface dialog, int id) {
                   dialog.cancel();
              }
-         });
+         });*/
     	AlertDialog alert = builder.create();
     	alert.show();
     }
