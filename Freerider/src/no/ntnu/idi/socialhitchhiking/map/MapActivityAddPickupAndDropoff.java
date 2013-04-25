@@ -71,6 +71,7 @@ import org.apache.http.client.ClientProtocolException;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -377,23 +378,38 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 						if(res.getStatus() == ResponseStatus.FAILED){
 							if(res.getErrorMessage().contains("no_duplicate_notifications")){
 								//makeToast("You have already sent a request on this journey");
-								AlertDialog ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this).create();  
+								AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
 								ad.setMessage("You have already sent a request on this ride");
 								ad.setTitle("Unable to send request");
+								ad.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,int id) {
+										
+									}
+								  });
 								ad.show();
 							}
 							else if(res.getErrorMessage().equals("No available seats")){
 								//makeToast("There are no available seats on this ride");
-								AlertDialog ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this).create();  
+								AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
 								ad.setMessage("There are no available seats on this ride");
 								ad.setTitle("Unable to send request");
+								ad.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,int id) {
+										
+									}
+								  });
 								ad.show();
 							}
 							else if(res.getErrorMessage().equals("User already in journey")){
 								//makeToast("You have already hitched this ride");
-								AlertDialog ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this).create();  
-								ad.setMessage("You have already sent a request on this ride");
+								AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
+								ad.setMessage("You have already hitched this ride");
 								ad.setTitle("Unable to send request");
+								ad.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,int id) {
+										
+									}
+								  });
 								ad.show();
 							}
 							else{
