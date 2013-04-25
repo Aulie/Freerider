@@ -437,24 +437,24 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		List<Journey> ret = new ArrayList<Journey>();
 		while(rs.next()){
 			ServerLogger.write("Got result");
-			Journey journey = new Journey(rs.getInt("journeyserial"));
-			User user = new User(rs.getString("Name"),rs.getString("id"));
-			user.setSurname(rs.getString("Surname"));
-			user.setRating(rs.getDouble("Rating"));
+			//Journey journey = new Journey(rs.getInt("journeyserial"));
+			//User user = new User(rs.getString("Name"),rs.getString("id"));
+			//user.setSurname(rs.getString("Surname"));
+			//user.setRating(rs.getDouble("Rating"));
 			//journey.setHitchhiker(user);
 			
-			List<Location> routeData = readRouteData(rs);
-			user = getUser(user.getID());
-			Route route = new Route(user, "", routeData, rs.getInt("routeserial"));
-			String[] addresses = rs.getString("addresses").split(Route.ADDRESS_STRING_DELIMITER);
-			List<MapLocation> mapPoints = readMapLocationData(rs, addresses);
-			route.setMapPoints(mapPoints);
+			//List<Location> routeData = readRouteData(rs);
+			//user = getUser(user.getID());
+			//Route route = new Route(user, "", routeData, rs.getInt("routeserial"));
+			//String[] addresses = rs.getString("addresses").split(Route.ADDRESS_STRING_DELIMITER);
+			//List<MapLocation> mapPoints = readMapLocationData(rs, addresses);
+			//route.setMapPoints(mapPoints);
 			//route.setFrequency(rs.getInt("frequency"));
-			journey.setRoute(route);
-			journey.setStart(convertToCalendar(rs.getTimestamp("starttime")));
-			journey.setVisibility(Visibility.valueOf(rs.getString("visibility")));
-			journey = getJourney(rs.getInt("journeyserial"));
-			journey.setHitchhikers(getHitchhikers(rs.getInt("journeyserial")));
+			//journey.setRoute(route);
+			//journey.setStart(convertToCalendar(rs.getTimestamp("starttime")));
+			//journey.setVisibility(Visibility.valueOf(rs.getString("visibility")));
+			Journey journey = getJourney(rs.getInt("journeyserial"));
+			//journey.setHitchhikers(getHitchhikers(rs.getInt("journeyserial")));
 			//journey.setTripPreferences(pref);
 			ret.add(journey);
 		}
