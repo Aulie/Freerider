@@ -186,32 +186,6 @@ public class MapActivityJourney extends MapActivityAbstract{
 					  });
 					ad.show();
 				
-					/*
-					final Dialog confirmDialog = new Dialog(MapActivityJourney.this);
-					confirmDialog.setContentView(R.layout.cancel_ride_layout);
-					
-					ImageView okBtn = (ImageView)confirmDialog.findViewById(R.id.okBtn);
-					TextView contentTxt = (TextView)confirmDialog.findViewById(R.id.questionField);
-					confirmDialog.setTitle("Confirm");
-					
-					if(getApp().getUser().getFullName().equals(getApp().getSelectedJourney().getDriver().getFullName())){
-						contentTxt.setText("Do you want to cancel this ride?");
-					} else{
-						contentTxt.setText("Do you want to leave this ride?");
-					}
-					
-					
-					okBtn.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							handleJourney(getApp().getSelectedJourney());
-							confirmDialog.dismiss();
-							MapActivityJourney.this.finish();
-						}
-					});
-					
-					confirmDialog.show();
-					*/
 			}
 			
 		});
@@ -284,29 +258,7 @@ public class MapActivityJourney extends MapActivityAbstract{
 			deleteJourneyFromList(j);
 		}
 	}
-	/*
-	private void cancelJourney(final Journey j){
-		AlertDialog.Builder b = new AlertDialog.Builder(this);
-		b.setTitle("Journey");
-		b.setMessage("What do you want to do with this journey?");
-		b.setPositiveButton("Cancel it", new OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				handleJourney(j);
-			}
-		});
-		b.setNegativeButton("Show in map", new OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				showInMap(j);
-			}
-		});
-		b.setNeutralButton("Nothing", new OnClickListener() {
-			public void onClick(DialogInterface arg0, int arg1) {
-				
-			}
-		});
-		b.show();
-	}
-	*/
+	
 	private void sendMessageToDriver(){
 		
 		final Dialog customDialog = new Dialog(this);
@@ -331,7 +283,6 @@ public class MapActivityJourney extends MapActivityAbstract{
 	    spinner.setAdapter(adapter);
 	    
 	    ImageView sendBtn = (ImageView)customDialog.findViewById(R.id.sendBtn);
-	    ImageView cancelBtn = (ImageView)customDialog.findViewById(R.id.cancelBtn);
 	    final EditText input = (EditText)customDialog.findViewById(R.id.input);
 	    
 	    sendBtn.setOnClickListener(new OnClickListener() {
@@ -390,13 +341,6 @@ public class MapActivityJourney extends MapActivityAbstract{
 				
 			}
 			
-		});
-	    
-	    cancelBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				customDialog.dismiss();
-			}
 		});
 	    
 		customDialog.show();
