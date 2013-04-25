@@ -414,10 +414,28 @@ public class NotificationHandler{
 			if(response.getStatus() == ResponseStatus.OK){
 				if(response.getJourneys().size() > 0){
 					journey = response.getJourneys().get(0);
+					
+					Intent intent = new Intent(in, no.ntnu.idi.socialhitchhiking.map.MapActivityJourney.class);
+					Log.e("Owner", journey.getRoute().getOwner().getFullName());
+					Log.e("JourneyName", journey.getRoute().getName());
+					Log.e("Serial", journey.getRoute().getSerial() + "");
+					MapRoute mr = new MapRoute(journey.getRoute().getOwner(), journey.getRoute().getName(), journey.getRoute().getSerial(), journey.getRoute().getMapPoints());
+					intent.putExtra("Journey", true);
+					intent.putExtra("journeyAccepted", true);
+					intent.putExtra("journeyRejected", false);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					app.setSelectedMapRoute(mr);
+					app.setSelectedJourney(journey);
+					app.setJourneyPickupPoint(not.getStartPoint());
+					app.setJourneyDropoffPoint(not.getStopPoint());
+					app.setSelectedNotification(not);
+					
+					app.startActivity(intent);
 				}
 			}
 			else if(response.getStatus() == ResponseStatus.FAILED){
 				Log.e("FAILED", "ResponseStatus == FAILED");
+				Toast.makeText(in, "Ride is finished", Toast.LENGTH_SHORT);
 			}
 		}catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -435,6 +453,7 @@ public class NotificationHandler{
 			Log.e("4", e.toString());
 		}
 		
+		/*
 		Intent intent = new Intent(in, no.ntnu.idi.socialhitchhiking.map.MapActivityJourney.class);
 		Log.e("Owner", journey.getRoute().getOwner().getFullName());
 		Log.e("JourneyName", journey.getRoute().getName());
@@ -451,6 +470,7 @@ public class NotificationHandler{
 		app.setSelectedNotification(not);
 		
 		app.startActivity(intent);
+		*/
 	}
 
 	
