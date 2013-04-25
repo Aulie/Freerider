@@ -275,7 +275,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 			}
 		}
 		
-		// Addring the rating og the driver
+		// Addring the rating of the driver
 		((TextView)findViewById(R.id.recommendations)).setText("Recommendations: " + (int)driver.getRating());
 		
 		// Setting the drivers mobile number
@@ -351,7 +351,16 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				NotificationRequest req;
 				
 				if(pickupPoint == null || dropoffPoint == null){
-					makeToast("You have to choose pickup point and dropoff point.");
+					//makeToast("You have to choose pickup point and dropoff point.");
+					AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
+					ad.setMessage("You have to choose pickup point and dropoff point.");
+					ad.setTitle("Unable to send request");
+					ad.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							
+						}
+					  });
+					ad.show();
 					return;
 				}
 				
@@ -626,7 +635,16 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
 					// Checks to make sure the pickup point is before the dropoff point.
 					if(l.indexOf(temp) < l.indexOf(dropoffPoint)){
-						makeToast("The pickup point has to be before the dropoff point");
+						//makeToast("The pickup point has to be before the dropoff point");
+						AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
+						ad.setMessage("The pickup point has to be before the dropoff point");
+						ad.setTitle("Unable to send request");
+						ad.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,int id) {
+								
+							}
+						  });
+						ad.show();
 					}else{
 						// Adds the pickup point to the map by drawing a cross
 						pickupPoint = temp;
@@ -635,7 +653,16 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				}
 			}
 		}else{
-			makeToast("Please add a pickup address");
+			//makeToast("Please add a pickup address");
+			AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
+			ad.setMessage("Please add a pickup address");
+			ad.setTitle("Unable to send request");
+			ad.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					
+				}
+			  });
+			ad.show();
 		}
 	}
 	
@@ -671,7 +698,16 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
 					// Checks to make sure the dropoff point is after the pickup point.
 					if(l.indexOf(temp) > l.indexOf(pickupPoint)){
-						makeToast("The droppoff point has to be after the pickup point");
+						//makeToast("The droppoff point has to be after the pickup point");
+						AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
+						ad.setMessage("The droppoff point has to be after the pickup point");
+						ad.setTitle("Unable to send request");
+						ad.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,int id) {
+								
+							}
+						  });
+						ad.show();
 					}else{
 						// Adds the dropoff point to the map by drawing a cross
 						dropoffPoint = temp;
@@ -680,7 +716,16 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 				}
 			}
 		}else{
-			makeToast("Please add a dropoff address");
+			//makeToast("Please add a dropoff address");
+			AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
+			ad.setMessage("Please add a dropoff address");
+			ad.setTitle("Unable to send request");
+			ad.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					
+				}
+			  });
+			ad.show();
 		}
 	}
 	
@@ -720,7 +765,16 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
 					// Checks to make sure the pickup point is before the dropoff point.
 					if(l.indexOf(temp) < l.indexOf(dropoffPoint)){
-						makeToast("The pickup point has to be before the dropoff point");
+						//makeToast("The pickup point has to be before the dropoff point");
+						AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
+						ad.setMessage("The pickup point has to be before the dropoff point");
+						ad.setTitle("Unable to send request");
+						ad.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,int id) {
+								
+							}
+						  });
+						ad.show();
 					}else{
 						// Adds the pickup point to the map by drawing a thumb
 						pickupPoint = temp;
@@ -752,7 +806,16 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 					List<Location> l = getApp().getSelectedJourney().getRoute().getRouteData();
 					// Checks to make sure the dropoff point is after the pickup point.
 					if(l.indexOf(temp) > l.indexOf(pickupPoint)){
-						makeToast("The droppoff point has to be after the pickup point");
+						//makeToast("The droppoff point has to be after the pickup point");
+						AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
+						ad.setMessage("The droppoff point has to be after the pickup point");
+						ad.setTitle("Unable to send request");
+						ad.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,int id) {
+								
+							}
+						  });
+						ad.show();
 					}else{
 						// Adds the dropoff point to the map by drawing a thumb
 						dropoffPoint = temp;

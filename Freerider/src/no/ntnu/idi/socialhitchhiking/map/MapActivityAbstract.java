@@ -169,6 +169,8 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 	
 	protected Route drawableRoute;
 	
+	protected String routeDescription;
+	
 	/**
 	 * A {@link Handler} that receives {@link Message}s from the 
 	 * {@link #drawPathOnMap(MapRoute)}-method.
@@ -181,7 +183,7 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 			}else if(msg.what == 1338){
 				if(msg.obj instanceof MapRoute){
 					MapRoute route = (MapRoute)msg.obj;
-					String routeDescription = route.getRouteDescription();
+					routeDescription = route.getRouteDescription();
 					routePathOverlay = new RoutePathOverlay(route);
 					List<Overlay> listOfOverlays = mapView.getOverlays();
 					try{
@@ -191,9 +193,9 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 					}
 					mapView.invalidate();
 
-					if(routeDescription != null && routeDescription.length() > 1){
+					/*if(routeDescription != null && routeDescription.length() > 1){
 						if(!inPickupMode) makeToast(routeDescription); 
-					}
+					}*/
 					onDrawingPathEnded();
 				}
 			}else if(msg.what > 10000 && msg.what<11000){

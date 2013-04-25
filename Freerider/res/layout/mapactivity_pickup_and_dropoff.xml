@@ -38,20 +38,20 @@
 	        	    android:id="@+id/mapViewPickupTextViewDate"
 	        	    android:layout_width="match_parent"
 	        	    android:layout_height="wrap_content"
-	        	    android:layout_gravity="left"
 	        	    android:layout_weight="1"
+	        	    android:textStyle="bold"
 	        	    android:textSize="15sp"
 	        	    android:text="[DATE]" />
- 
-        	    <TextView
-        	        android:id="@+id/mapViewPickupTextViewSeats"
-        	        android:layout_width="match_parent"
-        	        android:layout_height="wrap_content"
-        	        android:layout_gravity="right"
-        	        android:layout_weight="1"
-        	        android:textSize="15sp"
-        	        android:text="[SEATS]" />
- 
+	        	
+	       	    <TextView
+	       	        android:id="@+id/mapViewPickupTextViewSeats"
+	       	        android:layout_width="match_parent"
+	       	        android:layout_height="wrap_content"
+	       	        android:layout_gravity="right"
+	       	        android:layout_weight="1"
+	       	        android:textStyle="bold"
+	       	        android:textSize="15sp"
+	       	        android:text="[SEATS]" />
         	</LinearLayout>
         	
         	<LinearLayout 
@@ -76,6 +76,7 @@
                         android:ems="10"
                         android:hint="@string/mapViewPickup"
                         android:imeOptions="actionNext"
+                        android:paddingRight="40dip"
                         android:paddingLeft="40dip"
                         android:layout_marginTop="5dip"
                         android:singleLine="true"
@@ -105,7 +106,7 @@
                         android:id="@+id/mapViewPickupBtnPickup"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
-                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_gravity="center_vertical|right"
                         android:textSize="15sp"
                         android:text="@string/mapViewPickupBtnUseMap"
                         />
@@ -127,6 +128,7 @@
                         android:ems="10"
                         android:hint="@string/mapViewDropoff"
                         android:imeOptions="actionDone"
+                        android:paddingRight="40dip"
                         android:paddingLeft="40dip"
                         android:layout_marginTop="5dip"
                         android:singleLine="true"
@@ -157,7 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
                         android:textSize="15sp"
-                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_gravity="center_vertical|right"
                         android:text="@string/mapViewPickupBtnUseMap"
                         />
                  </LinearLayout>
