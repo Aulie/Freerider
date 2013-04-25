@@ -63,6 +63,7 @@ import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -163,12 +164,33 @@ public class MapActivityJourney extends MapActivityAbstract{
 
 			@Override
 			public void onClick(View v) {
+					
+					AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityJourney.this);  
+					if(getApp().getUser().getFullName().equals(getApp().getSelectedJourney().getDriver().getFullName())){
+						ad.setMessage("Do you want to cancel this ride?");
+					} else{
+						ad.setMessage("Do you want to leave this ride?");
+					}
+					ad.setTitle("Confirm");
+					
+					ad.setNegativeButton("Ok",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							handleJourney(getApp().getSelectedJourney());
+							MapActivityJourney.this.finish();
+						}
+					  });
+					ad.setPositiveButton("Cancel",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							
+						}
+					  });
+					ad.show();
 				
+					/*
 					final Dialog confirmDialog = new Dialog(MapActivityJourney.this);
 					confirmDialog.setContentView(R.layout.cancel_ride_layout);
 					
 					ImageView okBtn = (ImageView)confirmDialog.findViewById(R.id.okBtn);
-					ImageView cancelBtn = (ImageView)confirmDialog.findViewById(R.id.cBtn);
 					TextView contentTxt = (TextView)confirmDialog.findViewById(R.id.questionField);
 					confirmDialog.setTitle("Confirm");
 					
@@ -183,17 +205,13 @@ public class MapActivityJourney extends MapActivityAbstract{
 						@Override
 						public void onClick(View v) {
 							handleJourney(getApp().getSelectedJourney());
-						}
-					});
-					
-					cancelBtn.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
 							confirmDialog.dismiss();
+							MapActivityJourney.this.finish();
 						}
 					});
 					
 					confirmDialog.show();
+					*/
 			}
 			
 		});

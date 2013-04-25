@@ -30,21 +30,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/maps"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:layout_marginTop="1dip"
-            />
-        
-        <ImageView 
-            android:id="@+id/cBtn"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_menu_blocked_user"
-            android:scaleX="1"
-            android:scaleY="1"
             android:layout_gravity="right"
             android:layout_weight="1"
-            android:paddingTop="14dip"
+            android:layout_marginTop="5dip"
+            android:paddingTop="15dip"
             />
         
     </LinearLayout>

@@ -74,17 +74,5 @@
             android:layout_weight="1"
             />
         
-        <ImageView 
-            android:id="@+id/cancelBtn2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/speech_bubble_overlay_close"
-            android:scaleX="1.45"
-            android:scaleY="1.45"
-            android:paddingTop="21dip"
-            android:paddingBottom="10dip"
-            android:layout_gravity="right"
-            android:layout_weight="1"
-            />
     </LinearLayout>
 </LinearLayout>

@@ -64,7 +64,7 @@
             android:scaleY="1.15"
             android:layout_gravity="left"
             android:layout_weight="1"
-            android:paddingTop="16dip"
+            android:paddingTop="22dip"
             
             />
         
@@ -75,9 +75,9 @@
             android:src="@drawable/maps"
             android:scaleX="1.05"
             android:scaleY="1.05"
-            android:layout_gravity="left"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:paddingTop="13dip"
+            android:paddingTop="8dip"
             
             />
         
@@ -90,18 +90,8 @@
             android:scaleY="1.05"
             android:layout_gravity="right"
             android:layout_weight="1"
+            android:paddingTop="3dip"
             />
         
-        <ImageView
-            android:id="@+id/cancelBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/speech_bubble_overlay_close"
-            android:scaleX="1.35"
-            android:scaleY="1.35"
-            android:layout_gravity="right"
-            android:layout_weight="1"
-            android:paddingTop="20dip"
-            />
     </LinearLayout>
 </LinearLayout>

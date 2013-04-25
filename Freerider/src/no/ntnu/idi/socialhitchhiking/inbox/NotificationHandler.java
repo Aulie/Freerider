@@ -130,6 +130,7 @@ public class NotificationHandler{
 		not = nf;
 		in = i;
 		if(not.isRead() && not.getType() == NotificationType.MESSAGE){
+			//funker
 			createChatDialog(not);
 		}
 		else if(not.isRead()){
@@ -147,6 +148,7 @@ public class NotificationHandler{
 				createMessageDialog(false,"Hitchhiker cancelled request", not.getSenderName()+" cancelled the request");
 				break;
 			case HITCHHIKER_REQUEST:
+				//funker
 				createNotificationDialog();
 				break;
 			case REQUEST_ACCEPT:
@@ -178,7 +180,6 @@ public class NotificationHandler{
 		aorRDialog.setContentView(R.layout.message_layout);
 		
 		ImageView okBtn = (ImageView)aorRDialog.findViewById(R.id.replyBtn);
-		ImageView cancelBtn = (ImageView)aorRDialog.findViewById(R.id.cancelBtn);
 		ImageView showBtn = (ImageView)aorRDialog.findViewById(R.id.showJourneyBtn);
 		ImageView markAsReadBtn = (ImageView)aorRDialog.findViewById(R.id.markAsReadBtn);
 		ImageView facebookBtn = (ImageView)aorRDialog.findViewById(R.id.shareOnFaceBtn);
@@ -212,14 +213,6 @@ public class NotificationHandler{
 			@Override
 			public void onClick(View v) {
 				createMarkedAsReadRequest();
-				aorRDialog.dismiss();
-			}
-		});
-		
-		cancelBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
 				aorRDialog.dismiss();
 			}
 		});
@@ -261,7 +254,6 @@ public class NotificationHandler{
 		notifDialog.setContentView(R.layout.notif_layout);
 		
 		ImageView okBtn = (ImageView)notifDialog.findViewById(R.id.okBtn);
-		ImageView cancelBtn = (ImageView)notifDialog.findViewById(R.id.cBtn);
 		ImageView showBtn = (ImageView)notifDialog.findViewById(R.id.showBtn);
 		TextView contentTxt = (TextView)notifDialog.findViewById(R.id.questionField);
 		
@@ -271,14 +263,6 @@ public class NotificationHandler{
 			@Override
 			public void onClick(View v) {
 				createCommentForRequest(NotificationType.REQUEST_ACCEPT);
-				notifDialog.dismiss();
-			}
-		});
-		
-		cancelBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				createCommentForRequest(NotificationType.REQUEST_REJECT);
 				notifDialog.dismiss();
 			}
 		});
@@ -481,7 +465,6 @@ public class NotificationHandler{
 		TextView contentTxt = (TextView)messageDialog.findViewById(R.id.contentViewField);
 		
 		ImageView replyBtn = (ImageView)messageDialog.findViewById(R.id.replyBtn);
-		ImageView cancelBtn = (ImageView)messageDialog.findViewById(R.id.cancelBtn);
 		ImageView showRideBtn = (ImageView)messageDialog.findViewById(R.id.showJourneyBtn);
 		ImageView markAsReadBtn = (ImageView)messageDialog.findViewById(R.id.markAsReadBtn);
 		ImageView facebookBtn = (ImageView)messageDialog.findViewById(R.id.shareOnFaceBtn);
@@ -502,7 +485,6 @@ public class NotificationHandler{
 				replyDialog.setTitle("Replay");
 				
 				ImageView sendBtn = (ImageView)replyDialog.findViewById(R.id.sendBtn);
-				ImageView cancelBtn2 = (ImageView)replyDialog.findViewById(R.id.cancelBtn2);
 				
 				TextView sendTxt = (TextView)replyDialog.findViewById(R.id.sendTxt);
 				TextView messageFromTxt = (TextView)replyDialog.findViewById(R.id.messageFromTxt);
@@ -513,13 +495,6 @@ public class NotificationHandler{
 				sendTxt.setText(not.getSenderName());
 				messageFromTxt.setText("Message from: " + not.getSenderName());
 				messageContent.setText(not.getComment());
-				
-				cancelBtn2.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						replyDialog.dismiss();
-					}
-				});
 				
 				sendBtn.setOnClickListener(new View.OnClickListener() {
 					@Override
@@ -543,13 +518,6 @@ public class NotificationHandler{
 					}
 				});
 				replyDialog.show();
-			}
-		});
-		
-		cancelBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				messageDialog.dismiss();
 			}
 		});
 		

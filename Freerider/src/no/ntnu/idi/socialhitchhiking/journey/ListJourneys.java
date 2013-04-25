@@ -96,6 +96,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 	private List<Journey> journeys;
 	private Calendar now, hr24, hr72,in14Days,nextMonth;
 	private boolean owned;
+	public Dialog optionsDialog;
 	
 	public void showMain(List<Journey> journeys){
 		setContentView(R.layout.my_rides);
@@ -191,6 +192,8 @@ public class ListJourneys extends SocialHitchhikingActivity{
 			Log.e("Error:" , e.getMessage());
 		}
 		*/
+		
+		
 		initAdapter(adapter, this.journeys);
 		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
@@ -296,6 +299,8 @@ public class ListJourneys extends SocialHitchhikingActivity{
 
 		return no;
 	}
+	
+	
 	private List<Journey> getNext72(List<Journey> list){
 		List<Journey> no = new ArrayList<Journey>();
 
@@ -346,13 +351,13 @@ public class ListJourneys extends SocialHitchhikingActivity{
 	}
 
 	private void cancelJourney(final Journey j){
-		final Dialog optionsDialog = new Dialog(ListJourneys.this);
+		//final Dialog optionsDialog = new Dialog(ListJourneys.this);
+		optionsDialog = new Dialog(ListJourneys.this);
 		optionsDialog.setTitle("Ride");
 		
 		optionsDialog.setContentView(R.layout.options_layout);
 		
 		ImageView leaveBtn = (ImageView)optionsDialog.findViewById(R.id.leaveBtn);
-		ImageView cancelBtn = (ImageView)optionsDialog.findViewById(R.id.cancelBtn);
 		ImageView showInMapBtn = (ImageView)optionsDialog.findViewById(R.id.showBtn);
 		
 		leaveBtn.setOnClickListener(new View.OnClickListener() {
@@ -362,7 +367,6 @@ public class ListJourneys extends SocialHitchhikingActivity{
 				confirmDialog.setContentView(R.layout.cancel_ride_layout);
 				
 				ImageView okBtn = (ImageView)confirmDialog.findViewById(R.id.okBtn);
-				ImageView cancelBtn = (ImageView)confirmDialog.findViewById(R.id.cBtn);
 				TextView contentTxt = (TextView)confirmDialog.findViewById(R.id.questionField);
 				confirmDialog.setTitle("Confirm");
 				
@@ -383,21 +387,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 					}
 				});
 				
-				cancelBtn.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						confirmDialog.dismiss();
-					}
-				});
-				
 				confirmDialog.show();
-			}
-		});
-		
-		cancelBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				optionsDialog.dismiss();
 			}
 		});
 		
@@ -524,6 +514,10 @@ public class ListJourneys extends SocialHitchhikingActivity{
 	protected void onResume() {
 		super.onResume();
 		adapter.updateDataSet();
+		if(optionsDialog != null){
+			optionsDialog.dismiss();
+		}
+		
 	}
 	
 	private void sendCancelJourney(Journey j) {
