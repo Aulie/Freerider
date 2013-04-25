@@ -49,9 +49,11 @@ public class GpsHandler<T> {
 		List<String> providers = locManager.getProviders(true);
 		Location l = null;
         
-        for (int i=providers.size()-1; i>=0; i--) {
+        for (int i = providers.size()-1; i >= 0; i--) {
                 l = locManager.getLastKnownLocation(providers.get(i));
-                if (l != null) break;
+                if (l != null){
+                	break;
+                }
         }
         if(l != null){
         	if(activity instanceof FindDriver) {

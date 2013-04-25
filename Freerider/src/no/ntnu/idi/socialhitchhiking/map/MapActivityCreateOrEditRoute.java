@@ -1138,6 +1138,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 			acFrom.setText(addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1));
 		} catch (IOException e) {
+			Toast.makeText(this, "Problem with GPS, try restarting your device", Toast.LENGTH_LONG).show();
 		}
 		loadingDialog.dismiss();
 	}

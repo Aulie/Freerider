@@ -498,7 +498,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 			searchFrom.setText(addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1));
 		} catch (IOException e) {
-			//Log.e("IOError",e.getMessage());
+			Toast.makeText(this, "Problem with GPS, try restarting your device", Toast.LENGTH_LONG).show();
 		}
 		loadingDialog.dismiss();
 	}
