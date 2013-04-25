@@ -69,6 +69,7 @@ import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 
 import org.apache.http.client.ClientProtocolException;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
@@ -375,13 +376,25 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 						}
 						if(res.getStatus() == ResponseStatus.FAILED){
 							if(res.getErrorMessage().contains("no_duplicate_notifications")){
-								makeToast("You have already sent a request on this journey");
+								//makeToast("You have already sent a request on this journey");
+								AlertDialog ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this).create();  
+								ad.setMessage("You have already sent a request on this ride");
+								ad.setTitle("Unable to send request");
+								ad.show();
 							}
 							else if(res.getErrorMessage().equals("No available seats")){
-								makeToast("There are no available seats on this ride");
+								//makeToast("There are no available seats on this ride");
+								AlertDialog ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this).create();  
+								ad.setMessage("There are no available seats on this ride");
+								ad.setTitle("Unable to send request");
+								ad.show();
 							}
 							else if(res.getErrorMessage().equals("User already in journey")){
-								makeToast("You have already hitched this ride");
+								//makeToast("You have already hitched this ride");
+								AlertDialog ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this).create();  
+								ad.setMessage("You have already sent a request on this ride");
+								ad.setTitle("Unable to send request");
+								ad.show();
 							}
 							else{
 								makeToast("Could not send request");
