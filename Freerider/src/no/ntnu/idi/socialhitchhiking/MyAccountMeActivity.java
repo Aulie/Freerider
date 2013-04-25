@@ -71,103 +71,117 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 	private boolean ageChanged;
 	private boolean aboutMeChanged;
 	private boolean phoneChanged;
+	private boolean isUserInitialized;
+	private boolean isImageInitialized;
+	private AsyncTask<Void, User, UserResponse> userLoader;
+	private AsyncTask<String, Void, Bitmap> getImage;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		isUserInitialized = false;
+		isImageInitialized = false;
 		try{
 			// Setting the loading layout
 			setContentView(R.layout.main_loading);
 			// Getting the user from the database
 			user = getApp().getUser();
-			new UserLoader(this).execute();
+			userLoader = new UserLoader(this).execute();
 			// Adding image of the driver
 			// Execute the Asynctask: Get image from url and add it to the ImageView
-			new GetImage(picture, this).execute(user.getPictureURL());
+			getImage = new GetImage(picture, this).execute(user.getPictureURL());
 		}catch(NullPointerException e){
 			Toast.makeText(this, "A server error occured.", Toast.LENGTH_LONG).show();
 		}
 	}
 	@Override
 	public void onStop(){
-		ageChanged = false;
-		aboutMeChanged = false;
-		phoneChanged = false;
-		
-		if(phoneString == null){
-			phoneString = "";
-		}
-		if(aboutMeString == null){
-			aboutMeString = "";
-		}
-		
-		// Checking if a new age is set
-		if(!ageString.equals(age.getText().toString())){
-			ageChanged = true;
-		}
-		// Checking if a new phone number is set
-		if(!phoneString.equals(phone.getText().toString())){
-			phoneChanged = true;
-		}
-		// Checking if a new "about me" is set
-		if(!aboutMeString.equals(aboutMe.getText().toString())){
-			aboutMeChanged = true;
-		}
-		// Setting the age
-		boolean isEmpty = false;
-		if(age.getText().toString().length() < 1){
-			isEmpty = true;
-		}
-		
-		if(isEmpty){
-			ageString = "0";
-		}else{
-			ageString = age.getText().toString();
-		}
-		// Setting the phone number
-		isEmpty = false;
-		
-		if(phone.getText().toString().length() < 1){
-			isEmpty = true;
-		}
-		
-		if(isEmpty){
-			phoneString = "";
-		}
-		else{
-			phoneString = phone.getText().toString();
-		}
-		// Setting the About me
-		aboutMeString = aboutMe.getText().toString();
-		
-		// Make changes in the user object
-		if(ageChanged){
-			user.setAge(Integer.parseInt(ageString));
-		}
-		if(phoneChanged){
-			user.setPhone(phoneString);
-		}
-		if(aboutMeChanged){
-			user.setAbout(aboutMeString);
-		}
-		// Add the changes to the user object to the database
-		Request userReq = new UserRequest(RequestType.UPDATE_USER, user);
-		try {
-			RequestTask.sendRequest(userReq, getApp());
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(isUserInitialized && isImageInitialized){
+			ageChanged = false;
+			aboutMeChanged = false;
+			phoneChanged = false;
+			
+			if(phoneString == null){
+				phoneString = "";
+			}
+			if(aboutMeString == null){
+				aboutMeString = "";
+			}
+			
+			// Checking if a new age is set
+			if(!ageString.equals(age.getText().toString())){
+				ageChanged = true;
+			}
+			// Checking if a new phone number is set
+			if(!phoneString.equals(phone.getText().toString())){
+				phoneChanged = true;
+			}
+			// Checking if a new "about me" is set
+			if(!aboutMeString.equals(aboutMe.getText().toString())){
+				aboutMeChanged = true;
+			}
+			// Setting the age
+			boolean isEmpty = false;
+			if(age.getText().toString().length() < 1){
+				isEmpty = true;
+			}
+			
+			if(isEmpty){
+				ageString = "0";
+			}else{
+				ageString = age.getText().toString();
+			}
+			// Setting the phone number
+			isEmpty = false;
+			
+			if(phone.getText().toString().length() < 1){
+				isEmpty = true;
+			}
+			
+			if(isEmpty){
+				phoneString = "";
+			}
+			else{
+				phoneString = phone.getText().toString();
+			}
+			// Setting the About me
+			aboutMeString = aboutMe.getText().toString();
+			
+			// Make changes in the user object
+			if(ageChanged){
+				user.setAge(Integer.parseInt(ageString));
+			}
+			if(phoneChanged){
+				user.setPhone(phoneString);
+			}
+			if(aboutMeChanged){
+				user.setAbout(aboutMeString);
+			}
+			// Add the changes to the user object to the database
+			Request userReq = new UserRequest(RequestType.UPDATE_USER, user);
+			try {
+				RequestTask.sendRequest(userReq, getApp());
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		super.onStop();
+	}
+	@Override
+	public void onBackPressed(){
+		userLoader.cancel(true);
+		getImage.cancel(true);
+		super.onBackPressed();
 	}
 	/**
 	 * Initializing the user from a {@link UserResponse}
@@ -175,6 +189,7 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 	 */
 	public void initUser(UserResponse res){
 		this.user = res.getUser();
+		isUserInitialized = true;
 	}
 	/**
 	 * Displays the user info in the layout.
@@ -223,6 +238,9 @@ public class MyAccountMeActivity extends SocialHitchhikingActivity {
 	    }
 	    // Adding recommendations to the user
 	    recommendations.setText("Recommendations: " + (int)user.getRating());
+	    
+	    // Indicating that the image is initialized
+	    isImageInitialized = true;
 	}
 }
 /**

@@ -69,15 +69,23 @@ public class MyAccountPreferences extends SocialHitchhikingActivity {
 	private Visibility privacyPreference;
 	private String facebookPrivacy = "";
 	private Button btnFacebook;
+	private AsyncTask<Void, TripPreferences, PreferenceResponse> prefLoader;
+	private boolean isPrefInitialized;
+	
     /** Called when the activity is first created. */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		isPrefInitialized = false;
 		// Setting the loading layout
 		setContentView(R.layout.main_loading);
 		// Starting AsyncTask loading preferences from database
-		new PreferenceLoader(this).execute();
+		prefLoader = new PreferenceLoader(this).execute();
 	}
+	/**
+	 * Initializes the preferences from the {@link PreferenceResonse} retrieved from the database.
+	 * @param res
+	 */
 	public void initPreferences(PreferenceResponse res){
 		setContentView(R.layout.my_account_preferences);
 		
@@ -142,6 +150,9 @@ public class MyAccountPreferences extends SocialHitchhikingActivity {
 	    // Setting the Facebook privacy button
         btnFacebook.setText(Html.fromHtml("<b>" + "Set Facebook privacy" + "</b>" +  "<br />" + 
                 "<small>" + facebookPrivacy + "</small>" + "<br />"));
+        
+        // Indicating that the preferences are initialized
+        isPrefInitialized = true;
 	}
 	/**
 	 * Called when the button "Set Facebook privacy" is clicked. Opens an AlertDialog where the user selects a privacy setting.
@@ -204,42 +215,48 @@ public class MyAccountPreferences extends SocialHitchhikingActivity {
 	/** Save the preferences on the database*/
 	@Override
 	public void onStop() {
-
-        for (int i = 0; i < checked.size(); i++) {
-            // Item position in adapter
-            int position = checked.keyAt(i);
-            // Add preference if it is checked i.e.) == TRUE and remove it if it is not checked
-	            switch (position) {
-	                case 0: pref2.setMusic(checked.valueAt(i));
-	                         break;
-	                case 1:  pref2.setAnimals(checked.valueAt(i));
-	                         break;
-	                case 2: pref2.setBreaks(checked.valueAt(i));
-	                		break;
-	                case 3: pref2.setTalking(checked.valueAt(i));
-	                		break;
-	                case 4: pref2.setSmoking(checked.valueAt(i));
-	                		break;
-	            }
-        }
-        Request req3 = new PreferenceRequest(RequestType.UPDATE_PREFERENCE,getApp().getUser(),pref2);
-        try {
-			PreferenceResponse res2 = (PreferenceResponse) RequestTask.sendRequest(req3,getApp());
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(isPrefInitialized){
+	        for (int i = 0; i < checked.size(); i++) {
+	            // Item position in adapter
+	            int position = checked.keyAt(i);
+	            // Add preference if it is checked i.e.) == TRUE and remove it if it is not checked
+		            switch (position) {
+		                case 0: pref2.setMusic(checked.valueAt(i));
+		                         break;
+		                case 1:  pref2.setAnimals(checked.valueAt(i));
+		                         break;
+		                case 2: pref2.setBreaks(checked.valueAt(i));
+		                		break;
+		                case 3: pref2.setTalking(checked.valueAt(i));
+		                		break;
+		                case 4: pref2.setSmoking(checked.valueAt(i));
+		                		break;
+		            }
+	        }
+	        Request req3 = new PreferenceRequest(RequestType.UPDATE_PREFERENCE,getApp().getUser(),pref2);
+	        try {
+				PreferenceResponse res2 = (PreferenceResponse) RequestTask.sendRequest(req3,getApp());
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		// TODO Auto-generated method stub
 		super.onStop();
+	}
+	@Override
+	public void onBackPressed(){
+		prefLoader.cancel(true);
+		super.onBackPressed();
 	}
 }
 /**

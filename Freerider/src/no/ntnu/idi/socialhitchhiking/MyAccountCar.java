@@ -71,6 +71,7 @@ import android.widget.Toast;
 public class MyAccountCar extends SocialHitchhikingActivity {
 
     private static final int CAMERA_REQUEST = 1337; 
+    private static final int ALBUM_REQUEST = 1;
     private ImageView imageView;
     private User user;
     private EditText carName;
@@ -85,6 +86,8 @@ public class MyAccountCar extends SocialHitchhikingActivity {
     private byte[] byteArray;
     private byte[] byteArrayx;
     private PreferenceResponse prefRes;
+    private AsyncTask<Void, User, CarResponse> carLoader;
+    private boolean isCarInitialized;
     
     boolean seatsChanged;
     boolean carChanged;
@@ -92,6 +95,7 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	    @Override
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
+	        isCarInitialized = false;
 	        setContentView(R.layout.my_account_car);
 	        this.imageView = (ImageView)this.findViewById(R.id.cameraView);
 	        carName = (EditText) this.findViewById(R.id.carName);
@@ -107,131 +111,149 @@ public class MyAccountCar extends SocialHitchhikingActivity {
         	Car car = new Car(user.getCarId(), "", 0.0);
         	setContentView(R.layout.main_loading);
         	// Loading the car and seats info
-	        new CarLoader(this, car).execute();
+	        carLoader = new CarLoader(this, car).execute();
 	    }
 
 	    @Override
 		public void onStop() {
-	    	// Checks to see what is changed
-	    	if(!seatsAvailable.toString().equals(seatsText.getText().toString())){
-	    		seatsChanged = true;
-	    	}
-	    	if(!carName.getText().toString().equals(carNameString) ||
-	    			bar.getRating() != comfort){
-	    		carChanged = true;
-	    	}
-	    	
-	    	// If the user has entered a new number of available seats
-	    	if(seatsText.getText().length() > 0){
-		    	try{
-	    			seatsAvailable = Integer.parseInt(seatsText.getText().toString());
-		    	}catch(NumberFormatException e){
-		    		Toast.makeText(this, "Please enter an integer value in Available seats", Toast.LENGTH_SHORT).show();
-		    		return;
+	    	if(isCarInitialized){
+		    	// Checks to see what is changed
+		    	if(!seatsAvailable.toString().equals(seatsText.getText().toString())){
+		    		seatsChanged = true;
 		    	}
-	    	}else{
-	    		seatsAvailable = 0;
-	    	}
-    		// Getting car ID
-    		id = user.getCarId();
-			// Setting new car name
-    		if(carName.getText().toString().length() > 0){
-    			carNameString = carName.getText().toString();
-    		}else{
-    			carNameString = "";
-    		}
-    		// Setting new comfort
-    		comfort = bar.getRating();
-    		
-    		/*Fetch car picture and convert it to byte array*/
-    		//btm = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-    		
-    		// Adds the picture of the car if a picture exists
-    		if(btm != null && carChanged){
-    			try {
-    				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    				btm.compress(Bitmap.CompressFormat.PNG, 100, stream);
-    				byteArray = stream.toByteArray();
-					stream.close();
-					stream = null;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-    		}
-    		
-    		// Update seats in the database if it is changed
-    		if(seatsChanged){
-	    		TripPreferences preferences = prefRes.getPreferences();
-	    		preferences.setSeatsAvailable(seatsAvailable);
-	    		Request prefReq = new PreferenceRequest(RequestType.UPDATE_PREFERENCE, user, preferences);
-	    		try {
-					RequestTask.sendRequest(prefReq, getApp());
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-    		}
-    		// If the user has a car, update the info if it has changed
-    		if(user.getCarId()!= 0 && carChanged){
-	    		// Updating the car info to the database
-	    		car = new Car(id,carNameString,comfort, byteArray);
-	    		Request req = new CarRequest(RequestType.UPDATE_CAR, getApp().getUser(), car);
-	    		try {
-					RequestTask.sendRequest(req, getApp());
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-    		}
-	    	// If the user doesn't have a car, create one and add it to the database
-	    	else if(user.getCarId() == 0 && carChanged){
-	    		// Adding the new car to the database
-	    		car = new Car(id,carNameString,comfort, byteArray);
-	    		Request req = new CarRequest(RequestType.CREATE_CAR, getApp().getUser(), car);
-	    		try {
-					RequestTask.sendRequest(req, getApp());
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		    	if(!carName.getText().toString().equals(carNameString) ||
+		    			bar.getRating() != comfort){
+		    		carChanged = true;
+		    	}
+		    	
+		    	// If the user has entered a new number of available seats
+		    	if(seatsText.getText().length() > 0){
+			    	try{
+		    			seatsAvailable = Integer.parseInt(seatsText.getText().toString());
+			    	}catch(NumberFormatException e){
+			    		Toast.makeText(this, "Please enter an integer value in Available seats", Toast.LENGTH_SHORT).show();
+			    		return;
+			    	}
+		    	}else{
+		    		seatsAvailable = 0;
+		    	}
+	    		// Getting car ID
+	    		id = user.getCarId();
+				// Setting new car name
+	    		if(carName.getText().toString().length() > 0){
+	    			carNameString = carName.getText().toString();
+	    		}else{
+	    			carNameString = "";
+	    		}
+	    		// Setting new comfort
+	    		comfort = bar.getRating();
+	    		
+	    		// Adds the picture of the car if a picture exists
+	    		if(btm != null && carChanged){
+	    			try {
+	    				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+	    				btm.compress(Bitmap.CompressFormat.PNG, 100, stream);
+	    				byteArray = stream.toByteArray();
+						stream.close();
+						stream = null;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	    		}
+	    		
+	    		// Update seats in the database if it is changed
+	    		if(seatsChanged){
+		    		TripPreferences preferences = prefRes.getPreferences();
+		    		preferences.setSeatsAvailable(seatsAvailable);
+		    		Request prefReq = new PreferenceRequest(RequestType.UPDATE_PREFERENCE, user, preferences);
+		    		try {
+						RequestTask.sendRequest(prefReq, getApp());
+					} catch (ClientProtocolException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	    		}
+	    		// If the user has a car, update the info if it has changed
+	    		if(user.getCarId()!= 0 && carChanged){
+		    		// Updating the car info to the database
+		    		car = new Car(id,carNameString,comfort, byteArray);
+		    		Request req = new CarRequest(RequestType.UPDATE_CAR, getApp().getUser(), car);
+		    		try {
+						RequestTask.sendRequest(req, getApp());
+					} catch (ClientProtocolException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	    		}
+		    	// If the user doesn't have a car, create one and add it to the database
+		    	else if(user.getCarId() == 0 && carChanged){
+		    		// Adding the new car to the database
+		    		car = new Car(id,carNameString,comfort, byteArray);
+		    		Request req = new CarRequest(RequestType.CREATE_CAR, getApp().getUser(), car);
+		    		try {
+						RequestTask.sendRequest(req, getApp());
+					} catch (ClientProtocolException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		    	}
 	    	}
 	    	super.onStop();
 	    }
 	    
+	    @Override
+	    public void onBackPressed(){
+	    	carLoader.cancel(true);
+	    	super.onBackPressed();
+	    }
+	    
+	    /**
+	     * Converts dp's to pixels in relation to the users' screen
+	     * @param dp
+	     * @param context
+	     * @return
+	     */
 	    private int convertDpToPixel(float dp,Context context){
 	        Resources resources = context.getResources();
 	        DisplayMetrics metrics = resources.getDisplayMetrics();
 	        int px = (int) (dp * (metrics.densityDpi/160f));
 	        return px;
 	    }
+	    /**
+	     * Gets and resizes a {@link Bitmap} from a {@link Uri} using width and height.
+	     * @param uri
+	     * @param width
+	     * @param height
+	     * @return
+	     */
 	    private Bitmap getBitmap(Uri uri, int width, int height) {
 	        InputStream in = null;
 	        try {
@@ -276,30 +298,17 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 		protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
 			super.onActivityResult(requestCode, resultCode, data);
 			int px = convertDpToPixel(160, getApp());
-			if (requestCode == 1337 && resultCode == RESULT_OK) { 
+			if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) { 
 	        	btm = getBitmap(data.getData(), px, px);
 	            //btm = (Bitmap) data.getExtras().get("data"); 
 	            imageView.setImageBitmap(btm);
 	            imageView.invalidate();
 	            carChanged = true;
-	        }else if(requestCode == 1 && resultCode == RESULT_OK){
+	        }else if(requestCode == ALBUM_REQUEST && resultCode == RESULT_OK){
 	        	btm = getBitmap(data.getData(), px, px);
 	            imageView.setImageBitmap(btm);
 	            imageView.invalidate();
 	            carChanged = true;
-	        	/*Uri chosenImageUri = data.getData();
-	            Bitmap mBitmap = null;
-	            try {
-					mBitmap = Media.getBitmap(this.getContentResolver(), chosenImageUri);
-					imageView.setImageBitmap(mBitmap);
-		            imageView.invalidate();
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
 	        }
 	    }
 		/**
@@ -351,6 +360,8 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 			    		imageView.setImageBitmap(btm);
 			    	}
 		        }
+		        // Indicates that the car is initialized
+		        isCarInitialized = true;
 	        }
 	        //if user does not yet have a car registated
 	        else{
@@ -370,7 +381,7 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	            public void onClick(View v) {
 	            	carChanged = true;
 	                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
-	                startActivityForResult(cameraIntent, 1337); 
+	                startActivityForResult(cameraIntent, CAMERA_REQUEST); 
 	            }
 	        });
 	        // Setting the button for getting a car picture from the phone
@@ -382,7 +393,7 @@ public class MyAccountCar extends SocialHitchhikingActivity {
  	            	carChanged = true;
  	            	Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
  	            	photoPickerIntent.setType("image/*");
- 	            	startActivityForResult(photoPickerIntent, 1);
+ 	            	startActivityForResult(photoPickerIntent, ALBUM_REQUEST);
  	            }
  	        });
 		} 
