@@ -19,6 +19,8 @@
  ******************************************************************************/
 package no.ntnu.idi.socialhitchhiking.utility;
 
+import java.util.List;
+
 import no.ntnu.idi.socialhitchhiking.findDriver.FindDriver;
 import no.ntnu.idi.socialhitchhiking.map.MapActivityCreateOrEditRoute;
 import android.app.Activity;
@@ -44,7 +46,34 @@ public class GpsHandler<T> {
 		activity = parent;
 	}
 	public void findLocation() {
-		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
+		List<String> providers = locManager.getProviders(true);
+		Location l = null;
+        
+        for (int i=providers.size()-1; i>=0; i--) {
+                l = locManager.getLastKnownLocation(providers.get(i));
+                if (l != null) break;
+        }
+        if(l != null){
+        	if(activity instanceof FindDriver) {
+				((FindDriver)activity).gotLocation(l);
+			}
+			else
+			{
+				((MapActivityCreateOrEditRoute)activity).gotLocation(l);
+			}
+			
+			try {
+				this.finalize();
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        else
+        {
+        	locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
+        }
+		
 	}
 	public void abortGPS() {
 		locManager.removeUpdates(locListener);

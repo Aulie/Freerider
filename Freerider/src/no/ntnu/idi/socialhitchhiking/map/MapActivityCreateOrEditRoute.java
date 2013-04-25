@@ -1099,7 +1099,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	        Toast.makeText(this, "GPS is not activated", Toast.LENGTH_LONG).show();
 	        return;
 	    }
-		gps.findLocation();
+		
 		loadingDialog = ProgressDialog.show(this, "Locating", "Finding your location");
 		loadingDialog.setCancelable(true);
 		loadingDialog.setOnCancelListener(new OnCancelListener()
@@ -1112,7 +1112,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 				loadingDialog.dismiss();
 			}
 		});
-		
+		gps.findLocation();
 		new Thread() {
 			public void run() {
 				try {
