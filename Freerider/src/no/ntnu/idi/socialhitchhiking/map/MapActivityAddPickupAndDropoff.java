@@ -381,7 +381,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 								AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
 								ad.setMessage("You have already sent a request on this ride");
 								ad.setTitle("Unable to send request");
-								ad.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+								ad.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,int id) {
 										
 									}
@@ -393,7 +393,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 								AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
 								ad.setMessage("There are no available seats on this ride");
 								ad.setTitle("Unable to send request");
-								ad.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+								ad.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,int id) {
 										
 									}
@@ -405,7 +405,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 								AlertDialog.Builder ad = new AlertDialog.Builder(MapActivityAddPickupAndDropoff.this);  
 								ad.setMessage("You have already hitched this ride");
 								ad.setTitle("Unable to send request");
-								ad.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+								ad.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,int id) {
 										
 									}
