@@ -42,9 +42,16 @@ package no.ntnu.idi.socialhitchhiking.utility;
 
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
+import no.ntnu.idi.socialhitchhiking.map.MapActivityAddPickupAndDropoff;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 
 public class SettingsActivity extends PreferenceActivity{
 	SocialHitchhikingApplication app;
@@ -55,6 +62,45 @@ public class SettingsActivity extends PreferenceActivity{
 		app = (SocialHitchhikingApplication) getApplication();
 		addPreferencesFromResource(R.xml.settings_activity);
 
+	}
+
+	@Override
+	@Deprecated
+	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
+			Preference preference) {
+		// TODO Auto-generated method stub
+		if(preference.getKey().equals("freerider_credits")){
+			PackageInfo pInfo;
+			String version = "2.0";
+			try {
+				pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+				version = pInfo.versionName;
+			} catch (NameNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			AlertDialog.Builder ad = new AlertDialog.Builder(SettingsActivity.this);  
+			ad.setMessage("Freerider v" + version + "\n\nBy Freerider Team 2:\n\tMade Ziius\n\tThomas Gjerde\n\tKristoffer Aulie\n\tMagnus Lefdal\n\tJosè Luis Trigo\n\tJon-Robert Skårberg\n\tFredrik Tangen");
+			ad.setTitle("Credits");
+			ad.setPositiveButton("Close",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					
+				}
+			  });
+			ad.show();
+		} else if(preference.getKey().equals("app_info")){
+			AlertDialog.Builder ad = new AlertDialog.Builder(SettingsActivity.this);  
+			ad.setMessage("Routes that have not been used in 14 days are automatically deleted \nRides are automatically deleted 24 hours after completion");
+			ad.setTitle("Privacy information");
+			ad.setPositiveButton("Close",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					
+				}
+			  });
+			ad.show();
+		}
+		return super.onPreferenceTreeClick(preferenceScreen, preference);
 	}
 
 	@Override

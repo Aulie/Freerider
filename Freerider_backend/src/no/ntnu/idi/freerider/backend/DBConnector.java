@@ -751,7 +751,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 
 	public List<Notification> getNotifications(User user) throws SQLException {
 		List<Notification> ret = new ArrayList<Notification>();
-		PreparedStatement stmt = conn.prepareStatement("SELECT time_sent, concerning_journey, type,	sender,	startpoint::geometry, endpoint::geometry, comment, recipient, name || ' ' || surname AS fullname, is_read FROM notifications INNER JOIN users ON sender=id WHERE recipient=? ORDER BY time_sent");
+		PreparedStatement stmt = conn.prepareStatement("SELECT time_sent, concerning_journey, type,	sender,	startpoint::geometry, endpoint::geometry, comment, recipient, name || ' ' || surname AS fullname, is_read FROM notifications INNER JOIN users ON sender=id WHERE recipient=? ORDER BY time_sent DESC");
 		stmt.setString(1, user.getID());
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()){

@@ -28,6 +28,16 @@
         android:summary="Set the default privacy settings for sharing the rides you create."
         android:title="Set Facebook privacy" android:entryValues="@array/privacy_values" android:positiveButtonText="OK"/>
 	</PreferenceCategory>
+	<PreferenceCategory 
+	    android:key="about_category"
+	    android:title="About">
+	    <Preference 
+	        android:key="freerider_credits"
+	        android:title="Credits"/>
+	    <Preference 
+	        android:key="app_info"
+	        android:title="Privacy"/>	    
+	</PreferenceCategory>
 	
     
 

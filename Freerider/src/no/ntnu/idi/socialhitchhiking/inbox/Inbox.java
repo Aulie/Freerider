@@ -260,6 +260,9 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		if(getApp().getUser() != null){
 			if(!history){
 				if(request){
+					if(requestAdapter.isEmpty()){
+						Toast.makeText(this, "You have no new requests", Toast.LENGTH_SHORT).show();
+					}
 					notifications.setAdapter(requestAdapter);
 				}
 				else
