@@ -53,6 +53,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -297,25 +298,30 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	    @Override
 		protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
 			super.onActivityResult(requestCode, resultCode, data);
+			
 			int px = convertDpToPixel(160, getApp());
 			if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) { 
-				if(data.getAction() != null){
-		        	btm = getBitmap(data.getData(), px, px);
-		            if(btm != null){
-			            imageView.setImageBitmap(btm);
-			            imageView.invalidate();
-			            carChanged = true;
-		            }
+				if(data.getData() == null){
+					Bundle extras = data.getExtras();
+				    btm = (Bitmap) extras.get("data");
 				}
+				else if(data.getAction() != null){
+		        	btm = getBitmap(data.getData(), px, px);
+		            
+				}
+				if(btm != null){
+		            imageView.setImageBitmap(btm);
+		            imageView.invalidate();
+		            carChanged = true;
+	            }
 	        }else if(requestCode == ALBUM_REQUEST && resultCode == RESULT_OK){
-	        	if(data.getAction() != null){
 	        		btm = getBitmap(data.getData(), px, px);
-	        	}
 	        	if(btm != null){
 		            imageView.setImageBitmap(btm);
 		            imageView.invalidate();
 		            carChanged = true;
 	        	}
+	        	
 	        }
 	    }
 		/**
@@ -388,6 +394,8 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	            public void onClick(View v) {
 	            	carChanged = true;
 	                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
+	                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,"tempName");
+	                cameraIntent.putExtra("return-data", true);
 	                startActivityForResult(cameraIntent, CAMERA_REQUEST); 
 	            }
 	        });
