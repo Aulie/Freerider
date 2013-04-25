@@ -145,7 +145,6 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 						Intent intent = new Intent(ScheduleDrive.this, no.ntnu.idi.socialhitchhiking.map.MapActivityCreateOrEditRoute.class);
 						MapRoute mr = new MapRoute(selectedRoute.getOwner(), selectedRoute.getName(), selectedRoute.getSerial(), selectedRoute.getMapPoints());
 						getApp().setSelectedMapRoute(mr);
-						intent.putExtra("editMode", true);
 						intent.putExtra("routePosition", position);
 						startActivity(intent);
 					}
