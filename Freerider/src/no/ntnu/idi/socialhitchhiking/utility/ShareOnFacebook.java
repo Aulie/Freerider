@@ -57,10 +57,15 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
+/**
+ * @author Jose Luis Trigo
+ * @author Kristoffer Aulie
+ *
+ */
 public class ShareOnFacebook extends SocialHitchhikingActivity{
 
 	private static final String APP_ID = "321654017885450";
-	private static final String[] PERMISSIONS = new String[] {"read_stream","publish_stream"};
+//	private static final String[] PERMISSIONS = new String[] {"read_stream","publish_stream"};
 //,"publish_actions"
 	private static final String TOKEN = "access_token";
         private static final String EXPIRES = "access_expires";
@@ -80,13 +85,18 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
         	return editor.commit();
     	}
 
-    	@SuppressWarnings("deprecation")
-		public boolean restoreCredentials(Facebook facebook) {
-        	SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApp());
-        	facebook.setAccessToken(sharedPreferences.getString(TOKEN, null));
-        	facebook.setAccessExpires(sharedPreferences.getLong(EXPIRES, 0));
-        	return facebook.isSessionValid();
-    	}
+	/**
+	 * Sets facebook token from Shared Preferences.
+	 * @param {@link Facebook}
+	 * @return {@link true} if facebook session is valid
+	 */
+	@SuppressWarnings("deprecation")
+	public boolean restoreCredentials(Facebook facebook) {
+    	SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApp());
+    	facebook.setAccessToken(sharedPreferences.getString(TOKEN, null));
+    	facebook.setAccessExpires(sharedPreferences.getLong(EXPIRES, 0));
+    	return facebook.isSessionValid();
+	}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -133,13 +143,20 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 		messageToPost = facebookMessage;
 	}
 
+	/**
+	 * Action for do not share button. When pressed application goes back to main and deletes activity stack.
+	 * @param button
+	 */
 	public void doNotShare(View button){
 		Intent intent = new Intent(ShareOnFacebook.this, Main.class);
 		startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		showToast("Trip created");
 		finish();
 	}
-	@SuppressWarnings("deprecation")
+	/**
+	 * Post to facebook wall and goes back to main screen deleting activity stack.
+	 * @param button
+	 */
 	public void share(View button){
 //		if (! facebook.isSessionValid()) {
 //			loginAndPostToWall();
@@ -152,11 +169,16 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
 //		}
 	}
 
-	@SuppressWarnings("deprecation")
-	public void loginAndPostToWall(){
-		 facebook.authorize(this, PERMISSIONS, new LoginDialogListener());
-	}
+//	@SuppressWarnings("deprecation")
+//	public void loginAndPostToWall(){
+//		 facebook.authorize(this, PERMISSIONS, new LoginDialogListener());
+//	}
 
+	/**
+	 * Post message with ride information and a link to google maps with info about the route.
+	 * 
+	 * @param message
+	 */
 	@SuppressWarnings("deprecation")
 	public void postToWall(String message){
 	    
@@ -239,44 +261,58 @@ public class ShareOnFacebook extends SocialHitchhikingActivity{
                 
 	}
 
-	class LoginDialogListener implements DialogListener {
-	    public void onComplete(Bundle values) {
-	    	saveCredentials(facebook);
-	    	if (messageToPost != null){
-			postToWall(messageToPost);
-		}
-	    }
-	    public void onFacebookError(FacebookError error) {
-	    	showToast("Authentication with Facebook failed!");
-	        finish();
-	    }
-	    public void onError(DialogError error) {
-	    	showToast("Authentication with Facebook failed!");
-	        finish();
-	    }
-	    public void onCancel() {
-	    	showToast("Authentication with Facebook cancelled!");
-	        finish();
-	    }
-	}
+//	class LoginDialogListener implements DialogListener {
+//	    public void onComplete(Bundle values) {
+//	    	saveCredentials(facebook);
+//	    	if (messageToPost != null){
+//			postToWall(messageToPost);
+//		}
+//	    }
+//	    public void onFacebookError(FacebookError error) {
+//	    	showToast("Authentication with Facebook failed!");
+//	        finish();
+//	    }
+//	    public void onError(DialogError error) {
+//	    	showToast("Authentication with Facebook failed!");
+//	        finish();
+//	    }
+//	    public void onCancel() {
+//	    	showToast("Authentication with Facebook cancelled!");
+//	        finish();
+//	    }
+//	}
 
+	/**
+	 * Converts a {@link String} parameter into a {@link Toast}
+	 * @param message
+	 */
 	private void showToast(String message){
 		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 	}
-	 public String formatDate(Calendar c){
-	    	String formatedDate = c.get(Calendar.DAY_OF_MONTH)
-					+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR);
-	    	return formatedDate;
-	    }
-	    
-	    public String formatTime(Calendar c){
-			//This formats Calendar.MINUTE so minutes below 10 show a 0 before
-	    	Integer min = c.get(Calendar.MINUTE);
-			String minutes=min.toString();
-			if(min<10)
-				minutes="0"+minutes;
-			
-			String formatedTime = c.get(Calendar.HOUR_OF_DAY)+":"+minutes;
-			return formatedTime;
-	    }
+
+	/**
+	 * Extracts day, month, and year from a {@link Calendar} type and converts it in a {@link String} with format d/m/y
+	 * @param c
+	 * @return {@link String} formatedDate
+	 */
+	public String formatDate(Calendar c) {
+		String formatedDate = c.get(Calendar.DAY_OF_MONTH) + "/"
+				+ (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
+		return formatedDate;
+	}
+	/**
+	 * Extracts hour and minutes from a {@link Calendar} type and converts it in a {@link String} with format h:m
+	 * @param c
+	 * @return {@link String} formatedDate
+	 */   
+    public String formatTime(Calendar c){
+		//This formats Calendar.MINUTE so minutes below 10 show a 0 before
+    	Integer min = c.get(Calendar.MINUTE);
+		String minutes=min.toString();
+		if(min<10)
+			minutes="0"+minutes;
+		
+		String formatedTime = c.get(Calendar.HOUR_OF_DAY)+":"+minutes;
+		return formatedTime;
+    }
 }

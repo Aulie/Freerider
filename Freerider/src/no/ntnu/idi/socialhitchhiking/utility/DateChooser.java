@@ -87,6 +87,9 @@ public class DateChooser {
 		d = new DateListener();
 		initDialogs();
 	}
+	/**
+	 * Initiates {@link DatePicker} and {@link TimePicker} dialogs with current date and time
+	 */
 	private void initDialogs(){
 		dd = new DatePickerDialog(act, d, dateAndTime.get(Calendar.YEAR), 
 				dateAndTime.get(Calendar.MONTH), dateAndTime.get(Calendar.DAY_OF_MONTH));	
@@ -109,36 +112,67 @@ public class DateChooser {
 			}
 		});
 	}
+	/**
+	 * Sets title for dialog window
+	 * @param dateMsg Title for {@link DatePicker} dialog
+	 * @param timeMsg Title for {@link TimePicker} dialog
+	 */
 	public void setTitle(String dateMsg,String timeMsg){
 		dd.setTitle(dateMsg);
 		td.setTitle(timeMsg);
 	}
+	/**
+	 * Sets title for set date dialog window
+	 * @param dateMsg Title for {@link DatePicker} dialog
+	 */
 	public void setTitleDate(String dateMsg){
 		dd.setTitle(dateMsg);
 	}
+	/**
+	 * Sets title for set time dialog window
+	 * @param timeMsg Title for {@link TimePicker} dialog
+	 */
 	public void setTitleTime(String timeMsg){
 		td.setTitle(timeMsg);
 	}
+	/**
+	 * Shows {@link DatePicker} dialog and then depending of the class that calls 
+	 * this function it will show {@link TimePicker} or end.
+	 */
 	public void show(){
 		showDatePicker();
 	}
-	
+	/**
+	 * Shows {@link DatePicker} dialog only
+	 */
 	public void showDatePicker(){
 		dd.show();
 	}
+	/**
+	 * Shows {@link TimePicker} dialog only
+	 */
 	public void showTimePicker(){
 		td.show();
 	}
+	/**
+	 * If the activity calling is FindDriver it 
+	 */
 	private void fireCancelEvent(){
 		if(act instanceof FindDriver){
 			PropertyChangeEvent e = new PropertyChangeEvent(this, DATE_CHANGED, null, null);
 			l.firePropertyChange(e);			
 		}
 	}
+	/**
+	 * Notifies that date has changed
+	 */
 	private void fireEvent(){
 		PropertyChangeEvent e = new PropertyChangeEvent(this, DATE_CHANGED, start, dateAndTime);
 		l.firePropertyChange(e);
 	}
+	/**
+	 * Notifies that time has changed
+	 */
 	private void fireEventTime(){
 		PropertyChangeEvent e = new PropertyChangeEvent(this, TIME_CHANGED, start, dateAndTime);
 		l.firePropertyChange(e);
@@ -163,6 +197,9 @@ public class DateChooser {
 //	}
 
 
+	/**
+	 * Notifies changes when Date or Time are changed in {@link DatePicker} and {@link TimePicker} dialogs
+	 */
 	private class DateListener implements DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener{
 
 		@Override
