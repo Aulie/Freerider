@@ -299,16 +299,23 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 			super.onActivityResult(requestCode, resultCode, data);
 			int px = convertDpToPixel(160, getApp());
 			if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) { 
-	        	btm = getBitmap(data.getData(), px, px);
-	            //btm = (Bitmap) data.getExtras().get("data"); 
-	            imageView.setImageBitmap(btm);
-	            imageView.invalidate();
-	            carChanged = true;
+				if(data.getAction() != null){
+		        	btm = getBitmap(data.getData(), px, px);
+		            if(btm != null){
+			            imageView.setImageBitmap(btm);
+			            imageView.invalidate();
+			            carChanged = true;
+		            }
+				}
 	        }else if(requestCode == ALBUM_REQUEST && resultCode == RESULT_OK){
-	        	btm = getBitmap(data.getData(), px, px);
-	            imageView.setImageBitmap(btm);
-	            imageView.invalidate();
-	            carChanged = true;
+	        	if(data.getAction() != null){
+	        		btm = getBitmap(data.getData(), px, px);
+	        	}
+	        	if(btm != null){
+		            imageView.setImageBitmap(btm);
+		            imageView.invalidate();
+		            carChanged = true;
+	        	}
 	        }
 	    }
 		/**
