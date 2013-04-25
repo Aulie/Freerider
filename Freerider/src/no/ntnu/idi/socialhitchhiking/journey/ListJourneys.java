@@ -262,6 +262,9 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		nextMonth.add(Calendar.MONTH, 1);
 	}
 	private void initAdapter(SectionedListViewAdapter adp,List<Journey> list){
+		if(adapter != null){
+			adapter.reset();
+		}
 		List<Journey> temp = new ArrayList<Journey>(list);
 		Collections.copy(temp, list);
 		List<Journey> result = new ArrayList<Journey>();
@@ -517,6 +520,12 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		if(optionsDialog != null){
 			optionsDialog.dismiss();
 		}
+		if(journeys != null){
+			journeys.clear();
+			setContentView(R.layout.main_loading);
+			new Loader(this).execute();
+		}
+		
 		
 	}
 	
