@@ -693,6 +693,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 						TextView startTime = (TextView)row.findViewById(R.id.your_journey_item_starttime);
 						TextView start = (TextView)row.findViewById(R.id.your_journey_item_start);
 						TextView stop = (TextView)row.findViewById(R.id.your_journey_item_stop);
+						TextView numHitch = (TextView)row.findViewById(R.id.your_journey_item_num_hitched);
 						
 						int c=0;
 						switch (current.getVisibility()) {
@@ -725,6 +726,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 						startTime.setText(Html.fromHtml("<b>" + "Date: " +"</b>\t" + date));
 						start.setText(Html.fromHtml("<b>" + "From: "+"</b> " + current.getRoute().getStartAddress()));
 						stop.setText(Html.fromHtml("<b>" + "To: "+"</b>\t\t" + current.getRoute().getEndAddress()));
+						numHitch.setText(Integer.toString(current.getHitchhikers().size()));
 
 					}
 					catch(NullPointerException e)

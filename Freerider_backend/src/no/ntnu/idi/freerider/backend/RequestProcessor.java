@@ -452,7 +452,7 @@ public class RequestProcessor {
 			//if(!checkForRequest(notification)) {
 				//throw new SQLException("Attempt to accept nonexistent driver cancel.");
 			//}
-			db.deleteJourneyWithoutCheck(new Journey(serial));
+			db.deleteJourney(db.getJourney(serial));
 			break;
 		case MESSAGE:
 			break;

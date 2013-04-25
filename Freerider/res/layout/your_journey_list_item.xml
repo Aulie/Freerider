@@ -55,7 +55,21 @@
         <TextView
             android:id="@+id/your_journey_item_starttime"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" 
+            android:minWidth="240dp"/>
+        <TextView 
+            android:id="@+id/your_journey_item_num_hitched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="1dp"
+            android:text="0"/>
+        <ImageView
+            android:id="@+id/your_journey_item_hitched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:contentDescription="Hitchhikers"
+            android:src="@drawable/thumb_green"/>
     </LinearLayout>
 
 </LinearLayout>
