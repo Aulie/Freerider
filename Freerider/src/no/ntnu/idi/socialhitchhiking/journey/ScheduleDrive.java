@@ -175,6 +175,10 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 
 	}
 
+	/**
+	 * Sends a request to the database to delete the route r passed as a parameter.
+	 * @param r
+	 */
 	private void deleteRoute(Route r){
 		Response res=null;
 		RouteRequest req;
@@ -213,6 +217,9 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		}
 	}
 	
+	/**
+	 * Gets user previously created routes and shows them as a list so user can reuse an old ride
+	 */
 	private void initRoutes() {
 		List<Route> routes = null;
 			try {
@@ -236,6 +243,11 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 
 
 
+	/**
+	 * Queries the database to get previously used routes of the Driver
+	 * @return {@link List}<{@link Route}> with all previously created routes of a Driver.
+	 * @throws ClientProtocolException
+	 */
 	private List<Route> getRoutes()throws ClientProtocolException{
 		Request req = new UserRequest(RequestType.GET_ROUTES, getApp().getUser());
 		Response res = null;
@@ -261,6 +273,9 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 	}
 	
 
+	/**
+	 * Creates a Journey with previously selected route and sends a query to the database to add the {@link Journey}
+	 */
 	private void sendJourneyRequest(){
 		Journey jour = new Journey(-1);
 		jour.setRoute(selectedRoute);
@@ -323,6 +338,10 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		super.onResume();
 		//if(routeAdap != null)routeAdap.notifyDataSetChanged();
 	}
+	/**
+	 * Extension of {@link ArrayAdapter} to show a route.
+	 *
+	 */
 	private class RouteAdapter extends ArrayAdapter<Route>{
 		public RouteAdapter(Context context, int textViewResourceId,
 				List<Route> objects) {

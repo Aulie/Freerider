@@ -21,6 +21,10 @@ package no.ntnu.idi.socialhitchhiking.journey;
 
 /**
  * @author Jose Luis Trigo
+ * Class has 3 atributes:  
+ * icon: to be shown on the left of each option 
+ * title: name of the option 
+ * subtitle: actual value of the option
  */
 
 public class TripOption {
@@ -32,6 +36,11 @@ public class TripOption {
         super();
     }
     
+    /**
+     * @param icon to be shown on the left of each option ({@link int})
+     * @param title name of the option ({@link String})
+     * @param subtitle actual value of the option ({@link String})
+     */
     public TripOption(int icon, String title, String subtitle) {
         super();
         this.icon = icon;

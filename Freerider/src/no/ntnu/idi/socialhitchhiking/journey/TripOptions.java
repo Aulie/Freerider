@@ -65,6 +65,8 @@ import android.widget.Toast;
 
 /**
  * @author Jose Luis Trigo
+ * This class shows a list of preferences for the driver when creating a ride 
+ * such as date, time, seats available, FB visibility of the ride and other preferences.
  */
 
 public class TripOptions extends SocialHitchhikingActivity {
@@ -213,17 +215,29 @@ public class TripOptions extends SocialHitchhikingActivity {
         
         
     }
+    /**
+     * Calls {@link DateChooser} to change date with a {@link DatePicker} when dialog is ended PropertyChangeListener
+     * is called and TripOptions list is refreshed
+     */
     void setDate(){
     	dc = new DateChooser(TripOptions.this, propLis);
 		dc.setTitleDate("Set Date of Trip");
 		dc.showDatePicker();
     }
-    
+    /**
+     * Calls {@link DateChooser} to change date with a {@link TimePicker} when dialog is ended PropertyChangeListener
+     * is called and TripOptions list is refreshed
+     */
     void setTime(){
     	dc = new DateChooser(TripOptions.this, propLis);
 		dc.setTitleTime("Set Time of Trip");
 		dc.showTimePicker();
     }
+    /**
+     * Shows a custom {@link AlertDialog} to select the number of seats available for the trip.
+     * 1 is the minimum number of seats available and they can be incremented and decremented by two + and - buttons
+     * When ok button is pressed, list is refreshed
+     */
     void setSeats(){
 
 //    	seatValue = 1;
@@ -277,6 +291,10 @@ public class TripOptions extends SocialHitchhikingActivity {
 	    builder.show();
     }
     
+    /**
+     * Shows a SetSingleChoiceItems {@link AlertDialog} to select the level of privacy for the ride.
+     * When selected it shows Driver'd default preference for FB privacy first.
+     */
     void setPrivacy(){
 
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -319,6 +337,10 @@ public class TripOptions extends SocialHitchhikingActivity {
     	alert.show();
     }
     
+    /**
+     * Shows a SetMultiChoiceItems {@link AlertDialog} with Driver's extra preferences for the ride.
+     * When selected, Driver's default extra preferences are selected.
+     */
     void setExtras(){
     	
     	final BitSet sExtras = tripPreferences.getExtras();
@@ -355,6 +377,11 @@ public class TripOptions extends SocialHitchhikingActivity {
     	alert.show();
     }
 
+    /**
+     * When Next button is clicked, a journey is created with selected preference and previously selected route.
+     * ShareOnFacebook activity is called finally to give the driver the option of sharing the ride on FB.
+     * @param v
+     */
     public void onNextClick(View v){
     	journey = new Journey(-1);
 		journey.setRoute(selectedRoute);
@@ -370,6 +397,9 @@ public class TripOptions extends SocialHitchhikingActivity {
 
 	}
     
+    /**
+     * Sends a request to the Backend to create a new ride in the database.
+     */
     private void sendJourneyRequest(){
     	
 		JourneyRequest req = new JourneyRequest(RequestType.CREATE_JOURNEY, getApp().getUser(), journey);
@@ -418,13 +448,21 @@ public class TripOptions extends SocialHitchhikingActivity {
 			e.printStackTrace();
 		}*/
 	}
-    
+    /**
+	 * Extracts day, month, and year from a {@link Calendar} type and converts it in a {@link String} with format d/m/y
+	 * @param c
+	 * @return {@link String} formatedDate
+	 */
     public String formatDate(Calendar c){
     	String formatedDate = c.get(Calendar.DAY_OF_MONTH)
 				+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR);
     	return formatedDate;
     }
-    
+    /**
+	 * Extracts hour and minutes from a {@link Calendar} type and converts it in a {@link String} with format h:m
+	 * @param c
+	 * @return {@link String} formatedDate
+	 */
     public String formatTime(Calendar c){
 		//This formats Calendar.MINUTE so minutes below 10 show a 0 before
     	Integer min = c.get(Calendar.MINUTE);
