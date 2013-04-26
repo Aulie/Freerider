@@ -353,7 +353,7 @@ public class MapActivityAddPickupAndDropoff extends MapActivityAbstract{
 					res = RequestTask.sendRequest(req,getApp());
 					if(res instanceof UserResponse){
 						if(res.getStatus() == ResponseStatus.OK){
-							makeToast("Notification sent");
+							makeToast("Ride request sent to driver");
 							finish();
 						}
 						if(res.getStatus() == ResponseStatus.FAILED){
