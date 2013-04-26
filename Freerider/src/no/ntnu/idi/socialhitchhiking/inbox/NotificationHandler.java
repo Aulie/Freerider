@@ -42,21 +42,14 @@ package no.ntnu.idi.socialhitchhiking.inbox;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Journey;
-import no.ntnu.idi.freerider.model.Location;
-import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.NotificationType;
 import no.ntnu.idi.freerider.model.Route;
-import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
-import no.ntnu.idi.freerider.model.Visibility;
-import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.JourneyResponse;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
 import no.ntnu.idi.freerider.protocol.Request;
@@ -68,31 +61,22 @@ import no.ntnu.idi.freerider.protocol.UserRequest;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
-import no.ntnu.idi.socialhitchhiking.journey.TripOptions;
 import no.ntnu.idi.socialhitchhiking.map.MapActivityAbstract;
-import no.ntnu.idi.socialhitchhiking.map.MapActivityJourney;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
-import no.ntnu.idi.socialhitchhiking.utility.ShareOnFacebook;
-import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
+
 
 import org.apache.http.client.ClientProtocolException;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 //import android.view.View.OnClickListener;
@@ -365,30 +349,23 @@ public class NotificationHandler{
 		try{
 			SingleJourneyRequest r = new SingleJourneyRequest(RequestType.GET_JOURNEY, app.getUser(), not.getJourneySerial());
 			JourneyResponse response = (JourneyResponse)RequestTask.sendRequest(r, app);
-			
-			Log.e("JourneyResponse", response.toString());
 			if(response.getStatus() == ResponseStatus.OK){
 				if(response.getJourneys().size() > 0){
 					journey = response.getJourneys().get(0);
 				}
 			}
 			else if(response.getStatus() == ResponseStatus.FAILED){
-				Log.e("FAILED", "ResponseStatus == FAILED");
 			}
 		}catch (MalformedURLException e) {
 			e.printStackTrace();
-			Log.e("1", e.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
-			Log.e("2", e.toString());
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.e("3", e.toString());
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.e("4", e.toString());
 		}
 		Route route = new Route(journey.getRoute().getOwner(), journey.getRoute().getName(), journey.getRoute().getRouteData(), journey.getRoute().getSerial());
 		route.setMapPoints(journey.getRoute().getMapPoints());
@@ -409,16 +386,11 @@ public class NotificationHandler{
 		try{
 			SingleJourneyRequest r = new SingleJourneyRequest(RequestType.GET_JOURNEY, app.getUser(), not.getJourneySerial());
 			JourneyResponse response = (JourneyResponse)RequestTask.sendRequest(r, app);
-			
-			Log.e("JourneyResponse", response.toString());
 			if(response.getStatus() == ResponseStatus.OK){
 				if(response.getJourneys().size() > 0){
 					journey = response.getJourneys().get(0);
 					
 					Intent intent = new Intent(in, no.ntnu.idi.socialhitchhiking.map.MapActivityJourney.class);
-					Log.e("Owner", journey.getRoute().getOwner().getFullName());
-					Log.e("JourneyName", journey.getRoute().getName());
-					Log.e("Serial", journey.getRoute().getSerial() + "");
 					MapRoute mr = new MapRoute(journey.getRoute().getOwner(), journey.getRoute().getName(), journey.getRoute().getSerial(), journey.getRoute().getMapPoints());
 					intent.putExtra("Journey", true);
 					intent.putExtra("journeyAccepted", true);
@@ -434,23 +406,18 @@ public class NotificationHandler{
 				}
 			}
 			else if(response.getStatus() == ResponseStatus.FAILED){
-				Log.e("FAILED", "ResponseStatus == FAILED");
-				Toast.makeText(in, "Ride is finished", Toast.LENGTH_SHORT);
+				Toast.makeText(in, "Ride is finished", Toast.LENGTH_SHORT).show();
 			}
 		}catch (MalformedURLException e) {
 			e.printStackTrace();
-			Log.e("1", e.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
-			Log.e("2", e.toString());
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.e("3", e.toString());
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.e("4", e.toString());
 		}
 		
 		/*

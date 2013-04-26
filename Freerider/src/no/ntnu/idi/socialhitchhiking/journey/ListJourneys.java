@@ -64,7 +64,6 @@ import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.freerider.protocol.UserRequest;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
-import no.ntnu.idi.socialhitchhiking.map.MapActivityJourney;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 import no.ntnu.idi.socialhitchhiking.utility.JourneyAdapter;
 import no.ntnu.idi.socialhitchhiking.utility.SectionedListViewAdapter;
@@ -72,15 +71,11 @@ import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 
 import org.apache.http.client.ClientProtocolException;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -105,21 +100,13 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		if(journeys.size()==0){
 			Toast.makeText(this, "You have no active rides", Toast.LENGTH_LONG).show();
 		}
-		//I think there is a bug causing duplicates somewhere in this mangled mess
-		//I'll fix it later
-		//Thomas
 		List<Journey> tempJourneys = new ArrayList<Journey>();
 		for(int i = 0; i < journeys.size(); i++) {
-			Log.e("I","I");
-			Log.e("Size", " " + journeys.get(i).getHitchhikers().size());
 			if(journeys.get(i).getHitchhikers().size() > 0){
-				Log.e("Not null","not null");
 				boolean added = false;
 				for(int j = 0; j<journeys.get(i).getHitchhikers().size(); j++)
 				{
-					Log.e("J","j");
 					if(journeys.get(i).getHitchhikers().get(j).getID().equals(getApp().getUser().getID())){
-						Log.e("Hitchhiker", Integer.toString(journeys.get(i).getSerial()));
 						if(!owned) {
 							tempJourneys.add(journeys.get(i));
 						}
@@ -135,8 +122,6 @@ public class ListJourneys extends SocialHitchhikingActivity{
 			}
 			else
 			{
-				Log.e("owner","owner");
-				Log.e("Owner", Integer.toString(journeys.get(i).getSerial()));
 				if(owned) {
 					tempJourneys.add(journeys.get(i));
 				}
@@ -229,7 +214,6 @@ public class ListJourneys extends SocialHitchhikingActivity{
 			result.setText(caption);
 			result.setTextColor(Color.BLACK);
 			result.setBackgroundColor(Color.rgb(170, 170, 170));
-			Log.e("ting: ", caption);
 
 			return (result);
 		}
@@ -240,7 +224,6 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
 		owned = intent.getBooleanExtra("owned", true);
-		Log.e("Owned",Boolean.toString(owned));
 		setContentView(R.layout.main_loading);
 		new Loader(this).execute();
 		
@@ -561,7 +544,6 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.e("ExecutionMelvin", e.getMessage());
 		}
 		return false;
 	}
@@ -604,7 +586,6 @@ class Loader extends AsyncTask<Void, Integer, List<Journey>>{
 
 	@Override
 	protected void onPostExecute(List<Journey> result) {
-		Log.e("12345", "1");
 		activity.showMain(result);
 		
 	}

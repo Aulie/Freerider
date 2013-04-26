@@ -73,7 +73,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,14 +90,11 @@ import android.widget.Toast;
  * @author Pål
  * @author Christian Thurmann-Nielsen
  * @author Made Ziius
- *
+ * @author Thomas Gjerde
  */
 public class ScheduleDrive extends SocialHitchhikingActivity {
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
-		//super.onBackPressed();
-		Log.e("Back","ScheduleDrive");
 		finish();
 	}
 	private Calendar dateAndTime;
@@ -132,7 +128,6 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		listRoute.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parentView, View childView, final int position, long id) {
-				Log.e("Freq","" + ((Route)listRoute.getItemAtPosition(position)).getFrequency());
 				AlertDialog.Builder alertbox = new AlertDialog.Builder(ScheduleDrive.this);
 				alertbox.setTitle("Edit route");
 				alertbox.setMessage("Do you want to change the route?");
@@ -197,22 +192,17 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 					if(res.getErrorMessage().toLowerCase().contains("is still referenced")){
 						createAlertDialog(this, false, "Route", "deleted", "Route is used in an active journey!");
 					}else{
-						Log.e("Routeklikk",res.getErrorMessage());
 						createAlertDialog(this, false, "Route", "deleted", "Could not delete the route.");
 					}
 				}
 			}
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -262,13 +252,10 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//		System.out.println(res.toString()+"\nERROR? "+res.getErrorMessage());
 		return ((RouteResponse) res).getRoutes();
 	}
 	
@@ -287,22 +274,20 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		try {
 			res = RequestTask.sendRequest(req,getApp());
 			if(res.getStatus() != ResponseStatus.OK){
-				createAlertDialog(this, false,  "Journey","created","");
+				createAlertDialog(this, false,  "Drive","created","");
 			}
 			else{
 				if(getApp().getJourneys() != null)
 					getApp().getJourneys().add(jour);
-				createAlertDialog(this, true, "Journey","created","");
+				createAlertDialog(this, true, "Drive","created","");
 			}
 		} catch (ClientProtocolException e) {
-			createAlertDialog(this, false,  "Journey","created","");
+			createAlertDialog(this, false,  "Drive","created","");
 		} catch (IOException e) {
-			createAlertDialog(this, false,"Journey","created","");
+			createAlertDialog(this, false,"Drive","created","");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -310,33 +295,15 @@ public class ScheduleDrive extends SocialHitchhikingActivity {
 		
 		Intent intent = new Intent(ScheduleDrive.this, no.ntnu.idi.socialhitchhiking.journey.TripOptions.class);
 		startActivity(intent);
-//		AlertDialog.Builder b = new AlertDialog.Builder(this);
-//		b.setTitle("Create a trip");
-//		b.setMessage("Do you want to create a trip with this route?");
-//		b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface dialog, int which) {
-//				dc = new DateChooser(ScheduleDrive.this, propLis);
-//				dc.setTitle("Set Date of Journey", "Set Time of Journey");
-//				dc.show();
-////				Intent intent = new Intent(ScheduleDrive.this, no.ntnu.idi.socialhitchhiking.journey.TripOptions.class);
-////				startActivity(intent);
-//			}
-//		});
-//		b.setNegativeButton("Cancel", null);
-//		b.show();
 		
 	}
 	@Override
 	protected void onPause() {
 		super.onPause();
-		//Why on earth is this code here?
-		//if(routeAdap != null)routeAdap.notifyDataSetChanged();
 	}
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//if(routeAdap != null)routeAdap.notifyDataSetChanged();
 	}
 	/**
 	 * Extension of {@link ArrayAdapter} to show a route.

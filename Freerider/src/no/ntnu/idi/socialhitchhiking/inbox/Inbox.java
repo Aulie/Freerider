@@ -67,18 +67,15 @@ import no.ntnu.idi.freerider.protocol.UserRequest;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
-import no.ntnu.idi.socialhitchhiking.journey.ListJourneys;
 import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 import no.ntnu.idi.socialhitchhiking.utility.SectionedListViewAdapter;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -426,7 +423,6 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		Journey journey = null;
 		int serial = n.getJourneySerial();
 		if(getApp().getJourneys() == null)getApp().sendJourneysRequest();
-		Log.d("FACEBOOK", "");
 		for (Journey j : getApp().getJourneys()) {
 			if(j.getSerial() == serial)journey = j;
 		}
@@ -476,12 +472,6 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 	}
 
 	public void showMain(Response response) {
-		
-		
-		
-		
-		Log.e("hit?", "KAKE ER JÆÆÆÆVLIG GODT");
-		
 		setContentView(R.layout.inbox);
 		Intent intent = getIntent();
 		
@@ -508,7 +498,6 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		if(response instanceof NotificationResponse && response.getStatus() == ResponseStatus.OK){
 			notif = (NotificationResponse) response;
 			getApp().setNotifications(notif.getNotifications());
-			Log.e("hit?", "KAKE ER GODT");
 			notifHistory = getApp().getNotifications();
 			sorted = sortNotifications(notifHistory);
 			requestList = new ArrayList<Notification>();
@@ -523,7 +512,6 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 			initAdapter(active,sorted);
 			initAdapter(historyAdap,notifHistory);
 			notifications.setAdapter(active);
-			Log.e("hit?", "KAKE ER BÆLGODT");
 		}
 		
 		initCalendars();
