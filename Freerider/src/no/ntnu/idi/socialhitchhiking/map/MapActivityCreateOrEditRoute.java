@@ -17,34 +17,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/**
- * @contributor(s): Freerider Team (Group 4, IT2901 Fall 2012, NTNU)
- * @version: 		1.0
- *
- * Copyright (C) 2012 Freerider Team.
- *
- * Licensed under the Apache License, Version 2.0.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied.
- *
- * See the License for the specific language governing permissions
- * and limitations under the License.
- *
- */
+
 package no.ntnu.idi.socialhitchhiking.map;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -53,9 +32,6 @@ import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
 import no.ntnu.idi.freerider.model.Route;
-import no.ntnu.idi.freerider.model.TripPreferences;
-import no.ntnu.idi.freerider.model.Visibility;
-import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
@@ -64,9 +40,6 @@ import no.ntnu.idi.freerider.protocol.RouteRequest;
 import no.ntnu.idi.freerider.protocol.RouteResponse;
 import no.ntnu.idi.socialhitchhiking.R;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
-import no.ntnu.idi.socialhitchhiking.journey.ScheduleDrive;
-import no.ntnu.idi.socialhitchhiking.journey.TripOptions;
-import no.ntnu.idi.socialhitchhiking.utility.DateChooser;
 import no.ntnu.idi.socialhitchhiking.utility.GpsHandler;
 
 import org.apache.http.client.ClientProtocolException;
@@ -78,14 +51,11 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -108,7 +78,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -304,7 +273,6 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 					
 				}
 				else{
-					Log.e("IF5","vi kom hit");
 					button.setText("Show on map");
 					button.setEnabled(false);
 				}

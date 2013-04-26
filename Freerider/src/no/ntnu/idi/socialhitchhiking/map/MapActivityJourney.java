@@ -17,27 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/**
- * @contributor(s): Freerider Team (Group 4, IT2901 Fall 2012, NTNU)
- * @version: 		1.0
- *
- * Copyright (C) 2012 Freerider Team.
- *
- * Licensed under the Apache License, Version 2.0.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied.
- *
- * See the License for the specific language governing permissions
- * and limitations under the License.
- *
- */
+
 package no.ntnu.idi.socialhitchhiking.map;
 
 import java.io.IOException;
@@ -60,23 +40,18 @@ import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.socialhitchhiking.R;
-import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -139,14 +114,12 @@ public class MapActivityJourney extends MapActivityAbstract{
 		
 		if(getApp().getSelectedJourney().getHitchhikers().size() != 0){
 			
-			Log.e("Du har kommet hit", "1");
 			TextView firstHitchTxt = (TextView)findViewById(R.id.firstHikerTxt);
 				
 			firstHitchTxt.setText(getApp().getSelectedJourney().getHitchhikers().get(0).getFullName());
 			
 			
 			if(getApp().getSelectedJourney().getHitchhikers().size() > 1){
-				Log.e("Du har kommet hit", "2");
 				for(int c=1; c<getApp().getSelectedJourney().getHitchhikers().size(); c++){
 					HitchList hitch = new HitchList(getApp().getSelectedJourney().getHitchhikers().get(c));
 				}
@@ -154,7 +127,6 @@ public class MapActivityJourney extends MapActivityAbstract{
 			
 			
 		}else{
-			Log.e("Du har kommet hit", "3");
 			TextView firstHitchTxt = (TextView)findViewById(R.id.firstHikerTxt);
 			firstHitchTxt.setText("No hitchhikers");
 		}
@@ -241,7 +213,6 @@ public class MapActivityJourney extends MapActivityAbstract{
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.e("ExecutionMelvin", e.getMessage());
 		}
 		return false;
 	}
@@ -348,7 +319,6 @@ public class MapActivityJourney extends MapActivityAbstract{
 	}
 	
 	private void sendMessage(User mid, EditText input){
-		Log.e("SendMessage", "Message to: " + mid.getFullName() + ", content: " + input.getText().toString());
 		Notification not = new Notification(getApp().getUser().getID(), mid.getID(), getApp().getUser().getFullName(), input.getText().toString(), getApp().getSelectedJourney().getSerial(), NotificationType.MESSAGE, getApp().getSelectedMapRoute().getStartLocation(), getApp().getSelectedMapRoute().getEndLocation(), Calendar.getInstance());
     	NotificationRequest req = new NotificationRequest(getApp().getUser(), not);
     	

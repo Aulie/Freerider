@@ -85,7 +85,6 @@ public class JourneyReminder extends BroadcastReceiver{
 				}
 			}
 		}
-
 		if(count > 1)SendNotification.create(app, SendNotification.LIST_JOURNEY, "Reminder, Upcoming trips", "You have "+count+" scheduled trips in less than one hour from now", "Scheduled Journey");
 		else if(count > 0)SendNotification.create(app, SendNotification.LIST_JOURNEY, "Reminder, Upcoming trip", "You have a scheduled trip in less than one hour from now", "Scheduled Journey");
 

@@ -36,7 +36,8 @@ import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 /**
  * Class for parsing the XML-files from google maps
  * 
- * @author Thomas, Jon-Robert
+ * @author Thomas
+ * @author Jon-Robert
  *
  */
 public class XMLParser 

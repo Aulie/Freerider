@@ -18,7 +18,11 @@
  * limitations under the License.
  ******************************************************************************/
 package no.ntnu.idi.socialhitchhiking.map;
-
+/**
+ * Object that stores low level locations for use by xml parser
+ * @author Thomas Gjerde
+ *
+ */
 public class LowLocation {
 	String latitude;
 	String longitude;

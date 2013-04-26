@@ -17,30 +17,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/**
- * @contributor(s): Freerider Team (Group 4, IT2901 Fall 2012, NTNU)
- * @version: 		1.0
- * Copyright (C) 2012 Freerider Team.
- *
- * Licensed under the Apache License, Version 2.0.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied.
- *
- * See the License for the specific language governing permissions
- * and limitations under the License.
- *
- */
 package no.ntnu.idi.socialhitchhiking.map;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,8 +37,6 @@ import no.ntnu.idi.freerider.model.User;
 import no.ntnu.idi.freerider.protocol.CarRequest;
 import no.ntnu.idi.freerider.protocol.CarResponse;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
-import no.ntnu.idi.freerider.protocol.PreferenceRequest;
-import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.Response;
@@ -70,16 +47,12 @@ import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import org.apache.http.client.ClientProtocolException;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -89,7 +62,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;

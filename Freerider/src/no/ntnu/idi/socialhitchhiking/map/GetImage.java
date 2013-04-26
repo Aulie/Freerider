@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import no.ntnu.idi.socialhitchhiking.*;
 import no.ntnu.idi.socialhitchhiking.myAccount.MyAccountMeActivity;
 
 import android.app.Activity;
@@ -31,7 +30,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 /**
  * Class that fetches images from URLs. Used here to get profile pictures from Facebook.

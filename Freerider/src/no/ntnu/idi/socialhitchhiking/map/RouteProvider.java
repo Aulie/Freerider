@@ -17,27 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/**
- * @contributor(s): Freerider Team (Group 4, IT2901 Fall 2012, NTNU)
- * @version: 		1.0
- *
- * Copyright (C) 2012 Freerider Team.
- *
- * Licensed under the Apache License, Version 2.0.
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied.
- *
- * See the License for the specific language governing permissions
- * and limitations under the License.
- *
- */
+
 package no.ntnu.idi.socialhitchhiking.map;
 
 import java.io.IOException;
@@ -45,31 +25,20 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Stack;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
 import javax.xml.parsers.ParserConfigurationException;
-
-import no.ntnu.idi.freerider.model.Location;
 import no.ntnu.idi.freerider.model.MapLocation;
-import no.ntnu.idi.freerider.protocol.Response;
-import no.ntnu.idi.freerider.xml.RequestSerializer;
-import no.ntnu.idi.freerider.xml.ResponseParser;
-import no.ntnu.idi.socialhitchhiking.R;
-import no.ntnu.idi.socialhitchhiking.client.RequestTask;
-
 import org.apache.http.client.ClientProtocolException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.util.Log;
 
 /**
  * This class retrieves a {@link MapRoute} using the Google Maps API.
@@ -112,11 +81,9 @@ public class RouteProvider {
 			ret = future.get();
 		} catch (InterruptedException e) {
 			ret = null;
-			Log.e("Error","klikk");
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			ret = null;
-			Log.e("Error","klikk");
 		}
 	    executor.shutdown();
 	    return ret;
@@ -125,9 +92,7 @@ public class RouteProvider {
 
 	
 	private static MapRoute getRoute(InputStream is, boolean drawable) throws IOException, XmlPullParserException {
-		Log.e("Reached","getRoute Start");
 		XMLParser parser = new XMLParser(drawable);
-		Log.e("Reached","getRoute Middle");
 		return parser.parse(is);
 	}
 
