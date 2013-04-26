@@ -70,12 +70,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.webkit.CookieSyncManager;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
@@ -128,7 +127,6 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 					t.join();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
-					Log.e("Interrupted","Exc");
 				}
 				
 			}
@@ -448,7 +446,6 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 							System.out.println("Brukeren er NY!");
 							//new UserRequest(RequestType.CREATE_USER, login);
 							newUserBoolean = true;
-							Log.e("I connection", Boolean.toString(newUserBoolean));
 						}
 						msg.obj = login;
 						handler.sendMessage(msg);

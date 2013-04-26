@@ -83,7 +83,6 @@ public class JourneyReminder extends BroadcastReceiver{
 					app.setKeyState("journeyreminder"+j.getSerial(), true);
 					count++;
 				}
-
 			}
 		}
 

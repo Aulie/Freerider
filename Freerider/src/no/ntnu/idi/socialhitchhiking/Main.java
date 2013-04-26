@@ -53,6 +53,7 @@ import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.facebook.FBConnectionActivity;
 import no.ntnu.idi.socialhitchhiking.journey.ScheduleDrive;
 import no.ntnu.idi.socialhitchhiking.map.MapActivityCreateOrEditRoute;
+import no.ntnu.idi.socialhitchhiking.myAccount.MyAccount;
 import no.ntnu.idi.socialhitchhiking.utility.SettingsManager;
 
 import org.apache.http.client.ClientProtocolException;
@@ -263,7 +264,7 @@ public class Main extends FBConnectionActivity{
 		    .setMessage("You should provide some basic information about yourself. Do you want to do this now?")
 		    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 		        public void onClick(DialogInterface dialog, int which) { 
-		        	Intent intent = new Intent(Main.this, no.ntnu.idi.socialhitchhiking.MyAccount.class);
+		        	Intent intent = new Intent(Main.this, no.ntnu.idi.socialhitchhiking.myAccount.MyAccount.class);
 		        	intent.putExtra("fromDialog", true);
 		    		Main.this.startActivity(intent);
 		        }
@@ -428,7 +429,7 @@ public class Main extends FBConnectionActivity{
 	 * Starts the {@link MyAccount} activity when "My account" is clicked.
 	 */
 	private void startMyAccount(){
-		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.MyAccount.class);
+		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.myAccount.MyAccount.class);
 		startActivity(intent);
 	}
 

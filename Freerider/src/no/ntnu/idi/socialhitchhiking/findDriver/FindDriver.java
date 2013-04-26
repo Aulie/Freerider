@@ -47,10 +47,8 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -84,12 +82,9 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.Html;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -438,7 +433,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			Log.e("feilmelding: ", e.getCause().toString());
 			e.printStackTrace();
 		}   
 		return res.getJourneys();

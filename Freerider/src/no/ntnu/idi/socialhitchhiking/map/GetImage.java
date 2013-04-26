@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import no.ntnu.idi.socialhitchhiking.*;
+import no.ntnu.idi.socialhitchhiking.myAccount.MyAccountMeActivity;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
