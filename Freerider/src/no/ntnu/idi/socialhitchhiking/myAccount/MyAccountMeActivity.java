@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package no.ntnu.idi.socialhitchhiking;
+package no.ntnu.idi.socialhitchhiking.myAccount;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -35,6 +35,10 @@ import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.UserRequest;
 import no.ntnu.idi.freerider.protocol.UserResponse;
+import no.ntnu.idi.socialhitchhiking.R;
+import no.ntnu.idi.socialhitchhiking.R.drawable;
+import no.ntnu.idi.socialhitchhiking.R.id;
+import no.ntnu.idi.socialhitchhiking.R.layout;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.map.GetImage;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;

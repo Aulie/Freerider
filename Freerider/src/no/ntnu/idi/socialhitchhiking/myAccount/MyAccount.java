@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package no.ntnu.idi.socialhitchhiking;
+package no.ntnu.idi.socialhitchhiking.myAccount;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import no.ntnu.idi.freerider.model.Journey;
+import no.ntnu.idi.socialhitchhiking.R;
+import no.ntnu.idi.socialhitchhiking.R.layout;
 import no.ntnu.idi.socialhitchhiking.journey.ListJourneys;
 import android.app.Activity;
 import android.app.TabActivity;
