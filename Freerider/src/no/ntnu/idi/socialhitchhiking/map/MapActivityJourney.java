@@ -57,10 +57,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -382,9 +379,7 @@ public class MapActivityJourney extends MapActivityAbstract{
 			LinearLayout linear = (LinearLayout)findViewById(R.id.linLayout);
 			
 			frame.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-			//frame.setPadding(left, top, right, bottom)
 			frame.setPadding(0, dipToPx(8), 0, 0);
-			//frame.setPadding(0, 8, 0, 0);
 			FrameLayout.LayoutParams lli2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
 			lli2.setMargins(0, 0, 0, 0);
 			icon.setLayoutParams(lli2);
@@ -394,8 +389,6 @@ public class MapActivityJourney extends MapActivityAbstract{
 			
 			FrameLayout.LayoutParams lliDest = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
 			lliDest.setMargins(dipToPx(35), dipToPx(4), 0, 0);
-			//lliDest.setMargins(35, 4, 0, 0);
-			//lliDest.setMargins(left, top, right, bottom)
 			hitchTxt.setLayoutParams(lliDest);
 			hitchTxt.setText(hiker.getFullName());
 			
