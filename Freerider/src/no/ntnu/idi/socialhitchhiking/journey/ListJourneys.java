@@ -51,7 +51,9 @@ import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 
 import org.apache.http.client.ClientProtocolException;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -110,54 +112,6 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		}
 		this.journeys = tempJourneys;
 		initCalendars();
-		/*
-		Request req2 = new UserRequest(RequestType.GET_USER, getApp().getUser());
-		UserResponse res2 = null;
-		try
-		{
-			res2 = (UserResponse)RequestTask.sendRequest(req2, getApp());
-			Log.e("CarId",Integer.toString(res2.getUser().getCarId()));
-		} catch (ClientProtocolException e1)
-		{
-			Log.e("Error",e1.getMessage());
-		} catch (IOException e1)
-		{
-			Log.e("Error",e1.getMessage());
-		} catch (InterruptedException e1)
-		{
-			Log.e("Error",e1.getMessage());
-		} catch (ExecutionException e1)
-		{
-			Log.e("Error",e1.getMessage());
-		}
-		
-		
-		Car car = new Car(0,"Corollaenj",7.7);
-		//Log.e("CARID",Integer.toString(car.getCarId());
-		Request req = new CarRequest(RequestType.CREATE_CAR, getApp().getUser(), car);
-		CarResponse res = null;
-		try
-		{
-			res = (CarResponse) RequestTask.sendRequest(req,getApp());
-			Log.e("Result",Integer.toString(res.getCar().getCarId()));
-		} catch (ClientProtocolException e)
-		{
-			Log.e("Error:" , e.getMessage());
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			Log.e("Error:" , e.getMessage());
-		} catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			Log.e("Error:" , e.getMessage());
-		} catch (ExecutionException e)
-		{
-			// TODO Auto-generated catch block
-			Log.e("Error:" , e.getMessage());
-		}
-		*/
-		
 		
 		initAdapter(adapter, this.journeys);
 		listview.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -317,9 +271,8 @@ public class ListJourneys extends SocialHitchhikingActivity{
 	}
 
 	private void cancelJourney(final Journey j){
-		//final Dialog optionsDialog = new Dialog(ListJourneys.this);
 		optionsDialog = new Dialog(ListJourneys.this);
-		optionsDialog.setTitle("Ride");
+		optionsDialog.setTitle("Ride Options");
 		
 		optionsDialog.setContentView(R.layout.options_layout);
 		
@@ -329,31 +282,27 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		leaveBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				final Dialog confirmDialog = new Dialog(ListJourneys.this);
-				confirmDialog.setContentView(R.layout.cancel_ride_layout);
 				
-				ImageView okBtn = (ImageView)confirmDialog.findViewById(R.id.okBtn);
-				TextView contentTxt = (TextView)confirmDialog.findViewById(R.id.questionField);
-				confirmDialog.setTitle("Confirm");
-				
-				if(getApp().getUser().getFullName().equals(j.getDriver().getFullName())){
-					contentTxt.setText("Do you want to cancel this ride?");
+				AlertDialog.Builder ad = new AlertDialog.Builder(ListJourneys.this);  
+				if(j.getDriver().getFullName().equals(getApp().getUser().getFullName())){
+					ad.setMessage("Do you want to cancel this ride?");
 				} else{
-					contentTxt.setText("Do you want to leave this ride?");
+					ad.setMessage("Do you want to leave this ride?");
 				}
+				ad.setTitle("Confirm");
 				
-				
-				okBtn.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
+				ad.setNegativeButton("Ok",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
 						handleJourney(j);
-						confirmDialog.dismiss();
 						optionsDialog.dismiss();
+					}
+				  });
+				ad.setPositiveButton("Cancel",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
 						
 					}
-				});
-				
-				confirmDialog.show();
+				  });
+				ad.show();
 			}
 		});
 		
@@ -366,29 +315,6 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		
 		optionsDialog.show();
 	}
-	/*
-	private void cancelJourney(final Journey j){
-		AlertDialog.Builder b = new AlertDialog.Builder(this);
-		b.setTitle("Journey");
-		b.setMessage("What do you want to do with this journey?");
-		b.setPositiveButton("Cancel it", new OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				handleJourney(j);
-			}
-		});
-		b.setNegativeButton("Show in map", new OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				showInMap(j);
-			}
-		});
-		b.setNeutralButton("Nothing", new OnClickListener() {
-			public void onClick(DialogInterface arg0, int arg1) {
-				
-			}
-		});
-		b.show();
-	}
-	*/
 	
 	private List<Notification> getNotifications(User user){
 		List<Notification> notifications = null;
@@ -436,26 +362,7 @@ public class ListJourneys extends SocialHitchhikingActivity{
 				}
 			}
 		}
-		/*
-		if(j.getHitchhiker() != null){
-			List<Notification> notifHiker = getNotifications(j.getHitchhiker());
-			if(notifHiker != null){
-				for (Notification not : notifHiker) {
-					if(not.getJourneySerial() == j.getSerial()){
-						if(not.getStopPoint() != null) drop = not.getStopPoint();
-						if(not.getStartPoint() != null) pick = not.getStartPoint();
-
-						if(not.getType().equals(NotificationType.REQUEST_ACCEPT)){
-							accepted = true;
-						}
-						if(not.getType().equals(NotificationType.REQUEST_REJECT)){
-							rejected = true;
-						}
-					}
-				}
-			}
-		}
-		*/
+		
 		Route sr = j.getRoute();
 		Intent intent = new Intent(this, no.ntnu.idi.socialhitchhiking.map.MapActivityJourney.class);
 		intent.putExtra("journey", true);

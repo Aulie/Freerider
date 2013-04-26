@@ -23,6 +23,8 @@
             android:src="@drawable/btn_check_buttonless_on"
             android:layout_gravity="left"
             android:layout_weight="1"
+            android:layout_marginTop="5dip"
+            android:paddingTop="17dip"
             />
         
         <ImageView 
