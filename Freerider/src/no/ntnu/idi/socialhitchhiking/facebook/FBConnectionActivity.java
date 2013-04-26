@@ -158,7 +158,7 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 	 * Log out of Facebook
 	 */
 	public void logOut(Main m){
-		//setConnection(m);
+		setConnection(m);
 		mAsyncRunner.logout(mContext, new LogoutRequestListener());
 	}
 
@@ -286,7 +286,6 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 				@Override
 				public void run() {
 					if(mFacebook != null){
-
 						if (isSession()){
 							deleteSession();
 						}
