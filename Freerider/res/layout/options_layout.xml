@@ -27,6 +27,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:paddingBottom="10dip"
+            android:paddingTop="10dip"
             />
         
     </LinearLayout>

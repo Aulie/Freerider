@@ -63,6 +63,7 @@
 	    				android:src="@drawable/mail"
 	    				android:scaleX="0.9"
 		  		 		android:scaleY="0.9"
+		  		 		android:paddingRight="5dip"
 	    				android:layout_gravity="left" 
 	    			/>
 
@@ -123,8 +124,9 @@
 		  		 		android:layout_width="wrap_content"
 						android:layout_height="wrap_content" 
 		  		 		android:src="@drawable/car_icon_ext2"
-		  		 		android:scaleX="0.8"
-		  		 		android:scaleY="0.8"
+		  		 		android:scaleX="0.9"
+		  		 		android:scaleY="0.9"
+		  		 		android:paddingRight="5dip"
 		  		 		android:layout_gravity="left"
 		  	 		/>
 
