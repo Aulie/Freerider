@@ -73,11 +73,12 @@ public class JourneyReminder extends BroadcastReceiver{
 		else jour = app.getJourneys();
 		Calendar nextHour = Calendar.getInstance();
 		nextHour.add(Calendar.HOUR_OF_DAY, 1);
+		Calendar now = Calendar.getInstance();
 		if(jour == null || jour.size() == 0) return;
 		int count = 0;
 
 		for (Journey j : jour) {
-			if(j.getStart().before(nextHour)){
+			if(j.getStart().before(nextHour) && j.getStart().after(now)){
 				if(!app.isKey("journeyreminder"+j.getSerial())){
 					app.setKeyState("journeyreminder"+j.getSerial(), true);
 					count++;
