@@ -24,27 +24,18 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.http.client.ClientProtocolException;
 
-import no.ntnu.idi.freerider.model.Car;
-import no.ntnu.idi.freerider.model.TripPreferences;
+
 import no.ntnu.idi.freerider.model.User;
-import no.ntnu.idi.freerider.protocol.CarRequest;
-import no.ntnu.idi.freerider.protocol.CarResponse;
-import no.ntnu.idi.freerider.protocol.PreferenceRequest;
-import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.UserRequest;
 import no.ntnu.idi.freerider.protocol.UserResponse;
 import no.ntnu.idi.socialhitchhiking.R;
-import no.ntnu.idi.socialhitchhiking.R.drawable;
-import no.ntnu.idi.socialhitchhiking.R.id;
-import no.ntnu.idi.socialhitchhiking.R.layout;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.map.GetImage;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;

@@ -24,21 +24,13 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.TripPreferences;
-import no.ntnu.idi.freerider.model.User;
 import no.ntnu.idi.freerider.model.Visibility;
 import no.ntnu.idi.freerider.protocol.PreferenceRequest;
 import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
-import no.ntnu.idi.freerider.protocol.UserRequest;
-import no.ntnu.idi.freerider.protocol.UserResponse;
 import no.ntnu.idi.socialhitchhiking.R;
-import no.ntnu.idi.socialhitchhiking.R.array;
-import no.ntnu.idi.socialhitchhiking.R.id;
-import no.ntnu.idi.socialhitchhiking.R.layout;
-import no.ntnu.idi.socialhitchhiking.R.string;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
-import no.ntnu.idi.socialhitchhiking.journey.TripOption;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 
 import org.apache.http.client.ClientProtocolException;
@@ -46,13 +38,9 @@ import org.apache.http.client.ClientProtocolException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Html;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -122,7 +110,6 @@ public class MyAccountPreferences extends SocialHitchhikingActivity {
 	    selectedItems = new ArrayList<String>();
 	    checked = listPreferences.getCheckedItemPositions();
 	    pref2 =res.getPreferences();
-		Log.e("PREFERENCE", pref2.getMusic().toString());
 	    
 	    /**Fetch preferences from the database and display them*/
 	    for (int i = 0; i < 5; i++){

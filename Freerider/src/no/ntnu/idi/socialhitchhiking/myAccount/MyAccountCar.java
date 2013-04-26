@@ -20,12 +20,9 @@
 package no.ntnu.idi.socialhitchhiking.myAccount;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutionException;
 
 import no.ntnu.idi.freerider.model.Car;
@@ -38,8 +35,6 @@ import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.socialhitchhiking.R;
-import no.ntnu.idi.socialhitchhiking.R.id;
-import no.ntnu.idi.socialhitchhiking.R.layout;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.utility.SocialHitchhikingActivity;
 
@@ -48,19 +43,15 @@ import org.apache.http.client.ClientProtocolException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Images.Media;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -361,7 +352,6 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 		        byteArray = res.getCar().getPhoto();
 		        
 				/*Values of the car from database*/
-		        Log.e("Inni:", carNameString + " " + Integer.toString(id));
 		
 		        // Display these values to the user
 		        carName.setText(carNameString);
@@ -381,7 +371,6 @@ public class MyAccountCar extends SocialHitchhikingActivity {
 	        }
 	        //if user does not yet have a car registated
 	        else{
-	        	Log.e("???", "ja/nei");
 		        carNameString = "";
 		        id = -1;
 		        comfort = 0.0f;

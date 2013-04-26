@@ -18,29 +18,11 @@
  * limitations under the License.
  ******************************************************************************/
 package no.ntnu.idi.socialhitchhiking.myAccount;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.socialhitchhiking.R;
-import no.ntnu.idi.socialhitchhiking.R.layout;
-import no.ntnu.idi.socialhitchhiking.journey.ListJourneys;
-import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
