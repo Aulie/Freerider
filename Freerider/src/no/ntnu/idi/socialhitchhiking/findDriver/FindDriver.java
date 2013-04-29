@@ -39,7 +39,6 @@ import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.ResponseStatus;
 import no.ntnu.idi.freerider.protocol.SearchRequest;
 import no.ntnu.idi.socialhitchhiking.R;
-import no.ntnu.idi.socialhitchhiking.SocialHitchhikingApplication;
 import no.ntnu.idi.socialhitchhiking.client.RequestTask;
 import no.ntnu.idi.socialhitchhiking.map.AutoCompleteTextWatcher;
 import no.ntnu.idi.socialhitchhiking.map.GeoHelper;
@@ -144,6 +143,8 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		setContentView(R.layout.find_driver);
 		previousSearch = getPreviousSearch();
 		previousAdapter = new ArrayAdapter<FindDriver.PreviousSearch>(this, R.layout.simple_spinner_with_newline);
+		
+		//Load previous search
 		previousAdapter.add(new PreviousSearch("[Select previous search]", ""));
 		for(int i = 0; i < previousSearch.size(); i++) {
 			if(previousSearch.get(i).getFrom() != null) {
@@ -154,7 +155,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		previousSpinner.setAdapter(previousAdapter);
 		previousSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
-
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3)
@@ -173,14 +173,12 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0)
 			{
-				// TODO Auto-generated method stub
 				
 			}
 			
 		});
 		searchTo = (AutoCompleteTextView) findViewById (R.id.search2);
-		searchTo.setOnEditorActionListener(new OnEditorActionListener() {
-			
+		searchTo.setOnEditorActionListener(new OnEditorActionListener() {			
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				if(actionId == EditorInfo.IME_ACTION_DONE){
@@ -238,9 +236,9 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		});
 		initAutocomplete();
 		search.setOnClickListener(new OnClickListener() {
+			//Search button
 			@Override
 			public void onClick(View v) {
-				//Log.e("Clicked","Search");
 				if(searchFrom.getText().toString().equals("") && searchTo.getText().toString().equals("")){
 					Toast.makeText(FindDriver.this, "Please enter origin and destination", Toast.LENGTH_SHORT).show();
 				}
@@ -282,7 +280,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 	
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		try{
 			searchingDialog2.dismiss();
@@ -408,7 +405,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 			createAlertDialog(this, false, "Search request","sent", "IOException");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
@@ -524,7 +520,7 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 		}
 	}
 	/**
-	 * Adding the previous seach list to the shared preferences.
+	 * Adding the previous search list to the shared preferences.
 	 */
 	public void setPreviousSearch() {
 		SharedPreferences settings = getSharedPreferences("PreviousSearch", 0);
@@ -599,27 +595,12 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 
 		@Override
 		protected String doInBackground(Void... params) {
-			//Looper.prepare();
-			//journeys = null;
 			try {
 				if(upcoming) {
 					numDays = 7;
 					Calendar c = Calendar.getInstance();
 					searchDate.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 					journeys = search();
-					//Log.e("Upcoming","Yes");
-					/*
-					Calendar c = Calendar.getInstance();
-					journeys = new ArrayList<Journey>();
-					for(int i = 0; i < 7; i++) {
-						searchDate.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-						List<Journey> tempList = search();
-						for(int j = 0; j < tempList.size(); j++) {
-							journeys.add(tempList.get(j));
-						}
-						c.add(Calendar.DAY_OF_MONTH, 2); //2?
-					}
-					*/
 				} else {
 					numDays = 1;
 					journeys = search();
@@ -632,14 +613,8 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 					}
 				}
 				journeys.removeAll(tempJ);
-				if(journeys.size() == 0) {
-					//Toast.makeText(FindDriver.this, "No rides matched your search", Toast.LENGTH_LONG);
-				}
 				
 			} catch (NullPointerException e) {
-				//Toast toast = Toast.makeText(FindDriver.this, "ERROR in receiving journeys", Toast.LENGTH_LONG);
-				//toast.show();
-				//Log.e("Error",e.getMessage());
 				e.printStackTrace();
 			}
 			return null;
@@ -710,10 +685,6 @@ public class FindDriver extends SocialHitchhikingActivity implements PropertyCha
 
 				
 			});
-			//for(int i = 0; i < journeys.size(); i++) {
-				//Log.e("Stuff",journeys.get(i).getDriver().getFirstName());
-			//}
-			//Log.e("Freq",Integer.toString(journeys.get(0).getRoute().getFrequency()));
 			searchingDialog.dismiss();
 		}
 		
