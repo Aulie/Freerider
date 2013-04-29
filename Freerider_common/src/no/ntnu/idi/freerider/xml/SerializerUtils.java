@@ -35,7 +35,9 @@ import no.ntnu.idi.freerider.model.User;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
 
-/** A utility class for serializers needing to serialize data objects. */
+/** A utility class for serializers needing to serialize data objects. 
+ * @author Thomas Gjerde
+ * */
 class SerializerUtils {
 
 	static Element serializeJourney(Journey journey) {

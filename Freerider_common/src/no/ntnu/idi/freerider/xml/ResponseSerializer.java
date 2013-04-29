@@ -23,7 +23,6 @@ package no.ntnu.idi.freerider.xml;
 import no.ntnu.idi.freerider.model.Journey;
 import no.ntnu.idi.freerider.model.Notification;
 import no.ntnu.idi.freerider.model.Route;
-import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.protocol.CarResponse;
 import no.ntnu.idi.freerider.protocol.JourneyResponse;
 import no.ntnu.idi.freerider.protocol.NotificationResponse;
@@ -37,7 +36,9 @@ import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 
-/** A serializer translating Responses into XML. */
+/** A serializer translating Responses into XML. 
+ * @author Thomas Gjerde
+ * */
 public class ResponseSerializer {
 
 	public static String serialize(Response responseObject){

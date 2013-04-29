@@ -20,7 +20,11 @@
 package no.ntnu.idi.freerider.protocol;
 
 import no.ntnu.idi.freerider.model.TripPreferences;
-
+/**
+ * A Response subclass for responses involving Preferences
+ * @author Thomas Gjerde
+ *
+ */
 public class PreferenceResponse extends Response{
 	private final TripPreferences preference;
 	public PreferenceResponse(RequestType type, ResponseStatus status,TripPreferences preference) {

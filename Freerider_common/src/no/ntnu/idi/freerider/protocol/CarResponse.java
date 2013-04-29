@@ -20,7 +20,11 @@
 package no.ntnu.idi.freerider.protocol;
 
 import no.ntnu.idi.freerider.model.Car;
-
+/**
+ * A Response subclass for responses involving Cars
+ * @author Thomas Gjerde
+ *
+ */
 public class CarResponse extends Response
 {
 	private final Car car;

@@ -19,9 +19,7 @@
  ******************************************************************************/
 
 package no.ntnu.idi.freerider.model;
-import java.util.logging.Logger;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 
 /** A point on the Earth, with an optional address */

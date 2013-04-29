@@ -20,6 +20,11 @@
 package no.ntnu.idi.freerider.model;
 import no.ntnu.idi.freerider.xml.Base64;
 
+/**
+ * Object for storing car info
+ * @author Thomas Gjerde
+ *
+ */
 public class Car{
 
 	public int getCarId()

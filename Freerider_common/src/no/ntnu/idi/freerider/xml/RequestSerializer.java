@@ -35,7 +35,9 @@ import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
-/** A serializer which translates Requests into XML. */
+/** A serializer which translates Requests into XML. 
+ * @author Thomas Gjerde
+ * */
 public class RequestSerializer {
 
 	/** Serialize this Request. */

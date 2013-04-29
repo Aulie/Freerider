@@ -21,7 +21,11 @@ package no.ntnu.idi.freerider.protocol;
 
 import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
-
+/**
+ * A Request subclass representing requests that involve an attached Preference
+ * @author Thomas Gjerde
+ *
+ */
 public class PreferenceRequest extends Request {
 	private final TripPreferences preference;
 	public PreferenceRequest(RequestType type, User user, TripPreferences preference) {

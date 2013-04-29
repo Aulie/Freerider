@@ -24,7 +24,9 @@ import java.util.List;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
-/** A validator verifying that the document is a Request. Its validity to its own stated specification is assumed. */
+/** A validator verifying that the document is a Request. Its validity to its own stated specification is assumed. 
+ * @author Thomas Gjerde
+ * */
 class RequestValidator {
 	@SuppressWarnings("unchecked")
 	static boolean validate(Document request){

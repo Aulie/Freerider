@@ -42,7 +42,9 @@ import no.ntnu.idi.freerider.model.Visibility;
 import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-/** A utility class for various parsers needing to turn Elements into data model objects. */
+/** A utility class for various parsers needing to turn Elements into data model objects. 
+ * @author Thomas Gjerde
+ * */
 class ParserUtils {
 	private static Logger logger = LoggerFactory.getLogger(ParserUtils.class);
 

@@ -36,12 +36,10 @@ import no.ntnu.idi.freerider.model.Route;
 import no.ntnu.idi.freerider.model.TripPreferences;
 import no.ntnu.idi.freerider.model.User;
 import no.ntnu.idi.freerider.protocol.CarRequest;
-import no.ntnu.idi.freerider.protocol.CarResponse;
 import no.ntnu.idi.freerider.protocol.JourneyRequest;
 import no.ntnu.idi.freerider.protocol.LoginRequest;
 import no.ntnu.idi.freerider.protocol.NotificationRequest;
 import no.ntnu.idi.freerider.protocol.PreferenceRequest;
-import no.ntnu.idi.freerider.protocol.PreferenceResponse;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.RequestType;
 import no.ntnu.idi.freerider.protocol.RouteRequest;
@@ -55,7 +53,9 @@ import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** A parser which translates XML requests into Request objects. */
+/** A parser which translates XML requests into Request objects. 
+ * @author Thomas Gjerde
+ * */
 public class RequestParser {
 	private static Logger logger = LoggerFactory.getLogger(RequestParser.class);
 
