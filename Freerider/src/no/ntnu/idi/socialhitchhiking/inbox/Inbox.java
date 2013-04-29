@@ -138,38 +138,6 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		setContentView(R.layout.main_loading);
 		new InboxLoader(this).execute();
 	}
-
-	private void pullNotifications(){
-		/*
-		UserRequest req = new UserRequest(RequestType.PULL_NOTIFICATIONS,getApp().getUser());
-		Response response = null;
-		try {
-			response = RequestTask.sendRequest(req,getApp());*/
-			
-		
-		/*NotificationResponse notif = null;
-			if(response instanceof NotificationResponse && response.getStatus() == ResponseStatus.OK){
-				notif = (NotificationResponse) response;
-				getApp().setNotifications(notif.getNotifications());
-				notifHistory = getApp().getNotifications();
-				sorted = sortNotifications(notifHistory);
-				System.out.println("JoYo Inbox" + notifHistory.size());
-				initAdapter(active,sorted);
-				initAdapter(historyAdap,notifHistory);
-				notifications.setAdapter(active);
-			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} */
-	}
 	/**
 	 * Create custom {@link Menu} in the Inbox activity. Gives a user the possibility
 	 * of viewing old notifications.
@@ -182,7 +150,6 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				//changeNotificationList(item);
 				return true;
 			}
 		});
@@ -257,8 +224,6 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 					Toast.makeText(this, "You have no read notifications", Toast.LENGTH_SHORT).show();
 				}
 				notifications.setAdapter(historyAdap);
-				//history = true;
-				//item.setTitle("Show Active Notifications");
 				header.setText("Notification History");
 			}
 		}
@@ -495,10 +460,7 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		}
 		
 		initCalendars();
-		pullNotifications();
 		if(!getApp().isKey("inbox") && getApp().getSettings().isCheckSettings()){
-			//Toast toast = Toast.makeText(getApp(), "Notification history available in menu", Toast.LENGTH_LONG);
-			//toast.show();
 			getApp().setKeyState("inbox", true);
 		}
 		changeNotificationList();

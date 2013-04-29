@@ -59,13 +59,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-//import android.view.View.OnClickListener;
+
 
 public class NotificationHandler{
 	private static Inbox in;
 	private static Notification not;
 	private static SocialHitchhikingApplication app;
-	//private static Activity activity;
 	
 	
 	/**
@@ -94,7 +93,6 @@ public class NotificationHandler{
 		not = nf;
 		in = i;
 		if(not.isRead() && not.getType() == NotificationType.MESSAGE){
-			//funker
 			createChatDialog(not);
 		}
 		else if(not.isRead()){
@@ -112,7 +110,6 @@ public class NotificationHandler{
 				createMessageDialog(false,"Hitchhiker cancelled request", not.getSenderName()+" cancelled the request");
 				break;
 			case HITCHHIKER_REQUEST:
-				//funker
 				createNotificationDialog();
 				break;
 			case REQUEST_ACCEPT:
@@ -137,8 +134,6 @@ public class NotificationHandler{
 	
 	public static void createAorRDialog(){
 		final Dialog aorRDialog = new Dialog(in);
-		
-		//aorRDialog.setTitle("Request accepted by driver");
 		
 		
 		aorRDialog.setContentView(R.layout.message_layout);
@@ -341,10 +336,8 @@ public class NotificationHandler{
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Route route = new Route(journey.getRoute().getOwner(), journey.getRoute().getName(), journey.getRoute().getRouteData(), journey.getRoute().getSerial());
@@ -393,31 +386,11 @@ public class NotificationHandler{
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		/*
-		Intent intent = new Intent(in, no.ntnu.idi.socialhitchhiking.map.MapActivityJourney.class);
-		Log.e("Owner", journey.getRoute().getOwner().getFullName());
-		Log.e("JourneyName", journey.getRoute().getName());
-		Log.e("Serial", journey.getRoute().getSerial() + "");
-		MapRoute mr = new MapRoute(journey.getRoute().getOwner(), journey.getRoute().getName(), journey.getRoute().getSerial(), journey.getRoute().getMapPoints());
-		intent.putExtra("Journey", true);
-		intent.putExtra("journeyAccepted", true);
-		intent.putExtra("journeyRejected", false);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		app.setSelectedMapRoute(mr);
-		app.setSelectedJourney(journey);
-		app.setJourneyPickupPoint(not.getStartPoint());
-		app.setJourneyDropoffPoint(not.getStopPoint());
-		app.setSelectedNotification(not);
-		
-		app.startActivity(intent);
-		*/
 	}
 
 	
@@ -568,10 +541,8 @@ public class NotificationHandler{
 		} catch (ClientProtocolException e) {
 		} catch (IOException e) {
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
