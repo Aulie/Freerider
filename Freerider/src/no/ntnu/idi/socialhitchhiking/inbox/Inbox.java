@@ -75,6 +75,7 @@ import android.widget.Toast;
  * {@link NotificationHandler}
  * 
  * @author Christian Thurmann-Nielsen
+ * @author Thomas Gjerde
  */
 public class Inbox extends SocialHitchhikingActivity implements PropertyChangeListener{
 	private ListView notifications;

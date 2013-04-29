@@ -21,7 +21,11 @@ package no.ntnu.idi.freerider.backend;
 
 import java.sql.Date;
 
-
+/**
+ * Object for storing routes with few properties
+ * @author Thomas Gjerde
+ *
+ */
 
 public class SimpleRoute {
 	private int serial;

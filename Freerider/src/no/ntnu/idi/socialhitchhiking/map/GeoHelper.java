@@ -56,6 +56,8 @@ import com.google.android.maps.GeoPoint;
 /**
  * A helper class for everything that has to do with geocoding/reverse geocoding and 
  * converting between different kinds of"geo"-objects.
+ * 
+ * @author Thomas Gjerde
  */
 public class GeoHelper {
 

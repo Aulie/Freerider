@@ -53,7 +53,11 @@ import org.postgis.LineString;
 import org.postgis.PGgeometry;
 import org.postgis.Point;
 
-/** A utility class for connecting to the project's database */
+/** A utility class for connecting to the project's database 
+ * 
+ * @author Thomas Gjerde
+ * 
+ * */
 public class DBConnector {
 	private static final String JDBC_DRIVER = "org.postgresql.Driver";
 	private static final String DRIVER_WRAPPER = "org.postgis.DriverWrapper";

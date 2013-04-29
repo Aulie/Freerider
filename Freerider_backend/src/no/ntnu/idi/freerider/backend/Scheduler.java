@@ -28,7 +28,7 @@ import javax.servlet.ServletContextListener;
 
 /**
  * Repeatedly runs {@link MaintenanceService} at a given interval
- * @author Thomas
+ * @author Thomas Gjerde
  *
  */
 public class Scheduler implements ServletContextListener{

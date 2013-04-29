@@ -32,7 +32,7 @@ import android.os.Bundle;
 import android.util.Log;
 /**
  * Starts a GPS listener and returns current location to FindDriver class
- * @author Thomas
+ * @author Thomas Gjerde
  * @param <T>
  *
  */

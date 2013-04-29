@@ -27,7 +27,7 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 /**
  * Wrapper class for notification tabs
- * @author Thomas
+ * @author Thomas Gjerde
  *
  */
 public class ListNotifications extends TabActivity

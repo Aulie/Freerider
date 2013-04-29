@@ -28,7 +28,7 @@ import no.ntnu.idi.freerider.model.Journey;
 
 /**
  * Deletes old routes each time it is triggered
- * @author Thomas
+ * @author Thomas Gjerde
  *
  */
 public class MaintenanceService implements Runnable {

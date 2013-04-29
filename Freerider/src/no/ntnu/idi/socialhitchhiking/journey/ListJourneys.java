@@ -67,7 +67,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+/**
+ * Class that shows active rides
+ * @author Thomas Gjerde
+ *
+ */
 public class ListJourneys extends SocialHitchhikingActivity{
 	private ListView listview;
 	private List<Journey> journeys;

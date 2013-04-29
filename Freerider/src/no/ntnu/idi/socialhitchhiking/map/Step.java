@@ -22,7 +22,11 @@ package no.ntnu.idi.socialhitchhiking.map;
 import java.util.ArrayList;
 
 import no.ntnu.idi.freerider.model.Location;
-
+/**
+ * Object for storing route steps parsed from xml
+ * @author Thomas Gjerde
+ *
+ */
 public class Step 
 {
 	String startLatitude;

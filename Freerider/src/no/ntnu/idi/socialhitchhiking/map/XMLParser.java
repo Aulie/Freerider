@@ -36,7 +36,7 @@ import no.ntnu.idi.socialhitchhiking.map.MapRoute;
 /**
  * Class for parsing the XML-files from google maps
  * 
- * @author Thomas
+ * @author Thomas Gjerde
  * @author Jon-Robert
  *
  */
@@ -73,7 +73,7 @@ public class XMLParser
 	}
 	
 	/**
-	 * Method for extracting rout and legs from the feed
+	 * Method for extracting route and legs from the feed
 	 * @param parser
 	 * @param String type that specifies the action that should be performed
 	 * @return MapRoute
@@ -329,9 +329,9 @@ public class XMLParser
     }
 	
 	/**
-	 * 
+	 * Method for getting detailed line
 	 * @param encoded
-	 * @return
+	 * @return ArrayList<Location>
 	 */
 	public static ArrayList<Location> decodePoly(String encoded) {
 		ArrayList<Location> poly = new ArrayList<Location>();

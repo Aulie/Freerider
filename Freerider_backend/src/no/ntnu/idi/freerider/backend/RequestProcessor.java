@@ -59,7 +59,9 @@ import no.ntnu.idi.freerider.protocol.LoginRequest;
 
 /** The server's primary business logic class,
  *  which operates the database using DBConnector,
- *  processes incoming Requests and returns Responses. */
+ *  processes incoming Requests and returns Responses. 
+ *  @author Thomas Gjerde
+ *  */
 public class RequestProcessor {
 	private DBConnector db;
 	private static Logger logger = LoggerFactory.getLogger(RequestProcessor.class);

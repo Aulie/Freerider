@@ -25,14 +25,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
-
+/**
+ * Wrapper class for trip tabs
+ * @author Thomas Gjerde
+ *
+ */
 public class ListTrips extends TabActivity
 {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_trips);
 		TabHost tabHost = getTabHost();

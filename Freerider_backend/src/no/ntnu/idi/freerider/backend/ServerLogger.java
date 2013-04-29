@@ -27,7 +27,7 @@ import java.util.Date;
 
 /**
  * Utility class for writing to server log
- * @author Thomas
+ * @author Thomas Gjerde
  *
  */
 public class ServerLogger {
