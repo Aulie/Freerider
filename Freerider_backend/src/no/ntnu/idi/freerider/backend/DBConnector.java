@@ -513,7 +513,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	public void deleteJourney(Journey journey) throws SQLException {
 		//if(getHitchhikerID(journey.getSerial())!=null) throw new SQLException("Cannot delete journey with assigned hitchhiker. Send them a notification of cancellation instead.");
 		for(int i = 0; i < journey.getHitchhikers().size(); i++){
-			Notification note = new Notification(journey.getDriver().getID(), journey.getHitchhikers().get(i).getID(), journey.getDriver().getFullName(), "", journey.getSerial(), NotificationType.DRIVER_CANCEL);
+			Notification note = new Notification(journey.getDriver().getID(), journey.getHitchhikers().get(i).getID(), journey.getDriver().getFullName(), "Regarding ride from: " + journey.getRoute().getStartAddress() + "\nTo: " + journey.getRoute().getEndAddress(), journey.getSerial(), NotificationType.DRIVER_CANCEL);
 			addNotification(note);
 		}
 		deleteJourneyWithoutCheck(journey);
@@ -859,19 +859,21 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		ServerLogger.write("Start Read note");
 		ServerLogger.write("JourneySerial: " + note.getJourneySerial());
 		if(note.getJourneySerial() == 0){
-			PreparedStatement stmt = conn.prepareStatement("UPDATE notifications SET is_read=true WHERE recipient=? AND sender=? AND type=?::notification_type");
+			PreparedStatement stmt = conn.prepareStatement("UPDATE notifications SET is_read=true WHERE recipient=? AND sender=? AND type=?::notification_type AND comment=?");
 			stmt.setString(1, note.getRecipientID());
 			stmt.setString(2,note.getSenderID());
 			stmt.setString(3, note.getType().toString());
+			stmt.setString(4, note.getComment());
 			stmt.executeUpdate();
 		}
 		else
 		{
-			PreparedStatement stmt = conn.prepareStatement("UPDATE notifications SET is_read=true WHERE recipient=? AND sender=? AND concerning_journey=? AND type=?::notification_type");
+			PreparedStatement stmt = conn.prepareStatement("UPDATE notifications SET is_read=true WHERE recipient=? AND sender=? AND concerning_journey=? AND type=?::notification_type AND comment=?");
 			stmt.setString(1, note.getRecipientID());
 			stmt.setString(2,note.getSenderID());
 			stmt.setInt(3, note.getJourneySerial());
 			stmt.setString(4, note.getType().toString());
+			stmt.setString(5, note.getComment());
 			stmt.executeUpdate();
 		}
 	}
