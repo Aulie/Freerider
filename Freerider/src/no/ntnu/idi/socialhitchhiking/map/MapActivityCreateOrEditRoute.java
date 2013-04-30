@@ -364,7 +364,6 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 					mapView.getOverlays().clear();
 					createMap();
 					button.setText("Next");
-					//createOneTimeJourney();
 				}
 				else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
 					mapView.getOverlays().clear();
@@ -399,10 +398,8 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		if((acFrom.getText().toString().equals("") || acFrom.getText().toString().equals("")) && (acTo.getText().toString().equals("") || acTo.getText().toString().equals("") && checkAddFields() == false)){
 			return false;
 		}else if(acTo.getText().toString().equals("") || acTo.getText().toString().equals("") || checkAddFields() == false){
-			//makeToast("You have to fill in the Driving from field");
 			return false;
 		}else if(acFrom.getText().toString().equals("") || acFrom.getText().toString().equals("") || checkAddFields() == false){
-			//makeToast("You have to fill in the Driving to field");
 			return false;
 		}else{
 			return true;
@@ -723,11 +720,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 							button.setEnabled(false);
 							return false;
 						}
-						/*
-						mapView.getOverlays().clear();
-						createMap();
-						return true;
-						*/
+						
 						return false;
 					}
 					else{
@@ -857,19 +850,6 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		}
 		else 
 			createConfirmDialog(false,"Journey","created","");
-		
-//		DateChooser dc = new DateChooser(this, new PropertyChangeListener() {
-//			@Override
-//			public void propertyChange(PropertyChangeEvent event) {
-//				if(event.getPropertyName() == DateChooser.DATE_CHANGED){
-//					if(res.getStatus() == ResponseStatus.OK){
-//						sendJourneyRequest((Calendar) event.getNewValue());
-//					}
-//					else createConfirmDialog(false,"Journey","created","");
-//				}
-//			}
-//		});
-//		dc.show();
 		
 	}
 	
@@ -1168,12 +1148,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			addPointDialog();
 			return true;
 		}
-		/*
-		else if(item.getItemId() == R.id.mapmenu_clear){
-			clearMap();
-			return true;
-		}
-		*/
+		
 		else if(item.getItemId() == R.id.mapmenu_order){
 			changeOrder();
 			return true;
@@ -1203,6 +1178,9 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		finish();
 	}
 	
+	/** clearMap()
+	 * Initializes a new map
+	 */
 	private void clearMap() {
 		Intent newClearedMap = new Intent(this, no.ntnu.idi.socialhitchhiking.map.MapActivityCreateOrEditRoute.class);
 		newClearedMap.putExtra("latitudeE6", mapView.getMapCenter().getLatitudeE6());
@@ -1213,10 +1191,19 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		finish();
 	}
 	
+	/** addPointDialog
+	 * Initializes a inputdialog, for adding a driving through point
+	 */
 	private void addPointDialog(){
 		createInputDialog("Add point","Add a point by writing the address",true);
 	}	
 	
+	/** createInputDialog
+	 * Builds a dialog
+	 * @param title
+	 * @param msg
+	 * @param autoComplete
+	 */
 	private void createInputDialog(String title,String msg, boolean autoComplete){
 		SocialHitchhikingDialog alert = new SocialHitchhikingDialog(title, msg, autoComplete);
 		alert.show();
@@ -1325,13 +1312,11 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			acFrom.setText(selectedRoute.getMapPoints().get(0).getAddress().toString());
 			acTo.setText(selectedRoute.getMapPoints().get(selectedRoute.getMapPoints().size()-1).getAddress().toString());
 			
-			//int counter = 0;
 			
 			while(acList.size()>=1){
 				int id = acList.get(0).getId();
 				removeFromAcList(id);
 				setLayoutParams();
-				//counter++;
 			}
 			
 			for(int i=1; i<selectedRoute.getMapPoints().size()-1; i++){
@@ -1350,7 +1335,6 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 			button.setEnabled(true);
 			button.setText("Show on map");
 		}else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
-			//fillFieldsOnClick();
 		}else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
 			button.setText("Show on map");
 			button.setEnabled(false);
@@ -1373,12 +1357,10 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 		if(checkFields() && selectedRoute.getMapPoints().size()>1){
 			button.setEnabled(true);
 			button.setText("Next");
-			//hasDrawn = true;
 		}else if(checkFields() && selectedRoute.getMapPoints().size() == 0){
 			button.setEnabled(true);
 			button.setText("Show on map");
 		}else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
-			//fillFieldsOnClick();
 		}else if(checkFields() == false && selectedRoute.getMapPoints().size() == 0){
 			button.setText("Show on map");
 			button.setEnabled(false);
@@ -1393,15 +1375,7 @@ public class MapActivityCreateOrEditRoute extends MapActivityAbstract{
 	
 	@Override
 	public void onLongPress(MotionEvent e) {
-		/*
-		GeoPoint gp = mapView.getProjection().fromPixels(
-				(int) e.getX(),
-				(int) e.getY());
-		MapLocation mapLocation = (MapLocation) GeoHelper.getLocation(gp);
-
-		addPoint(mapLocation);
-		fillFieldsOnClick();
-		*/
+		
 	}
 	
 	
