@@ -409,7 +409,8 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		Notification notif;
 		if(!j.getDriver().getID().equals(id) ){
 			type = NotificationType.HITCHHIKER_CANCEL;
-			notif = new Notification(id, j.getRoute().getOwner().getID(),"", "", j.getSerial(), type);
+			//notif = new Notification(id, j.getRoute().getOwner().getID(),"", "", j.getSerial(), type);
+			notif = new Notification(id, j.getRoute().getOwner().getID(),getApp().getUser().getFullName(), "Regarding ride from: " + j.getRoute().getStartAddress() + "\nTo: " + j.getRoute().getEndAddress(), j.getSerial(), type);
 		}else{ 
 			type = NotificationType.HITCHHIKER_ACCEPTS_DRIVER_CANCEL;
 			notif = new Notification(id, id, "","", j.getSerial(), type);
