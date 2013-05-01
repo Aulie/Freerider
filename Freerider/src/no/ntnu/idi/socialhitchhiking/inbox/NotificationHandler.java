@@ -422,7 +422,7 @@ public class NotificationHandler{
 			public void onClick(View v) {
 				final Dialog replyDialog = new Dialog(in);
 				replyDialog.setContentView(R.layout.replay_layout);
-				replyDialog.setTitle("Replay");
+				replyDialog.setTitle("Reply");
 				
 				ImageView sendBtn = (ImageView)replyDialog.findViewById(R.id.sendBtn);
 				
