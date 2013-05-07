@@ -26,6 +26,10 @@ import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+/**
+ * This class displays the tabs in the MyTrips window
+ *
+ */
 public class MyTrips extends TabActivity {
 	
 @SuppressWarnings("deprecation")

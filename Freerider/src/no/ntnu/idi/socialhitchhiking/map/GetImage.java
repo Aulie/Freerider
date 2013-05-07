@@ -59,7 +59,9 @@ public class GetImage extends AsyncTask<String, Void, Bitmap> {
         return map;
     }
 
-    // Sets the Bitmap returned by doInBackground
+	/**
+	 * Sets the Bitmap returned by doInBackground
+	 */
     @Override
     protected void onPostExecute(Bitmap result) {
     	if(activity.getClass().getSimpleName().equals("MyAccountMeActivity")){
@@ -70,7 +72,11 @@ public class GetImage extends AsyncTask<String, Void, Bitmap> {
     	}
     }
 
-    // Creates Bitmap from InputStream and returns it
+    /**
+     * Creates Bitmap from InputStream and returns it
+     * @param url
+     * @return
+     */
     private Bitmap downloadImage(String url) {
         Bitmap bitmap = null;
         URL urltest = null;

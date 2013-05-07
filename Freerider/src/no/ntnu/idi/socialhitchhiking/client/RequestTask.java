@@ -94,7 +94,6 @@ public class RequestTask {
 			while(stream.available() > 0){
 				sb.append((char)stream.read());
 			}
-//			response.getEntity().getContent().close();
 			throw new IOException(statusLine.getReasonPhrase());
 		}
 	}

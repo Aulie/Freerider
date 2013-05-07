@@ -426,26 +426,6 @@ public class TripOptions extends SocialHitchhikingActivity {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
-		
-		/*Request req2 = new PreferenceRequest(RequestType.CREATE_PREFERENCE,getApp().getUser(),tripPreferences);
-		// Don't need this because CREATE_JOURNEY also creates preferences
-		try {
-			PreferenceResponse res2 = (PreferenceResponse) RequestTask.sendRequest(req2,getApp());
-			if(res2.getStatus() != ResponseStatus.OK){
-			}
-			else{
-//				if(getApp().g != null)
-//					getApp().getJourneys().add(jour);
-			}
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}*/
 	}
     /**
 	 * Extracts day, month, and year from a {@link Calendar} type and converts it in a {@link String} with format d/m/y

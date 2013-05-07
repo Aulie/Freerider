@@ -90,6 +90,9 @@ public class SocialHitchhikingApplication extends Application{
 		settings = new SettingsManager(this);
 		startJourneyReminder();
 	}
+	/**
+	 * Method for reseting variables
+	 */
 	public void reset(){
 		user = null;
 		routes = null;
@@ -251,6 +254,12 @@ public class SocialHitchhikingApplication extends Application{
 		int tenMinutes = 600000;
 		am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, tenMinutes/10, tenMinutes, journeyReminder);
 	}
+	/**
+	 * Method for returning a list containing the users journeys
+	 * @return
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
 	public List<Journey> sendJourneysRequest() throws InterruptedException, ExecutionException{
 		if(user != null && user.getID() != ""){
 			Request req = new UserRequest(RequestType.GET_JOURNEYS, getUser());

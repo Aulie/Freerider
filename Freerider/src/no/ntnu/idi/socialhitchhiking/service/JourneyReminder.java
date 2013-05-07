@@ -51,6 +51,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+/**
+ * A class for dispatching a reminder of a journey to a user
+ *
+ */
 public class JourneyReminder extends BroadcastReceiver{
 	SocialHitchhikingApplication app;
 

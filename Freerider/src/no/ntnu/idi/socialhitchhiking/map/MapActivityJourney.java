@@ -178,6 +178,10 @@ public class MapActivityJourney extends MapActivityAbstract{
 		else sendDeleteJourney(j);
 	}
 	
+	/**
+	 * Method that cancels a journey j
+	 * @param j
+	 */
 	private void sendCancelJourney(Journey j) {
 		NotificationType type;
 		String id = getApp().getUser().getID();
@@ -227,6 +231,9 @@ public class MapActivityJourney extends MapActivityAbstract{
 		}
 	}
 	
+	/**
+	 * sends a message to the driver of a journey
+	 */
 	private void sendMessageToDriver(){
 		
 		final Dialog customDialog = new Dialog(this);
@@ -315,6 +322,11 @@ public class MapActivityJourney extends MapActivityAbstract{
 		
 	}
 	
+	/**
+	 * method for sending a message
+	 * @param mid
+	 * @param input
+	 */
 	private void sendMessage(User mid, EditText input){
 		Notification not = new Notification(getApp().getUser().getID(), mid.getID(), getApp().getUser().getFullName(), input.getText().toString(), getApp().getSelectedJourney().getSerial(), NotificationType.MESSAGE, getApp().getSelectedMapRoute().getStartLocation(), getApp().getSelectedMapRoute().getEndLocation(), Calendar.getInstance());
     	NotificationRequest req = new NotificationRequest(getApp().getUser(), not);

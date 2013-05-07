@@ -177,25 +177,6 @@ public class DateChooser {
 		PropertyChangeEvent e = new PropertyChangeEvent(this, TIME_CHANGED, start, dateAndTime);
 		l.firePropertyChange(e);
 	}
-//	private void confirmDate(){
-//		correctbox = new AlertDialog.Builder(act);
-//		correctbox.setTitle("Correct date?");
-//		correctbox.setMessage("Set date: "+dateAndTime.getTime().toString());
-//		correctbox.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface arg0, int arg1) {
-//				fireEvent();
-//			}
-//		}); 
-//		correctbox.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface arg0, int arg1) {
-//				showDatePicker();
-//			}
-//		});
-//		correctbox.show();
-//	}
-
 
 	/**
 	 * Notifies changes when Date or Time are changed in {@link DatePicker} and {@link TimePicker} dialogs

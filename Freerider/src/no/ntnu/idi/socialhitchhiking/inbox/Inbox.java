@@ -230,7 +230,9 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		}
 	}
 
-
+	/**
+	 * method for sorting notifications after reading
+	 */
 	private List<Notification> sortNotifications(List<Notification> ns){
 		List<Notification> list = new ArrayList<Notification>();
 		for (Notification n : ns){
@@ -239,6 +241,10 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		ns.removeAll(list);
 		return list;
 	}
+	/**
+	 * Method for marking a notification as read
+	 * @param n
+	 */
 	public void setNotificationRead(Notification n){
 		n.setRead(true);
 		if(sorted.contains(n)){
@@ -256,6 +262,11 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 			initAdapter(historyAdap, notifHistory);
 		}
 	}
+	/**
+	 * Method for getting a list of notifications for today
+	 * @param list
+	 * @return
+	 */
 	private List<Notification> getToday(List<Notification> list){
 		List<Notification> no = new ArrayList<Notification>();
 		Calendar tomorrow = Calendar.getInstance();
@@ -273,6 +284,11 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 
 		return no;
 	}
+	/**
+	 * Method for getting a list of notifications for the last 4 days
+	 * @param list
+	 * @return
+	 */
 	private List<Notification> getLast4Days(List<Notification> list){
 		List<Notification> no = new ArrayList<Notification>();
 
@@ -285,6 +301,11 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 
 		return no;
 	}
+	/**
+	 * Method for getting a list of notifications for the last 10 days
+	 * @param list
+	 * @return
+	 */
 	private List<Notification> getLast10Days(List<Notification> list){
 		List<Notification> no = new ArrayList<Notification>();
 
@@ -297,6 +318,11 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 
 		return no;
 	}
+	/**
+	 * Method for getting a list of notifications for yesterday
+	 * @param list
+	 * @return
+	 */
 	private List<Notification> getYesterday(List<Notification> list){
 		List<Notification> no = new ArrayList<Notification>();
 
@@ -361,7 +387,12 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		}
 
 	}
-
+	/**
+	 * Takes a notification as a parameter, and displays the journey associated with the notification in a map
+	 * @param n
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
 	public void showInMap(Notification n) throws InterruptedException, ExecutionException {
 		getApp().setJourneyPickupPoint(n.getStartPoint());
 		getApp().setJourneyDropoffPoint(n.getStopPoint());

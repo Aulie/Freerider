@@ -211,6 +211,11 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		else if(list.size() != 0)adp.addSection("", new JourneyAdapter(this, 0,new ArrayList<Journey>()));
 		
 	}
+	/**
+	 * method for getting a list containing the journeys scheduled for the next 24 hours
+	 * @param list
+	 * @return
+	 */
 	private List<Journey> getNext24(List<Journey> list){
 		List<Journey> no = new ArrayList<Journey>();
 
@@ -224,7 +229,11 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		return no;
 	}
 	
-	
+	/**
+	 * method for getting a list containing the journeys scheduled for the next 72 hours
+	 * @param list
+	 * @return
+	 */
 	private List<Journey> getNext72(List<Journey> list){
 		List<Journey> no = new ArrayList<Journey>();
 
@@ -237,6 +246,11 @@ public class ListJourneys extends SocialHitchhikingActivity{
 
 		return no;
 	}
+	/**
+	 * method for getting a list containing the ongoing journeys
+	 * @param list
+	 * @return
+	 */
 	private List<Journey> getOngoing(List<Journey> list){
 		List<Journey> no = new ArrayList<Journey>();
 		for(Journey j : list){
@@ -247,6 +261,11 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		list.removeAll(no);
 		return no;
 	}
+	/**
+	 * method for getting a list containing the journeys scheduled for the next 14 days
+	 * @param list
+	 * @return
+	 */
 	private List<Journey> getNext14Days(List<Journey> list){
 		List<Journey> no = new ArrayList<Journey>();
 
@@ -260,6 +279,11 @@ public class ListJourneys extends SocialHitchhikingActivity{
 
 		return no;
 	}
+	/**
+	 * method for getting a list containing the journeys scheduled for this month
+	 * @param list
+	 * @return
+	 */
 	private List<Journey> getThisMonth(List<Journey> list){
 		List<Journey> no = new ArrayList<Journey>();
 
@@ -274,6 +298,10 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		return no;
 	}
 
+	/**
+	 * Method for canceling a journey taken as a parameter
+	 * @param j
+	 */
 	private void cancelJourney(final Journey j){
 		optionsDialog = new Dialog(ListJourneys.this);
 		optionsDialog.setTitle("Ride Options");
@@ -320,6 +348,11 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		optionsDialog.show();
 	}
 	
+	/**
+	 * This method returns a list of the users notifications
+	 * @param user
+	 * @return
+	 */
 	private List<Notification> getNotifications(User user){
 		List<Notification> notifications = null;
 		UserRequest req = new UserRequest(RequestType.PULL_NOTIFICATIONS, user);
@@ -345,6 +378,10 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		}
 		return notifications;
 	}
+	/**
+	 * Method for displaying a route in a map
+	 * @param j
+	 */
 	private void showInMap(Journey j) {
 		List<Notification> notifDriver = getNotifications(j.getDriver());
 		Location drop = null;
@@ -403,6 +440,10 @@ public class ListJourneys extends SocialHitchhikingActivity{
 		
 	}
 	
+	/**
+	 * Method for sending notifications after a journey is canceled.
+	 * @param j
+	 */
 	private void sendCancelJourney(Journey j) {
 		NotificationType type;
 		String id = getApp().getUser().getID();
@@ -422,6 +463,11 @@ public class ListJourneys extends SocialHitchhikingActivity{
 			createAlertDialog(this, succeded, "Ride", "cancelled", "");
 		}
 	}
+	/**
+	 * Method for sending a journey request
+	 * @param req
+	 * @return
+	 */
 	private boolean sendJourneyRequest(Request req){
 		Response res;
 		try {

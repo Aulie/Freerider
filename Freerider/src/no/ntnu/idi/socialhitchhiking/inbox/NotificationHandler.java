@@ -186,7 +186,10 @@ public class NotificationHandler{
 		
 		aorRDialog.show();
 	}
-	
+	/**
+	 * Method for creating a comment when creating a request
+	 * @param nt
+	 */
 	private static void createCommentForRequest(final NotificationType nt){
 		final EditText input = new EditText(in);
 		new AlertDialog.Builder(in).
@@ -284,6 +287,10 @@ public class NotificationHandler{
 		}).
 		show();
 	}
+	/**
+	 * Method taking a user as a parameter and sends a "thumbs up" for the user to the server
+	 * @param user
+	 */
 	public static void sendRating(User user){
     	UserRequest req = new UserRequest(RequestType.THUMBS_UP, user);
     	
@@ -301,6 +308,11 @@ public class NotificationHandler{
 		}
 	}
 	
+	/**
+	 * Method for sending a message to a user
+	 * @param mid
+	 * @param input
+	 */
 	public static void sendMessage(User mid, EditText input){
 		Notification nots = new Notification(app.getUser().getID(), mid.getID(), app.getUser().getFullName(), input.getText().toString(), not.getJourneySerial(), NotificationType.MESSAGE, Calendar.getInstance());
     	NotificationRequest req = new NotificationRequest(app.getUser(), nots);
