@@ -30,7 +30,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import no.ntnu.idi.freerider.protocol.JourneyResponse;
 import no.ntnu.idi.freerider.protocol.Request;
 import no.ntnu.idi.freerider.protocol.Response;
 import no.ntnu.idi.freerider.xml.RequestSerializer;
@@ -54,7 +53,11 @@ import org.apache.http.message.BasicRequestLine;
 import org.apache.http.protocol.HttpContext;
 
 import android.content.Context;
-
+/**
+ * This class handles communication between the server and client from the client side
+ * @author Thomas Gjerde
+ *
+ */
 public class RequestTask {
 	private HttpClient httpclient;
 	private HttpResponse response;
@@ -62,7 +65,11 @@ public class RequestTask {
 	HttpEntity entity;
 	private String addr;
 	private static Context con;
-
+	/**
+	 * Constructor for preparing request to server
+	 * @param addr
+	 * @param xml
+	 */
 	private RequestTask(final String addr,String xml) {
 		this.addr = addr;
 		httpclient = new DefaultHttpClient();
@@ -78,7 +85,12 @@ public class RequestTask {
 			e1.printStackTrace();
 		}
 	}
-
+	/**
+	 * Sends request and gets response
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	private InputStream getResponse() throws ClientProtocolException, IOException{
 		int port = Integer.parseInt(con.getResources().getString(R.string.server_port));
 		HttpHost host = new HttpHost(addr, port);
@@ -101,7 +113,7 @@ public class RequestTask {
 	 * Static method which adds elements and data to an xml file and sends it as a string to the server.
 	 * 
 	 * @param req - {@link Request}
-	 * @return returns a {@link JourneyResponse} to the input {@link Request}
+	 * @return returns a subclass of {@link Response} to the input {@link Request}
 	 * @throws ClientProtocolException 
 	 * @throws MalformedURLException
 	 * @throws FileNotFoundException
@@ -110,10 +122,15 @@ public class RequestTask {
 	 * @throws InterruptedException 
 	 */
 	public static Response sendRequest(final Request req,final Context c) throws ClientProtocolException, IOException, InterruptedException, ExecutionException  {
+		/**
+		 * Code for putting all all network communication on separate thread as required by higher Android APIs
+		 */
 		ExecutorService executor = Executors.newSingleThreadExecutor();
-		
 	    Callable<Response> callable = new Callable<Response>() {
 	        @Override
+	        /**
+	         * This contains the actual code for initiating the communication
+	         */
 	        public Response call() throws ClientProtocolException, IOException {
 	        	String xml = RequestSerializer.serialize(req);
 	    		con = c;
@@ -123,6 +140,9 @@ public class RequestTask {
 	    		return ResponseParser.parse(requestTask.getResponse());
 	        }
 	    };
+	    /**
+	     * Execute and retrieve result from network operation
+	     */
 	    Future<Response> future = executor.submit(callable);
 	    Response ret = future.get();
 	    executor.shutdown();

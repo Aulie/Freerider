@@ -200,8 +200,13 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		last10Days = Calendar.getInstance();
 		last10Days.add(Calendar.DATE,-10);
 	}
+	/**
+	 * This changes the adapter of the notifications listview based on the status of 2 booleans
+	 * !history && request == Shows unread requests
+	 * !history && !request == Shows unread messages
+	 * history == Shows read messages/requests 
+	 */
 	private void changeNotificationList(){
-		System.out.println("History: "+history);
 		if(getApp().getUser() != null){
 			if(!history){
 				if(request){
@@ -231,7 +236,7 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 	}
 
 	/**
-	 * method for sorting notifications after reading
+	 * Method for getting only unread notifications
 	 */
 	private List<Notification> sortNotifications(List<Notification> ns){
 		List<Notification> list = new ArrayList<Notification>();
@@ -498,7 +503,9 @@ public class Inbox extends SocialHitchhikingActivity implements PropertyChangeLi
 		changeNotificationList();
 	}
 }
-
+/**
+ * Gets notifications from server before showing actual GUI
+ */
 class InboxLoader extends AsyncTask<Void, Integer, Response>{
 	
 	Inbox activity;
@@ -512,16 +519,12 @@ class InboxLoader extends AsyncTask<Void, Integer, Response>{
 		try {
 			response = RequestTask.sendRequest(req,activity.getApp());
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return response;

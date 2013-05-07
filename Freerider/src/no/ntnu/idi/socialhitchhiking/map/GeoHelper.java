@@ -66,7 +66,13 @@ public class GeoHelper {
 	public static void initGeocoder(Context context){
 		fancyGeocoder = new Geocoder(context);
 	}
-
+	/**
+	 * Gets a list of addresses from a set of coordinates
+	 * @param lat
+	 * @param lon
+	 * @param maxResults
+	 * @return
+	 */
 	public static List<Address> getAddressesFromLocation(double lat, double lon, int maxResults){
 		JSONArray responseArray = getJSONArrayFromLocation(lat, lon, maxResults);
 		List<Address> addresses = new ArrayList<Address>();
@@ -161,7 +167,13 @@ public class GeoHelper {
 		}
 		return addressList;
 	}
-	
+	/**
+	 * Gets a {@link JSONArray} from the Google Maps API from a set of coordinates
+	 * @param lat
+	 * @param lon
+	 * @param maxResults
+	 * @return JSONArray of locations
+	 */
 	private static JSONArray getJSONArrayFromLocation(final double lat, final double lon, int maxResults) {
 		ExecutorService executor = Executors.newSingleThreadExecutor();
 	    
@@ -246,7 +258,11 @@ public class GeoHelper {
 	public static GeoPoint getGeoPoint(String address){
 		return GeoHelper.getLatLong(getLocationInfo(address));
 	}
-	
+	/**
+	 * Gets a {@link GeoPoint} from a {@link JSONObject}
+	 * @param jsonObject
+	 * @return
+	 */
 	private static GeoPoint  getLatLong(JSONObject jsonObject) {
 		Double lon = new Double(0);
 		Double lat = new Double(0);
@@ -262,7 +278,11 @@ public class GeoHelper {
 		}
 		return new GeoPoint((int) (lat * 1E6), (int) (lon * 1E6));
 	}
-
+	/**
+	 * Gets a {@link JSONObject} from an address string
+	 * @param adr
+	 * @return
+	 */
 	private static JSONObject getLocationInfo(final String adr) {
 		ExecutorService executor = Executors.newSingleThreadExecutor();
 	    Callable<StringBuilder> callable = new Callable<StringBuilder>() {

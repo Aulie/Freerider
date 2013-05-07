@@ -133,13 +133,19 @@ public class AutoCompleteTextWatcher implements TextWatcher{
 			}.execute(1);
 		}
 	}
-	
-	private synchronized void setAutoCompleteArrayAdapter(final List<String> list, final AutoCompleteTextView autoCompleteTextView, boolean isRetarded){
+	/**
+	 * Sets the adapter for a given autocompletetextview
+	 * 
+	 * @param list
+	 * @param autoCompleteTextView
+	 * @param needsHack This parameter is sometimes needed to get the correct event to trigger, if unsure, set to false
+	 */
+	private synchronized void setAutoCompleteArrayAdapter(final List<String> list, final AutoCompleteTextView autoCompleteTextView, boolean needsHack){
 		String[] data = list.toArray(new String[list.size()]); 
 		ArrayAdapter<?> adapter = new ArrayAdapter<Object>(context, no.ntnu.idi.socialhitchhiking.R.layout.item_list, data);
 		autoCompleteTextView.setAdapter(adapter);  
 
-		if(isRetarded){
+		if(needsHack){
 			int selStartF = autoCompleteTextView.getSelectionStart();
 			int selStopF  = autoCompleteTextView.getSelectionEnd();
 			autoCompleteTextView.setText(autoCompleteTextView.getText().toString()+"¤");
