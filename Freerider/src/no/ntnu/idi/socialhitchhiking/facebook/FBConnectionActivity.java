@@ -169,31 +169,6 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 			mFacebook.authorize(this, PERMS, new LoginDialogListener());
 		}
 	}
-		
-	public boolean getIdBoolean(){
-		try{
-			if (isSession()) {
-				mAsyncRunner.request("me", new IDRequestListener());
-			} else {
-				// not logged in, so relogin
-				mFacebook.authorize(this, PERMS, new NewLoginDialogListener());
-				return true;
-			}
-		}
-		catch(NullPointerException e){
-			mFacebook.authorize(this, PERMS, new NewLoginDialogListener());
-		}
-		return false;
-
-
-	}
-	public void getAccess() {
-		mFacebook.authorize(this, PERMS, new ReloginDialogListener());
-	}
-	public User getUser(){
-		return user;
-	}
-
 
 	/**
 	 * Initializes the Facebook user.
@@ -209,6 +184,9 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
         //syncManager.sync();
 		main.onResult();
 	}
+	/**
+	 * Removes users' Facebook access token on logout
+	 */
 	private void deleteSession(){
 		sharedPrefs.edit().remove("access_token").commit();
 		sharedPrefs.edit().remove("access_expires").commit();
@@ -224,6 +202,9 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 		mContext.startActivity(intent);*/
 		mFacebook.authorize(this, PERMS, Facebook.FORCE_DIALOG_AUTH, new NewLoginDialogListener());
 	}
+	/**
+	 * Resets the Facebook connection
+	 */
 	protected void resetSession(){
 		runOnUiThread(new Runnable() {
 
@@ -233,6 +214,10 @@ public abstract class FBConnectionActivity extends SocialHitchhikingActivity{
 			}
 		});
 	}
+	/**
+	 * Checks if you are in a Facebook session
+	 * @return true if in a Facebook session, otherwise false.
+	 */
 	protected boolean isSession() {
 
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
