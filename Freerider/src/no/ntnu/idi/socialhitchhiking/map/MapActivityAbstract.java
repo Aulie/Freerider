@@ -39,7 +39,9 @@ import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -340,6 +342,7 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 		new Thread(new Runnable(){
 			@Override
 			public void run() { 
+				//Looper.prepare();
 				MapRoute route = PersistHelper.routeCacheGetRoute(locationList);
 				if(route != null && route.getMapPoints() != null && route.getMapPoints().size() != 0 && route.getRouteData() != null && route.getRouteData().size() != 0){
 					drawPathOnMap(route);
@@ -347,17 +350,37 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 				else{
 					MapRoute mapRoute;
 					try {
+						if(selectedRoute.getMapPoints().size() == 0){
+							onDrawingPathEnded();
+							//okey, har fanga erroren, men får virkelig ikke gjort noe mer med det:S
+							//til thomas
+							/*
+							//Looper.prepare();
+							String message = "Unvalid address";
+							Toast toast = Toast.makeText(MapActivityAbstract.this, message, Toast.LENGTH_LONG);
+							toast.show();
+							*/
+							return;
+						}
 						if(locationList.size() < 2){
 							onDrawingPathEnded();
 							return;
 						}
 						mapRoute = new MapRoute(selectedRoute, locationList,true);
 					} catch (Exception e){
+							
 						String message = "Could not load the route from Google Maps...";
 						Toast toast = Toast.makeText(MapActivityAbstract.this, message, Toast.LENGTH_LONG);
-						toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
 						toast.show();
 						return;
+						
+						/*
+						String message = "Could not load the route from Google Maps...";
+						Toast toast = Toast.makeText(MapActivityAbstract.this, message, Toast.LENGTH_LONG);
+						//Toast toast = Toast.makeText(MapActivityCreateOrEditRoute.class, message, Toast.LENGTH_LONG);
+						toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
+						toast.show();
+						*/
 					}
 					boolean success = drawPathOnMap(mapRoute);
 					if(!success) return; 
