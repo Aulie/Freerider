@@ -24,7 +24,7 @@ import java.util.Comparator;
 import no.ntnu.idi.freerider.model.Route;
 /**
  * Custom comparator for sorting a route list by frequency
- * @author Thomas
+ * @author Thomas Gjerde
  *
  */
 public class RouteComparator implements Comparator<Route>{
