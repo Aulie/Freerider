@@ -339,10 +339,6 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 	 */
 	protected void drawPathOnMap(final List<MapLocation> locationList){
 		onDrawingPathStarted();
-		new Thread(new Runnable(){
-			@Override
-			public void run() { 
-				//Looper.prepare();
 				MapRoute route = PersistHelper.routeCacheGetRoute(locationList);
 				if(route != null && route.getMapPoints() != null && route.getMapPoints().size() != 0 && route.getRouteData() != null && route.getRouteData().size() != 0){
 					drawPathOnMap(route);
@@ -350,18 +346,6 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 				else{
 					MapRoute mapRoute;
 					try {
-						if(selectedRoute.getMapPoints().size() == 0){
-							onDrawingPathEnded();
-							//okey, har fanga erroren, men får virkelig ikke gjort noe mer med det:S
-							//til thomas
-							/*
-							//Looper.prepare();
-							String message = "Unvalid address";
-							Toast toast = Toast.makeText(MapActivityAbstract.this, message, Toast.LENGTH_LONG);
-							toast.show();
-							*/
-							return;
-						}
 						if(locationList.size() < 2){
 							onDrawingPathEnded();
 							return;
@@ -369,26 +353,17 @@ public abstract class MapActivityAbstract extends MapActivity implements Gesture
 						mapRoute = new MapRoute(selectedRoute, locationList,true);
 					} catch (Exception e){
 							
-						String message = "Could not load the route from Google Maps...";
+						String message = "Address not found, please verify spelling of address";
 						Toast toast = Toast.makeText(MapActivityAbstract.this, message, Toast.LENGTH_LONG);
 						toast.show();
+						onDrawingPathEnded();
 						return;
-						
-						/*
-						String message = "Could not load the route from Google Maps...";
-						Toast toast = Toast.makeText(MapActivityAbstract.this, message, Toast.LENGTH_LONG);
-						//Toast toast = Toast.makeText(MapActivityCreateOrEditRoute.class, message, Toast.LENGTH_LONG);
-						toast.setGravity(Gravity.BOTTOM, toast.getXOffset() / 2, toast.getYOffset() / 2);
-						toast.show();
-						*/
 					}
 					boolean success = drawPathOnMap(mapRoute);
 					if(!success) return; 
 					PersistHelper.saveRouteToCache(mapRoute);
 					//mapRoute = new MapRoute(selectedRoute, locationList,false);
 				}
-			}
-		}).start();
 		
 		for (int i = 0; i < locationList.size(); i++) {
 			if(i == 0){ 
