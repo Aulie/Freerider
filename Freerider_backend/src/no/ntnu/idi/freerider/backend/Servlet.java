@@ -59,8 +59,6 @@ public class Servlet extends HttpServlet {
 		DBConfigurator.init(getServletContext().getRealPath("WEB-INF/DBConfig.xml"));
 		
 		processor = new RequestProcessor();	
-		//Start scheduler for regular maintenance
-		//new Scheduler();
 	}
 
 	/**

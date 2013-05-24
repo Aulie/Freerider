@@ -211,19 +211,15 @@ public class DBConnector {
 		String[] addresses = addressList.split(Route.ADDRESS_STRING_DELIMITER);
 		List<MapLocation> mapLocations = readMapLocationData(rs, addresses);
 		ret.setFrequency(rs.getInt("frequency"));
-		//ServerLogger.write("" + ret.getFrequency());
 		ret.setMapPoints(mapLocations);
 		return ret;
 	}
 
 	public List<Route> getRoutes(String ownerID) throws SQLException {
-		ServerLogger.write("getRoutes TOP");
 		List<Route> ret = new ArrayList<Route>();
-		//Changed
 		PreparedStatement stmt = conn.prepareStatement("SELECT name, route::geometry, owner, serial, maplocations::geometry,addresses,frequency FROM routes WHERE owner=? AND ad_hoc=false ORDER BY frequency DESC");
 		stmt.setString(1,ownerID);
 		ResultSet rs = stmt.executeQuery();
-		ServerLogger.write("Before while");
 		while(rs.next()){
 			List<Location> routeData = readRouteData(rs);
 			User user = getUser(rs.getString("owner"));
@@ -232,10 +228,7 @@ public class DBConnector {
 			List<MapLocation> mapLocations = readMapLocationData(rs, addresses);
 			toAdd.setMapPoints(mapLocations);
 			toAdd.setFrequency(rs.getInt("frequency"));
-			ServerLogger.write("Before try");
-			ServerLogger.write("After setFreq");
 			ret.add(toAdd);
-			ServerLogger.write("After ret.add(toadd)");
 		}
 		return ret;
 	}
@@ -412,7 +405,6 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	/** Search for Journeys matching given preferences.  */
 	public List<Journey> search(Location start, Location stop, Calendar time, User searcher) throws SQLException{
 		PreparedStatement stmt = conn.prepareStatement("SELECT * FROM search_for_journeys(?::geography,?::geography,?,?)");
-		ServerLogger.write("Search: " + "SELECT * FROM search_for_journeys(" + Double.toString(start.getLatitude()) + "::geography," + Double.toString(start.getLongitude()) + "::geography," + searcher.getID() + "," + convertToTimestamp(time) + ")");
 		stmt.setObject(1, new Point(start.getLatitude(),start.getLongitude()),Types.OTHER);
 		stmt.setObject(2, new Point(stop.getLatitude(),stop.getLongitude()),Types.OTHER);
 		stmt.setString(3, searcher.getID());
@@ -420,26 +412,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		ResultSet rs = stmt.executeQuery();
 		List<Journey> ret = new ArrayList<Journey>();
 		while(rs.next()){
-			ServerLogger.write("Got result");
-			//Journey journey = new Journey(rs.getInt("journeyserial"));
-			//User user = new User(rs.getString("Name"),rs.getString("id"));
-			//user.setSurname(rs.getString("Surname"));
-			//user.setRating(rs.getDouble("Rating"));
-			//journey.setHitchhiker(user);
-			
-			//List<Location> routeData = readRouteData(rs);
-			//user = getUser(user.getID());
-			//Route route = new Route(user, "", routeData, rs.getInt("routeserial"));
-			//String[] addresses = rs.getString("addresses").split(Route.ADDRESS_STRING_DELIMITER);
-			//List<MapLocation> mapPoints = readMapLocationData(rs, addresses);
-			//route.setMapPoints(mapPoints);
-			//route.setFrequency(rs.getInt("frequency"));
-			//journey.setRoute(route);
-			//journey.setStart(convertToCalendar(rs.getTimestamp("starttime")));
-			//journey.setVisibility(Visibility.valueOf(rs.getString("visibility")));
 			Journey journey = getJourney(rs.getInt("journeyserial"));
-			//journey.setHitchhikers(getHitchhikers(rs.getInt("journeyserial")));
-			//journey.setTripPreferences(pref);
 			ret.add(journey);
 		}
 		return ret;
@@ -484,7 +457,6 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		stmt.close();
 		setDateModified(journey.getRoute());
 		incrementFrequency(journey.getRoute());
-		ServerLogger.write("END Add journey");
 		return ret;
 	}
 
@@ -502,7 +474,6 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 
 
 	public void deleteJourneyWithoutCheck(Journey journey) throws SQLException {
-		ServerLogger.write("Journey for deletion: " + journey.getSerial());
 		PreparedStatement stmt = conn.prepareStatement("DELETE FROM journeys WHERE serial=?");
 		stmt.setInt(1, journey.getSerial());
 		if(stmt.executeUpdate() !=1){
@@ -587,8 +558,6 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		Journey journey = new Journey(serial, route, start, hitchhikers, visibility);
 		TripPreferences preference = getPreference(rs.getInt("preferenceid"));
 		journey.setTripPreferences(preference);
-		ServerLogger.write("JSerial: " + serial);
-		ServerLogger.write("Num hitch: " + hitchhikers.size());
 		return journey;
 	}
 	public List<User> getHitchhikers(int journeySerial) throws SQLException {
@@ -611,10 +580,7 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		return ret;
 	}
 	public void sendRating(Journey journey){
-		ServerLogger.write("SendRating trigger");
-		ServerLogger.write("Hitchhikers:" + journey.getHitchhikers().size());
 		for(int i = 0; i < journey.getHitchhikers().size(); i++){
-			ServerLogger.write(journey.getHitchhikers().get(i).getFullName());
 			Notification note = new Notification(journey.getDriver().getID(), journey.getHitchhikers().get(i).getID(), journey.getHitchhikers().get(i).getFullName(), "", journey.getSerial(), NotificationType.RATING);
 			try {
 				addNotification(note);
@@ -817,7 +783,6 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 		stmt.setBoolean(6, preference.getTalking());
 		stmt.setInt(7, preference.getPrefId());
 		stmt.executeUpdate();
-		ServerLogger.write("\n\n\n\n\n\n\n\n\n\nBLARGH: \nSeats: " + Integer.toString(preference.getSeatsAvailable()) + "\nID: " + preference.getPrefId().toString() + "\n\n\n\n");
 	}
 	public Car getCar(int carId) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("SELECT * FROM car WHERE id=?");
@@ -856,8 +821,6 @@ public void deleteRouteBySerial(int serial) throws SQLException{
 	}
 
 	public void setNotificationRead(Notification note) throws SQLException {
-		ServerLogger.write("Start Read note");
-		ServerLogger.write("JourneySerial: " + note.getJourneySerial());
 		if(note.getJourneySerial() == 0){
 			PreparedStatement stmt = conn.prepareStatement("UPDATE notifications SET is_read=true WHERE recipient=? AND sender=? AND type=?::notification_type AND comment=?");
 			stmt.setString(1, note.getRecipientID());

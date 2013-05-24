@@ -28,7 +28,8 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-/** A configurator for DBConnector, which reads the details of the database connection from an XML file. */
+/** 
+ * A configurator for DBConnector, which reads the details of the database connection from an XML file. */
 public final class DBConfigurator {
 	private static Calendar lastRead = null;
 	private static File configFile;

@@ -24,7 +24,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 /**
  * Starts when server starts
- * @author Thomas
+ * @author Thomas Gjerde
  *
  */
 public class Config implements ServletContextListener {

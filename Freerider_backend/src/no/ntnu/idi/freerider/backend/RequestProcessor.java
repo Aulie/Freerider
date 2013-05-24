@@ -110,7 +110,6 @@ public class RequestProcessor {
 			}
 			return new UserResponse(type,status,loginUser);
 		case THUMBS_UP:
-			ServerLogger.write("Thumbs up");
 			try{
 				db.incrementUserRating(request.getUser().getID());
 			} catch(SQLException e){
@@ -137,7 +136,6 @@ public class RequestProcessor {
 			try
 			{
 				User ret = db.getUser(request.getUser().getID());
-				ServerLogger.write("About:" + ret.getAbout());
 				return new UserResponse(type, status, ret);
 			} catch (SQLException e3)
 			{
@@ -181,12 +179,9 @@ public class RequestProcessor {
 			}
 		case GET_ROUTES:
 			routes = null;
-			ServerLogger.write("GET_ROUTES");
 			String id = request.getUser().getID();
 			try {
-				ServerLogger.write("Route start");
 				routes = db.getRoutes(id);
-				ServerLogger.write("Route returned");
 				return new RouteResponse(type,ResponseStatus.OK,routes);
 			} catch (SQLException e1) {
 				ServerLogger.write("Error retrieving routes: " + e1.getMessage());
@@ -214,7 +209,6 @@ public class RequestProcessor {
 				Journey savedJourney = db.addJourney(((JourneyRequest) request).getJourney());
 				journeys = new ArrayList<Journey>();
 				journeys.add(savedJourney);
-				ServerLogger.write("Before Journey Return");
 				return new JourneyResponse(type, ResponseStatus.OK, journeys);
 			}catch (SQLException e) {
 				ServerLogger.write("Error saving journey: " + e.getMessage());
@@ -272,9 +266,6 @@ public class RequestProcessor {
 		case GET_JOURNEYS:
 			try{
 				journeys = db.getJourneys(request.getUser());
-				ServerLogger.write("Before Journey Req");
-				//ServerLogger.write(journeys.get(0).getDriver().getFullName());
-				ServerLogger.write("After serverlogger");
 				return new JourneyResponse(type, ResponseStatus.OK,journeys);
 			}catch(SQLException e){
 				logger.error("Error finding user's journeys for user " + request.getUser().getID(), e);
@@ -326,11 +317,6 @@ public class RequestProcessor {
 				return new UserResponse(type,ResponseStatus.FAILED,e.getMessage());
 			}
 		case GET_PREFERENCE:
-			ServerLogger.write("Before prefReq");
-			//TripPreferences prefReq = ((PreferenceRequest)request).getPreference();
-			
-			//db.getPreference(prefReq.getPrefId());
-			
 			try {
 				TripPreferences preference;
 				preference = db.getPreference(request.getUser().getID());
@@ -341,7 +327,6 @@ public class RequestProcessor {
 			}
 		case CREATE_PREFERENCE:
 			TripPreferences prefReq2 = ((PreferenceRequest)request).getPreference();
-			//ServerLogger.write(prefReq2.getSeatsAvailable().toString());
 			try {
 				db.createPreference(prefReq2);
 				return new PreferenceResponse(type, status, prefReq2);
@@ -415,11 +400,8 @@ public class RequestProcessor {
 			if(!db.hasAvailableSeats(serial)) {
 				throw new SQLException("No available seats");
 			}
-			ServerLogger.write("Before addHitchhiker");
 			db.addHitchhiker(notification.getRecipientID(),serial);
-			ServerLogger.write("Before incrementSeats");
 			db.incrementSeats(serial, -1);
-			ServerLogger.write("After incrementSeats");
 			break;
 		case REQUEST_REJECT:
 			if(checkForRequest(notification)) throw new SQLException("Attempted to reject previously accepted request.");
