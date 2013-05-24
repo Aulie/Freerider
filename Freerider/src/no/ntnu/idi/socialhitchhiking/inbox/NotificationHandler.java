@@ -60,7 +60,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+/**
+ * Helper class for handling notifications (mainly used by {@link Inbox}
+ *
+ */
 public class NotificationHandler{
 	private static Inbox in;
 	private static Notification not;

@@ -28,7 +28,10 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
-
+/**
+ * Class for managing application settings
+ *
+ */
 public class SettingsManager {
 	private ConnectivityManager conMan;
 	private WifiManager wifiMan;

@@ -33,8 +33,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 /**
- * @author Jose Luis Trigo
  * Extension of ArrayAdapter to adapt the class TripOption to be shown in a ListView
+ * @author Jose Luis Trigo
  */
 public class TripOptionAdapter extends ArrayAdapter<TripOption>{
 

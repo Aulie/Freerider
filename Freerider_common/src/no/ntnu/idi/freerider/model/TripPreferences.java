@@ -20,7 +20,11 @@
 package no.ntnu.idi.freerider.model;
 
 import java.util.BitSet;
-
+/**
+ * An object containing preference options for a journey
+ * @author Thomas Gjerde
+ *
+ */
 public class TripPreferences {
 	Integer prefId;
 	Integer seatsAvailable;

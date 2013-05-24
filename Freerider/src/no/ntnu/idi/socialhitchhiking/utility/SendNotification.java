@@ -32,7 +32,10 @@ import android.content.Intent;
 import android.net.Uri;
 
 
-
+/**
+ * Class used for sending notifications to android
+ *
+ */
 public class SendNotification{
 
 	public static final int LIST_JOURNEY = 1364312654;

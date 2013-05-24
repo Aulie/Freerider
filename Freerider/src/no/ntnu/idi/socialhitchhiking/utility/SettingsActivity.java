@@ -31,7 +31,11 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-
+/**
+ * Class for showing the settings activity
+ * @author Thomas Gjerde
+ *
+ */
 public class SettingsActivity extends PreferenceActivity{
 	SocialHitchhikingApplication app;
 

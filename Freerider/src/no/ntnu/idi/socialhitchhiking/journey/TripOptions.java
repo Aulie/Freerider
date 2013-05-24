@@ -63,9 +63,8 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
+ * This class shows a list of preferences for the driver when creating a ride such as date, time, seats available, FB visibility of the ride and other preferences.
  * @author Jose Luis Trigo
- * This class shows a list of preferences for the driver when creating a ride 
- * such as date, time, seats available, FB visibility of the ride and other preferences.
  */
 
 public class TripOptions extends SocialHitchhikingActivity {

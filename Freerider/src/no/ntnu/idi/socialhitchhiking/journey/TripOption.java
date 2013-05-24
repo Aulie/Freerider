@@ -20,6 +20,7 @@
 package no.ntnu.idi.socialhitchhiking.journey;
 
 /**
+ * Object class containing trip options
  * @author Jose Luis Trigo
  * Class has 3 attributes:  
  * icon: to be shown on the left of each option 

@@ -20,7 +20,11 @@
 package no.ntnu.idi.freerider.protocol;
 
 import no.ntnu.idi.freerider.model.User;
-
+/**
+ * A Request subclass for requests involving single journeys.
+ * @author Thomas Gjerde
+ *
+ */
 public class SingleJourneyRequest extends Request{
 	private final int journeySerial;
 	public SingleJourneyRequest(RequestType type, User user, int journeySerial) {

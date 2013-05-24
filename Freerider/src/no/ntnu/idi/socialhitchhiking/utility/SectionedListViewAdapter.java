@@ -27,7 +27,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-
+/**
+ * Class for generating a sectioned list adapter
+ *
+ */
 public abstract class SectionedListViewAdapter extends BaseAdapter{
 	protected abstract View getHeaderView(String caption, int index,View convertView, ViewGroup parent);
 

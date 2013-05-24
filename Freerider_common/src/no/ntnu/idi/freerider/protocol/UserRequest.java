@@ -21,7 +21,11 @@
 package no.ntnu.idi.freerider.protocol;
 
 import no.ntnu.idi.freerider.model.User;
-
+/**
+ * A Request subclass for requests involving users.
+ * @author Thomas Gjerde
+ *
+ */
 public class UserRequest extends Request{
 
 	public UserRequest(RequestType type, User user) {

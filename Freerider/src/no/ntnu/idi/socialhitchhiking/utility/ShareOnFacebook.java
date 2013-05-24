@@ -58,6 +58,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 /**
+ * Class for sharing a journey on Facebook
  * @author Jose Luis Trigo
  * @author Kristoffer Aulie
  *

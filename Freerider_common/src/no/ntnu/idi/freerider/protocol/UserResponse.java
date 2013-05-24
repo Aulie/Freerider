@@ -21,7 +21,11 @@
 package no.ntnu.idi.freerider.protocol;
 
 import no.ntnu.idi.freerider.model.User;
-
+/**
+ * A Response subclass for responses involving users.
+ * @author Thomas Gjerde
+ *
+ */
 public class UserResponse extends Response{
 	private User user;
 	public UserResponse(RequestType type, ResponseStatus status) {

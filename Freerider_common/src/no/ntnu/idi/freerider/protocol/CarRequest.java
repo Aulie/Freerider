@@ -21,7 +21,11 @@ package no.ntnu.idi.freerider.protocol;
 
 import no.ntnu.idi.freerider.model.Car;
 import no.ntnu.idi.freerider.model.User;
-
+/**
+ * A Request subclass for requests involving cars.
+ * @author Thomas Gjerde
+ *
+ */
 public class CarRequest extends Request {
 	private final Car car;
 	public CarRequest(RequestType type, User user, Car car){
